@@ -21,7 +21,7 @@ export async function OnGameModeStarted(): Promise<void> {
     // Build track from spatial object ids 1000..1999
     for (iterator = 1000; iterator < 1999; iterator++) {
         const objPos = mod.GetObjectPosition(mod.GetSpatialObject(iterator));
-        if (!(mod.XComponentOf(objPos) == 0 && mod.YComponentOf(objPos) == 0 && mod.ZComponentOf(objPos) < 1)) {
+        if (!(mod.XComponentOf(objPos) == 0 && mod.YComponentOf(objPos) == 0)) {
             track = mod.AppendToArray(track, objPos);
         }
     }
@@ -36,7 +36,7 @@ export async function OnGameModeStarted(): Promise<void> {
         const cp = mod.GetSpatialObject(iterator);
         const cpPos = mod.GetObjectPosition(cp);
         // Check for non-zero position to confirm existence
-        if (!(mod.XComponentOf(cpPos) == 0 && mod.YComponentOf(cpPos) == 0 && mod.ZComponentOf(cpPos) < 1)) {
+        if (!(mod.XComponentOf(cpPos) == 0 && mod.YComponentOf(cpPos) == 0)) {
             checkpoints = mod.AppendToArray(checkpoints, (iterator - 2000));
         }
     }
