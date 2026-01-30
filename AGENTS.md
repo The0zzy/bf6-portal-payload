@@ -52,8 +52,8 @@ All Portal API functionality is accessed through the global `mod` namespace:
 
 **IMPORTANT:**
 
-- Always start by reading the types in `node_modules/bf6-portal-mod-types/index.d.ts`
-- DO NOT make up functions and types in the mod namespace that aren't defined in `bf6-portal-mod-types/index.d.ts`
+- Always start by reading the types in `node_modules/bf6-portal-mod-types/`
+- DO NOT make up functions and types in the `mod` namespace that aren't defined in `bf6-portal-mod-types/`
 
 ### File Structure
 
