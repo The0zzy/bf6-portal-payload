@@ -1,3 +1,12 @@
 {
-  "portal_welcome_message": "Welcome to Portal! Let's play!"
+  "portal_welcome_message": "Welcome to Portal! Let's play!",
+  "payload": {
+    "track": {
+      "size": "Track Size: {}"
+    },
+    "checkpoints": {
+      "count": "No of Checkpoints: {}"
+    },
+    "status": "TrackCurrent: {} | Track: {} | Checkpoints: {}"
+  }
 }
