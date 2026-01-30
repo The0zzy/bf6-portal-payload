@@ -1,0 +1,21 @@
+{
+  "gameMode": {
+    "ui": {
+      "scoreLimit": "Score Limit: {}",
+      "timeLimit": "Time Limit: {}",
+      "teamScore": "Team {}: {}",
+      "winnerAnnouncement": "Team {} Wins!",
+      "drawAnnouncement": "The match ended in a draw!"
+    },
+    "notifications": {
+      "matchStart": "The match has started!",
+      "matchEnd": "The match has ended!",
+      "playerJoined": "{} has joined the match.",
+      "playerLeft": "{} has left the match."
+    },
+    "hud": {
+      "timer": "Time: {}",
+      "score": "Score: {}"
+    }
+  }
+}

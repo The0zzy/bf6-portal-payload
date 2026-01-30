@@ -1,0 +1,808 @@
+﻿{
+    "OngoingAreaTrigger":  {
+                               "scope":  "typescript",
+                               "body":  [
+                                            "export function OngoingAreaTrigger(eventAreaTrigger: mod.AreaTrigger): void {",
+                                            "\t//TODO",
+                                            "$0",
+                                            "}"
+                                        ],
+                               "description":  "BF6 Portal handler stub.",
+                               "prefix":  [
+                                              "bf6.OngoingAreaTrigger"
+                                          ]
+                           },
+    "OngoingCapturePoint":  {
+                                "scope":  "typescript",
+                                "body":  [
+                                             "export function OngoingCapturePoint(eventCapturePoint: mod.CapturePoint): void {",
+                                             "\t//TODO",
+                                             "$0",
+                                             "}"
+                                         ],
+                                "description":  "BF6 Portal handler stub.",
+                                "prefix":  [
+                                               "bf6.OngoingCapturePoint"
+                                           ]
+                            },
+    "OngoingEmplacementSpawner":  {
+                                      "scope":  "typescript",
+                                      "body":  [
+                                                   "export function OngoingEmplacementSpawner(eventEmplacementSpawner: mod.EmplacementSpawner): void {",
+                                                   "\t//TODO",
+                                                   "$0",
+                                                   "}"
+                                               ],
+                                      "description":  "BF6 Portal handler stub.",
+                                      "prefix":  [
+                                                     "bf6.OngoingEmplacementSpawner"
+                                                 ]
+                                  },
+    "OngoingGlobal":  {
+                          "scope":  "typescript",
+                          "body":  [
+                                       "export function OngoingGlobal(): void {",
+                                       "\t//TODO",
+                                       "$0",
+                                       "}"
+                                   ],
+                          "description":  "BF6 Portal handler stub.",
+                          "prefix":  [
+                                         "bf6.OngoingGlobal"
+                                     ]
+                      },
+    "OngoingHQ":  {
+                      "scope":  "typescript",
+                      "body":  [
+                                   "export function OngoingHQ(eventHQ: mod.HQ): void {",
+                                   "\t//TODO",
+                                   "$0",
+                                   "}"
+                               ],
+                      "description":  "BF6 Portal handler stub.",
+                      "prefix":  [
+                                     "bf6.OngoingHQ"
+                                 ]
+                  },
+    "OngoingInteractPoint":  {
+                                 "scope":  "typescript",
+                                 "body":  [
+                                              "export function OngoingInteractPoint(eventInteractPoint: mod.InteractPoint): void {",
+                                              "\t//TODO",
+                                              "$0",
+                                              "}"
+                                          ],
+                                 "description":  "BF6 Portal handler stub.",
+                                 "prefix":  [
+                                                "bf6.OngoingInteractPoint"
+                                            ]
+                             },
+    "OngoingLootSpawner":  {
+                               "scope":  "typescript",
+                               "body":  [
+                                            "export function OngoingLootSpawner(eventLootSpawner: mod.LootSpawner): void {",
+                                            "\t//TODO",
+                                            "$0",
+                                            "}"
+                                        ],
+                               "description":  "BF6 Portal handler stub.",
+                               "prefix":  [
+                                              "bf6.OngoingLootSpawner"
+                                          ]
+                           },
+    "OngoingMCOM":  {
+                        "scope":  "typescript",
+                        "body":  [
+                                     "export function OngoingMCOM(eventMCOM: mod.MCOM): void {",
+                                     "\t//TODO",
+                                     "$0",
+                                     "}"
+                                 ],
+                        "description":  "BF6 Portal handler stub.",
+                        "prefix":  [
+                                       "bf6.OngoingMCOM"
+                                   ]
+                    },
+    "OngoingPlayer":  {
+                          "scope":  "typescript",
+                          "body":  [
+                                       "export function OngoingPlayer(eventPlayer: mod.Player): void {",
+                                       "\t//TODO",
+                                       "$0",
+                                       "}"
+                                   ],
+                          "description":  "BF6 Portal handler stub.",
+                          "prefix":  [
+                                         "bf6.OngoingPlayer"
+                                     ]
+                      },
+    "OngoingRingOfFire":  {
+                              "scope":  "typescript",
+                              "body":  [
+                                           "export function OngoingRingOfFire(eventRingOfFire: mod.RingOfFire): void {",
+                                           "\t//TODO",
+                                           "$0",
+                                           "}"
+                                       ],
+                              "description":  "BF6 Portal handler stub.",
+                              "prefix":  [
+                                             "bf6.OngoingRingOfFire"
+                                         ]
+                          },
+    "OngoingSector":  {
+                          "scope":  "typescript",
+                          "body":  [
+                                       "export function OngoingSector(eventSector: mod.Sector): void {",
+                                       "\t//TODO",
+                                       "$0",
+                                       "}"
+                                   ],
+                          "description":  "BF6 Portal handler stub.",
+                          "prefix":  [
+                                         "bf6.OngoingSector"
+                                     ]
+                      },
+    "OngoingSpawner":  {
+                           "scope":  "typescript",
+                           "body":  [
+                                        "export function OngoingSpawner(eventSpawner: mod.Spawner): void {",
+                                        "\t//TODO",
+                                        "$0",
+                                        "}"
+                                    ],
+                           "description":  "BF6 Portal handler stub.",
+                           "prefix":  [
+                                          "bf6.OngoingSpawner"
+                                      ]
+                       },
+    "OngoingSpawnPoint":  {
+                              "scope":  "typescript",
+                              "body":  [
+                                           "export function OngoingSpawnPoint(eventSpawnPoint: mod.SpawnPoint): void {",
+                                           "\t//TODO",
+                                           "$0",
+                                           "}"
+                                       ],
+                              "description":  "BF6 Portal handler stub.",
+                              "prefix":  [
+                                             "bf6.OngoingSpawnPoint"
+                                         ]
+                          },
+    "OngoingTeam":  {
+                        "scope":  "typescript",
+                        "body":  [
+                                     "export function OngoingTeam(eventTeam: mod.Team): void {",
+                                     "\t//TODO",
+                                     "$0",
+                                     "}"
+                                 ],
+                        "description":  "BF6 Portal handler stub.",
+                        "prefix":  [
+                                       "bf6.OngoingTeam"
+                                   ]
+                    },
+    "OngoingVehicle":  {
+                           "scope":  "typescript",
+                           "body":  [
+                                        "export function OngoingVehicle(eventVehicle: mod.Vehicle): void {",
+                                        "\t//TODO",
+                                        "$0",
+                                        "}"
+                                    ],
+                           "description":  "BF6 Portal handler stub.",
+                           "prefix":  [
+                                          "bf6.OngoingVehicle"
+                                      ]
+                       },
+    "OngoingVehicleSpawner":  {
+                                  "scope":  "typescript",
+                                  "body":  [
+                                               "export function OngoingVehicleSpawner(eventVehicleSpawner: mod.VehicleSpawner): void {",
+                                               "\t//TODO",
+                                               "$0",
+                                               "}"
+                                           ],
+                                  "description":  "BF6 Portal handler stub.",
+                                  "prefix":  [
+                                                 "bf6.OngoingVehicleSpawner"
+                                             ]
+                              },
+    "OngoingWaypointPath":  {
+                                "scope":  "typescript",
+                                "body":  [
+                                             "export function OngoingWaypointPath(eventWaypointPath: mod.WaypointPath): void {",
+                                             "\t//TODO",
+                                             "$0",
+                                             "}"
+                                         ],
+                                "description":  "BF6 Portal handler stub.",
+                                "prefix":  [
+                                               "bf6.OngoingWaypointPath"
+                                           ]
+                            },
+    "OngoingWorldIcon":  {
+                             "scope":  "typescript",
+                             "body":  [
+                                          "export function OngoingWorldIcon(eventWorldIcon: mod.WorldIcon): void {",
+                                          "\t//TODO",
+                                          "$0",
+                                          "}"
+                                      ],
+                             "description":  "BF6 Portal handler stub.",
+                             "prefix":  [
+                                            "bf6.OngoingWorldIcon"
+                                        ]
+                         },
+    "OnAIMoveToFailed":  {
+                             "scope":  "typescript",
+                             "body":  [
+                                          "export function OnAIMoveToFailed(eventPlayer: mod.Player): void {",
+                                          "\t//TODO",
+                                          "$0",
+                                          "}"
+                                      ],
+                             "description":  "This will trigger when an AI Soldier stops trying to reach a destination.",
+                             "prefix":  [
+                                            "bf6.OnAIMoveToFailed"
+                                        ]
+                         },
+    "OnAIMoveToRunning":  {
+                              "scope":  "typescript",
+                              "body":  [
+                                           "export function OnAIMoveToRunning(eventPlayer: mod.Player): void {",
+                                           "\t//TODO",
+                                           "$0",
+                                           "}"
+                                       ],
+                              "description":  "This will trigger when an AI Soldier starts moving to a target location.",
+                              "prefix":  [
+                                             "bf6.OnAIMoveToRunning"
+                                         ]
+                          },
+    "OnAIMoveToSucceeded":  {
+                                "scope":  "typescript",
+                                "body":  [
+                                             "export function OnAIMoveToSucceeded(eventPlayer: mod.Player): void {",
+                                             "\t//TODO",
+                                             "$0",
+                                             "}"
+                                         ],
+                                "description":  "This will trigger when an AI Soldier reaches target location.",
+                                "prefix":  [
+                                               "bf6.OnAIMoveToSucceeded"
+                                           ]
+                            },
+    "OnAIParachuteRunning":  {
+                                 "scope":  "typescript",
+                                 "body":  [
+                                              "export function OnAIParachuteRunning(eventPlayer: mod.Player): void {",
+                                              "\t//TODO",
+                                              "$0",
+                                              "}"
+                                          ],
+                                 "description":  "This will trigger when an AI Soldier parachute action is running.",
+                                 "prefix":  [
+                                                "bf6.OnAIParachuteRunning"
+                                            ]
+                             },
+    "OnAIParachuteSucceeded":  {
+                                   "scope":  "typescript",
+                                   "body":  [
+                                                "export function OnAIParachuteSucceeded(eventPlayer: mod.Player): void {",
+                                                "\t//TODO",
+                                                "$0",
+                                                "}"
+                                            ],
+                                   "description":  "This will trigger when an AI Soldier parachute action has succeeded.",
+                                   "prefix":  [
+                                                  "bf6.OnAIParachuteSucceeded"
+                                              ]
+                               },
+    "OnAIWaypointIdleFailed":  {
+                                   "scope":  "typescript",
+                                   "body":  [
+                                                "export function OnAIWaypointIdleFailed(eventPlayer: mod.Player): void {",
+                                                "\t//TODO",
+                                                "$0",
+                                                "}"
+                                            ],
+                                   "description":  "This will trigger when an AI Soldier stops following a waypoint.",
+                                   "prefix":  [
+                                                  "bf6.OnAIWaypointIdleFailed"
+                                              ]
+                               },
+    "OnAIWaypointIdleRunning":  {
+                                    "scope":  "typescript",
+                                    "body":  [
+                                                 "export function OnAIWaypointIdleRunning(eventPlayer: mod.Player): void {",
+                                                 "\t//TODO",
+                                                 "$0",
+                                                 "}"
+                                             ],
+                                    "description":  "This will trigger when an AI Soldier starts following a waypoint.",
+                                    "prefix":  [
+                                                   "bf6.OnAIWaypointIdleRunning"
+                                               ]
+                                },
+    "OnAIWaypointIdleSucceeded":  {
+                                      "scope":  "typescript",
+                                      "body":  [
+                                                   "export function OnAIWaypointIdleSucceeded(eventPlayer: mod.Player): void {",
+                                                   "\t//TODO",
+                                                   "$0",
+                                                   "}"
+                                               ],
+                                      "description":  "This will trigger when an AI Soldier finishes following a waypoint.",
+                                      "prefix":  [
+                                                     "bf6.OnAIWaypointIdleSucceeded"
+                                                 ]
+                                  },
+    "OnCapturePointCaptured":  {
+                                   "scope":  "typescript",
+                                   "body":  [
+                                                "export function OnCapturePointCaptured(eventCapturePoint: mod.CapturePoint): void {",
+                                                "\t//TODO",
+                                                "$0",
+                                                "}"
+                                            ],
+                                   "description":  "This will trigger when a team takes control of a CapturePoint.",
+                                   "prefix":  [
+                                                  "bf6.OnCapturePointCaptured"
+                                              ]
+                               },
+    "OnCapturePointCapturing":  {
+                                    "scope":  "typescript",
+                                    "body":  [
+                                                 "export function OnCapturePointCapturing(eventCapturePoint: mod.CapturePoint): void {",
+                                                 "\t//TODO",
+                                                 "$0",
+                                                 "}"
+                                             ],
+                                    "description":  "This will trigger when a team begins capturing a CapturePoint.",
+                                    "prefix":  [
+                                                   "bf6.OnCapturePointCapturing"
+                                               ]
+                                },
+    "OnCapturePointLost":  {
+                               "scope":  "typescript",
+                               "body":  [
+                                            "export function OnCapturePointLost(eventCapturePoint: mod.CapturePoint): void {",
+                                            "\t//TODO",
+                                            "$0",
+                                            "}"
+                                        ],
+                               "description":  "This will trigger when a team loses control of a CapturePoint.",
+                               "prefix":  [
+                                              "bf6.OnCapturePointLost"
+                                          ]
+                           },
+    "OnGameModeEnding":  {
+                             "scope":  "typescript",
+                             "body":  [
+                                          "export function OnGameModeEnding(): void {",
+                                          "\t//TODO",
+                                          "$0",
+                                          "}"
+                                      ],
+                             "description":  "This will trigger when the gamemode ends.",
+                             "prefix":  [
+                                            "bf6.OnGameModeEnding"
+                                        ]
+                         },
+    "OnGameModeStarted":  {
+                              "scope":  "typescript",
+                              "body":  [
+                                           "export function OnGameModeStarted(): void {",
+                                           "\t//TODO",
+                                           "$0",
+                                           "}"
+                                       ],
+                              "description":  "This will trigger at the start of the gamemode.",
+                              "prefix":  [
+                                             "bf6.OnGameModeStarted"
+                                         ]
+                          },
+    "OnMandown":  {
+                      "scope":  "typescript",
+                      "body":  [
+                                   "export function OnMandown(eventPlayer: mod.Player, eventOtherPlayer: mod.Player): void {",
+                                   "\t//TODO",
+                                   "$0",
+                                   "}"
+                               ],
+                      "description":  "This will trigger when a Player is forced into the mandown state.",
+                      "prefix":  [
+                                     "bf6.OnMandown"
+                                 ]
+                  },
+    "OnMCOMArmed":  {
+                        "scope":  "typescript",
+                        "body":  [
+                                     "export function OnMCOMArmed(eventMCOM: mod.MCOM): void {",
+                                     "\t//TODO",
+                                     "$0",
+                                     "}"
+                                 ],
+                        "description":  "This will trigger when a MCOM is armed.",
+                        "prefix":  [
+                                       "bf6.OnMCOMArmed"
+                                   ]
+                    },
+    "OnMCOMDefused":  {
+                          "scope":  "typescript",
+                          "body":  [
+                                       "export function OnMCOMDefused(eventMCOM: mod.MCOM): void {",
+                                       "\t//TODO",
+                                       "$0",
+                                       "}"
+                                   ],
+                          "description":  "This will trigger when a MCOM is defused.",
+                          "prefix":  [
+                                         "bf6.OnMCOMDefused"
+                                     ]
+                      },
+    "OnMCOMDestroyed":  {
+                            "scope":  "typescript",
+                            "body":  [
+                                         "export function OnMCOMDestroyed(eventMCOM: mod.MCOM): void {",
+                                         "\t//TODO",
+                                         "$0",
+                                         "}"
+                                     ],
+                            "description":  "This will trigger when a MCOM detonates.",
+                            "prefix":  [
+                                           "bf6.OnMCOMDestroyed"
+                                       ]
+                        },
+    "OnPlayerDamaged":  {
+                            "scope":  "typescript",
+                            "body":  [
+                                         "export function OnPlayerDamaged(eventPlayer: mod.Player, eventOtherPlayer: mod.Player, eventDamageType: mod.DamageType, eventWeaponUnlock: mod.WeaponUnlock): void {",
+                                         "\t//TODO",
+                                         "$0",
+                                         "}"
+                                     ],
+                            "description":  "This will trigger when a Player takes damage.",
+                            "prefix":  [
+                                           "bf6.OnPlayerDamaged"
+                                       ]
+                        },
+    "OnPlayerDeployed":  {
+                             "scope":  "typescript",
+                             "body":  [
+                                          "export function OnPlayerDeployed(eventPlayer: mod.Player): void {",
+                                          "\t//TODO",
+                                          "$0",
+                                          "}"
+                                      ],
+                             "description":  "This will trigger whenever a Player deploys.",
+                             "prefix":  [
+                                            "bf6.OnPlayerDeployed"
+                                        ]
+                         },
+    "OnPlayerDied":  {
+                         "scope":  "typescript",
+                         "body":  [
+                                      "export function OnPlayerDied(eventPlayer: mod.Player, eventOtherPlayer: mod.Player, eventDeathType: mod.DeathType, eventWeaponUnlock: mod.WeaponUnlock): void {",
+                                      "\t//TODO",
+                                      "$0",
+                                      "}"
+                                  ],
+                         "description":  "This will trigger whenever a Player dies.",
+                         "prefix":  [
+                                        "bf6.OnPlayerDied"
+                                    ]
+                     },
+    "OnPlayerEarnedKill":  {
+                               "scope":  "typescript",
+                               "body":  [
+                                            "export function OnPlayerEarnedKill(eventPlayer: mod.Player, eventOtherPlayer: mod.Player, eventDeathType: mod.DeathType, eventWeaponUnlock: mod.WeaponUnlock): void {",
+                                            "\t//TODO",
+                                            "$0",
+                                            "}"
+                                        ],
+                               "description":  "This will trigger when a Player earns a kill against another Player.",
+                               "prefix":  [
+                                              "bf6.OnPlayerEarnedKill"
+                                          ]
+                           },
+    "OnPlayerEarnedKillAssist":  {
+                                     "scope":  "typescript",
+                                     "body":  [
+                                                  "export function OnPlayerEarnedKillAssist(eventPlayer: mod.Player, eventOtherPlayer: mod.Player): void {",
+                                                  "\t//TODO",
+                                                  "$0",
+                                                  "}"
+                                              ],
+                                     "description":  "This will trigger when a Player earns a kill assist.",
+                                     "prefix":  [
+                                                    "bf6.OnPlayerEarnedKillAssist"
+                                                ]
+                                 },
+    "OnPlayerEnterAreaTrigger":  {
+                                     "scope":  "typescript",
+                                     "body":  [
+                                                  "export function OnPlayerEnterAreaTrigger(eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger): void {",
+                                                  "\t//TODO",
+                                                  "$0",
+                                                  "}"
+                                              ],
+                                     "description":  "This will trigger when a Player enters an AreaTrigger.",
+                                     "prefix":  [
+                                                    "bf6.OnPlayerEnterAreaTrigger"
+                                                ]
+                                 },
+    "OnPlayerEnterCapturePoint":  {
+                                      "scope":  "typescript",
+                                      "body":  [
+                                                   "export function OnPlayerEnterCapturePoint(eventPlayer: mod.Player, eventCapturePoint: mod.CapturePoint): void {",
+                                                   "\t//TODO",
+                                                   "$0",
+                                                   "}"
+                                               ],
+                                      "description":  "This will trigger when a Player enters an AreaTrigger.",
+                                      "prefix":  [
+                                                     "bf6.OnPlayerEnterCapturePoint"
+                                                 ]
+                                  },
+    "OnPlayerEnterVehicle":  {
+                                 "scope":  "typescript",
+                                 "body":  [
+                                              "export function OnPlayerEnterVehicle(eventPlayer: mod.Player, eventVehicle: mod.Vehicle): void {",
+                                              "\t//TODO",
+                                              "$0",
+                                              "}"
+                                          ],
+                                 "description":  "This will trigger when a Player enters a Vehicle seat.",
+                                 "prefix":  [
+                                                "bf6.OnPlayerEnterVehicle"
+                                            ]
+                             },
+    "OnPlayerEnterVehicleSeat":  {
+                                     "scope":  "typescript",
+                                     "body":  [
+                                                  "export function OnPlayerEnterVehicleSeat(eventPlayer: mod.Player, eventVehicle: mod.Vehicle, eventSeat: mod.Object): void {",
+                                                  "\t//TODO",
+                                                  "$0",
+                                                  "}"
+                                              ],
+                                     "description":  "This will trigger when a Player enters a Vehicle seat.",
+                                     "prefix":  [
+                                                    "bf6.OnPlayerEnterVehicleSeat"
+                                                ]
+                                 },
+    "OnPlayerExitAreaTrigger":  {
+                                    "scope":  "typescript",
+                                    "body":  [
+                                                 "export function OnPlayerExitAreaTrigger(eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger): void {",
+                                                 "\t//TODO",
+                                                 "$0",
+                                                 "}"
+                                             ],
+                                    "description":  "This will trigger when a Player enters an AreaTrigger.",
+                                    "prefix":  [
+                                                   "bf6.OnPlayerExitAreaTrigger"
+                                               ]
+                                },
+    "OnPlayerExitCapturePoint":  {
+                                     "scope":  "typescript",
+                                     "body":  [
+                                                  "export function OnPlayerExitCapturePoint(eventPlayer: mod.Player, eventCapturePoint: mod.CapturePoint): void {",
+                                                  "\t//TODO",
+                                                  "$0",
+                                                  "}"
+                                              ],
+                                     "description":  "This will trigger when a Player enters an AreaTrigger.",
+                                     "prefix":  [
+                                                    "bf6.OnPlayerExitCapturePoint"
+                                                ]
+                                 },
+    "OnPlayerExitVehicle":  {
+                                "scope":  "typescript",
+                                "body":  [
+                                             "export function OnPlayerExitVehicle(eventPlayer: mod.Player, eventVehicle: mod.Vehicle): void {",
+                                             "\t//TODO",
+                                             "$0",
+                                             "}"
+                                         ],
+                                "description":  "This will trigger when a Player exits a Vehicle.",
+                                "prefix":  [
+                                               "bf6.OnPlayerExitVehicle"
+                                           ]
+                            },
+    "OnPlayerExitVehicleSeat":  {
+                                    "scope":  "typescript",
+                                    "body":  [
+                                                 "export function OnPlayerExitVehicleSeat(eventPlayer: mod.Player, eventVehicle: mod.Vehicle, eventSeat: mod.Object): void {",
+                                                 "\t//TODO",
+                                                 "$0",
+                                                 "}"
+                                             ],
+                                    "description":  "This will trigger when a Player exits a Vehicle seat.",
+                                    "prefix":  [
+                                                   "bf6.OnPlayerExitVehicleSeat"
+                                               ]
+                                },
+    "OnPlayerInteract":  {
+                             "scope":  "typescript",
+                             "body":  [
+                                          "export function OnPlayerInteract(eventPlayer: mod.Player, eventInteractPoint: mod.InteractPoint): void {",
+                                          "\t//TODO",
+                                          "$0",
+                                          "}"
+                                      ],
+                             "description":  "This will trigger when a Player interacts with InteractPoint.",
+                             "prefix":  [
+                                            "bf6.OnPlayerInteract"
+                                        ]
+                         },
+    "OnPlayerJoinGame":  {
+                             "scope":  "typescript",
+                             "body":  [
+                                          "export function OnPlayerJoinGame(eventPlayer: mod.Player): void {",
+                                          "\t//TODO",
+                                          "$0",
+                                          "}"
+                                      ],
+                             "description":  "This will trigger when a Player joins the game.",
+                             "prefix":  [
+                                            "bf6.OnPlayerJoinGame"
+                                        ]
+                         },
+    "OnPlayerLeaveGame":  {
+                              "scope":  "typescript",
+                              "body":  [
+                                           "export function OnPlayerLeaveGame(eventNumber: number): void {",
+                                           "\t//TODO",
+                                           "$0",
+                                           "}"
+                                       ],
+                              "description":  "This will trigger when any player leaves the game.",
+                              "prefix":  [
+                                             "bf6.OnPlayerLeaveGame"
+                                         ]
+                          },
+    "OnPlayerSwitchTeam":  {
+                               "scope":  "typescript",
+                               "body":  [
+                                            "export function OnPlayerSwitchTeam(eventPlayer: mod.Player, eventTeam: mod.Team): void {",
+                                            "\t//TODO",
+                                            "$0",
+                                            "}"
+                                        ],
+                               "description":  "This will trigger when a Player changes team.",
+                               "prefix":  [
+                                              "bf6.OnPlayerSwitchTeam"
+                                          ]
+                           },
+    "OnPlayerUIButtonEvent":  {
+                                  "scope":  "typescript",
+                                  "body":  [
+                                               "export function OnPlayerUIButtonEvent(eventPlayer: mod.Player, eventUIWidget: mod.UIWidget, eventUIButtonEvent: mod.UIButtonEvent): void {",
+                                               "\t//TODO",
+                                               "$0",
+                                               "}"
+                                           ],
+                                  "description":  "This will trigger when a Player enters an AreaTrigger.",
+                                  "prefix":  [
+                                                 "bf6.OnPlayerUIButtonEvent"
+                                             ]
+                              },
+    "OnPlayerUndeploy":  {
+                             "scope":  "typescript",
+                             "body":  [
+                                          "export function OnPlayerUndeploy(eventPlayer: mod.Player): void {",
+                                          "\t//TODO",
+                                          "$0",
+                                          "}"
+                                      ],
+                             "description":  "This will trigger when the Player dies and returns to the deploy screen.",
+                             "prefix":  [
+                                            "bf6.OnPlayerUndeploy"
+                                        ]
+                         },
+    "OnRayCastHit":  {
+                         "scope":  "typescript",
+                         "body":  [
+                                      "export function OnRayCastHit(eventPlayer: mod.Player, eventPoint: mod.Vector, eventNormal: mod.Vector): void {",
+                                      "\t//TODO",
+                                      "$0",
+                                      "}"
+                                  ],
+                         "description":  "This will trigger when a Raycast hits a target.",
+                         "prefix":  [
+                                        "bf6.OnRayCastHit"
+                                    ]
+                     },
+    "OnRayCastMissed":  {
+                            "scope":  "typescript",
+                            "body":  [
+                                         "export function OnRayCastMissed(eventPlayer: mod.Player): void {",
+                                         "\t//TODO",
+                                         "$0",
+                                         "}"
+                                     ],
+                            "description":  "This will trigger when a Raycast is called and doesn\u0027t hit any target.",
+                            "prefix":  [
+                                           "bf6.OnRayCastMissed"
+                                       ]
+                        },
+    "OnRevived":  {
+                      "scope":  "typescript",
+                      "body":  [
+                                   "export function OnRevived(eventPlayer: mod.Player, eventOtherPlayer: mod.Player): void {",
+                                   "\t//TODO",
+                                   "$0",
+                                   "}"
+                               ],
+                      "description":  "This will trigger when a Player is revived by another Player.",
+                      "prefix":  [
+                                     "bf6.OnRevived"
+                                 ]
+                  },
+    "OnRingOfFireZoneSizeChange":  {
+                                       "scope":  "typescript",
+                                       "body":  [
+                                                    "export function OnRingOfFireZoneSizeChange(eventRingOfFire: mod.RingOfFire, eventNumber: number): void {",
+                                                    "\t//TODO",
+                                                    "$0",
+                                                    "}"
+                                                ],
+                                       "description":  "This will trigger when a RingOfFire changes size.",
+                                       "prefix":  [
+                                                      "bf6.OnRingOfFireZoneSizeChange"
+                                                  ]
+                                   },
+    "OnSpawnerSpawned":  {
+                             "scope":  "typescript",
+                             "body":  [
+                                          "export function OnSpawnerSpawned(eventPlayer: mod.Player, eventSpawner: mod.Spawner): void {",
+                                          "\t//TODO",
+                                          "$0",
+                                          "}"
+                                      ],
+                             "description":  "This will trigger when an AISpawner spawns an AI Soldier.",
+                             "prefix":  [
+                                            "bf6.OnSpawnerSpawned"
+                                        ]
+                         },
+    "OnTimeLimitReached":  {
+                               "scope":  "typescript",
+                               "body":  [
+                                            "export function OnTimeLimitReached(): void {",
+                                            "\t//TODO",
+                                            "$0",
+                                            "}"
+                                        ],
+                               "description":  "This will trigger when the gamemode time limit has been reached.",
+                               "prefix":  [
+                                              "bf6.OnTimeLimitReached"
+                                          ]
+                           },
+    "OnVehicleDestroyed":  {
+                               "scope":  "typescript",
+                               "body":  [
+                                            "export function OnVehicleDestroyed(eventVehicle: mod.Vehicle): void {",
+                                            "\t//TODO",
+                                            "$0",
+                                            "}"
+                                        ],
+                               "description":  "This will trigger when a Vehicle is destroyed.",
+                               "prefix":  [
+                                              "bf6.OnVehicleDestroyed"
+                                          ]
+                           },
+    "OnVehicleSpawned":  {
+                             "scope":  "typescript",
+                             "body":  [
+                                          "export function OnVehicleSpawned(eventVehicle: mod.Vehicle): void {",
+                                          "\t//TODO",
+                                          "$0",
+                                          "}"
+                                      ],
+                             "description":  "This will trigger when a Vehicle is called into the map.",
+                             "prefix":  [
+                                            "bf6.OnVehicleSpawned"
+                                        ]
+                         }
+}
