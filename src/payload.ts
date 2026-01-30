@@ -12,11 +12,18 @@ export async function OnGameModeStarted(): Promise<void> {
 
     // Spawn payload object (door) at origin, identity rotation and scale
     Payload = mod.SpawnObject(
-        mod.RuntimeSpawn_Common.FiringRange_ExitDoor_01,
+        mod.RuntimeSpawn_Common.MCOM,
         mod.CreateVector(0, 0, 0),
         mod.CreateVector(0, 0, 0),
         mod.CreateVector(1, 1, 1)
     ) as mod.SpatialObject;
+    mod.AddUIIcon(
+        Payload,
+        mod.WorldIconImages.BombArmed,
+        2,
+        mod.CreateVector(0.3, 0.3, 0.3),
+        mod.Message(mod.stringkeys.payload.objective.title)
+    );
 
     // Build track from spatial object ids 1000..1999
     for (iterator = 1000; iterator < 1999; iterator++) {

@@ -7,6 +7,9 @@
     "checkpoints": {
       "count": "No of Checkpoints: {}"
     },
-    "status": "TrackCurrent: {} | Track: {} | Checkpoints: {}"
+    "status": "TrackCurrent: {} | Track: {} | Checkpoints: {}",
+    "objective": {
+      "title": "PAYLOAD"
+    }
   }
 }
