@@ -149,6 +149,13 @@ function getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1:
 
 function moveTowards(targetPos: mod.Vector, speed: number): void {
     const currentPos = mod.GetObjectPosition(STATE.payloadObject);
+    mod.DisplayHighlightedWorldLogMessage(
+        mod.Message(
+            mod.stringkeys.payload.objective.position,
+            mod.XComponentOf(currentPos),
+            mod.YComponentOf(currentPos),
+            mod.ZComponentOf(currentPos)
+        ));
     const direction = mod.DirectionTowards(currentPos, targetPos);
     const moveDelta = mod.Multiply(direction, speed);
     const nextPos = mod.Add(currentPos, moveDelta);
@@ -156,7 +163,7 @@ function moveTowards(targetPos: mod.Vector, speed: number): void {
     // Also update rotation based on the current waypoint logic
     const rotation = STATE.waypoints.get(STATE.reachedWaypointIndex)!.rotation;
 
-    mod.MoveObject(STATE.payloadObject, nextPos, rotation);
+    mod.MoveObject(STATE.payloadObject, moveDelta, rotation);
 }
 
 export function OngoingGlobal(): void {
@@ -173,7 +180,7 @@ export function OngoingGlobal(): void {
         // Push forward
         const targetWaypointIndex = STATE.reachedWaypointIndex + 1;
         const targetWaypoint = STATE.waypoints.get(targetWaypointIndex)!;
-        const speed = CONFIG.payloadSpeedMultiplierT1 + (STATE.speedAddition * (counts.t1 - counts.t2));
+        const speed = CONFIG.payloadSpeedMultiplierT1 + (CONFIG.speedAdditionPerPushingPlayer * (counts.t1 - counts.t2));
         moveTowards(targetWaypoint.position, speed);
         STATE.payloadState = PayloadState.ADVANCING;
 
@@ -191,7 +198,7 @@ export function OngoingGlobal(): void {
         // Push backward
         if (STATE.reachedWaypointIndex > STATE.lastReachedCheckpointIndex) {
             const currentWaypoint = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
-            const speed = CONFIG.payloadSpeedMultiplierT2 + (STATE.speedAddition * (counts.t2 - counts.t1));
+            const speed = CONFIG.payloadSpeedMultiplierT2 + (CONFIG.speedAdditionPerPushingPlayer * (counts.t2 - counts.t1));
             moveTowards(currentWaypoint.position, speed);
             STATE.payloadState = PayloadState.PUSHING_BACK;
 
@@ -202,7 +209,7 @@ export function OngoingGlobal(): void {
             // Check if we are precisely at the checkpoint or still moving back to it
             const lastCheckpoint = STATE.waypoints.get(STATE.lastReachedCheckpointIndex)!;
             if (mod.DistanceBetween(currentPos, lastCheckpoint.position) > CONFIG.waypointProximityRadius) {
-                const speed = CONFIG.payloadSpeedMultiplierT2 + (STATE.speedAddition * (counts.t2 - counts.t1));
+                const speed = CONFIG.payloadSpeedMultiplierT2 + (CONFIG.speedAdditionPerPushingPlayer * (counts.t2 - counts.t1));
                 moveTowards(lastCheckpoint.position, speed);
                 STATE.payloadState = PayloadState.PUSHING_BACK;
             } else {
