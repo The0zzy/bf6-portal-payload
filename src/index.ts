@@ -199,7 +199,7 @@ export function OngoingGlobal(): void {
                 moveTowards(lastCheckpoint.position, speed);
                 STATE.payloadState = PayloadState.PUSHING_BACK;
             } else {
-                STATE.payloadState = PayloadState.IDLE;
+                STATE.payloadState = PayloadState.LOCKED;
             }
         }
     } else if (counts.t1 > 0 && counts.t2 > 0) {
@@ -209,4 +209,8 @@ export function OngoingGlobal(): void {
     }
 
     calculatePayloadProgress();
+}
+
+export function OnTimeLimitReached(): void {
+    mod.EndGameMode(mod.GetTeam(2));
 }
