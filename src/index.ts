@@ -160,6 +160,10 @@ function moveTowards(targetPos: mod.Vector, speed: number): void {
 }
 
 export function OngoingGlobal(): void {
+    if (mod.GetMatchTimeRemaining() <= 0) {
+        mod.EndGameMode(mod.GetTeam(2));
+        return;
+    }
     if (!STATE.payloadObject) return;
 
     const currentPos = mod.GetObjectPosition(STATE.payloadObject);
@@ -214,6 +218,7 @@ export function OngoingGlobal(): void {
     calculatePayloadProgress();
 }
 
-export function OnTimeLimitReached(): void {
-    mod.EndGameMode(mod.GetTeam(2));
-}
+// bugged...
+// export function OnTimeLimitReached(): void {
+//     mod.EndGameMode(mod.GetTeam(2));
+// }
