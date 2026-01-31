@@ -13,6 +13,7 @@ interface PayloadWaypoint {
 }
 
 const CONFIG = {
+    gameModeTime: 20 * 60,
     defaultCheckpointTime: 450,
     enablePayloadSound: true,
     pushProximityRadius: 5,
@@ -114,6 +115,8 @@ function initPayloadObjective(): void {
 }
 
 export async function OnGameModeStarted(): Promise<void> {
+    mod.SetGameModeTimeLimit(CONFIG.gameModeTime);
+    mod.SetGameModeTargetScore(1000);
     initPayloadTrack();
     initProgressTracking();
     initPayloadRotation();
