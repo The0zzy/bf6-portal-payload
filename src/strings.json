@@ -14,7 +14,8 @@
       "advancing": "ADVANCING",
       "locked": "LOCKED",
       "pushing_back": "PUSHING BACK",
-      "message": "Payload State: {}"
+      "message": "Payload State: {}",
+      "checkpoint_reached": "Checkpoint {}/{} reached!"
     },
     "objective": {
       "title": "PAYLOAD",

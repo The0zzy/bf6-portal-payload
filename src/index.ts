@@ -38,6 +38,8 @@ interface State {
     totalDistance: number;
     lastWaypointDistance: number;
     lastReachedCheckpointIndex: number;
+    maxCheckpoints: number;
+    checkpointCount: number;
 }
 
 const CONFIG: Config = {
@@ -66,6 +68,8 @@ const STATE: State = {
     totalDistance: 0,
     lastWaypointDistance: 0,
     lastReachedCheckpointIndex: 0,
+    maxCheckpoints: 0,
+    checkpointCount: 0,
 }
 
 function getOpponentTeam(team: mod.Team): mod.Team {
@@ -107,10 +111,14 @@ function initPayloadTrack(): void {
                 rotation: mod.CreateVector(0, 0, 0)
             });
             waypointIndex++;
+            if (isCheckpoint) {
+                STATE.maxCheckpoints++;
+            }
         }
     }
     STATE.reachedWaypointIndex = 0;
     STATE.lastReachedCheckpointIndex = 0;
+    STATE.checkpointCount = 1;
 }
 
 function initPayloadRotation(): void {
@@ -132,6 +140,7 @@ function initPayloadObjective(): void {
         start.rotation,
         mod.CreateVector(1, 1, 1)
     );
+    mod.Wait(1);
     mod.AddUIIcon(
         STATE.payloadObject!,
         mod.WorldIconImages.BombArmed,
@@ -142,7 +151,7 @@ function initPayloadObjective(): void {
     );
 }
 
-export async function OnGameModeStarted(): Promise<void> {
+export function OnGameModeStarted(): void {
     mod.SetGameModeTimeLimit(3600);
     mod.SetGameModeTargetScore(1000);
     initPayloadTrack();
@@ -231,6 +240,8 @@ export function OngoingGlobal(): void {
             STATE.reachedWaypointIndex = targetWaypointIndex;
             if (targetWaypoint.isCheckpoint) {
                 STATE.lastReachedCheckpointIndex = targetWaypointIndex;
+                mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.checkpoint_reached, STATE.checkpointCount, STATE.maxCheckpoints));
+                STATE.checkpointCount++;
             }
             if (targetWaypointIndex === STATE.waypoints.size - 1) {
                 mod.EndGameMode(mod.GetTeam(1));
