@@ -8,6 +8,14 @@
       "count": "No of Checkpoints: {}"
     },
     "status": "TrackCurrent: {} | Track: {} | Checkpoints: {}",
+    "state": {
+      "idle": "IDLE",
+      "contested": "CONTESTED",
+      "advancing": "ADVANCING",
+      "locked": "LOCKED",
+      "pushing_back": "PUSHING BACK",
+      "message": "Payload State: {}"
+    },
     "objective": {
       "title": "PAYLOAD",
       "position": "Payload Position: ({}, {}, {})"

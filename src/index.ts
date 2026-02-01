@@ -137,7 +137,8 @@ function initPayloadObjective(): void {
         mod.WorldIconImages.BombArmed,
         3,
         mod.CreateVector(0.3, 0.3, 0.3),
-        mod.Message(mod.stringkeys.payload.objective.title)
+        mod.Message(mod.stringkeys.payload.objective.title),
+        mod.GetTeam(1)
     );
 }
 
@@ -224,6 +225,7 @@ export function OngoingGlobal(): void {
         const speed = CONFIG.payloadSpeedMultiplierT1 + (CONFIG.speedAdditionPerPushingPlayer * (counts.t1 - counts.t2));
         moveTowards(targetWaypoint.position, speed);
         STATE.payloadState = PayloadState.ADVANCING;
+        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.message, mod.stringkeys.payload.state.advancing));
 
         if (mod.DistanceBetween(currentPos, targetWaypoint.position) <= CONFIG.waypointProximityRadius) {
             STATE.reachedWaypointIndex = targetWaypointIndex;
@@ -242,6 +244,7 @@ export function OngoingGlobal(): void {
             const speed = CONFIG.payloadSpeedMultiplierT2 + (CONFIG.speedAdditionPerPushingPlayer * (counts.t2 - counts.t1));
             moveTowards(currentWaypoint.position, speed);
             STATE.payloadState = PayloadState.PUSHING_BACK;
+            mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.message, mod.stringkeys.payload.state.pushing_back));
 
             if (mod.DistanceBetween(currentPos, currentWaypoint.position) <= CONFIG.waypointProximityRadius) {
                 STATE.reachedWaypointIndex--;
@@ -255,12 +258,15 @@ export function OngoingGlobal(): void {
                 STATE.payloadState = PayloadState.PUSHING_BACK;
             } else {
                 STATE.payloadState = PayloadState.LOCKED;
+                mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.message, mod.stringkeys.payload.state.locked));
             }
         }
     } else if (counts.t1 > 0 && counts.t2 > 0) {
         STATE.payloadState = PayloadState.CONTESTED;
+        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.message, mod.stringkeys.payload.state.contested));
     } else {
         STATE.payloadState = PayloadState.IDLE;
+        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.message, mod.stringkeys.payload.state.idle));
     }
 
     calculatePayloadProgress();
