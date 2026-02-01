@@ -12,8 +12,36 @@ interface PayloadWaypoint {
     rotation: mod.Vector;
 }
 
-const CONFIG = {
-    gameModeTime: 20 * 60,
+interface Config {
+    gameModeTime: number;
+    defaultCheckpointTime: number;
+    enablePayloadSound: boolean;
+    pushProximityRadius: number;
+    waypointProximityRadius: number;
+    speedAdditionPerPushingPlayer: number;
+    payloadSpeedMultiplierT1: number;
+    payloadSpeedMultiplierT2: number;
+    overtimeDuration: number;
+    overtimeEnabled: boolean;
+    enableDebug: boolean;
+}
+
+interface State {
+    speedAddition: number;
+    progress: number;
+    firstAttackerSpawned: boolean;
+    payloadState: PayloadState;
+    waypoints: Map<number, PayloadWaypoint>;
+    reachedWaypointIndex: number;
+    isOvertime: boolean;
+    payloadObject: mod.Object | undefined;
+    totalDistance: number;
+    lastWaypointDistance: number;
+    lastReachedCheckpointIndex: number;
+}
+
+const CONFIG: Config = {
+    gameModeTime: 1 * 60,
     defaultCheckpointTime: 450,
     enablePayloadSound: true,
     pushProximityRadius: 5,
@@ -23,18 +51,18 @@ const CONFIG = {
     payloadSpeedMultiplierT2: 0.015,
     overtimeDuration: 60,
     overtimeEnabled: true,
+    enableDebug: true,
 }
 
-const STATE = {
+const STATE: State = {
     speedAddition: 0,
     progress: 0,
     firstAttackerSpawned: false,
     payloadState: PayloadState.IDLE,
-    payloadRotation: mod.EmptyArray(),
     waypoints: new Map<number, PayloadWaypoint>(),
     reachedWaypointIndex: 0,
     isOvertime: false,
-    payloadObject: mod.GetSpatialObject(123456),
+    payloadObject: undefined,
     totalDistance: 0,
     lastWaypointDistance: 0,
     lastReachedCheckpointIndex: 0,
@@ -57,7 +85,7 @@ function calculatePayloadProgress(): void {
     for (let i = 0; i < STATE.reachedWaypointIndex; i++) {
         traveledDistance += mod.DistanceBetween(STATE.waypoints.get(i)!.position, STATE.waypoints.get(i + 1)!.position);
     }
-    traveledDistance += mod.DistanceBetween(STATE.waypoints.get(STATE.reachedWaypointIndex)!.position, mod.GetObjectPosition(STATE.payloadObject));
+    traveledDistance += mod.DistanceBetween(STATE.waypoints.get(STATE.reachedWaypointIndex)!.position, mod.GetObjectPosition(STATE.payloadObject!));
 
     STATE.progress = traveledDistance / STATE.totalDistance;
 }
@@ -98,15 +126,14 @@ function initPayloadRotation(): void {
 
 function initPayloadObjective(): void {
     const start = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
-    // Spawn payload object (door) at origin, identity rotation and scale
     STATE.payloadObject = mod.SpawnObject(
         mod.RuntimeSpawn_Common.MCOM,
         start.position,
         start.rotation,
         mod.CreateVector(1, 1, 1)
-    ) as mod.SpatialObject;
+    );
     mod.AddUIIcon(
-        STATE.payloadObject,
+        STATE.payloadObject!,
         mod.WorldIconImages.BombArmed,
         3,
         mod.CreateVector(0.3, 0.3, 0.3),
@@ -148,14 +175,8 @@ function getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1:
 }
 
 function moveTowards(targetPos: mod.Vector, speed: number): void {
-    const currentPos = mod.GetObjectPosition(STATE.payloadObject);
-    mod.DisplayHighlightedWorldLogMessage(
-        mod.Message(
-            mod.stringkeys.payload.objective.position,
-            mod.XComponentOf(currentPos),
-            mod.YComponentOf(currentPos),
-            mod.ZComponentOf(currentPos)
-        ));
+    const currentPos = mod.GetObjectPosition(STATE.payloadObject!);
+
     const direction = mod.DirectionTowards(currentPos, targetPos);
     const moveDelta = mod.Multiply(direction, speed);
     const nextPos = mod.Add(currentPos, moveDelta);
@@ -163,7 +184,27 @@ function moveTowards(targetPos: mod.Vector, speed: number): void {
     // Also update rotation based on the current waypoint logic
     const rotation = STATE.waypoints.get(STATE.reachedWaypointIndex)!.rotation;
 
-    mod.MoveObject(STATE.payloadObject, moveDelta, rotation);
+    // does not work (visual object gets catapulted a far distance - getObjectPosition returns the same value as before the move)
+    // mod.MoveObject(STATE.payloadObject!, moveDelta, rotation);
+
+    // does not work (no movement at all [at least for the minimal movement delta 0.03, 0, 0.001])
+    // mod.MoveObject(STATE.payloadObject!, moveDelta);
+
+    // works (rotates by given value)
+    // mod.RotateObject(STATE.payloadObject!, rotation);
+
+    // works!!!
+    mod.SetObjectTransform(STATE.payloadObject!, mod.CreateTransform(nextPos, rotation))
+
+    // works but spawns new object every frame
+    // 
+    // mod.UnspawnObject(STATE.payloadObject!);
+    // STATE.payloadObject = mod.SpawnObject(
+    //     mod.RuntimeSpawn_Common.MCOM,
+    //     nextPos,
+    //     rotation,
+    //     mod.CreateVector(1, 1, 1)
+    // );
 }
 
 export function OngoingGlobal(): void {
@@ -173,7 +214,7 @@ export function OngoingGlobal(): void {
     }
     if (!STATE.payloadObject) return;
 
-    const currentPos = mod.GetObjectPosition(STATE.payloadObject);
+    const currentPos = mod.GetObjectPosition(STATE.payloadObject!);
     const counts = getAlivePlayersInProximity(currentPos, CONFIG.pushProximityRadius);
 
     if (counts.t1 > counts.t2) {
