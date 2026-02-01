@@ -41,7 +41,7 @@ interface State {
 }
 
 const CONFIG: Config = {
-    gameModeTime: 1 * 60,
+    gameModeTime: 20 * 60,
     defaultCheckpointTime: 450,
     enablePayloadSound: true,
     pushProximityRadius: 5,
@@ -143,7 +143,7 @@ function initPayloadObjective(): void {
 }
 
 export async function OnGameModeStarted(): Promise<void> {
-    mod.SetGameModeTimeLimit(CONFIG.gameModeTime);
+    mod.SetGameModeTimeLimit(3600);
     mod.SetGameModeTargetScore(1000);
     initPayloadTrack();
     initProgressTracking();
@@ -209,7 +209,7 @@ function moveTowards(targetPos: mod.Vector, speed: number): void {
 }
 
 export function OngoingGlobal(): void {
-    if (mod.GetMatchTimeRemaining() <= 0) {
+    if (mod.GetMatchTimeElapsed() >= CONFIG.gameModeTime) {
         mod.EndGameMode(mod.GetTeam(2));
         return;
     }
