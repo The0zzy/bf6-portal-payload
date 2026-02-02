@@ -1,3 +1,5 @@
+import { uiSetup } from './ui.ts';
+
 enum PayloadState {
     IDLE,
     CONTESTED,
@@ -103,8 +105,8 @@ function initPayloadTrack(): void {
         const objPos = mod.GetObjectPosition(mod.GetSpatialObject(i));
         if (!(mod.XComponentOf(objPos) == 0 && mod.YComponentOf(objPos) == 0)) {
             let isCheckpoint = false;
-            const checkpointPos = mod.GetObjectPosition(mod.GetSpatialObject(i + 2000));
-            if (!(mod.XComponentOf(checkpointPos) == 0 && mod.YComponentOf(checkpointPos) == 0)) {
+            const checkpointPos = mod.GetObjectPosition(mod.GetSpatialObject(i + 1000));
+            if (!(mod.XComponentOf(checkpointPos) == 0 && mod.YComponentOf(checkpointPos) == 0) || waypointIndex == 0) {
                 isCheckpoint = true;
                 STATE.maxCheckpoints++;
             }
@@ -156,13 +158,28 @@ function initPayloadObjective(): void {
     );
 }
 
+function initSectors(): void {
+    for (let i = 103; i < 199; i++) {
+        mod.EnableGameModeObjective(mod.GetSector(i), false);
+    }
+    for (let i = 302; i < 399; i++) {
+        mod.EnableHQ(mod.GetHQ(i), false);
+    }
+    for (let i = 402; i < 499; i++) {
+        mod.EnableHQ(mod.GetHQ(i), false);
+    }
+}
+
+
 export function OnGameModeStarted(): void {
     mod.SetGameModeTimeLimit(3600);
     mod.SetGameModeTargetScore(1000);
+    initSectors();
     initPayloadTrack();
     initProgressTracking();
     initPayloadRotation();
     initPayloadObjective();
+    uiSetup();
 }
 
 function getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1: number; t2: number } {
@@ -243,8 +260,13 @@ export function OngoingGlobal(): void {
         if (mod.DistanceBetween(currentPos, targetWaypoint.position) <= CONFIG.waypointProximityRadius) {
             STATE.reachedWaypointIndex = targetWaypointIndex;
             if (targetWaypoint.isCheckpoint) {
+                mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 300), false);
+                mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 400), false);
                 STATE.lastReachedCheckpointIndex = targetWaypointIndex;
                 STATE.currentCheckpoint++;
+                mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 300), true);
+                mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 400), true);
+                mod.EnableGameModeObjective(mod.GetSector(STATE.currentCheckpoint + 101), true);
                 mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.checkpoint_reached, STATE.currentCheckpoint, STATE.maxCheckpoints));
             }
             if (targetWaypointIndex === STATE.waypoints.size - 1) {

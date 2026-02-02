@@ -1,1754 +1,4377 @@
 {
-  "Portal_Dynamic": [
-    {
-      "name": "TEAM_1_HQ",
-      "AltTeam": "TeamNeutral",
-      "ObjId": 5,
-      "InfantrySpawns": [
-        "TEAM_1_HQ/SpawnPoint_1_1",
-        "TEAM_1_HQ/SpawnPoint_1_2",
-        "TEAM_1_HQ/SpawnPoint_1_3",
-        "TEAM_1_HQ/SpawnPoint_1_4"
-      ],
-      "HQArea": "TEAM_1_HQ/HQ_Team1",
-      "type": "HQ_PlayerSpawner",
-      "right": {
-        "x": 1,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 1,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 1
-      },
-      "position": {
-        "x": -181.27,
-        "y": 64.3885,
-        "z": 10.5202
-      },
-      "id": "TEAM_1_HQ",
-      "linked": ["HQArea", "InfantrySpawns"]
-    },
-    {
-      "name": "HQ_Team1",
-      "type": "PolygonVolume",
-      "id": "TEAM_1_HQ/HQ_Team1",
-      "height": 0,
-      "points": [
+    "Portal_Dynamic": [
         {
-          "x": -176.27,
-          "y": 69.3885,
-          "z": 15.5202
+            "name": "DeployCam",
+            "ObjId": 3,
+            "type": "DeployCam",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 0.0871558,
+                "z": -0.996195
+            },
+            "front": {
+                "x": 0,
+                "y": 0.996195,
+                "z": 0.0871558
+            },
+            "position": {
+                "x": -80.4583,
+                "y": 263.722,
+                "z": -30.3798
+            },
+            "id": "Camera3D/DeployCam"
         },
         {
-          "x": -176.27,
-          "y": 69.3885,
-          "z": 5.5202
+            "name": "CarSUV_01",
+            "type": "CarSUV_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -172.003,
+                "y": 64.0049,
+                "z": 9.71465
+            },
+            "id": "Payload/CarSUV_01"
         },
         {
-          "x": -186.27,
-          "y": 69.3885,
-          "z": 5.5202
+            "name": "Track_0",
+            "ObjId": 1000,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -245.294,
+                "y": 64.0338,
+                "z": 25.0164
+            },
+            "id": "Track/Track_0"
         },
         {
-          "x": -186.27,
-          "y": 69.3885,
-          "z": 15.5202
+            "name": "Track_1",
+            "ObjId": 1001,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -245.294,
+                "y": 64.0057,
+                "z": 16.8398
+            },
+            "id": "Track/Track_1"
+        },
+        {
+            "name": "Track_2",
+            "ObjId": 1002,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -243.893,
+                "y": 63.9957,
+                "z": 13.2827
+            },
+            "id": "Track/Track_2"
+        },
+        {
+            "name": "Track_3",
+            "ObjId": 1003,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -241.119,
+                "y": 64.0073,
+                "z": 11.2636
+            },
+            "id": "Track/Track_3"
+        },
+        {
+            "name": "Track_4",
+            "ObjId": 1004,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -237.103,
+                "y": 64.0294,
+                "z": 10.5684
+            },
+            "id": "Track/Track_4"
+        },
+        {
+            "name": "Track_5",
+            "ObjId": 1005,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -218.351,
+                "y": 63.9938,
+                "z": 10.5684
+            },
+            "id": "Track/Track_5"
+        },
+        {
+            "name": "Track_6",
+            "ObjId": 1006,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -194.833,
+                "y": 63.9938,
+                "z": 10.5684
+            },
+            "id": "Track/Track_6"
+        },
+        {
+            "name": "Track_7",
+            "ObjId": 1007,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -191.445,
+                "y": 63.9938,
+                "z": 9.33664
+            },
+            "id": "Track/Track_7"
+        },
+        {
+            "name": "Track_8",
+            "ObjId": 1008,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -189.193,
+                "y": 63.9938,
+                "z": 6.92015
+            },
+            "id": "Track/Track_8"
+        },
+        {
+            "name": "Track_9",
+            "ObjId": 1009,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -188.345,
+                "y": 63.9938,
+                "z": 4.46535
+            },
+            "id": "Track/Track_9"
+        },
+        {
+            "name": "Track_10",
+            "ObjId": 1010,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -188.345,
+                "y": 63.9938,
+                "z": -35.7525
+            },
+            "id": "Track/Track_10"
+        },
+        {
+            "name": "Track_11",
+            "ObjId": 1011,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -187.977,
+                "y": 63.9938,
+                "z": -38.2846
+            },
+            "id": "Track/Track_11"
+        },
+        {
+            "name": "Track_12",
+            "ObjId": 1012,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -186.11,
+                "y": 63.9938,
+                "z": -39.7863
+            },
+            "id": "Track/Track_12"
+        },
+        {
+            "name": "Track_13",
+            "ObjId": 1013,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -183.079,
+                "y": 63.9938,
+                "z": -40.4439
+            },
+            "id": "Track/Track_13"
+        },
+        {
+            "name": "Track_14",
+            "ObjId": 1014,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -173.086,
+                "y": 64.0103,
+                "z": -39.7564
+            },
+            "id": "Track/Track_14"
+        },
+        {
+            "name": "Track_15",
+            "ObjId": 1015,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -158.58,
+                "y": 64.0103,
+                "z": -40.0097
+            },
+            "id": "Track/Track_15"
+        },
+        {
+            "name": "Track_16",
+            "ObjId": 1016,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -147.761,
+                "y": 64.0103,
+                "z": -40.0097
+            },
+            "id": "Track/Track_16"
+        },
+        {
+            "name": "Track_17",
+            "ObjId": 1017,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -142.913,
+                "y": 64.0103,
+                "z": -40.8157
+            },
+            "id": "Track/Track_17"
+        },
+        {
+            "name": "Track_18",
+            "ObjId": 1018,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -139.964,
+                "y": 64.0103,
+                "z": -43.8412
+            },
+            "id": "Track/Track_18"
+        },
+        {
+            "name": "Track_19",
+            "ObjId": 1019,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -134.242,
+                "y": 64.0103,
+                "z": -55.8089
+            },
+            "id": "Track/Track_19"
+        },
+        {
+            "name": "Track_20",
+            "ObjId": 1020,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -131.694,
+                "y": 64.0103,
+                "z": -60.091
+            },
+            "id": "Track/Track_20"
+        },
+        {
+            "name": "Track_21",
+            "ObjId": 1021,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -127.158,
+                "y": 64.0103,
+                "z": -62.3307
+            },
+            "id": "Track/Track_21"
+        },
+        {
+            "name": "Track_22",
+            "ObjId": 1022,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -118.131,
+                "y": 64.0103,
+                "z": -62.7827
+            },
+            "id": "Track/Track_22"
+        },
+        {
+            "name": "Track_23",
+            "ObjId": 1023,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -94.5695,
+                "y": 64.0103,
+                "z": -62.7827
+            },
+            "id": "Track/Track_23"
+        },
+        {
+            "name": "Track_24",
+            "ObjId": 1024,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -90.3584,
+                "y": 64.0103,
+                "z": -60.8352
+            },
+            "id": "Track/Track_24"
+        },
+        {
+            "name": "Track_25",
+            "ObjId": 1025,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -88.1196,
+                "y": 64.0103,
+                "z": -57.0826
+            },
+            "id": "Track/Track_25"
+        },
+        {
+            "name": "Track_26",
+            "ObjId": 1026,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -88.014,
+                "y": 64.0103,
+                "z": -39.9684
+            },
+            "id": "Track/Track_26"
+        },
+        {
+            "name": "Track_27",
+            "ObjId": 1027,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -87.9688,
+                "y": 64.0103,
+                "z": -30.9657
+            },
+            "id": "Track/Track_27"
+        },
+        {
+            "name": "Track_28",
+            "ObjId": 1028,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -87.4411,
+                "y": 64.0103,
+                "z": -24.0093
+            },
+            "id": "Track/Track_28"
+        },
+        {
+            "name": "Track_29",
+            "ObjId": 1029,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -85.4674,
+                "y": 64.0103,
+                "z": -19.4545
+            },
+            "id": "Track/Track_29"
+        },
+        {
+            "name": "Track_30",
+            "ObjId": 1030,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -83.2741,
+                "y": 62.6894,
+                "z": -16.0782
+            },
+            "id": "Track/Track_30"
+        },
+        {
+            "name": "Track_31",
+            "ObjId": 1031,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -81.563,
+                "y": 61.8833,
+                "z": -13.7627
+            },
+            "id": "Track/Track_31"
+        },
+        {
+            "name": "Track_32",
+            "ObjId": 1032,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -79.783,
+                "y": 62.189,
+                "z": -11.6915
+            },
+            "id": "Track/Track_32"
+        },
+        {
+            "name": "Track_33",
+            "ObjId": 1033,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -78.5582,
+                "y": 62.7643,
+                "z": -9.97398
+            },
+            "id": "Track/Track_33"
+        },
+        {
+            "name": "Track_34",
+            "ObjId": 1034,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -76.7346,
+                "y": 64.0103,
+                "z": -7.619
+            },
+            "id": "Track/Track_34"
+        },
+        {
+            "name": "Track_35",
+            "ObjId": 1035,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -75.955,
+                "y": 64.008,
+                "z": -3.09304
+            },
+            "id": "Track/Track_35"
+        },
+        {
+            "name": "Track_36",
+            "ObjId": 1036,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -76.3464,
+                "y": 64.008,
+                "z": 6.66694
+            },
+            "id": "Track/Track_36"
+        },
+        {
+            "name": "Track_37",
+            "ObjId": 1037,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -76.7122,
+                "y": 64.008,
+                "z": 22.8647
+            },
+            "id": "Track/Track_37"
+        },
+        {
+            "name": "Track_38",
+            "ObjId": 1038,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -76.0132,
+                "y": 64.008,
+                "z": 27.781
+            },
+            "id": "Track/Track_38"
+        },
+        {
+            "name": "Track_39",
+            "ObjId": 1039,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -72.3581,
+                "y": 64.008,
+                "z": 31.6896
+            },
+            "id": "Track/Track_39"
+        },
+        {
+            "name": "Track_40",
+            "ObjId": 1040,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -67.2656,
+                "y": 64.0629,
+                "z": 33.056
+            },
+            "id": "Track/Track_40"
+        },
+        {
+            "name": "Track_41",
+            "ObjId": 1041,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -57.6944,
+                "y": 64.0086,
+                "z": 33.3338
+            },
+            "id": "Track/Track_41"
+        },
+        {
+            "name": "Track_42",
+            "ObjId": 1042,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -46.4664,
+                "y": 64.0086,
+                "z": 33.3338
+            },
+            "id": "Track/Track_42"
+        },
+        {
+            "name": "Track_43",
+            "ObjId": 1043,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -34.922,
+                "y": 64.0086,
+                "z": 33.3338
+            },
+            "id": "Track/Track_43"
+        },
+        {
+            "name": "Track_44",
+            "ObjId": 1044,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -26.7489,
+                "y": 65.0367,
+                "z": 33.3338
+            },
+            "id": "Track/Track_44"
+        },
+        {
+            "name": "Track_45",
+            "ObjId": 1045,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -20.9784,
+                "y": 64.3348,
+                "z": 33.4904
+            },
+            "id": "Track/Track_45"
+        },
+        {
+            "name": "Track_46",
+            "ObjId": 1046,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -17.4752,
+                "y": 64.0288,
+                "z": 33.8228
+            },
+            "id": "Track/Track_46"
+        },
+        {
+            "name": "Track_47",
+            "ObjId": 1047,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -12.46,
+                "y": 64.0038,
+                "z": 34.5847
+            },
+            "id": "Track/Track_47"
+        },
+        {
+            "name": "Track_48",
+            "ObjId": 1048,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -7.2057,
+                "y": 63.8706,
+                "z": 33.4406
+            },
+            "id": "Track/Track_48"
+        },
+        {
+            "name": "Track_49",
+            "ObjId": 1049,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -4.94413,
+                "y": 63.5092,
+                "z": 32.8734
+            },
+            "id": "Track/Track_49"
+        },
+        {
+            "name": "Track_50",
+            "ObjId": 1050,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -1.50448,
+                "y": 63.0465,
+                "z": 31.9108
+            },
+            "id": "Track/Track_50"
+        },
+        {
+            "name": "Track_51",
+            "ObjId": 1051,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 0.77276,
+                "y": 62.9522,
+                "z": 30.7962
+            },
+            "id": "Track/Track_51"
+        },
+        {
+            "name": "Track_52",
+            "ObjId": 1052,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 3.92682,
+                "y": 63.4306,
+                "z": 29.2123
+            },
+            "id": "Track/Track_52"
+        },
+        {
+            "name": "Track_53",
+            "ObjId": 1053,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 6.01262,
+                "y": 63.9528,
+                "z": 27.9673
+            },
+            "id": "Track/Track_53"
+        },
+        {
+            "name": "Track_54",
+            "ObjId": 1054,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 8.82431,
+                "y": 64.0125,
+                "z": 25.0004
+            },
+            "id": "Track/Track_54"
+        },
+        {
+            "name": "Track_55",
+            "ObjId": 1055,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 19.7756,
+                "y": 64.0125,
+                "z": 13.5414
+            },
+            "id": "Track/Track_55"
+        },
+        {
+            "name": "Track_56",
+            "ObjId": 1056,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 30.9343,
+                "y": 63.5143,
+                "z": 3.65262
+            },
+            "id": "Track/Track_56"
+        },
+        {
+            "name": "Track_57",
+            "ObjId": 1057,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 37.0499,
+                "y": 63.1481,
+                "z": -4.37879
+            },
+            "id": "Track/Track_57"
+        },
+        {
+            "name": "Track_58",
+            "ObjId": 1058,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 43.8842,
+                "y": 62.776,
+                "z": -12.3215
+            },
+            "id": "Track/Track_58"
+        },
+        {
+            "name": "Track_59",
+            "ObjId": 1059,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 55.4807,
+                "y": 62.271,
+                "z": -23.9963
+            },
+            "id": "Track/Track_59"
+        },
+        {
+            "name": "Track_60",
+            "ObjId": 1060,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 62.4922,
+                "y": 62.115,
+                "z": -27.1559
+            },
+            "id": "Track/Track_60"
+        },
+        {
+            "name": "Track_61",
+            "ObjId": 1061,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 68.2804,
+                "y": 62.115,
+                "z": -27.5102
+            },
+            "id": "Track/Track_61"
+        },
+        {
+            "name": "Track_62",
+            "ObjId": 1062,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 82.118,
+                "y": 62.115,
+                "z": -26.7511
+            },
+            "id": "Track/Track_62"
+        },
+        {
+            "name": "Track_63",
+            "ObjId": 1063,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 91.6212,
+                "y": 62.115,
+                "z": -26.7511
+            },
+            "id": "Track/Track_63"
+        },
+        {
+            "name": "Track_64",
+            "ObjId": 1064,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 98.5525,
+                "y": 62.5226,
+                "z": -26.7511
+            },
+            "id": "Track/Track_64"
+        },
+        {
+            "name": "Track_65",
+            "ObjId": 1065,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 107.073,
+                "y": 62.0898,
+                "z": -27.4546
+            },
+            "id": "Track/Track_65"
+        },
+        {
+            "name": "Track_66",
+            "ObjId": 1066,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 114.073,
+                "y": 62.075,
+                "z": -27.7538
+            },
+            "id": "Track/Track_66"
+        },
+        {
+            "name": "Track_67",
+            "ObjId": 1067,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 124.248,
+                "y": 62.075,
+                "z": -27.7538
+            },
+            "id": "Track/Track_67"
+        },
+        {
+            "name": "Track_68",
+            "ObjId": 1068,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 127.217,
+                "y": 62.075,
+                "z": -28.496
+            },
+            "id": "Track/Track_68"
+        },
+        {
+            "name": "Track_69",
+            "ObjId": 1069,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 130.068,
+                "y": 62.075,
+                "z": -30.3337
+            },
+            "id": "Track/Track_69"
+        },
+        {
+            "name": "Track_70",
+            "ObjId": 1070,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 130.786,
+                "y": 62.075,
+                "z": -34.049
+            },
+            "id": "Track/Track_70"
+        },
+        {
+            "name": "Track_71",
+            "ObjId": 1071,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 132.001,
+                "y": 62.075,
+                "z": -45.4306
+            },
+            "id": "Track/Track_71"
+        },
+        {
+            "name": "Track_72",
+            "ObjId": 1072,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 132.001,
+                "y": 62.5108,
+                "z": -53.2898
+            },
+            "id": "Track/Track_72"
+        },
+        {
+            "name": "Track_73",
+            "ObjId": 1073,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 133.13,
+                "y": 62.2142,
+                "z": -58.713
+            },
+            "id": "Track/Track_73"
+        },
+        {
+            "name": "Track_74",
+            "ObjId": 1074,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 133.827,
+                "y": 62.288,
+                "z": -62.0094
+            },
+            "id": "Track/Track_74"
+        },
+        {
+            "name": "Track_75",
+            "ObjId": 1075,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 133.809,
+                "y": 62.3342,
+                "z": -65.3529
+            },
+            "id": "Track/Track_75"
+        },
+        {
+            "name": "Track_76",
+            "ObjId": 1076,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 133.204,
+                "y": 62.1846,
+                "z": -70.0687
+            },
+            "id": "Track/Track_76"
+        },
+        {
+            "name": "Track_77",
+            "ObjId": 1077,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 131.227,
+                "y": 62.0451,
+                "z": -80.0826
+            },
+            "id": "Track/Track_77"
+        },
+        {
+            "name": "Track_78",
+            "ObjId": 1078,
+            "type": "FiringRange_MatDecal_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 131.227,
+                "y": 62.111,
+                "z": -89.6506
+            },
+            "id": "Track/Track_78"
+        },
+        {
+            "name": "checkpoint0",
+            "ObjId": 2018,
+            "type": "FireAlarmButton_01",
+            "right": {
+                "x": 10,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 10,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 10
+            },
+            "position": {
+                "x": -174.6198,
+                "y": 61.1649,
+                "z": 10.4157
+            },
+            "id": "Checkpoints/checkpoint0"
+        },
+        {
+            "name": "checkpoint1",
+            "ObjId": 2037,
+            "type": "FireAlarmButton_01",
+            "right": {
+                "x": 10,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 10,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 10
+            },
+            "position": {
+                "x": -174.6198,
+                "y": 61.1649,
+                "z": 10.4157
+            },
+            "id": "Checkpoints/checkpoint1"
+        },
+        {
+            "name": "checkpoint2",
+            "ObjId": 2058,
+            "type": "FireAlarmButton_01",
+            "right": {
+                "x": 10,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 10,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 10
+            },
+            "position": {
+                "x": -174.6198,
+                "y": 61.1649,
+                "z": 10.4157
+            },
+            "id": "Checkpoints/checkpoint2"
+        },
+        {
+            "name": "checkpoint3",
+            "ObjId": 2078,
+            "type": "FireAlarmButton_01",
+            "right": {
+                "x": 10,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 10,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 10
+            },
+            "position": {
+                "x": -174.6198,
+                "y": 61.1649,
+                "z": 10.4157
+            },
+            "id": "Checkpoints/checkpoint3"
+        },
+        {
+            "name": "Sector0",
+            "ObjId": 100,
+            "SectorArea": "Sectors/Sector0/SectorArea0",
+            "type": "Sector",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -287.163,
+                "y": 64.1004,
+                "z": 59.6446
+            },
+            "id": "Sectors/Sector0",
+            "linked": [
+                "SectorArea"
+            ]
+        },
+        {
+            "name": "SectorArea0",
+            "type": "PolygonVolume",
+            "id": "Sectors/Sector0/SectorArea0",
+            "height": 100,
+            "points": [
+                {
+                    "x": -256.64093,
+                    "y": 63.303212,
+                    "z": 12.519
+                },
+                {
+                    "x": -300.29363,
+                    "y": 63.303212,
+                    "z": 13.7551
+                },
+                {
+                    "x": -300.13373,
+                    "y": 63.303212,
+                    "z": 49.3206599
+                },
+                {
+                    "x": -315.04333,
+                    "y": 63.303212,
+                    "z": 49.3206599
+                },
+                {
+                    "x": -314.29783,
+                    "y": 63.303212,
+                    "z": 97.2798
+                },
+                {
+                    "x": -278.07637,
+                    "y": 63.303212,
+                    "z": 97.5177
+                },
+                {
+                    "x": -254.56653,
+                    "y": 63.303212,
+                    "z": 94.5955
+                },
+                {
+                    "x": -234.07653,
+                    "y": 63.303212,
+                    "z": 89.8379
+                },
+                {
+                    "x": -234.53313,
+                    "y": 63.303212,
+                    "z": 35.3093
+                },
+                {
+                    "x": -256.02963,
+                    "y": 63.303212,
+                    "z": 35.3204
+                }
+            ]
+        },
+        {
+            "name": "AreaTrigger0",
+            "ObjId": 600,
+            "Area": "Sectors/Sector0/SectorArea0",
+            "type": "AreaTrigger",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -286.24317,
+                "y": 87.2405,
+                "z": 62.89566
+            },
+            "id": "Sectors/Sector0/AreaTrigger0",
+            "linked": [
+                "Area"
+            ]
+        },
+        {
+            "name": "Sector1",
+            "ObjId": 101,
+            "MCOMs": [],
+            "SectorArea": "Sectors/Sector1/SectorArea1",
+            "type": "Sector",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -166.771,
+                "y": 64.1004,
+                "z": 10.3386
+            },
+            "id": "Sectors/Sector1",
+            "linked": [
+                "SectorArea",
+                "MCOMs"
+            ]
+        },
+        {
+            "name": "SectorArea1",
+            "type": "PolygonVolume",
+            "id": "Sectors/Sector1/SectorArea1",
+            "height": 100,
+            "points": [
+                {
+                    "x": -200.613,
+                    "y": 63.535176,
+                    "z": -59.2482
+                },
+                {
+                    "x": -204.785,
+                    "y": 63.535176,
+                    "z": -38.1857
+                },
+                {
+                    "x": -226.925,
+                    "y": 63.535176,
+                    "z": -27.3281
+                },
+                {
+                    "x": -227.4,
+                    "y": 63.535176,
+                    "z": -9.52571
+                },
+                {
+                    "x": -239.98,
+                    "y": 63.535176,
+                    "z": -8.9323
+                },
+                {
+                    "x": -240.218,
+                    "y": 63.535176,
+                    "z": 0.681003
+                },
+                {
+                    "x": -252.479,
+                    "y": 63.535176,
+                    "z": 1.11671
+                },
+                {
+                    "x": -256.675,
+                    "y": 63.535176,
+                    "z": 12.5522
+                },
+                {
+                    "x": -256.049,
+                    "y": 63.535176,
+                    "z": 35.341
+                },
+                {
+                    "x": -234.573,
+                    "y": 63.535176,
+                    "z": 35.3645
+                },
+                {
+                    "x": -225.18,
+                    "y": 63.535176,
+                    "z": 37.7392
+                },
+                {
+                    "x": -164.009,
+                    "y": 63.535176,
+                    "z": 37.5602
+                },
+                {
+                    "x": -144.781,
+                    "y": 63.535176,
+                    "z": 37.8159
+                },
+                {
+                    "x": -139.941,
+                    "y": 63.535176,
+                    "z": 8.69855
+                },
+                {
+                    "x": -130.143,
+                    "y": 63.535176,
+                    "z": -7.52015
+                },
+                {
+                    "x": -128.754,
+                    "y": 63.535176,
+                    "z": -82.5605
+                },
+                {
+                    "x": -140.03,
+                    "y": 63.535176,
+                    "z": -81.7942
+                },
+                {
+                    "x": -157.436,
+                    "y": 63.535176,
+                    "z": -61.651
+                },
+                {
+                    "x": -179.221,
+                    "y": 63.535176,
+                    "z": -58.1479
+                }
+            ]
+        },
+        {
+            "name": "AreaTrigger1",
+            "ObjId": 601,
+            "Area": "Sectors/Sector1/SectorArea1",
+            "type": "AreaTrigger",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -189.7294,
+                "y": 87.2405,
+                "z": 17.95992
+            },
+            "id": "Sectors/Sector1/AreaTrigger1",
+            "linked": [
+                "Area"
+            ]
+        },
+        {
+            "name": "TEAM_1_HQ",
+            "AltTeam": "TeamNeutral",
+            "ObjId": 301,
+            "InfantrySpawns": [
+                "Sectors/Sector1/TEAM_1_HQ/SpawnPoint_1_1",
+                "Sectors/Sector1/TEAM_1_HQ/SpawnPoint_1_2",
+                "Sectors/Sector1/TEAM_1_HQ/SpawnPoint_1_3",
+                "Sectors/Sector1/TEAM_1_HQ/SpawnPoint_1_4"
+            ],
+            "HQArea": "Sectors/Sector1/TEAM_1_HQ/HQ_Team1",
+            "type": "HQ_PlayerSpawner",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -289.168,
+                "y": 66.6556,
+                "z": 63.1111
+            },
+            "id": "Sectors/Sector1/TEAM_1_HQ",
+            "linked": [
+                "HQArea",
+                "InfantrySpawns"
+            ]
+        },
+        {
+            "name": "HQ_Team1",
+            "type": "PolygonVolume",
+            "id": "Sectors/Sector1/TEAM_1_HQ/HQ_Team1",
+            "height": 0,
+            "points": [
+                {
+                    "x": -283.490723,
+                    "y": 71.6556,
+                    "z": 67.585612
+                },
+                {
+                    "x": -283.490723,
+                    "y": 71.6556,
+                    "z": 57.585612
+                },
+                {
+                    "x": -293.490723,
+                    "y": 71.6556,
+                    "z": 57.585612
+                },
+                {
+                    "x": -293.490723,
+                    "y": 71.6556,
+                    "z": 67.585612
+                }
+            ]
+        },
+        {
+            "name": "SpawnPoint_1_1",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.856231,
+                "y": 0,
+                "z": -0.516593
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.516593,
+                "y": 0,
+                "z": -0.856231
+            },
+            "position": {
+                "x": -284.29184,
+                "y": 66.6556,
+                "z": 37.2215
+            },
+            "id": "Sectors/Sector1/TEAM_1_HQ/SpawnPoint_1_1"
+        },
+        {
+            "name": "SpawnPoint_1_2",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.897644,
+                "y": 0,
+                "z": -0.440722
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.440722,
+                "y": 0,
+                "z": 0.897644
+            },
+            "position": {
+                "x": -267.7194,
+                "y": 66.6556,
+                "z": 60.90384
+            },
+            "id": "Sectors/Sector1/TEAM_1_HQ/SpawnPoint_1_2"
+        },
+        {
+            "name": "SpawnPoint_1_3",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.703345,
+                "y": 0,
+                "z": -0.710849
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.710849,
+                "y": 0,
+                "z": -0.703345
+            },
+            "position": {
+                "x": -284.98834,
+                "y": 66.6556,
+                "z": 94.1068
+            },
+            "id": "Sectors/Sector1/TEAM_1_HQ/SpawnPoint_1_3"
+        },
+        {
+            "name": "SpawnPoint_1_4",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.74353,
+                "y": 0,
+                "z": -0.668702
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.668702,
+                "y": 0,
+                "z": -0.74353
+            },
+            "position": {
+                "x": -288.697358,
+                "y": 66.6556,
+                "z": 46.926
+            },
+            "id": "Sectors/Sector1/TEAM_1_HQ/SpawnPoint_1_4"
+        },
+        {
+            "name": "TEAM_2_HQ",
+            "Team": "Team2",
+            "AltTeam": "TeamNeutral",
+            "ObjId": 401,
+            "InfantrySpawns": [
+                "Sectors/Sector1/TEAM_2_HQ/SpawnPoint_2_1",
+                "Sectors/Sector1/TEAM_2_HQ/SpawnPoint_2_2",
+                "Sectors/Sector1/TEAM_2_HQ/SpawnPoint_2_3",
+                "Sectors/Sector1/TEAM_2_HQ/SpawnPoint_2_4"
+            ],
+            "HQArea": "Sectors/Sector1/TEAM_2_HQ/HQ_Team2",
+            "type": "HQ_PlayerSpawner",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -126.285,
+                "y": 66.0269,
+                "z": 18.0136
+            },
+            "id": "Sectors/Sector1/TEAM_2_HQ",
+            "linked": [
+                "HQArea",
+                "InfantrySpawns"
+            ]
+        },
+        {
+            "name": "HQ_Team2",
+            "type": "PolygonVolume",
+            "id": "Sectors/Sector1/TEAM_2_HQ/HQ_Team2",
+            "height": 0,
+            "points": [
+                {
+                    "x": -121.285,
+                    "y": 71.0269,
+                    "z": 23.0136
+                },
+                {
+                    "x": -121.285,
+                    "y": 71.0269,
+                    "z": 13.0136
+                },
+                {
+                    "x": -131.285,
+                    "y": 71.0269,
+                    "z": 13.0136
+                },
+                {
+                    "x": -131.285,
+                    "y": 71.0269,
+                    "z": 23.0136
+                }
+            ]
+        },
+        {
+            "name": "SpawnPoint_2_1",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.817508,
+                "y": 0,
+                "z": 0.575919
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.575919,
+                "y": 0,
+                "z": -0.817508
+            },
+            "position": {
+                "x": -91.3898,
+                "y": 64.04461,
+                "z": 15.62129
+            },
+            "id": "Sectors/Sector1/TEAM_2_HQ/SpawnPoint_2_1"
+        },
+        {
+            "name": "SpawnPoint_2_2",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.0691121,
+                "y": 0,
+                "z": 0.997609
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.997609,
+                "y": 0,
+                "z": 0.0691121
+            },
+            "position": {
+                "x": -98.4098,
+                "y": 62.91539,
+                "z": 1.1572
+            },
+            "id": "Sectors/Sector1/TEAM_2_HQ/SpawnPoint_2_2"
+        },
+        {
+            "name": "SpawnPoint_2_3",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.921545,
+                "y": 0,
+                "z": 0.388272
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.388272,
+                "y": 0,
+                "z": 0.921545
+            },
+            "position": {
+                "x": -92.2887,
+                "y": 64.2719,
+                "z": -98.1244
+            },
+            "id": "Sectors/Sector1/TEAM_2_HQ/SpawnPoint_2_3"
+        },
+        {
+            "name": "SpawnPoint_2_4",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.895215,
+                "y": 0,
+                "z": 0.445635
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.445635,
+                "y": 0,
+                "z": -0.895215
+            },
+            "position": {
+                "x": -86.4952,
+                "y": 64.25696,
+                "z": -31.2926
+            },
+            "id": "Sectors/Sector1/TEAM_2_HQ/SpawnPoint_2_4"
+        },
+        {
+            "name": "Sector2",
+            "ObjId": 102,
+            "MCOMs": [],
+            "SectorArea": "Sectors/Sector2/SectorArea2",
+            "type": "Sector",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -102.832,
+                "y": 64.1004,
+                "z": -3.70543
+            },
+            "id": "Sectors/Sector2",
+            "linked": [
+                "SectorArea",
+                "MCOMs"
+            ]
+        },
+        {
+            "name": "SectorArea2",
+            "type": "PolygonVolume",
+            "id": "Sectors/Sector2/SectorArea2",
+            "height": 100,
+            "points": [
+                {
+                    "x": -128.84,
+                    "y": 59.68305,
+                    "z": -82.49393
+                },
+                {
+                    "x": -130.297,
+                    "y": 59.68305,
+                    "z": -7.50553
+                },
+                {
+                    "x": -140.084,
+                    "y": 59.68305,
+                    "z": 8.62277
+                },
+                {
+                    "x": -144.946,
+                    "y": 59.68305,
+                    "z": 37.78907
+                },
+                {
+                    "x": -133.377,
+                    "y": 59.68305,
+                    "z": 40.52267
+                },
+                {
+                    "x": -97.968,
+                    "y": 59.68305,
+                    "z": 42.01037
+                },
+                {
+                    "x": -67.255,
+                    "y": 59.68305,
+                    "z": 58.18747
+                },
+                {
+                    "x": -65.048,
+                    "y": 59.68305,
+                    "z": -31.98193
+                },
+                {
+                    "x": -57.94,
+                    "y": 59.68305,
+                    "z": -40.06103
+                },
+                {
+                    "x": -58.044,
+                    "y": 59.68305,
+                    "z": -111.03223
+                },
+                {
+                    "x": -96.01,
+                    "y": 59.68305,
+                    "z": -105.47243
+                }
+            ]
+        },
+        {
+            "name": "AreaTrigger2",
+            "ObjId": 602,
+            "Area": "Sectors/Sector2/SectorArea2",
+            "type": "AreaTrigger",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -100.14152,
+                "y": 87.2405,
+                "z": 0.46247
+            },
+            "id": "Sectors/Sector2/AreaTrigger2",
+            "linked": [
+                "Area"
+            ]
+        },
+        {
+            "name": "TEAM_1_HQ2",
+            "AltTeam": "TeamNeutral",
+            "ObjId": 302,
+            "InfantrySpawns": [
+                "Sectors/Sector2/TEAM_1_HQ2/SpawnPoint_1_1",
+                "Sectors/Sector2/TEAM_1_HQ2/SpawnPoint_1_2",
+                "Sectors/Sector2/TEAM_1_HQ2/SpawnPoint_1_3",
+                "Sectors/Sector2/TEAM_1_HQ2/SpawnPoint_1_4"
+            ],
+            "HQArea": "Sectors/Sector2/TEAM_1_HQ2/HQ_Team1",
+            "type": "HQ_PlayerSpawner",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -161.8277,
+                "y": 64.388494,
+                "z": 10.92067
+            },
+            "id": "Sectors/Sector2/TEAM_1_HQ2",
+            "linked": [
+                "HQArea",
+                "InfantrySpawns"
+            ]
+        },
+        {
+            "name": "HQ_Team1",
+            "type": "PolygonVolume",
+            "id": "Sectors/Sector2/TEAM_1_HQ2/HQ_Team1",
+            "height": 0,
+            "points": [
+                {
+                    "x": -178.5394,
+                    "y": 69.388494,
+                    "z": 15.91623684
+                },
+                {
+                    "x": -178.5394,
+                    "y": 69.388494,
+                    "z": 5.91623684
+                },
+                {
+                    "x": -188.5394,
+                    "y": 69.388494,
+                    "z": 5.91623684
+                },
+                {
+                    "x": -188.5394,
+                    "y": 69.388494,
+                    "z": 15.91623684
+                }
+            ]
+        },
+        {
+            "name": "SpawnPoint_1_1",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.845812,
+                "y": 0,
+                "z": -0.533482
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.533482,
+                "y": 0,
+                "z": -0.845812
+            },
+            "position": {
+                "x": -174.507,
+                "y": 64.928579,
+                "z": -31.13353
+            },
+            "id": "Sectors/Sector2/TEAM_1_HQ2/SpawnPoint_1_1"
+        },
+        {
+            "name": "SpawnPoint_1_2",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.859888,
+                "y": 0,
+                "z": -0.510483
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.510483,
+                "y": 0,
+                "z": -0.859888
+            },
+            "position": {
+                "x": -188.4717,
+                "y": 64.180257,
+                "z": -6.96793
+            },
+            "id": "Sectors/Sector2/TEAM_1_HQ2/SpawnPoint_1_2"
+        },
+        {
+            "name": "SpawnPoint_1_3",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.911905,
+                "y": 0,
+                "z": -0.410401
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.410401,
+                "y": 0,
+                "z": 0.911905
+            },
+            "position": {
+                "x": -169.61963,
+                "y": 65.430764,
+                "z": -17.13313
+            },
+            "id": "Sectors/Sector2/TEAM_1_HQ2/SpawnPoint_1_3"
+        },
+        {
+            "name": "SpawnPoint_1_4",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.384827,
+                "y": 0,
+                "z": -0.922988
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.922988,
+                "y": 0,
+                "z": 0.384827
+            },
+            "position": {
+                "x": -173.0478,
+                "y": 65.580774,
+                "z": -54.22203
+            },
+            "id": "Sectors/Sector2/TEAM_1_HQ2/SpawnPoint_1_4"
+        },
+        {
+            "name": "TEAM_2_HQ2",
+            "Team": "Team2",
+            "AltTeam": "TeamNeutral",
+            "ObjId": 402,
+            "InfantrySpawns": [
+                "Sectors/Sector2/TEAM_2_HQ2/SpawnPoint_2_1",
+                "Sectors/Sector2/TEAM_2_HQ2/SpawnPoint_2_2",
+                "Sectors/Sector2/TEAM_2_HQ2/SpawnPoint_2_3",
+                "Sectors/Sector2/TEAM_2_HQ2/SpawnPoint_2_4"
+            ],
+            "HQArea": "Sectors/Sector2/TEAM_2_HQ2/HQ_Team2",
+            "type": "HQ_PlayerSpawner",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -6.0007,
+                "y": 65.31974,
+                "z": 7.52617
+            },
+            "id": "Sectors/Sector2/TEAM_2_HQ2",
+            "linked": [
+                "HQArea",
+                "InfantrySpawns"
+            ]
+        },
+        {
+            "name": "HQ_Team2",
+            "type": "PolygonVolume",
+            "id": "Sectors/Sector2/TEAM_2_HQ2/HQ_Team2",
+            "height": 0,
+            "points": [
+                {
+                    "x": -1.0007,
+                    "y": 70.31974,
+                    "z": 12.52617
+                },
+                {
+                    "x": -1.0007,
+                    "y": 70.31974,
+                    "z": 2.52617
+                },
+                {
+                    "x": -11.0007,
+                    "y": 70.31974,
+                    "z": 2.52617
+                },
+                {
+                    "x": -11.0007,
+                    "y": 70.31974,
+                    "z": 12.52617
+                }
+            ]
+        },
+        {
+            "name": "SpawnPoint_2_1",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.0816434,
+                "y": 0,
+                "z": 0.996662
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.996662,
+                "y": 0,
+                "z": -0.0816434
+            },
+            "position": {
+                "x": -36.2799,
+                "y": 63.46741,
+                "z": 60.13767
+            },
+            "id": "Sectors/Sector2/TEAM_2_HQ2/SpawnPoint_2_1"
+        },
+        {
+            "name": "SpawnPoint_2_2",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.0126704,
+                "y": 0,
+                "z": 0.99992
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.99992,
+                "y": 0,
+                "z": 0.0126704
+            },
+            "position": {
+                "x": -3.60616,
+                "y": 65.31974,
+                "z": 5.66795
+            },
+            "id": "Sectors/Sector2/TEAM_2_HQ2/SpawnPoint_2_2"
+        },
+        {
+            "name": "SpawnPoint_2_3",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.200822,
+                "y": 0,
+                "z": 0.979627
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.979627,
+                "y": 0,
+                "z": -0.200822
+            },
+            "position": {
+                "x": 7.0235,
+                "y": 66.205093,
+                "z": 12.46713
+            },
+            "id": "Sectors/Sector2/TEAM_2_HQ2/SpawnPoint_2_3"
+        },
+        {
+            "name": "SpawnPoint_2_4",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.478018,
+                "y": 0,
+                "z": 0.87835
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.87835,
+                "y": 0,
+                "z": -0.478018
+            },
+            "position": {
+                "x": -14.08635,
+                "y": 64.330391,
+                "z": 39.49557
+            },
+            "id": "Sectors/Sector2/TEAM_2_HQ2/SpawnPoint_2_4"
+        },
+        {
+            "name": "Sector3",
+            "ObjId": 103,
+            "MCOMs": [],
+            "SectorArea": "Sectors/Sector3/SectorArea3",
+            "type": "Sector",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -22.7624,
+                "y": 64.1004,
+                "z": -3.70543
+            },
+            "id": "Sectors/Sector3",
+            "linked": [
+                "SectorArea",
+                "MCOMs"
+            ]
+        },
+        {
+            "name": "SectorArea3",
+            "type": "PolygonVolume",
+            "id": "Sectors/Sector3/SectorArea3",
+            "height": 100,
+            "points": [
+                {
+                    "x": 7.26751,
+                    "y": 57.81192,
+                    "z": -38.09213
+                },
+                {
+                    "x": -57.94359,
+                    "y": 57.81192,
+                    "z": -40.13513
+                },
+                {
+                    "x": -65.11209,
+                    "y": 57.81192,
+                    "z": -32.01043
+                },
+                {
+                    "x": -67.29449,
+                    "y": 57.81192,
+                    "z": 58.07397
+                },
+                {
+                    "x": -33.45309,
+                    "y": 57.81192,
+                    "z": 68.47977
+                },
+                {
+                    "x": -2.35259,
+                    "y": 57.81192,
+                    "z": 69.25537
+                },
+                {
+                    "x": 20.21661,
+                    "y": 57.81192,
+                    "z": 52.27027
+                },
+                {
+                    "x": 39.13961,
+                    "y": 57.81192,
+                    "z": 59.10867
+                },
+                {
+                    "x": 84.73691,
+                    "y": 57.81192,
+                    "z": 15.81707
+                },
+                {
+                    "x": 43.91991,
+                    "y": 57.81192,
+                    "z": -29.14453
+                },
+                {
+                    "x": 31.81181,
+                    "y": 57.81192,
+                    "z": -17.46352
+                }
+            ]
+        },
+        {
+            "name": "AreaTrigger3",
+            "ObjId": 603,
+            "Area": "Sectors/Sector3/SectorArea3",
+            "type": "AreaTrigger",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -20.07192,
+                "y": 87.2405,
+                "z": 0.46247
+            },
+            "id": "Sectors/Sector3/AreaTrigger3",
+            "linked": [
+                "Area"
+            ]
+        },
+        {
+            "name": "TEAM_1_HQ3",
+            "AltTeam": "TeamNeutral",
+            "ObjId": 303,
+            "InfantrySpawns": [
+                "Sectors/Sector3/TEAM_1_HQ3/SpawnPoint_1_1",
+                "Sectors/Sector3/TEAM_1_HQ3/SpawnPoint_1_2",
+                "Sectors/Sector3/TEAM_1_HQ3/SpawnPoint_1_3",
+                "Sectors/Sector3/TEAM_1_HQ3/SpawnPoint_1_4"
+            ],
+            "HQArea": "Sectors/Sector3/TEAM_1_HQ3/HQ_Team1",
+            "type": "HQ_PlayerSpawner",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -70.8968,
+                "y": 64.388494,
+                "z": -3.564853
+            },
+            "id": "Sectors/Sector3/TEAM_1_HQ3",
+            "linked": [
+                "HQArea",
+                "InfantrySpawns"
+            ]
+        },
+        {
+            "name": "HQ_Team1",
+            "type": "PolygonVolume",
+            "id": "Sectors/Sector3/TEAM_1_HQ3/HQ_Team1",
+            "height": 0,
+            "points": [
+                {
+                    "x": -87.6085,
+                    "y": 69.388494,
+                    "z": 1.43071384
+                },
+                {
+                    "x": -87.6085,
+                    "y": 69.388494,
+                    "z": -8.56928616
+                },
+                {
+                    "x": -97.6085,
+                    "y": 69.388494,
+                    "z": -8.56928616
+                },
+                {
+                    "x": -97.6085,
+                    "y": 69.388494,
+                    "z": 1.43071384
+                }
+            ]
+        },
+        {
+            "name": "SpawnPoint_1_1",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.291905,
+                "y": 0,
+                "z": -0.956448
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.956448,
+                "y": 0,
+                "z": 0.291905
+            },
+            "position": {
+                "x": -118.4787,
+                "y": 66.123764,
+                "z": -0.386243
+            },
+            "id": "Sectors/Sector3/TEAM_1_HQ3/SpawnPoint_1_1"
+        },
+        {
+            "name": "SpawnPoint_1_2",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.859888,
+                "y": 0,
+                "z": -0.510483
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.510483,
+                "y": 0,
+                "z": -0.859888
+            },
+            "position": {
+                "x": -112.9476,
+                "y": 65.867014,
+                "z": -6.852583
+            },
+            "id": "Sectors/Sector3/TEAM_1_HQ3/SpawnPoint_1_2"
+        },
+        {
+            "name": "SpawnPoint_1_3",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.998072,
+                "y": 0,
+                "z": 0.0620764
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.0620764,
+                "y": 0,
+                "z": 0.998072
+            },
+            "position": {
+                "x": -86.508,
+                "y": 64.035573,
+                "z": -45.518353
+            },
+            "id": "Sectors/Sector3/TEAM_1_HQ3/SpawnPoint_1_3"
+        },
+        {
+            "name": "SpawnPoint_1_4",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.47889,
+                "y": 0,
+                "z": -0.877874
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.877874,
+                "y": 0,
+                "z": -0.47889
+            },
+            "position": {
+                "x": -89.8197,
+                "y": 64.154615,
+                "z": 36.212447
+            },
+            "id": "Sectors/Sector3/TEAM_1_HQ3/SpawnPoint_1_4"
+        },
+        {
+            "name": "TEAM_2_HQ3",
+            "Team": "Team2",
+            "AltTeam": "TeamNeutral",
+            "ObjId": 403,
+            "InfantrySpawns": [
+                "Sectors/Sector3/TEAM_2_HQ3/SpawnPoint_2_1",
+                "Sectors/Sector3/TEAM_2_HQ3/SpawnPoint_2_2",
+                "Sectors/Sector3/TEAM_2_HQ3/SpawnPoint_2_3",
+                "Sectors/Sector3/TEAM_2_HQ3/SpawnPoint_2_4"
+            ],
+            "HQArea": "Sectors/Sector3/TEAM_2_HQ3/HQ_Team2",
+            "type": "HQ_PlayerSpawner",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 63.6598,
+                "y": 64.330495,
+                "z": -38.81503
+            },
+            "id": "Sectors/Sector3/TEAM_2_HQ3",
+            "linked": [
+                "HQArea",
+                "InfantrySpawns"
+            ]
+        },
+        {
+            "name": "HQ_Team2",
+            "type": "PolygonVolume",
+            "id": "Sectors/Sector3/TEAM_2_HQ3/HQ_Team2",
+            "height": 0,
+            "points": [
+                {
+                    "x": 68.6598,
+                    "y": 69.330495,
+                    "z": -33.81503
+                },
+                {
+                    "x": 68.6598,
+                    "y": 69.330495,
+                    "z": -43.81503
+                },
+                {
+                    "x": 58.6598,
+                    "y": 69.330495,
+                    "z": -43.81503
+                },
+                {
+                    "x": 58.6598,
+                    "y": 69.330495,
+                    "z": -33.81503
+                }
+            ]
+        },
+        {
+            "name": "SpawnPoint_2_1",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.0824254,
+                "y": 0,
+                "z": 0.996598
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.996598,
+                "y": 0,
+                "z": 0.0824254
+            },
+            "position": {
+                "x": 128.8689,
+                "y": 62.178955,
+                "z": -4.55143
+            },
+            "id": "Sectors/Sector3/TEAM_2_HQ3/SpawnPoint_2_1"
+        },
+        {
+            "name": "SpawnPoint_2_2",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.996629,
+                "y": 0,
+                "z": 0.0820432
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.0820432,
+                "y": 0,
+                "z": 0.996629
+            },
+            "position": {
+                "x": 98.9461,
+                "y": 64.835378,
+                "z": -42.81283
+            },
+            "id": "Sectors/Sector3/TEAM_2_HQ3/SpawnPoint_2_2"
+        },
+        {
+            "name": "SpawnPoint_2_3",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.838138,
+                "y": 0,
+                "z": 0.545458
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.545458,
+                "y": 0,
+                "z": 0.838138
+            },
+            "position": {
+                "x": 74.6951,
+                "y": 62.196375,
+                "z": -75.21553
+            },
+            "id": "Sectors/Sector3/TEAM_2_HQ3/SpawnPoint_2_3"
+        },
+        {
+            "name": "SpawnPoint_2_4",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.99386,
+                "y": 0,
+                "z": 0.110637
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.110637,
+                "y": 0,
+                "z": 0.99386
+            },
+            "position": {
+                "x": 85.5147,
+                "y": 65.27992,
+                "z": -69.18863
+            },
+            "id": "Sectors/Sector3/TEAM_2_HQ3/SpawnPoint_2_4"
+        },
+        {
+            "name": "Sector4",
+            "ObjId": 104,
+            "MCOMs": [],
+            "SectorArea": "Sectors/Sector4/SectorArea4",
+            "type": "Sector",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 64.8647,
+                "y": 64.1004,
+                "z": -23.6775
+            },
+            "id": "Sectors/Sector4",
+            "linked": [
+                "SectorArea",
+                "MCOMs"
+            ]
+        },
+        {
+            "name": "SectorArea4",
+            "type": "PolygonVolume",
+            "id": "Sectors/Sector4/SectorArea4",
+            "height": 100,
+            "points": [
+                {
+                    "x": 78.66194,
+                    "y": 57.90785,
+                    "z": -90.2504
+                },
+                {
+                    "x": 62.37218,
+                    "y": 57.90785,
+                    "z": -86.2705
+                },
+                {
+                    "x": 57.20021,
+                    "y": 57.90785,
+                    "z": -70.2187
+                },
+                {
+                    "x": 52.43201,
+                    "y": 57.90785,
+                    "z": -45.9426
+                },
+                {
+                    "x": 43.32331,
+                    "y": 57.90785,
+                    "z": -29.35664
+                },
+                {
+                    "x": 84.71391,
+                    "y": 57.90785,
+                    "z": 15.9505
+                },
+                {
+                    "x": 101.46001,
+                    "y": 57.90785,
+                    "z": 9.1348
+                },
+                {
+                    "x": 150.51991,
+                    "y": 57.90785,
+                    "z": 8.1718
+                },
+                {
+                    "x": 151.76601,
+                    "y": 57.90785,
+                    "z": -137.0231
+                },
+                {
+                    "x": 112.31281,
+                    "y": 57.90785,
+                    "z": -138.2621
+                },
+                {
+                    "x": 98.67081,
+                    "y": 57.90785,
+                    "z": -107.0383
+                },
+                {
+                    "x": 98.32911,
+                    "y": 57.90785,
+                    "z": -91.0711
+                }
+            ]
+        },
+        {
+            "name": "AreaTrigger4",
+            "ObjId": 604,
+            "Area": "Sectors/Sector4/SectorArea4",
+            "type": "AreaTrigger",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 67.55518,
+                "y": 79.1518,
+                "z": -19.5096
+            },
+            "id": "Sectors/Sector4/AreaTrigger4",
+            "linked": [
+                "Area"
+            ]
+        },
+        {
+            "name": "TEAM_1_HQ4",
+            "AltTeam": "TeamNeutral",
+            "ObjId": 304,
+            "InfantrySpawns": [
+                "Sectors/Sector4/TEAM_1_HQ4/SpawnPoint_1_1",
+                "Sectors/Sector4/TEAM_1_HQ4/SpawnPoint_1_2",
+                "Sectors/Sector4/TEAM_1_HQ4/SpawnPoint_1_3",
+                "Sectors/Sector4/TEAM_1_HQ4/SpawnPoint_1_4"
+            ],
+            "HQArea": "Sectors/Sector4/TEAM_1_HQ4/HQ_Team1",
+            "type": "HQ_PlayerSpawner",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 16.7303,
+                "y": 64.388494,
+                "z": -23.536923
+            },
+            "id": "Sectors/Sector4/TEAM_1_HQ4",
+            "linked": [
+                "HQArea",
+                "InfantrySpawns"
+            ]
+        },
+        {
+            "name": "HQ_Team1",
+            "type": "PolygonVolume",
+            "id": "Sectors/Sector4/TEAM_1_HQ4/HQ_Team1",
+            "height": 0,
+            "points": [
+                {
+                    "x": 0.0186,
+                    "y": 69.388494,
+                    "z": -18.54135616
+                },
+                {
+                    "x": 0.0186,
+                    "y": 69.388494,
+                    "z": -28.54135616
+                },
+                {
+                    "x": -9.9814,
+                    "y": 69.388494,
+                    "z": -28.54135616
+                },
+                {
+                    "x": -9.9814,
+                    "y": 69.388494,
+                    "z": -18.54135616
+                }
+            ]
+        },
+        {
+            "name": "SpawnPoint_1_1",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.671487,
+                "y": 0,
+                "z": -0.741016
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.741016,
+                "y": 0,
+                "z": 0.671487
+            },
+            "position": {
+                "x": 11.24767,
+                "y": 64.248312,
+                "z": -27.553203
+            },
+            "id": "Sectors/Sector4/TEAM_1_HQ4/SpawnPoint_1_1"
+        },
+        {
+            "name": "SpawnPoint_1_2",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.323768,
+                "y": 0,
+                "z": -0.946136
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.946136,
+                "y": 0,
+                "z": -0.323768
+            },
+            "position": {
+                "x": 33.2784,
+                "y": 66.816454,
+                "z": 42.551077
+            },
+            "id": "Sectors/Sector4/TEAM_1_HQ4/SpawnPoint_1_2"
+        },
+        {
+            "name": "SpawnPoint_1_3",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.417566,
+                "y": 0,
+                "z": -0.908647
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.908647,
+                "y": 0,
+                "z": 0.417566
+            },
+            "position": {
+                "x": 7.09544,
+                "y": 66.099794,
+                "z": 11.340777
+            },
+            "id": "Sectors/Sector4/TEAM_1_HQ4/SpawnPoint_1_3"
+        },
+        {
+            "name": "SpawnPoint_1_4",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.289215,
+                "y": 0,
+                "z": -0.957264
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.957264,
+                "y": 0,
+                "z": -0.289215
+            },
+            "position": {
+                "x": 9.65582,
+                "y": 64.710203,
+                "z": 43.699377
+            },
+            "id": "Sectors/Sector4/TEAM_1_HQ4/SpawnPoint_1_4"
+        },
+        {
+            "name": "TEAM_2_HQ4",
+            "Team": "Team2",
+            "AltTeam": "TeamNeutral",
+            "ObjId": 404,
+            "InfantrySpawns": [
+                "Sectors/Sector4/TEAM_2_HQ4/SpawnPoint_2_1",
+                "Sectors/Sector4/TEAM_2_HQ4/SpawnPoint_2_2",
+                "Sectors/Sector4/TEAM_2_HQ4/SpawnPoint_2_3",
+                "Sectors/Sector4/TEAM_2_HQ4/SpawnPoint_2_4"
+            ],
+            "HQArea": "Sectors/Sector4/TEAM_2_HQ4/HQ_Team2",
+            "type": "HQ_PlayerSpawner",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 151.2869,
+                "y": 64.330495,
+                "z": -58.7871
+            },
+            "id": "Sectors/Sector4/TEAM_2_HQ4",
+            "linked": [
+                "HQArea",
+                "InfantrySpawns"
+            ]
+        },
+        {
+            "name": "HQ_Team2",
+            "type": "PolygonVolume",
+            "id": "Sectors/Sector4/TEAM_2_HQ4/HQ_Team2",
+            "height": 0,
+            "points": [
+                {
+                    "x": 156.2869,
+                    "y": 69.330495,
+                    "z": -53.7871
+                },
+                {
+                    "x": 156.2869,
+                    "y": 69.330495,
+                    "z": -63.7871
+                },
+                {
+                    "x": 146.2869,
+                    "y": 69.330495,
+                    "z": -63.7871
+                },
+                {
+                    "x": 146.2869,
+                    "y": 69.330495,
+                    "z": -53.7871
+                }
+            ]
+        },
+        {
+            "name": "SpawnPoint_2_1",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.665726,
+                "y": 0,
+                "z": 0.746198
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.746198,
+                "y": 0,
+                "z": 0.665726
+            },
+            "position": {
+                "x": 173.4401,
+                "y": 63.37135,
+                "z": -77.9732
+            },
+            "id": "Sectors/Sector4/TEAM_2_HQ4/SpawnPoint_2_1"
+        },
+        {
+            "name": "SpawnPoint_2_2",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.0126704,
+                "y": 0,
+                "z": 0.99992
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.99992,
+                "y": 0,
+                "z": 0.0126704
+            },
+            "position": {
+                "x": 177.1271,
+                "y": 62.404865,
+                "z": -61.28853
+            },
+            "id": "Sectors/Sector4/TEAM_2_HQ4/SpawnPoint_2_2"
+        },
+        {
+            "name": "SpawnPoint_2_3",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.647043,
+                "y": 0,
+                "z": 0.762454
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.762454,
+                "y": 0,
+                "z": 0.647043
+            },
+            "position": {
+                "x": 177.5119,
+                "y": 62.653185,
+                "z": -102.1811
+            },
+            "id": "Sectors/Sector4/TEAM_2_HQ4/SpawnPoint_2_3"
+        },
+        {
+            "name": "SpawnPoint_2_4",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.818721,
+                "y": 0,
+                "z": 0.574191
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.574191,
+                "y": 0,
+                "z": 0.818721
+            },
+            "position": {
+                "x": 173.1892,
+                "y": 62.852785,
+                "z": -135.4508
+            },
+            "id": "Sectors/Sector4/TEAM_2_HQ4/SpawnPoint_2_4"
+        },
+        {
+            "name": "Sector5",
+            "ObjId": 105,
+            "MCOMs": [],
+            "SectorArea": "Sectors/Sector5/SectorArea5",
+            "type": "Sector",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 179.742,
+                "y": 64.1004,
+                "z": -55.8953
+            },
+            "id": "Sectors/Sector5",
+            "linked": [
+                "SectorArea",
+                "MCOMs"
+            ]
+        },
+        {
+            "name": "SectorArea5",
+            "type": "PolygonVolume",
+            "id": "Sectors/Sector5/SectorArea5",
+            "height": 100,
+            "points": [
+                {
+                    "x": 181.8176,
+                    "y": 60.77225,
+                    "z": -142.28
+                },
+                {
+                    "x": 162.61581,
+                    "y": 60.77225,
+                    "z": -142.7348
+                },
+                {
+                    "x": 151.74431,
+                    "y": 60.77225,
+                    "z": -137.0005
+                },
+                {
+                    "x": 150.49431,
+                    "y": 60.77225,
+                    "z": 8.1604
+                },
+                {
+                    "x": 162.71811,
+                    "y": 60.77225,
+                    "z": 7.9586
+                },
+                {
+                    "x": 162.72901,
+                    "y": 60.77225,
+                    "z": -12.658
+                },
+                {
+                    "x": 182.5049,
+                    "y": 60.77225,
+                    "z": -12.8759
+                },
+                {
+                    "x": 186.43459,
+                    "y": 60.77225,
+                    "z": -88.343
+                },
+                {
+                    "x": 186.27986,
+                    "y": 60.77225,
+                    "z": -126.6935
+                }
+            ]
+        },
+        {
+            "name": "AreaTrigger5",
+            "ObjId": 605,
+            "Area": "Sectors/Sector5/SectorArea5",
+            "type": "AreaTrigger",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 182.43248,
+                "y": 87.2405,
+                "z": -51.7274
+            },
+            "id": "Sectors/Sector5/AreaTrigger5",
+            "linked": [
+                "Area"
+            ]
         }
-      ]
-    },
-    {
-      "name": "SpawnPoint_1_1",
-      "type": "SpawnPoint",
-      "right": {
-        "x": 0.999884,
-        "y": 0,
-        "z": 0.0152535
-      },
-      "up": {
-        "x": 0,
-        "y": 1,
-        "z": 0
-      },
-      "front": {
-        "x": -0.0152535,
-        "y": 0,
-        "z": 0.999884
-      },
-      "position": {
-        "x": -181.27,
-        "y": 64.3885,
-        "z": 7.5202
-      },
-      "id": "TEAM_1_HQ/SpawnPoint_1_1"
-    },
-    {
-      "name": "SpawnPoint_1_2",
-      "type": "SpawnPoint",
-      "right": {
-        "x": -0.9995,
-        "y": 0,
-        "z": 0.0316198
-      },
-      "up": {
-        "x": 0,
-        "y": 1,
-        "z": 0
-      },
-      "front": {
-        "x": -0.0316198,
-        "y": 0,
-        "z": -0.9995
-      },
-      "position": {
-        "x": -178.27,
-        "y": 64.3885,
-        "z": 10.5202
-      },
-      "id": "TEAM_1_HQ/SpawnPoint_1_2"
-    },
-    {
-      "name": "SpawnPoint_1_3",
-      "type": "SpawnPoint",
-      "right": {
-        "x": -0.0428871,
-        "y": 0,
-        "z": -0.99908
-      },
-      "up": {
-        "x": 0,
-        "y": 1,
-        "z": 0
-      },
-      "front": {
-        "x": 0.99908,
-        "y": 0,
-        "z": -0.0428871
-      },
-      "position": {
-        "x": -184.27,
-        "y": 64.3885,
-        "z": 10.5202
-      },
-      "id": "TEAM_1_HQ/SpawnPoint_1_3"
-    },
-    {
-      "name": "SpawnPoint_1_4",
-      "type": "SpawnPoint",
-      "right": {
-        "x": 0.0841819,
-        "y": 0,
-        "z": 0.99645
-      },
-      "up": {
-        "x": 0,
-        "y": 1,
-        "z": 0
-      },
-      "front": {
-        "x": -0.99645,
-        "y": 0,
-        "z": 0.0841819
-      },
-      "position": {
-        "x": -181.27,
-        "y": 64.3885,
-        "z": 13.5202
-      },
-      "id": "TEAM_1_HQ/SpawnPoint_1_4"
-    },
-    {
-      "name": "TEAM_2_HQ",
-      "Team": "Team2",
-      "AltTeam": "TeamNeutral",
-      "ObjId": 6,
-      "InfantrySpawns": [
-        "TEAM_2_HQ/SpawnPoint_2_1",
-        "TEAM_2_HQ/SpawnPoint_2_2",
-        "TEAM_2_HQ/SpawnPoint_2_3",
-        "TEAM_2_HQ/SpawnPoint_2_4"
-      ],
-      "HQArea": "TEAM_2_HQ/HQ_Team2",
-      "type": "HQ_PlayerSpawner",
-      "right": {
-        "x": 1,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 1,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 1
-      },
-      "position": {
-        "x": -82.1664,
-        "y": 64.1217,
-        "z": 44.2427
-      },
-      "id": "TEAM_2_HQ",
-      "linked": ["HQArea", "InfantrySpawns"]
-    },
-    {
-      "name": "HQ_Team2",
-      "type": "PolygonVolume",
-      "id": "TEAM_2_HQ/HQ_Team2",
-      "height": 0,
-      "points": [
+    ],
+    "Static": [
         {
-          "x": -77.1664,
-          "y": 69.1217,
-          "z": 49.2427
+            "name": "MP_Abbasid_Terrain",
+            "metadata/_edit_lock_": true,
+            "type": "MP_Abbasid_Terrain",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "id": "Static/MP_Abbasid_Terrain"
         },
         {
-          "x": -77.1664,
-          "y": 69.1217,
-          "z": 39.2427
-        },
-        {
-          "x": -87.1664,
-          "y": 69.1217,
-          "z": 39.2427
-        },
-        {
-          "x": -87.1664,
-          "y": 69.1217,
-          "z": 49.2427
+            "name": "MP_Abbasid_Assets",
+            "metadata/_edit_lock_": true,
+            "type": "MP_Abbasid_Assets",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "id": "Static/MP_Abbasid_Assets"
         }
-      ]
-    },
-    {
-      "name": "SpawnPoint_2_1",
-      "type": "SpawnPoint",
-      "right": {
-        "x": 0.87795,
-        "y": 0,
-        "z": 0.478754
-      },
-      "up": {
-        "x": 0,
-        "y": 1,
-        "z": 0
-      },
-      "front": {
-        "x": -0.478754,
-        "y": 0,
-        "z": 0.87795
-      },
-      "position": {
-        "x": -82.1664,
-        "y": 64.1217,
-        "z": 41.2427
-      },
-      "id": "TEAM_2_HQ/SpawnPoint_2_1"
-    },
-    {
-      "name": "SpawnPoint_2_2",
-      "type": "SpawnPoint",
-      "right": {
-        "x": -0.997604,
-        "y": 0,
-        "z": -0.0691822
-      },
-      "up": {
-        "x": 0,
-        "y": 1,
-        "z": 0
-      },
-      "front": {
-        "x": 0.0691822,
-        "y": 0,
-        "z": -0.997604
-      },
-      "position": {
-        "x": -79.1664,
-        "y": 64.1217,
-        "z": 44.2427
-      },
-      "id": "TEAM_2_HQ/SpawnPoint_2_2"
-    },
-    {
-      "name": "SpawnPoint_2_3",
-      "type": "SpawnPoint",
-      "right": {
-        "x": 0.162758,
-        "y": 0,
-        "z": -0.986666
-      },
-      "up": {
-        "x": 0,
-        "y": 1,
-        "z": 0
-      },
-      "front": {
-        "x": 0.986666,
-        "y": 0,
-        "z": 0.162758
-      },
-      "position": {
-        "x": -85.1664,
-        "y": 64.1217,
-        "z": 44.2427
-      },
-      "id": "TEAM_2_HQ/SpawnPoint_2_3"
-    },
-    {
-      "name": "SpawnPoint_2_4",
-      "type": "SpawnPoint",
-      "right": {
-        "x": -0.165771,
-        "y": 0,
-        "z": 0.986164
-      },
-      "up": {
-        "x": 0,
-        "y": 1,
-        "z": 0
-      },
-      "front": {
-        "x": -0.986164,
-        "y": 0,
-        "z": -0.165771
-      },
-      "position": {
-        "x": -82.1664,
-        "y": 64.1217,
-        "z": 47.2427
-      },
-      "id": "TEAM_2_HQ/SpawnPoint_2_4"
-    },
-    {
-      "name": "CombatArea",
-      "CombatVolume": "CombatArea/CombatVolume",
-      "type": "CombatArea",
-      "right": {
-        "x": 1,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 1,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 1
-      },
-      "position": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "id": "CombatArea",
-      "linked": ["CombatVolume"]
-    },
-    {
-      "name": "CombatVolume",
-      "type": "PolygonVolume",
-      "id": "CombatArea/CombatVolume",
-      "height": 100,
-      "points": [
-        {
-          "x": -95.5116,
-          "y": 56.99,
-          "z": -105.887
-        },
-        {
-          "x": -128.91,
-          "y": 56.99,
-          "z": -82.328
-        },
-        {
-          "x": -139.985,
-          "y": 56.99,
-          "z": -81.8334
-        },
-        {
-          "x": -168.181,
-          "y": 56.99,
-          "z": -66.2023
-        },
-        {
-          "x": -181.484,
-          "y": 56.99,
-          "z": -60.3675
-        },
-        {
-          "x": -200.613,
-          "y": 56.99,
-          "z": -59.2482
-        },
-        {
-          "x": -204.785,
-          "y": 56.99,
-          "z": -38.1857
-        },
-        {
-          "x": -226.925,
-          "y": 56.99,
-          "z": -27.3281
-        },
-        {
-          "x": -227.4,
-          "y": 56.99,
-          "z": -9.52571
-        },
-        {
-          "x": -239.98,
-          "y": 56.99,
-          "z": -8.9323
-        },
-        {
-          "x": -240.218,
-          "y": 56.99,
-          "z": 0.681003
-        },
-        {
-          "x": -250.306,
-          "y": 56.99,
-          "z": 1.27442
-        },
-        {
-          "x": -252.769,
-          "y": 56.99,
-          "z": 63.4065
-        },
-        {
-          "x": -252.888,
-          "y": 56.99,
-          "z": 112.066
-        },
-        {
-          "x": -214.755,
-          "y": 56.99,
-          "z": 112.768
-        },
-        {
-          "x": -206.528,
-          "y": 56.99,
-          "z": 121.968
-        },
-        {
-          "x": -194.636,
-          "y": 56.99,
-          "z": 123.613
-        },
-        {
-          "x": -96.5864,
-          "y": 56.99,
-          "z": 122.566
-        },
-        {
-          "x": -96.6612,
-          "y": 56.99,
-          "z": 103.794
-        },
-        {
-          "x": -68.9756,
-          "y": 56.99,
-          "z": 103.379
-        },
-        {
-          "x": -45.649,
-          "y": 56.99,
-          "z": 97.6191
-        },
-        {
-          "x": -44.6315,
-          "y": 56.99,
-          "z": 63.588
-        },
-        {
-          "x": 10.8436,
-          "y": 56.99,
-          "z": 55.1037
-        },
-        {
-          "x": 57.9097,
-          "y": 56.99,
-          "z": 7.09969
-        },
-        {
-          "x": 78.8298,
-          "y": 56.99,
-          "z": -11.1813
-        },
-        {
-          "x": 80.208,
-          "y": 56.99,
-          "z": -51.1729
-        },
-        {
-          "x": 79.2165,
-          "y": 56.99,
-          "z": -89.1882
-        },
-        {
-          "x": 57.0786,
-          "y": 56.99,
-          "z": -105.642
-        },
-        {
-          "x": 57.2282,
-          "y": 56.99,
-          "z": -118.955
-        },
-        {
-          "x": 36.9601,
-          "y": 56.99,
-          "z": -119.104
-        },
-        {
-          "x": 36.5861,
-          "y": 56.99,
-          "z": -111.625
-        },
-        {
-          "x": 35.1651,
-          "y": 56.99,
-          "z": -111.625
-        },
-        {
-          "x": 35.0635,
-          "y": 56.99,
-          "z": -104.861
-        },
-        {
-          "x": 24.8172,
-          "y": 56.99,
-          "z": -105.011
-        },
-        {
-          "x": 25.4904,
-          "y": 56.99,
-          "z": -126.176
-        },
-        {
-          "x": -5.84673,
-          "y": 56.99,
-          "z": -125.503
-        },
-        {
-          "x": -5.84673,
-          "y": 56.99,
-          "z": -113.612
-        },
-        {
-          "x": -66.726,
-          "y": 56.99,
-          "z": -113.612
-        }
-      ]
-    },
-    {
-      "name": "DeployCam",
-      "ObjId": 2,
-      "type": "DeployCam",
-      "right": {
-        "x": 1,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 0.0871558,
-        "z": -0.996195
-      },
-      "front": {
-        "x": 0,
-        "y": 0.996195,
-        "z": 0.0871558
-      },
-      "position": {
-        "x": -80.4583,
-        "y": 263.722,
-        "z": -30.3798
-      },
-      "id": "Camera3D/DeployCam"
-    },
-    {
-      "name": "Track_01",
-      "ObjId": 1039,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -174.62,
-        "y": 64.108,
-        "z": 10.4157
-      },
-      "id": "Track/Track_01"
-    },
-    {
-      "name": "Track_02",
-      "ObjId": 1040,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -168.072,
-        "y": 64.108,
-        "z": 10.634
-      },
-      "id": "Track/Track_02"
-    },
-    {
-      "name": "Track_03",
-      "ObjId": 1041,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -162.914,
-        "y": 64.108,
-        "z": 9.12579
-      },
-      "id": "Track/Track_03"
-    },
-    {
-      "name": "Track_04",
-      "ObjId": 1042,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -158.761,
-        "y": 64.108,
-        "z": 3.9431
-      },
-      "id": "Track/Track_04"
-    },
-    {
-      "name": "Track_05",
-      "ObjId": 1043,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -155.726,
-        "y": 64.108,
-        "z": -5.41813
-      },
-      "id": "Track/Track_05"
-    },
-    {
-      "name": "Track_06",
-      "ObjId": 1044,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -143.125,
-        "y": 64.108,
-        "z": -36.419
-      },
-      "id": "Track/Track_06"
-    },
-    {
-      "name": "Track_07",
-      "ObjId": 1045,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -134.175,
-        "y": 64.108,
-        "z": -57.311
-      },
-      "id": "Track/Track_07"
-    },
-    {
-      "name": "Track_08",
-      "ObjId": 1046,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -130.318,
-        "y": 64.108,
-        "z": -61.4081
-      },
-      "id": "Track/Track_08"
-    },
-    {
-      "name": "Track_09",
-      "ObjId": 1047,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -125.097,
-        "y": 64.108,
-        "z": -63.2055
-      },
-      "id": "Track/Track_09"
-    },
-    {
-      "name": "Track_10",
-      "ObjId": 1048,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -96.0788,
-        "y": 64.108,
-        "z": -63.1494
-      },
-      "id": "Track/Track_10"
-    },
-    {
-      "name": "Track_11",
-      "ObjId": 1049,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -91.0526,
-        "y": 64.108,
-        "z": -61.2043
-      },
-      "id": "Track/Track_11"
-    },
-    {
-      "name": "Track_12",
-      "ObjId": 1050,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -87.8508,
-        "y": 64.108,
-        "z": -56.236
-      },
-      "id": "Track/Track_12"
-    },
-    {
-      "name": "Track_13",
-      "ObjId": 1051,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -88.9348,
-        "y": 64.108,
-        "z": -46.3989
-      },
-      "id": "Track/Track_13"
-    },
-    {
-      "name": "Track_14",
-      "ObjId": 1052,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -88.5928,
-        "y": 64.108,
-        "z": -36.6109
-      },
-      "id": "Track/Track_14"
-    },
-    {
-      "name": "Track_15",
-      "ObjId": 1053,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -88.6299,
-        "y": 64.108,
-        "z": -25.7838
-      },
-      "id": "Track/Track_15"
-    },
-    {
-      "name": "Track_16",
-      "ObjId": 1054,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -85.7411,
-        "y": 64.108,
-        "z": -19.351
-      },
-      "id": "Track/Track_16"
-    },
-    {
-      "name": "Track_17",
-      "ObjId": 1055,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -80.8258,
-        "y": 64.108,
-        "z": -13.7662
-      },
-      "id": "Track/Track_17"
-    },
-    {
-      "name": "Track_18",
-      "ObjId": 1056,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -76.5395,
-        "y": 64.108,
-        "z": -5.99289
-      },
-      "id": "Track/Track_18"
-    },
-    {
-      "name": "Track_19",
-      "ObjId": 1057,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -76.3762,
-        "y": 64.108,
-        "z": 1.56268
-      },
-      "id": "Track/Track_19"
-    },
-    {
-      "name": "Track_20",
-      "ObjId": 1058,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -76.3762,
-        "y": 64.108,
-        "z": 25.7363
-      },
-      "id": "Track/Track_20"
-    },
-    {
-      "name": "Track_21",
-      "ObjId": 1059,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -74.295,
-        "y": 64.108,
-        "z": 30.6097
-      },
-      "id": "Track/Track_21"
-    },
-    {
-      "name": "Track_22",
-      "ObjId": 1060,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -67.1394,
-        "y": 64.108,
-        "z": 33.1899
-      },
-      "id": "Track/Track_22"
-    },
-    {
-      "name": "Track_23",
-      "ObjId": 1061,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -56.3896,
-        "y": 64.108,
-        "z": 33.3979
-      },
-      "id": "Track/Track_23"
-    },
-    {
-      "name": "Track_24",
-      "ObjId": 1062,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -33.6343,
-        "y": 64.0052,
-        "z": 33.3979
-      },
-      "id": "Track/Track_24"
-    },
-    {
-      "name": "Track_25",
-      "ObjId": 1063,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -26.9735,
-        "y": 65.0306,
-        "z": 33.3979
-      },
-      "id": "Track/Track_25"
-    },
-    {
-      "name": "Track_26",
-      "ObjId": 1064,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -20.7434,
-        "y": 64.2443,
-        "z": 33.3979
-      },
-      "id": "Track/Track_26"
-    },
-    {
-      "name": "Track_27",
-      "ObjId": 1065,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -16.3953,
-        "y": 63.8727,
-        "z": 33.3979
-      },
-      "id": "Track/Track_27"
-    },
-    {
-      "name": "Track_28",
-      "ObjId": 1066,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -7.55456,
-        "y": 63.8384,
-        "z": 33.3979
-      },
-      "id": "Track/Track_28"
-    },
-    {
-      "name": "Track_29",
-      "ObjId": 1067,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -2.93897,
-        "y": 63.8384,
-        "z": 31.9834
-      },
-      "id": "Track/Track_29"
-    },
-    {
-      "name": "Track_30",
-      "ObjId": 1068,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": 1.97804,
-        "y": 63.8384,
-        "z": 29.9134
-      },
-      "id": "Track/Track_30"
-    },
-    {
-      "name": "Track_31",
-      "ObjId": 1069,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": 6.15802,
-        "y": 63.9358,
-        "z": 27.5615
-      },
-      "id": "Track/Track_31"
-    },
-    {
-      "name": "Track_32",
-      "ObjId": 1070,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": 10.3229,
-        "y": 63.9863,
-        "z": 23.2849
-      },
-      "id": "Track/Track_32"
-    },
-    {
-      "name": "Track_33",
-      "ObjId": 1071,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": 13.9818,
-        "y": 63.9863,
-        "z": 19.4822
-      },
-      "id": "Track/Track_33"
-    },
-    {
-      "name": "Track_34",
-      "ObjId": 1072,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": 25.0329,
-        "y": 63.9863,
-        "z": 7.79635
-      },
-      "id": "Track/Track_34"
-    },
-    {
-      "name": "Track_35",
-      "ObjId": 1073,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": 31.3945,
-        "y": 63.5865,
-        "z": 3.58313
-      },
-      "id": "Track/Track_35"
-    },
-    {
-      "name": "Track_36",
-      "ObjId": 1074,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": 37.3395,
-        "y": 63.1443,
-        "z": -6.2437
-      },
-      "id": "Track/Track_36"
-    },
-    {
-      "name": "Track_37",
-      "ObjId": 1075,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": 54.0583,
-        "y": 62.371,
-        "z": -22.6257
-      },
-      "id": "Track/Track_37"
-    },
-    {
-      "name": "Track_38",
-      "ObjId": 1076,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": 59.2151,
-        "y": 62.371,
-        "z": -26.9834
-      },
-      "id": "Track/Track_38"
-    },
-    {
-      "name": "Track_39",
-      "ObjId": 1077,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": 75.8548,
-        "y": 62.0911,
-        "z": -28.8026
-      },
-      "id": "Track/Track_39"
-    },
-    {
-      "name": "checkpoint0",
-      "ObjId": 2001,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -174.6198,
-        "y": 61.1649,
-        "z": 10.4157
-      },
-      "id": "Checkpoints/checkpoint0"
-    },
-    {
-      "name": "checkpoint1",
-      "ObjId": 2010,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -174.6198,
-        "y": 61.1649,
-        "z": 10.4157
-      },
-      "id": "Checkpoints/checkpoint1"
-    },
-    {
-      "name": "checkpoint2",
-      "ObjId": 2022,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -174.6198,
-        "y": 61.1649,
-        "z": 10.4157
-      },
-      "id": "Checkpoints/checkpoint2"
-    },
-    {
-      "name": "checkpoint3",
-      "ObjId": 2038,
-      "type": "FireAlarmButton_01",
-      "right": {
-        "x": 10,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 10,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 10
-      },
-      "position": {
-        "x": -174.6198,
-        "y": 61.1649,
-        "z": 10.4157
-      },
-      "id": "Checkpoints/checkpoint3"
-    }
-  ],
-  "Static": [
-    {
-      "name": "MP_Abbasid_Terrain",
-      "metadata/_edit_lock_": true,
-      "type": "MP_Abbasid_Terrain",
-      "right": {
-        "x": 1,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 1,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 1
-      },
-      "position": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "id": "Static/MP_Abbasid_Terrain"
-    },
-    {
-      "name": "MP_Abbasid_Assets",
-      "metadata/_edit_lock_": true,
-      "type": "MP_Abbasid_Assets",
-      "right": {
-        "x": 1,
-        "y": 0,
-        "z": 0
-      },
-      "up": {
-        "x": 0,
-        "y": 1,
-        "z": 0
-      },
-      "front": {
-        "x": 0,
-        "y": 0,
-        "z": 1
-      },
-      "position": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "id": "Static/MP_Abbasid_Assets"
-    }
-  ]
+    ]
 }
