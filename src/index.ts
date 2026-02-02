@@ -1,3 +1,5 @@
+import { initCheckpointTimer, updateCheckpointTimer } from './ui.ts';
+
 enum PayloadState {
     IDLE,
     CONTESTED,
@@ -41,11 +43,12 @@ interface State {
     lastReachedCheckpointIndex: number;
     maxCheckpoints: number;
     currentCheckpoint: number;
+    checkpointStartTime: number;
 }
 
 const CONFIG: Config = {
-    gameModeTime: 20 * 60,
-    defaultCheckpointTime: 450,
+    gameModeTime: 60 * 60, // 60 minutes
+    defaultCheckpointTime: 450, // 7.5 minutes
     enablePayloadSound: true,
     pushProximityRadius: 5,
     waypointProximityRadius: 0.25,
@@ -71,6 +74,7 @@ const STATE: State = {
     lastReachedCheckpointIndex: 0,
     maxCheckpoints: 0,
     currentCheckpoint: 0,
+    checkpointStartTime: 0,
 }
 
 function getOpponentTeam(team: mod.Team): mod.Team {
@@ -163,6 +167,10 @@ export function OnGameModeStarted(): void {
     initProgressTracking();
     initPayloadRotation();
     initPayloadObjective();
+
+    STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
+
+    initCheckpointTimer(CONFIG.defaultCheckpointTime);
 }
 
 function getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1: number; t2: number } {
@@ -245,6 +253,7 @@ export function OngoingGlobal(): void {
             if (targetWaypoint.isCheckpoint) {
                 STATE.lastReachedCheckpointIndex = targetWaypointIndex;
                 STATE.currentCheckpoint++;
+                STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
                 mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.checkpoint_reached, STATE.currentCheckpoint, STATE.maxCheckpoints));
             }
             if (targetWaypointIndex === STATE.waypoints.size - 1) {
@@ -281,6 +290,17 @@ export function OngoingGlobal(): void {
     }
 
     calculatePayloadProgress();
+
+    // Update Checkpoint Timer
+    const elapsedSinceCheckpoint = mod.GetMatchTimeElapsed() - STATE.checkpointStartTime;
+    const remainingTime = CONFIG.defaultCheckpointTime - elapsedSinceCheckpoint;
+
+    if (remainingTime <= 0) {
+        mod.EndGameMode(mod.GetTeam(2));
+        return;
+    }
+
+    updateCheckpointTimer(remainingTime);
 }
 
 function setPayloadState(state: PayloadState): void {

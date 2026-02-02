@@ -19,7 +19,9 @@
     },
     "objective": {
       "title": "PAYLOAD",
-      "position": "Payload Position: ({}, {}, {})"
+      "position": "Payload Position: ({}, {}, {})",
+      "checkpoint_timer": "Next checkpoint in: {}:{}{}",
+      "checkpoint_timer_padded": "Next checkpoint in: 0{}:{}{}"
     }
   }
 }
