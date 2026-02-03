@@ -1,102 +1,19 @@
 import { initCheckpointTimer, updateCheckpointTimer, uiSetup } from './ui.ts';
+import { CONFIG } from './config.ts';
+import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
 
-enum PayloadState {
-    IDLE,
-    CONTESTED,
-    ADVANCING,
-    LOCKED,
-    PUSHING_BACK
-}
-
-interface PayloadWaypoint {
-    position: mod.Vector;
-    isCheckpoint: boolean;
-    rotation: mod.Vector;
-    distance: number;
-}
-
-interface Config {
-    gameModeTime: number;
-    defaultCheckpointTime: number;
-    enablePayloadSound: boolean;
-    pushProximityRadius: number;
-    waypointProximityRadius: number;
-    speedAdditionPerPushingPlayer: number;
-    payloadSpeedMultiplierT1: number;
-    payloadSpeedMultiplierT2: number;
-    overtimeDuration: number;
-    overtimeEnabled: boolean;
-    enableDebug: boolean;
-}
-
-interface State {
-    speedAddition: number;
-    progress: number;
-    firstAttackerSpawned: boolean;
-    payloadState: PayloadState;
-    waypoints: Map<number, PayloadWaypoint>;
-    reachedWaypointIndex: number;
-    isOvertime: boolean;
-    payloadObject: mod.Object | undefined;
-    totalDistance: number;
-    lastWaypointDistance: number;
-    lastReachedCheckpointIndex: number;
-    maxCheckpoints: number;
-    currentCheckpoint: number;
-    checkpointStartTime: number;
-}
-
-const CONFIG: Config = {
-    gameModeTime: 60 * 60, // 60 minutes
-    defaultCheckpointTime: 450, // 7.5 minutes
-    enablePayloadSound: true,
-    pushProximityRadius: 5,
-    waypointProximityRadius: 0.25,
-    speedAdditionPerPushingPlayer: 0.005,
-    payloadSpeedMultiplierT1: 0.035,
-    payloadSpeedMultiplierT2: 0.015,
-    overtimeDuration: 60,
-    overtimeEnabled: true,
-    enableDebug: true,
-}
-
-const STATE: State = {
-    speedAddition: 0,
-    progress: 0,
-    firstAttackerSpawned: false,
-    payloadState: PayloadState.IDLE,
-    waypoints: new Map<number, PayloadWaypoint>(),
-    reachedWaypointIndex: 0,
-    isOvertime: false,
-    payloadObject: undefined,
-    totalDistance: 0,
-    lastWaypointDistance: 0,
-    lastReachedCheckpointIndex: 0,
-    maxCheckpoints: 0,
-    currentCheckpoint: 0,
-    checkpointStartTime: 0,
-}
 
 function getOpponentTeam(team: mod.Team): mod.Team {
     const teamId = mod.GetObjId(team);
     return teamId === 1 ? mod.GetTeam(2) : mod.GetTeam(1);
 }
 
-function initProgressTracking(): void {
-    for (let i = 0; i < STATE.waypoints.size - 1; i++) {
-        STATE.totalDistance += mod.DistanceBetween(STATE.waypoints.get(i)!.position, STATE.waypoints.get(i + 1)!.position);
-    }
-}
-
 function calculatePayloadProgress(): void {
     let traveledDistance = 0;
-
-    for (let i = 0; i < STATE.reachedWaypointIndex; i++) {
-        traveledDistance += mod.DistanceBetween(STATE.waypoints.get(i)!.position, STATE.waypoints.get(i + 1)!.position);
-    }
-    traveledDistance += mod.DistanceBetween(STATE.waypoints.get(STATE.reachedWaypointIndex)!.position, mod.GetObjectPosition(STATE.payloadObject!));
-
-    STATE.progress = traveledDistance / STATE.totalDistance;
+    traveledDistance = STATE.waypoints.get(STATE.reachedWaypointIndex)!.distance;
+    traveledDistance += mod.DistanceBetween(STATE.waypoints.get(STATE.reachedWaypointIndex)!.position, STATE.payloadPosition);
+    STATE.progressInMeters = traveledDistance;
+    STATE.progressInPercent = (traveledDistance / STATE.totalDistanceInMeters) * 100;
 }
 
 function initPayloadTrack(): void {
@@ -124,9 +41,9 @@ function initPayloadTrack(): void {
             waypointIndex++;
         }
     }
-    STATE.totalDistance = distance;
+    STATE.totalDistanceInMeters = distance;
     STATE.reachedWaypointIndex = 0;
-    STATE.lastReachedCheckpointIndex = 0;
+    STATE.reachedCheckpointIndex = 0;
     STATE.currentCheckpoint = 1;
 }
 
@@ -172,22 +89,6 @@ function initSectors(): void {
     }
 }
 
-
-export function OnGameModeStarted(): void {
-    mod.SetGameModeTimeLimit(3600);
-    mod.SetGameModeTargetScore(1000);
-    initSectors();
-    initPayloadTrack();
-    initProgressTracking();
-    initPayloadRotation();
-    initPayloadObjective();
-
-    STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
-
-    initCheckpointTimer(CONFIG.defaultCheckpointTime);
-    uiSetup();
-}
-
 function getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1: number; t2: number } {
     const players = mod.AllPlayers();
     let t1 = 0;
@@ -213,12 +114,65 @@ function getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1:
 }
 
 function moveTowards(targetPos: mod.Vector, speed: number): void {
-    const currentPos = mod.GetObjectPosition(STATE.payloadObject!);
-
-    const direction = mod.DirectionTowards(currentPos, targetPos);
+    const direction = mod.DirectionTowards(STATE.payloadPosition, targetPos);
     const moveDelta = mod.Multiply(direction, speed);
-    const nextPos = mod.Add(currentPos, moveDelta);
+    const nextPos = mod.Add(STATE.payloadPosition, moveDelta);
+    STATE.payloadPosition = nextPos;
+}
 
+function onCheckpointReached(checkpointIndex: number): void {
+    if (STATE.payloadState !== PayloadState.ADVANCING) {
+        STATE.payloadState = PayloadState.LOCKED;
+        return;
+    } else {
+        mod.EnableHQ(mod.GetHQ(checkpointIndex + 300), false);
+        mod.EnableHQ(mod.GetHQ(checkpointIndex + 400), false);
+        STATE.reachedCheckpointIndex = checkpointIndex;
+        STATE.currentCheckpoint++;
+        STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
+        mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 300), true);
+        mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 400), true);
+        mod.EnableGameModeObjective(mod.GetSector(STATE.currentCheckpoint + 101), true);
+        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.checkpoint_reached, STATE.currentCheckpoint, STATE.maxCheckpoints));
+    }
+}
+
+function setPayloadState(state: PayloadState): void {
+    if (STATE.payloadState !== state) {
+        STATE.payloadState = state;
+        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.message, mod.stringkeys.payload.state[state]));
+    }
+}
+
+function checkWaypointReached(targetWaypointIndex: number) {
+    const targetWaypoint = STATE.waypoints.get(targetWaypointIndex)!;
+    if (mod.DistanceBetween(STATE.payloadPosition, targetWaypoint.position) <= CONFIG.waypointProximityRadius) {
+        STATE.reachedWaypointIndex = targetWaypointIndex;
+        if (targetWaypoint.isCheckpoint) {
+            onCheckpointReached(STATE.currentCheckpoint);
+        }
+    }
+}
+
+function pushForward(counts: { t1: number; t2: number }) {
+    const targetWaypointIndex = STATE.reachedWaypointIndex + 1;
+    const targetWaypoint = STATE.waypoints.get(targetWaypointIndex)!;
+    const speed = CONFIG.payloadSpeedMultiplierT1 + (CONFIG.speedAdditionPerPushingPlayer * (counts.t1 - counts.t2));
+    moveTowards(targetWaypoint.position, speed);
+    setPayloadState(PayloadState.ADVANCING);
+    checkWaypointReached(targetWaypointIndex);
+}
+
+function pushBackward(counts: { t1: number; t2: number }) {
+    const targetWaypointIndex = STATE.reachedWaypointIndex - 1;
+    const targetWaypoint = STATE.waypoints.get(targetWaypointIndex)!;
+    const speed = CONFIG.payloadSpeedMultiplierT2 + (CONFIG.speedAdditionPerPushingPlayer * (counts.t2 - counts.t1));
+    moveTowards(targetWaypoint.position, speed);
+    setPayloadState(PayloadState.PUSHING_BACK);
+    checkWaypointReached(targetWaypointIndex);
+}
+
+function updatePayloadObject() {
     // Also update rotation based on the current waypoint logic
     const rotation = STATE.waypoints.get(STATE.reachedWaypointIndex)!.rotation;
 
@@ -232,7 +186,7 @@ function moveTowards(targetPos: mod.Vector, speed: number): void {
     // mod.RotateObject(STATE.payloadObject!, rotation);
 
     // works!!!
-    mod.SetObjectTransform(STATE.payloadObject!, mod.CreateTransform(nextPos, rotation))
+    mod.SetObjectTransform(STATE.payloadObject!, mod.CreateTransform(STATE.payloadPosition, rotation))
 
     // works but spawns new object every frame
     // 
@@ -245,6 +199,25 @@ function moveTowards(targetPos: mod.Vector, speed: number): void {
     // );
 }
 
+export function OnGameModeStarted(): void {
+    mod.SetGameModeTimeLimit(3600);
+    mod.SetGameModeTargetScore(1000);
+    initSectors();
+    initPayloadTrack();
+    initPayloadRotation();
+    initPayloadObjective();
+
+    STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
+
+    initCheckpointTimer(CONFIG.defaultCheckpointTime);
+    uiSetup();
+}
+
+function onPayloadMoved() {
+    calculatePayloadProgress();
+    updatePayloadObject();
+}
+
 export function OngoingGlobal(): void {
     if (mod.GetMatchTimeElapsed() >= CONFIG.gameModeTime) {
         mod.EndGameMode(mod.GetTeam(2));
@@ -252,8 +225,19 @@ export function OngoingGlobal(): void {
     }
     if (!STATE.payloadObject) return;
 
-    const currentPos = mod.GetObjectPosition(STATE.payloadObject!);
-    const counts = getAlivePlayersInProximity(currentPos, CONFIG.pushProximityRadius);
+    const counts = getAlivePlayersInProximity(STATE.payloadPosition, CONFIG.pushProximityRadius);
+
+    if (counts.t1 > counts.t2) {
+        pushForward(counts);
+        onPayloadMoved();
+    } else if (counts.t2 > counts.t1) {
+        pushBackward(counts);
+        onPayloadMoved();
+    } else if (counts.t1 > 0 && counts.t2 > 0) {
+        setPayloadState(PayloadState.CONTESTED);
+    } else {
+        setPayloadState(PayloadState.IDLE);
+    }
 
     if (counts.t1 > counts.t2) {
         // Push forward
@@ -263,18 +247,10 @@ export function OngoingGlobal(): void {
         moveTowards(targetWaypoint.position, speed);
         setPayloadState(PayloadState.ADVANCING);
 
-        if (mod.DistanceBetween(currentPos, targetWaypoint.position) <= CONFIG.waypointProximityRadius) {
+        if (mod.DistanceBetween(STATE.payloadPosition, targetWaypoint.position) <= CONFIG.waypointProximityRadius) {
             STATE.reachedWaypointIndex = targetWaypointIndex;
             if (targetWaypoint.isCheckpoint) {
-                mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 300), false);
-                mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 400), false);
-                STATE.lastReachedCheckpointIndex = targetWaypointIndex;
-                STATE.currentCheckpoint++;
-                STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
-                mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 300), true);
-                mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 400), true);
-                mod.EnableGameModeObjective(mod.GetSector(STATE.currentCheckpoint + 101), true);
-                mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.checkpoint_reached, STATE.currentCheckpoint, STATE.maxCheckpoints));
+                onCheckpointReached(STATE.currentCheckpoint);
             }
             if (targetWaypointIndex === STATE.waypoints.size - 1) {
                 mod.EndGameMode(mod.GetTeam(1));
@@ -283,19 +259,19 @@ export function OngoingGlobal(): void {
 
     } else if (counts.t2 > counts.t1) {
         // Push backward
-        if (STATE.reachedWaypointIndex > STATE.lastReachedCheckpointIndex) {
+        if (STATE.reachedWaypointIndex > STATE.reachedCheckpointIndex) {
             const currentWaypoint = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
             const speed = CONFIG.payloadSpeedMultiplierT2 + (CONFIG.speedAdditionPerPushingPlayer * (counts.t2 - counts.t1));
             moveTowards(currentWaypoint.position, speed);
             setPayloadState(PayloadState.PUSHING_BACK);
 
-            if (mod.DistanceBetween(currentPos, currentWaypoint.position) <= CONFIG.waypointProximityRadius) {
+            if (mod.DistanceBetween(STATE.payloadPosition, currentWaypoint.position) <= CONFIG.waypointProximityRadius) {
                 STATE.reachedWaypointIndex--;
             }
         } else {
             // Check if we are precisely at the checkpoint or still moving back to it
-            const lastCheckpoint = STATE.waypoints.get(STATE.lastReachedCheckpointIndex)!;
-            if (mod.DistanceBetween(currentPos, lastCheckpoint.position) > CONFIG.waypointProximityRadius) {
+            const lastCheckpoint = STATE.waypoints.get(STATE.reachedCheckpointIndex)!;
+            if (mod.DistanceBetween(STATE.payloadPosition, lastCheckpoint.position) > CONFIG.waypointProximityRadius) {
                 const speed = CONFIG.payloadSpeedMultiplierT2 + (CONFIG.speedAdditionPerPushingPlayer * (counts.t2 - counts.t1));
                 moveTowards(lastCheckpoint.position, speed);
                 setPayloadState(PayloadState.PUSHING_BACK);
@@ -303,13 +279,7 @@ export function OngoingGlobal(): void {
                 setPayloadState(PayloadState.LOCKED);
             }
         }
-    } else if (counts.t1 > 0 && counts.t2 > 0) {
-        setPayloadState(PayloadState.CONTESTED);
-    } else {
-        setPayloadState(PayloadState.IDLE);
     }
-
-    calculatePayloadProgress();
 
     // Update Checkpoint Timer
     const elapsedSinceCheckpoint = mod.GetMatchTimeElapsed() - STATE.checkpointStartTime;
@@ -321,13 +291,6 @@ export function OngoingGlobal(): void {
     }
 
     updateCheckpointTimer(remainingTime);
-}
-
-function setPayloadState(state: PayloadState): void {
-    if (STATE.payloadState !== state) {
-        STATE.payloadState = state;
-        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.message, mod.stringkeys.payload.state[state]));
-    }
 }
 
 // bugged...
