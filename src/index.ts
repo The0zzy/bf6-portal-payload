@@ -184,7 +184,7 @@ export function OnGameModeStarted(): void {
 
     STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
 
-    initCheckpointTimer(CONFIG.defaultCheckpointTime);
+    //initCheckpointTimer(CONFIG.defaultCheckpointTime);
     uiSetup();
 }
 
