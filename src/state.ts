@@ -14,6 +14,7 @@ export interface PayloadWaypoint {
 }
 
 export interface State {
+    lastElapsedSeconds: any;
     progress: number;
     firstAttackerSpawned: boolean;
     payloadState: PayloadState;
@@ -32,6 +33,7 @@ export interface State {
 }
 
 export const STATE: State = {
+    lastElapsedSeconds: 0,
     progress: 0,
     firstAttackerSpawned: false,
     payloadState: PayloadState.IDLE,
