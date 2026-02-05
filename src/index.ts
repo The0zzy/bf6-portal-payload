@@ -270,6 +270,17 @@ export function OngoingGlobal(): void {
     }
 }
 
+// Team Switcher for testing
+export function OngoingPlayer(eventPlayer: mod.Player): void {
+    if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier)) return;
+    if (!mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) return;
+    if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsZooming)
+        && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsCrouching)) {
+        mod.SetTeam(eventPlayer, mod.GetTeam(eventPlayer) == mod.GetTeam(1) ? mod.GetTeam(2) : mod.GetTeam(1));
+    }
+
+}
+
 // bugged...
 // export function OnTimeLimitReached(): void {
 //     mod.EndGameMode(mod.GetTeam(2));
