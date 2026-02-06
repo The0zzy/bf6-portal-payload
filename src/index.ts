@@ -242,8 +242,7 @@ export function OnGameModeStarted(): void {
 
     STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
 
-    initCheckpointTimer(CONFIG.defaultCheckpointTime);
-    //uiSetup();
+    uiSetup();
 }
 
 export function OngoingGlobal(): void {

@@ -15,13 +15,14 @@
       "locked": "LOCKED",
       "pushing_back": "PUSHING BACK",
       "message": "Payload State: {}",
-      "checkpoint_reached": "Checkpoint {}/{} reached!"
+      "checkpoint_reached": "Checkpoint {}/{} reached!",
+      "percentage": "{}%"
     },
     "objective": {
       "title": "PAYLOAD",
       "position": "Payload Position: ({}, {}, {})",
       "checkpoint_timer": "Next checkpoint in: {}:{}{}",
-      "checkpoint_timer_padded": "Next checkpoint in: 0{}:{}{}"
+      "checkpoint_timer_padded": "{}:{}{}"
     }
   }
 }
