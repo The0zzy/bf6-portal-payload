@@ -275,9 +275,10 @@ export function OngoingPlayer(eventPlayer: mod.Player): void {
     if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier)) return;
     if (!mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) return;
     if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsZooming)
-        && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsCrouching)) {
+        && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsCrouching)
+        && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsInteracting)
+    ) {
         mod.SetTeam(eventPlayer, mod.Equals(mod.GetTeam(eventPlayer), mod.GetTeam(2)) ? mod.GetTeam(1) : mod.GetTeam(2));
-        // somehow doesn't work (team input invalid - only works in one direction somehow)
     }
 }
 
