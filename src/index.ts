@@ -77,21 +77,20 @@ function initPayloadRotation(): void {
 
 function initPayloadObjective(): void {
     const start = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
-    STATE.payloadObject = mod.SpawnObject(
-        mod.RuntimeSpawn_Common.MCOM,
-        start.position,
-        start.rotation,
-        mod.CreateVector(1, 1, 1)
-    );
-    mod.Wait(1);
-    mod.AddUIIcon(
-        STATE.payloadObject!,
-        mod.WorldIconImages.BombArmed,
-        3,
-        mod.CreateVector(0.3, 0.3, 0.3),
-        mod.Message(mod.stringkeys.payload.objective.title),
-        mod.GetTeam(1)
-    );
+    for (const objConfig of CONFIG.payloadObjects) {
+        const spawnPos = mod.Add(start.position, objConfig.relativeOffset);
+        const obj = mod.SpawnObject(
+            objConfig.prefab,
+            spawnPos,
+            start.rotation,
+            objConfig.initialSize
+        );
+        if (mod.IsType(obj, mod.Types.VFX)) {
+            mod.EnableVFX(obj, true);
+            //mod.SetVFXScale(obj as mod.VFX, objConfig.initialSize);
+        }
+        STATE.payloadObjects.push(obj);
+    }
 }
 
 function initSectors(): void {
@@ -183,7 +182,8 @@ function checkWaypointReached(targetWaypointIndex: number) {
 function pushForward(counts: { t1: number; t2: number }) {
     const targetWaypointIndex = STATE.reachedWaypointIndex + 1;
     const targetWaypoint = STATE.waypoints.get(targetWaypointIndex)!;
-    const speed = CONFIG.payloadSpeedMultiplierT1 + (CONFIG.speedAdditionPerPushingPlayer * (counts.t1 - counts.t2));
+    const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t1 - counts.t2);
+    const speed = CONFIG.payloadSpeedMultiplierT1 + speedAddtion;
     moveTowards(targetWaypoint.position, speed);
     setPayloadState(PayloadState.ADVANCING);
     checkWaypointReached(targetWaypointIndex);
@@ -196,15 +196,26 @@ function pushBackward(counts: { t1: number; t2: number }) {
     }
     const targetWaypointIndex = STATE.reachedWaypointIndex - 1;
     const targetWaypoint = STATE.waypoints.get(targetWaypointIndex)!;
-    const speed = CONFIG.payloadSpeedMultiplierT2 + (CONFIG.speedAdditionPerPushingPlayer * (counts.t2 - counts.t1));
+    const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t2 - counts.t1);
+    const speed = CONFIG.payloadSpeedMultiplierT2 + speedAddtion;
     moveTowards(targetWaypoint.position, speed);
     setPayloadState(PayloadState.PUSHING_BACK);
     checkWaypointReached(targetWaypointIndex);
 }
 
 function updatePayloadObject() {
-    const rotation = STATE.waypoints.get(STATE.reachedWaypointIndex)!.rotation;
-    mod.SetObjectTransform(STATE.payloadObject!, mod.CreateTransform(STATE.payloadPosition, rotation))
+    const waypoint = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
+    const rotation = waypoint.rotation;
+    for (let i = 0; i < STATE.payloadObjects.length; i++) {
+        const obj = STATE.payloadObjects[i];
+        const config = CONFIG.payloadObjects[i];
+        const worldPos = mod.Add(STATE.payloadPosition, config.relativeOffset);
+        if (mod.IsType(obj, mod.Types.VFX)) {
+            mod.MoveVFX(obj as mod.VFX, worldPos, rotation);
+        } else {
+            mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, rotation));
+        }
+    }
 }
 
 function onPayloadMoved() {
@@ -256,8 +267,6 @@ export function OngoingGlobal(): void {
         STATE.lastElapsedSeconds = elapsedSeconds;
         executeEverySecond();
     }
-
-    if (!STATE.payloadObject) return;
 
     const counts = getAlivePlayersInProximity(STATE.payloadPosition, CONFIG.pushProximityRadius);
 

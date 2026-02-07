@@ -22,7 +22,7 @@ export interface State {
     waypoints: Map<number, PayloadWaypoint>;
     reachedWaypointIndex: number;
     isOvertime: boolean;
-    payloadObject: mod.Object | undefined;
+    payloadObjects: mod.Object[];
     totalDistanceInMeters: number;
     reachedCheckpointIndex: number;
     maxCheckpoints: number;
@@ -40,7 +40,7 @@ export const STATE: State = {
     waypoints: new Map<number, PayloadWaypoint>(),
     reachedWaypointIndex: 0,
     isOvertime: false,
-    payloadObject: undefined,
+    payloadObjects: [],
     totalDistanceInMeters: 0,
     reachedCheckpointIndex: 0,
     maxCheckpoints: 0,
