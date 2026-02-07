@@ -1,4 +1,5 @@
-import { initCheckpointTimer, updateCheckpointTimer, uiSetup, updateUI } from './ui.ts';
+import { initCheckpointTimer, updateCheckpointTimer, uiSetup, updateUI, updateCheckpointUI } from './ui.ts';
+import { initSounds, playCheckpointReachedSound } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
 
@@ -139,12 +140,14 @@ function moveTowards(targetPos: mod.Vector, speed: number): void {
 function onCheckpointReached(): void {
     if (STATE.payloadState !== PayloadState.ADVANCING) return;
 
-    mod.EnableHQ(mod.GetHQ(STATE.reachedCheckpointIndex + 300), false);
-    mod.EnableHQ(mod.GetHQ(STATE.reachedCheckpointIndex + 400), false);
+    mod.EnableHQ(mod.GetHQ((STATE.currentCheckpoint - 1) + 300), false);
+    mod.EnableHQ(mod.GetHQ((STATE.currentCheckpoint - 1) + 400), false);
     if (STATE.reachedWaypointIndex == STATE.waypoints.size - 1) {
         onFinalCheckpointReached();
         return;
     }
+    playCheckpointReachedSound();
+    updateCheckpointUI();
     STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
     mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 300), true);
     mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 400), true);
@@ -240,6 +243,7 @@ export function OnGameModeStarted(): void {
     initPayloadTrack();
     initPayloadRotation();
     initPayloadObjective();
+    initSounds();
 
     STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
 

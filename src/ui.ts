@@ -41,8 +41,7 @@ let friendlycolour = mod.CreateVector(0, 0.8, 1); //0, 0.8, 1
 let enemycolour = mod.CreateVector(1, 0.2, 0.2);
 let friendlybgcolour = mod.CreateVector(0, 0.15, 0.3);
 let enemybgcolour = mod.CreateVector(0.4, 0, 0);
-
-
+let goldcolour = mod.CreateVector(1, 0.8, 0);
 
 
 export function uiSetup(): void {
@@ -82,4 +81,24 @@ export function updateUI(): void {
     mod.SetUITextLabel(mod.FindUIWidgetWithName("percentage2"), mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(STATE.progressInPercent)));
     mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress_background1"), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0));
     mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress_background2"), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0));
+}
+
+
+
+export async function updateCheckpointUI(): Promise<void> {
+    const containerWidget = mod.FindUIWidgetWithName("container");
+    mod.AddUIText("checkpointreached", mod.CreateVector(0, 200, 0), mod.CreateVector(400, 100, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, goldcolour, 0.8, mod.UIBgFill.Blur, mod.Message(mod.stringkeys.payload.checkpoints.blankmessage), 48, goldcolour, 1, mod.UIAnchor.Center);
+    for (let i = 0; i < 600; i += 40) {
+        mod.SetUIWidgetSize(mod.FindUIWidgetWithName("checkpointreached"), mod.CreateVector(i, 100, 0));
+        await mod.Wait(0.033);
+    }
+    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("checkpointreached"), mod.CreateVector(600, 100, 0));
+    mod.SetUITextLabel(mod.FindUIWidgetWithName("checkpointreached"), mod.Message(mod.stringkeys.payload.checkpoints.message));
+    await mod.Wait(6);
+    mod.SetUITextLabel(mod.FindUIWidgetWithName("checkpointreached"), mod.Message(mod.stringkeys.payload.checkpoints.blankmessage));
+    for (let i = 600; i > 0; i -= 40) {
+        mod.SetUIWidgetSize(mod.FindUIWidgetWithName("checkpointreached"), mod.CreateVector(i, 100, 0));
+        await mod.Wait(0.033);
+    }
+    mod.DeleteUIWidget(mod.FindUIWidgetWithName("checkpointreached"));
 }

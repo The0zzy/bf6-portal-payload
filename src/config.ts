@@ -19,7 +19,7 @@ export const CONFIG: Config = {
     pushProximityRadius: 5,
     waypointProximityRadius: 0.25,
     speedAdditionPerPushingPlayer: 0.005,
-    payloadSpeedMultiplierT1: 0.095, //0.035
+    payloadSpeedMultiplierT1: 0.205, //0.035
     payloadSpeedMultiplierT2: 0.015,
     overtimeDuration: 60,
     overtimeEnabled: true,

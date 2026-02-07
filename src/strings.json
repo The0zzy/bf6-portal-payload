@@ -5,7 +5,9 @@
       "size": "Track Size: {}"
     },
     "checkpoints": {
-      "count": "No of Checkpoints: {}"
+      "count": "No of Checkpoints: {}",
+      "message": "CHECKPOINT REACHED",
+      "blankmessage": ""
     },
     "status": "TrackCurrent: {} | Track: {} | Checkpoints: {}",
     "state": {
