@@ -33,10 +33,10 @@ export const CONFIG: Config = {
     enableDebug: true,
     payloadObjects: [
         { prefab: mod.RuntimeSpawn_Common.MCOM, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(1, 1, 1) },
-        { prefab: mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Target_Area, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(1, 1, 1) },
-        { prefab: mod.RuntimeSpawn_Common.Basketball_01, relativeOffset: mod.CreateVector(2, 0, 2), initialSize: mod.CreateVector(1, 1, 1) },
-        { prefab: mod.RuntimeSpawn_Common.Basketball_01, relativeOffset: mod.CreateVector(2, 0, -2), initialSize: mod.CreateVector(1, 1, 1) },
-        { prefab: mod.RuntimeSpawn_Common.Basketball_01, relativeOffset: mod.CreateVector(-2, 0, 2), initialSize: mod.CreateVector(1, 1, 1) },
-        { prefab: mod.RuntimeSpawn_Common.Basketball_01, relativeOffset: mod.CreateVector(-2, 0, -2), initialSize: mod.CreateVector(1, 1, 1) },
+        { prefab: mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Target_Area, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(2.5, 1, 2.5) },
+        { prefab: mod.RuntimeSpawn_Common.Basketball_01, relativeOffset: mod.CreateVector(2.5, 0, 2.5), initialSize: mod.CreateVector(1, 1, 1) },
+        { prefab: mod.RuntimeSpawn_Common.Basketball_01, relativeOffset: mod.CreateVector(2.5, 0, -2.5), initialSize: mod.CreateVector(1, 1, 1) },
+        { prefab: mod.RuntimeSpawn_Common.Basketball_01, relativeOffset: mod.CreateVector(-2.5, 0, 2.5), initialSize: mod.CreateVector(1, 1, 1) },
+        { prefab: mod.RuntimeSpawn_Common.Basketball_01, relativeOffset: mod.CreateVector(-2.5, 0, -2.5), initialSize: mod.CreateVector(1, 1, 1) },
     ],
 };

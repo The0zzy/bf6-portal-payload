@@ -84,6 +84,9 @@ function initPayloadObjective(): void {
             start.rotation,
             objConfig.initialSize
         );
+        if (mod.IsType(obj, mod.Types.VFX)) {
+            mod.EnableVFX(obj, true);
+        }
         STATE.payloadObjects.push(obj);
     }
 }
