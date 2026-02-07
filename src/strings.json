@@ -15,6 +15,7 @@
       "locked": "LOCKED",
       "pushing_back": "PUSHING BACK",
       "message": "Payload State: {}",
+      "speed": "Base Speed: {} | Speed Addition: {} | Overall Speed: {}",
       "checkpoint_reached": "Checkpoint {}/{} reached!",
       "percentage": "{}%"
     },
