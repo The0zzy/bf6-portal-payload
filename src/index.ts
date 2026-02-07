@@ -76,21 +76,16 @@ function initPayloadRotation(): void {
 
 function initPayloadObjective(): void {
     const start = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
-    STATE.payloadObject = mod.SpawnObject(
-        mod.RuntimeSpawn_Common.MCOM,
-        start.position,
-        start.rotation,
-        mod.CreateVector(1, 1, 1)
-    );
-    mod.Wait(1);
-    mod.AddUIIcon(
-        STATE.payloadObject!,
-        mod.WorldIconImages.BombArmed,
-        3,
-        mod.CreateVector(0.3, 0.3, 0.3),
-        mod.Message(mod.stringkeys.payload.objective.title),
-        mod.GetTeam(1)
-    );
+    for (const objConfig of CONFIG.payloadObjects) {
+        const spawnPos = mod.Add(start.position, objConfig.relativeOffset);
+        const obj = mod.SpawnObject(
+            objConfig.prefab,
+            spawnPos,
+            start.rotation,
+            objConfig.initialSize
+        );
+        STATE.payloadObjects.push(obj);
+    }
 }
 
 function initSectors(): void {
@@ -204,8 +199,14 @@ function pushBackward(counts: { t1: number; t2: number }) {
 }
 
 function updatePayloadObject() {
-    const rotation = STATE.waypoints.get(STATE.reachedWaypointIndex)!.rotation;
-    mod.SetObjectTransform(STATE.payloadObject!, mod.CreateTransform(STATE.payloadPosition, rotation))
+    const waypoint = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
+    const rotation = waypoint.rotation;
+    for (let i = 0; i < STATE.payloadObjects.length; i++) {
+        const obj = STATE.payloadObjects[i];
+        const config = CONFIG.payloadObjects[i];
+        const worldPos = mod.Add(STATE.payloadPosition, config.relativeOffset);
+        mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, rotation));
+    }
 }
 
 function onPayloadMoved() {
@@ -255,8 +256,6 @@ export function OngoingGlobal(): void {
         STATE.lastElapsedSeconds = elapsedSeconds;
         executeEverySecond();
     }
-
-    if (!STATE.payloadObject) return;
 
     const counts = getAlivePlayersInProximity(STATE.payloadPosition, CONFIG.pushProximityRadius);
 

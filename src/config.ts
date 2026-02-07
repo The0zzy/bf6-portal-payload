@@ -1,3 +1,9 @@
+export interface PayloadObjectConfig {
+    prefab: any;
+    relativeOffset: mod.Vector;
+    initialSize: mod.Vector;
+}
+
 export interface Config {
     gameModeTime: number;
     defaultCheckpointTime: number;
@@ -10,6 +16,7 @@ export interface Config {
     overtimeDuration: number;
     overtimeEnabled: boolean;
     enableDebug: boolean;
+    payloadObjects: PayloadObjectConfig[];
 }
 
 export const CONFIG: Config = {
@@ -24,4 +31,12 @@ export const CONFIG: Config = {
     overtimeDuration: 60,
     overtimeEnabled: true,
     enableDebug: true,
+    payloadObjects: [
+        { prefab: mod.RuntimeSpawn_Common.MCOM, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(1, 1, 1) },
+        { prefab: mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Target_Area, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(1, 1, 1) },
+        { prefab: mod.RuntimeSpawn_Common.Basketball_01, relativeOffset: mod.CreateVector(2, 0, 2), initialSize: mod.CreateVector(1, 1, 1) },
+        { prefab: mod.RuntimeSpawn_Common.Basketball_01, relativeOffset: mod.CreateVector(2, 0, -2), initialSize: mod.CreateVector(1, 1, 1) },
+        { prefab: mod.RuntimeSpawn_Common.Basketball_01, relativeOffset: mod.CreateVector(-2, 0, 2), initialSize: mod.CreateVector(1, 1, 1) },
+        { prefab: mod.RuntimeSpawn_Common.Basketball_01, relativeOffset: mod.CreateVector(-2, 0, -2), initialSize: mod.CreateVector(1, 1, 1) },
+    ],
 };
