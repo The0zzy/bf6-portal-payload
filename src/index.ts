@@ -183,7 +183,6 @@ function pushForward(counts: { t1: number; t2: number }) {
     const targetWaypoint = STATE.waypoints.get(targetWaypointIndex)!;
     const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t1 - counts.t2);
     const speed = CONFIG.payloadSpeedMultiplierT1 + speedAddtion;
-    mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.speed, CONFIG.payloadSpeedMultiplierT1, speedAddtion, speed));
     moveTowards(targetWaypoint.position, speed);
     setPayloadState(PayloadState.ADVANCING);
     checkWaypointReached(targetWaypointIndex);
@@ -198,7 +197,6 @@ function pushBackward(counts: { t1: number; t2: number }) {
     const targetWaypoint = STATE.waypoints.get(targetWaypointIndex)!;
     const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t2 - counts.t1);
     const speed = CONFIG.payloadSpeedMultiplierT2 + speedAddtion;
-    mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.speed, CONFIG.payloadSpeedMultiplierT2, speedAddtion, speed));
     moveTowards(targetWaypoint.position, speed);
     setPayloadState(PayloadState.PUSHING_BACK);
     checkWaypointReached(targetWaypointIndex);
