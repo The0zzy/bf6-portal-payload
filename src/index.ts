@@ -87,6 +87,7 @@ function initPayloadObjective(): void {
         );
         if (mod.IsType(obj, mod.Types.VFX)) {
             mod.EnableVFX(obj, true);
+            //mod.SetVFXScale(obj as mod.VFX, objConfig.initialSize);
         }
         STATE.payloadObjects.push(obj);
     }
@@ -209,7 +210,11 @@ function updatePayloadObject() {
         const obj = STATE.payloadObjects[i];
         const config = CONFIG.payloadObjects[i];
         const worldPos = mod.Add(STATE.payloadPosition, config.relativeOffset);
-        mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, rotation));
+        if (mod.IsType(obj, mod.Types.VFX)) {
+            mod.MoveVFX(obj as mod.VFX, worldPos, rotation);
+        } else {
+            mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, rotation));
+        }
     }
 }
 
