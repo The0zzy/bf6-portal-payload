@@ -42,6 +42,7 @@ let enemycolour = mod.CreateVector(1, 0.2, 0.2);
 let friendlybgcolour = mod.CreateVector(0, 0.15, 0.3);
 let enemybgcolour = mod.CreateVector(0.4, 0, 0);
 let goldcolour = mod.CreateVector(1, 0.8, 0);
+let goldbgcolour = mod.CreateVector(0.5, 0.4, 0);
 
 
 export function uiSetup(): void {
@@ -87,17 +88,17 @@ export function updateUI(): void {
 
 export async function updateCheckpointUI(): Promise<void> {
     const containerWidget = mod.FindUIWidgetWithName("container");
-    mod.AddUIText("checkpointreached", mod.CreateVector(0, 200, 0), mod.CreateVector(400, 100, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, goldcolour, 0.8, mod.UIBgFill.Blur, mod.Message(mod.stringkeys.payload.checkpoints.blankmessage), 48, goldcolour, 1, mod.UIAnchor.Center);
-    for (let i = 0; i < 600; i += 40) {
-        mod.SetUIWidgetSize(mod.FindUIWidgetWithName("checkpointreached"), mod.CreateVector(i, 100, 0));
+    mod.AddUIText("checkpointreached", mod.CreateVector(0, 100, 0), mod.CreateVector(500, 80, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, goldbgcolour, 0.8, mod.UIBgFill.Blur, mod.Message(mod.stringkeys.payload.checkpoints.blankmessage), 48, goldcolour, 1, mod.UIAnchor.Center);
+    for (let i = 0; i < 500; i += 20) {
+        mod.SetUIWidgetSize(mod.FindUIWidgetWithName("checkpointreached"), mod.CreateVector(i, 80, 0));
         await mod.Wait(0.033);
     }
-    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("checkpointreached"), mod.CreateVector(600, 100, 0));
+    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("checkpointreached"), mod.CreateVector(500, 80, 0));
     mod.SetUITextLabel(mod.FindUIWidgetWithName("checkpointreached"), mod.Message(mod.stringkeys.payload.checkpoints.message));
     await mod.Wait(6);
     mod.SetUITextLabel(mod.FindUIWidgetWithName("checkpointreached"), mod.Message(mod.stringkeys.payload.checkpoints.blankmessage));
-    for (let i = 600; i > 0; i -= 40) {
-        mod.SetUIWidgetSize(mod.FindUIWidgetWithName("checkpointreached"), mod.CreateVector(i, 100, 0));
+    for (let i = 500; i > 0; i -= 20) {
+        mod.SetUIWidgetSize(mod.FindUIWidgetWithName("checkpointreached"), mod.CreateVector(i, 80, 0));
         await mod.Wait(0.033);
     }
     mod.DeleteUIWidget(mod.FindUIWidgetWithName("checkpointreached"));
