@@ -1,4 +1,4 @@
-import { initCheckpointTimer, updateCheckpointTimer, uiSetup } from './ui.ts';
+import { initCheckpointTimer, updateCheckpointTimer, uiSetup, updateUI } from './ui.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
 
@@ -207,6 +207,7 @@ function updatePayloadObject() {
 function onPayloadMoved() {
     calculatePayloadProgress();
     updatePayloadObject();
+    updateUI();
 }
 
 function executeEverySecond() {
