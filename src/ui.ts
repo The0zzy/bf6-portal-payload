@@ -88,8 +88,8 @@ export function updateUI(): void {
 
 export async function updateCheckpointUI(): Promise<void> {
     const containerWidget = mod.FindUIWidgetWithName("container");
-    mod.AddUIText("checkpointreached", mod.CreateVector(0, 100, 0), mod.CreateVector(500, 80, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, goldbgcolour, 0.8, mod.UIBgFill.Blur, mod.Message(mod.stringkeys.payload.checkpoints.blankmessage), 48, goldcolour, 1, mod.UIAnchor.Center);
-    for (let i = 0; i < 500; i += 20) {
+    mod.AddUIText("checkpointreached", mod.CreateVector(0, 100, 0), mod.CreateVector(500, 80, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, goldbgcolour, 0.8, mod.UIBgFill.Blur, mod.Message(mod.stringkeys.payload.checkpoints.blankmessage), 52, goldcolour, 1, mod.UIAnchor.Center);
+    for (let i = 0; i < 500; i += 25) {
         mod.SetUIWidgetSize(mod.FindUIWidgetWithName("checkpointreached"), mod.CreateVector(i, 80, 0));
         await mod.Wait(0.033);
     }
@@ -97,7 +97,7 @@ export async function updateCheckpointUI(): Promise<void> {
     mod.SetUITextLabel(mod.FindUIWidgetWithName("checkpointreached"), mod.Message(mod.stringkeys.payload.checkpoints.message));
     await mod.Wait(6);
     mod.SetUITextLabel(mod.FindUIWidgetWithName("checkpointreached"), mod.Message(mod.stringkeys.payload.checkpoints.blankmessage));
-    for (let i = 500; i > 0; i -= 20) {
+    for (let i = 500; i > 0; i -= 25) {
         mod.SetUIWidgetSize(mod.FindUIWidgetWithName("checkpointreached"), mod.CreateVector(i, 80, 0));
         await mod.Wait(0.033);
     }

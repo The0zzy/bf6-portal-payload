@@ -1,5 +1,5 @@
 import { initCheckpointTimer, updateCheckpointTimer, uiSetup, updateUI, updateCheckpointUI } from './ui.ts';
-import { initSounds, playCheckpointReachedSound } from './sounds.ts';
+import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
 
@@ -187,6 +187,11 @@ function pushForward(counts: { t1: number; t2: number }) {
     moveTowards(targetWaypoint.position, speed);
     setPayloadState(PayloadState.ADVANCING);
     checkWaypointReached(targetWaypointIndex);
+    VOPushing();
+    if (STATE.progressInPercent > 90) {
+        playNearEndMusic();
+        playNearEndVO();
+    }
 }
 
 function pushBackward(counts: { t1: number; t2: number }) {
@@ -201,6 +206,7 @@ function pushBackward(counts: { t1: number; t2: number }) {
     moveTowards(targetWaypoint.position, speed);
     setPayloadState(PayloadState.PUSHING_BACK);
     checkWaypointReached(targetWaypointIndex);
+    VOPushingBack();
 }
 
 function updatePayloadObject() {
@@ -236,6 +242,10 @@ function executeEverySecond() {
     if (remainingTime <= 0) {
         onRunningOutOfTime();
         return;
+    }
+    if (remainingTime <= 60) {
+        playNearEndMusic();
+        playLowTimeVO();
     }
 }
 
