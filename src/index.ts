@@ -87,7 +87,9 @@ function initPayloadObjective(): void {
         );
         if (mod.IsType(obj, mod.Types.VFX)) {
             mod.EnableVFX(obj, true);
-            //mod.SetVFXScale(obj as mod.VFX, objConfig.initialSize);
+            mod.SetVFXScale(obj as mod.VFX, mod.XComponentOf(objConfig.initialSize));
+            mod.SetVFXColor(obj as mod.VFX, mod.CreateVector(0, 0, 1));
+            mod.SetVFXSpeed(obj as mod.VFX, mod.YComponentOf(objConfig.initialSize));
         }
         STATE.payloadObjects.push(obj);
     }
