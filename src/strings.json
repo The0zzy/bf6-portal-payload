@@ -21,6 +21,14 @@
       "checkpoint_reached": "Checkpoint {}/{} reached!",
       "percentage": "{}%"
     },
+    "scoring": {
+      "team1": "ATTACKERS",
+      "team2": "DEFENDERS",
+      "kills": "Kills",
+      "assists": "Assists",
+      "deaths": "Deaths",
+      "objective": "Objective"
+    },
     "objective": {
       "title": "PAYLOAD",
       "position": "Payload Position: ({}, {}, {})",

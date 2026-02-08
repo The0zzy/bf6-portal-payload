@@ -2,6 +2,7 @@ import { initCheckpointTimer, updateCheckpointTimer, uiSetup, updateUI, updateCh
 import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
+import { initScoreboard, onPlayerDied, onPlayerEarnedAssist, awardObjectivePoints, onPlayerLeave } from './scoring.ts';
 
 
 function getOpponentTeam(team: mod.Team): mod.Team {
@@ -107,29 +108,31 @@ function initSectors(): void {
     }
 }
 
-function getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1: number; t2: number } {
+function getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1: mod.Player[]; t2: mod.Player[] } {
     const players = mod.AllPlayers();
-    let t1 = 0;
-    let t2 = 0;
+    let t1: mod.Player[] = [];
+    let t2: mod.Player[] = [];
     const team1 = mod.GetTeam(1);
     const team2 = mod.GetTeam(2);
+    const playerCount = mod.CountOf(players);
 
-    for (let i = 0; i < mod.CountOf(players); i++) {
+    for (let i = 0; i < playerCount; i++) {
         const player = mod.ValueInArray(players, i) as mod.Player;
         if (mod.GetSoldierState(player, mod.SoldierStateBool.IsAlive)) {
             const playerPos = mod.GetSoldierState(player, mod.SoldierStateVector.GetPosition);
             if (mod.DistanceBetween(position, playerPos) <= radius) {
                 const team = mod.GetTeam(player);
                 if (mod.Equals(team, team1)) {
-                    t1++;
+                    t1.push(player);
                 } else if (mod.Equals(team, team2)) {
-                    t2++;
+                    t2.push(player);
                 }
             }
         }
     }
     return { t1, t2 };
 }
+
 
 function moveTowards(targetPos: mod.Vector, speed: number): void {
     const direction = mod.DirectionTowards(STATE.payloadPosition, targetPos);
@@ -181,10 +184,10 @@ function checkWaypointReached(targetWaypointIndex: number) {
     }
 }
 
-function pushForward(counts: { t1: number; t2: number }) {
+function pushForward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
     const targetWaypointIndex = STATE.reachedWaypointIndex + 1;
     const targetWaypoint = STATE.waypoints.get(targetWaypointIndex)!;
-    const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t1 - counts.t2);
+    const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t1.length - counts.t2.length);
     const speed = CONFIG.payloadSpeedMultiplierT1 + speedAddtion;
     moveTowards(targetWaypoint.position, speed);
     setPayloadState(PayloadState.ADVANCING);
@@ -196,14 +199,14 @@ function pushForward(counts: { t1: number; t2: number }) {
     }
 }
 
-function pushBackward(counts: { t1: number; t2: number }) {
+function pushBackward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
     if (STATE.reachedWaypointIndex <= STATE.reachedCheckpointIndex) {
         setPayloadState(PayloadState.LOCKED);
         return;
     }
     const targetWaypointIndex = STATE.reachedWaypointIndex - 1;
     const targetWaypoint = STATE.waypoints.get(targetWaypointIndex)!;
-    const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t2 - counts.t1);
+    const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t2.length - counts.t1.length);
     const speed = CONFIG.payloadSpeedMultiplierT2 + speedAddtion;
     moveTowards(targetWaypoint.position, speed);
     setPayloadState(PayloadState.PUSHING_BACK);
@@ -271,27 +274,46 @@ export function OnGameModeStarted(): void {
     STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
 
     uiSetup();
+    initScoreboard();
+}
+
+export function OnPlayerDied(victim: mod.Player, killer: mod.Player): void {
+    onPlayerDied(victim, killer);
+}
+
+export function OnPlayerEarnedAssist(player: mod.Player): void {
+    onPlayerEarnedAssist(player);
+}
+
+export function OnPlayerLeaveGame(playerId: number): void {
+    onPlayerLeave(playerId);
 }
 
 export function OngoingGlobal(): void {
     const elapsedSeconds = mod.GetMatchTimeElapsed();
+    const counts = getAlivePlayersInProximity(STATE.payloadPosition, CONFIG.pushProximityRadius);
+
     if (STATE.lastElapsedSeconds != elapsedSeconds) {
         STATE.lastElapsedSeconds = elapsedSeconds;
         executeEverySecond();
     }
 
-    const counts = getAlivePlayersInProximity(STATE.payloadPosition, CONFIG.pushProximityRadius);
-
-    if (counts.t1 > counts.t2) {
+    if (counts.t1.length > counts.t2.length) {
         pushForward(counts);
         onPayloadMoved();
-    } else if (counts.t2 > counts.t1) {
+    } else if (counts.t2.length > counts.t1.length) {
         pushBackward(counts);
         onPayloadMoved();
-    } else if (counts.t1 > 0 && counts.t2 > 0) {
+    } else if (counts.t1.length > 0 && counts.t2.length > 0) {
         setPayloadState(PayloadState.CONTESTED);
     } else {
         setPayloadState(PayloadState.IDLE);
+    }
+
+    // Award objective points to all players in proximity of the payload
+    if (STATE.payloadState != PayloadState.IDLE) {
+        for (const p of counts.t1) awardObjectivePoints(p, 1);
+        for (const p of counts.t2) awardObjectivePoints(p, 1);
     }
 }
 

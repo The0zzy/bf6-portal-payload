@@ -13,6 +13,13 @@ export interface PayloadWaypoint {
     distance: number;
 }
 
+export interface PlayerScoring {
+    kills: number;
+    assists: number;
+    deaths: number;
+    objective: number;
+}
+
 export interface State {
     lastElapsedSeconds: any;
     progress: number;
@@ -30,6 +37,7 @@ export interface State {
     checkpointStartTime: number;
     progressInMeters: number;
     progressInPercent: number;
+    playerScores: Map<number, PlayerScoring>;
 }
 
 export const STATE: State = {
@@ -49,4 +57,5 @@ export const STATE: State = {
     payloadPosition: mod.CreateVector(0, 0, 0),
     progressInMeters: 0,
     progressInPercent: 0,
+    playerScores: new Map<number, PlayerScoring>(),
 };
