@@ -66,12 +66,15 @@ function initPayloadTrack(): void {
 }
 
 function initPayloadRotation(): void {
+    const defaultFacingDirection = mod.CreateVector(0, 0, 1);
     for (let i = 0; i < STATE.waypoints.size - 1; i++) {
         const currentPos = STATE.waypoints.get(i)!.position;
         const nextPos = STATE.waypoints.get(i + 1)!.position;
         const direction = mod.DirectionTowards(currentPos, nextPos);
-        const angle = mod.AngleBetweenVectors(mod.ForwardVector(), direction);
-        const rotation = mod.CreateVector(0, angle, 0);
+        const directionXZ = mod.CreateVector(mod.XComponentOf(direction), 0, mod.ZComponentOf(direction));
+        const angle = mod.AngleBetweenVectors(defaultFacingDirection, directionXZ);
+        const radians = mod.DegreesToRadians(angle);
+        const rotation = mod.CreateVector(0, radians, 0);
         STATE.waypoints.get(i)!.rotation = rotation;
     }
 }
@@ -88,11 +91,34 @@ function initPayloadObjective(): void {
         );
         if (mod.IsType(obj, mod.Types.VFX)) {
             mod.EnableVFX(obj, true);
-            mod.SetVFXScale(obj as mod.VFX, mod.XComponentOf(objConfig.initialSize));
-            mod.SetVFXColor(obj as mod.VFX, mod.CreateVector(0, 0, 1));
-            mod.SetVFXSpeed(obj as mod.VFX, mod.YComponentOf(objConfig.initialSize));
         }
         STATE.payloadObjects.push(obj);
+    }
+    const vehicleSpawner = mod.SpawnObject(
+        mod.RuntimeSpawn_Common.VehicleSpawner,
+        start.position,
+        start.rotation,
+        mod.CreateVector(1, 1, 1)
+    ) as mod.VehicleSpawner;
+    mod.SetVehicleSpawnerVehicleType(vehicleSpawner, mod.VehicleList.Marauder);
+    mod.ForceVehicleSpawnerSpawn(vehicleSpawner);
+}
+
+export function OnVehicleSpawned(eventVehicle: mod.Vehicle): void {
+    const vehiclePosition = mod.GetVehicleState(eventVehicle, mod.VehicleStateVector.VehiclePosition);
+    if (mod.DistanceBetween(STATE.waypoints.get(0)!.position, vehiclePosition) < 5) {
+        STATE.payloadVehicle = eventVehicle;
+        mod.SetVehicleMaxHealthMultiplier(eventVehicle, 5);
+        mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.assigned_payload_vehicle));
+        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.assigned_payload_vehicle));
+    }
+}
+
+export function OngoingVehicle(eventVehicle: mod.Vehicle): void {
+    if (eventVehicle == STATE.payloadVehicle) {
+        mod.Heal(eventVehicle, 100);
+        mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.healed_vehicle));
+        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.healed_vehicle));
     }
 }
 
@@ -226,6 +252,11 @@ function updatePayloadObject() {
         } else {
             mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, rotation));
         }
+    }
+    if (STATE.payloadVehicle) {
+        mod.Teleport(STATE.payloadVehicle, STATE.payloadPosition, mod.YComponentOf(rotation));
+        mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.moved_vehicle));
+        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.moved_vehicle));
     }
 }
 

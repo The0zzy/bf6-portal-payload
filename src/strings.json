@@ -35,7 +35,10 @@
       "title": "PAYLOAD",
       "position": "Payload Position: ({}, {}, {})",
       "checkpoint_timer": "Next checkpoint in: {}:{}{}",
-      "checkpoint_timer_padded": "{}:{}{}"
+      "checkpoint_timer_padded": "{}:{}{}",
+      "assigned_payload_vehicle": "Assigned payload vehicle!",
+      "moved_vehicle": "Moved payload vehicle!",
+      "healed_vehicle": "Healed payload vehicle!"
     }
   }
 }

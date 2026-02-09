@@ -22,7 +22,7 @@ export interface PlayerScoring {
 }
 
 export interface State {
-    lastElapsedSeconds: any;
+    lastElapsedSeconds: number;
     progress: number;
     firstAttackerSpawned: boolean;
     payloadState: PayloadState;
@@ -39,6 +39,7 @@ export interface State {
     progressInMeters: number;
     progressInPercent: number;
     playerScores: Map<number, PlayerScoring>;
+    payloadVehicle?: mod.Vehicle;
 }
 
 export const STATE: State = {
