@@ -2,23 +2,19 @@ import { STATE, type PlayerScoring } from './state.ts';
 
 export function scoring_initScoreboard(): void {
     mod.SetScoreboardType(mod.ScoreboardType.CustomTwoTeams);
-
-    // Configure columns. Column indices are 1-4.
+    mod.SetScoreboardColumnWidths(1, 1, 1, 1, 1);
     mod.SetScoreboardHeader(
-        mod.Message(mod.stringkeys.payload.scoring.team1),
-        mod.Message(mod.stringkeys.payload.scoring.team2)
+        mod.Message(mod.stringkeys.payload.scoreboard.team1),
+        mod.Message(mod.stringkeys.payload.scoreboard.team2)
     );
     mod.SetScoreboardColumnNames(
-        mod.Message(mod.stringkeys.payload.scoring.objective),
-        mod.Message(mod.stringkeys.payload.scoring.kills),
-        mod.Message(mod.stringkeys.payload.scoring.assists),
-        mod.Message(mod.stringkeys.payload.scoring.deaths),
-        mod.Message(mod.stringkeys.payload.scoring.revives)
+        mod.Message(mod.stringkeys.payload.scoreboard.objective),
+        mod.Message(mod.stringkeys.payload.scoreboard.kills),
+        mod.Message(mod.stringkeys.payload.scoreboard.assists),
+        mod.Message(mod.stringkeys.payload.scoreboard.deaths),
+        mod.Message(mod.stringkeys.payload.scoreboard.revives)
     );
-    mod.SetScoreboardColumnWidths(1, 1, 1, 1, 1);
-
-    // Sort by objective (Column 1) descending
-    mod.SetScoreboardSorting(1);
+    // mod.SetScoreboardSorting(1);
     scoring_refreshScoreboard();
 }
 
@@ -48,30 +44,30 @@ export function scoring_refreshScoreboard(): void {
 
 export function scoring_updatePlayerScore(player: mod.Player, type: keyof PlayerScoring, amount: number): void {
     const score = scoring_getOrCreatePlayerScore(player);
-    let scoreTypeString = mod.stringkeys.payload.scoring.objective;
+    let scoreTypeString = mod.stringkeys.payload.scoreboard.objective;
     switch (type) {
         case 'objective':
             score.objective += amount;
-            scoreTypeString = mod.stringkeys.payload.scoring.objective;
+            scoreTypeString = mod.stringkeys.payload.scoreboard.objective;
             break;
         case 'kills':
             score.kills += amount;
-            scoreTypeString = mod.stringkeys.payload.scoring.kills;
+            scoreTypeString = mod.stringkeys.payload.scoreboard.kills;
             break;
         case 'assists':
             score.assists += amount;
-            scoreTypeString = mod.stringkeys.payload.scoring.assists;
+            scoreTypeString = mod.stringkeys.payload.scoreboard.assists;
             break;
         case 'deaths':
             score.deaths += amount;
-            scoreTypeString = mod.stringkeys.payload.scoring.deaths;
+            scoreTypeString = mod.stringkeys.payload.scoreboard.deaths;
             break;
         case 'revives':
             score.revives += amount;
-            scoreTypeString = mod.stringkeys.payload.scoring.revives;
+            scoreTypeString = mod.stringkeys.payload.scoreboard.revives;
             break;
     }
-    mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.scoring.message, player, scoreTypeString, amount));
+    mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.scoring.message, player, amount, scoreTypeString));
     // Update the actual scoreboard values using column indices
     mod.SetScoreboardPlayerValues(player, score.objective, score.kills, score.assists, score.deaths, score.revives);
 }

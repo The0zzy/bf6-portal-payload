@@ -304,11 +304,16 @@ export function OngoingGlobal(): void {
 
     if (STATE.lastElapsedSeconds != elapsedSeconds) {
         STATE.lastElapsedSeconds = elapsedSeconds;
-        executeEverySecond();
-
         // Award objective points to all players in proximity of the payload
-        for (const p of counts.t1) scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
-        for (const p of counts.t2) scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
+        for (const p of counts.t1) {
+            scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
+            mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.scoreboard.message, p, CONFIG.objectiveScorePerSecond, mod.stringkeys.payload.scoreboard.objective));
+        }
+        for (const p of counts.t2) {
+            scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
+            mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.scoreboard.message, p, CONFIG.objectiveScorePerSecond, mod.stringkeys.payload.scoreboard.objective));
+        }
+        executeEverySecond();
     }
 
     if (counts.t1.length > counts.t2.length) {

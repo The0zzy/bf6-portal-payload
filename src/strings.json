@@ -21,7 +21,7 @@
       "checkpoint_reached": "Checkpoint {}/{} reached!",
       "percentage": "{}%"
     },
-    "scoring": {
+    "scoreboard": {
       "team1": "ATTACKERS",
       "team2": "DEFENDERS",
       "kills": "Kills",
