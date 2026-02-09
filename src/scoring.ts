@@ -15,10 +15,11 @@ export function scoring_initScoreboard(): void {
         mod.Message(mod.stringkeys.payload.scoring.deaths),
         mod.Message(mod.stringkeys.payload.scoring.revives)
     );
-    mod.SetScoreboardColumnWidths(20, 20, 20, 20, 20);
+    mod.SetScoreboardColumnWidths(1, 1, 1, 1, 1);
 
     // Sort by objective (Column 1) descending
     mod.SetScoreboardSorting(1);
+    scoring_refreshScoreboard();
 }
 
 export function scoring_getOrCreatePlayerScore(player: mod.Player): PlayerScoring {
@@ -35,10 +36,42 @@ export function scoring_getOrCreatePlayerScore(player: mod.Player): PlayerScorin
     return STATE.playerScores.get(playerId)!;
 }
 
+export function scoring_refreshScoreboard(): void {
+    const allPlayers = mod.AllPlayers();
+    const playerCount = mod.CountOf(allPlayers);
+    for (let i = 0; i < playerCount; i++) {
+        const player = mod.ValueInArray(allPlayers, i) as mod.Player;
+        const score = scoring_getOrCreatePlayerScore(player);
+        mod.SetScoreboardPlayerValues(player, score.objective, score.kills, score.assists, score.deaths, score.revives);
+    }
+}
+
 export function scoring_updatePlayerScore(player: mod.Player, type: keyof PlayerScoring, amount: number): void {
     const score = scoring_getOrCreatePlayerScore(player);
-    (score[type] as number) += amount;
-
+    let scoreTypeString = mod.stringkeys.payload.scoring.objective;
+    switch (type) {
+        case 'objective':
+            score.objective += amount;
+            scoreTypeString = mod.stringkeys.payload.scoring.objective;
+            break;
+        case 'kills':
+            score.kills += amount;
+            scoreTypeString = mod.stringkeys.payload.scoring.kills;
+            break;
+        case 'assists':
+            score.assists += amount;
+            scoreTypeString = mod.stringkeys.payload.scoring.assists;
+            break;
+        case 'deaths':
+            score.deaths += amount;
+            scoreTypeString = mod.stringkeys.payload.scoring.deaths;
+            break;
+        case 'revives':
+            score.revives += amount;
+            scoreTypeString = mod.stringkeys.payload.scoring.revives;
+            break;
+    }
+    mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.scoring.message, player, scoreTypeString, amount));
     // Update the actual scoreboard values using column indices
     mod.SetScoreboardPlayerValues(player, score.objective, score.kills, score.assists, score.deaths, score.revives);
 }

@@ -28,7 +28,8 @@
       "assists": "Assists",
       "deaths": "Deaths",
       "objective": "Objective",
-      "revives": "Revives"
+      "revives": "Revives",
+      "message": "{} scored {} points for {}!"
     },
     "objective": {
       "title": "PAYLOAD",

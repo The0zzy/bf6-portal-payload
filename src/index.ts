@@ -2,7 +2,7 @@ import { updateCheckpointTimer, uiSetup, updateUI, updateCheckpointUI, ui_onPlay
 import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
-import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived } from './scoring.ts';
+import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard } from './scoring.ts';
 
 
 function getOpponentTeam(team: mod.Team): mod.Team {
@@ -291,6 +291,7 @@ export function OnPlayerLeaveGame(playerId: number): void {
 
 export function OnPlayerJoinGame(eventPlayer: mod.Player): void {
     ui_onPlayerJoinGame();
+    scoring_refreshScoreboard();
 }
 
 export function OnPlayerRevived(reviver: mod.Player, victim: mod.Player): void {
