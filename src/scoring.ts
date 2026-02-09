@@ -14,7 +14,7 @@ export function scoring_initScoreboard(): void {
         mod.Message(mod.stringkeys.payload.scoreboard.deaths),
         mod.Message(mod.stringkeys.payload.scoreboard.revives)
     );
-    mod.SetScoreboardSorting(1);
+    // mod.SetScoreboardSorting(1);
     scoring_refreshScoreboard();
 }
 
