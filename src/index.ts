@@ -295,7 +295,7 @@ export function OnPlayerJoinGame(eventPlayer: mod.Player): void {
 }
 
 export function OnRevived(victim: mod.Player, reviver: mod.Player): void {
-    scoring_onPlayerRevived(reviver, victim);
+    scoring_onPlayerRevived(victim, reviver);
 }
 
 export function OngoingGlobal(): void {
