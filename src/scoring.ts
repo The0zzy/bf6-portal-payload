@@ -79,7 +79,7 @@ export function scoring_onPlayerDied(victim: mod.Player, killer: mod.Player): vo
     }
 }
 
-export function scoring_onPlayerRevived(reviver: mod.Player, victim: mod.Player): void {
+export function scoring_onPlayerRevived(victim: mod.Player, reviver: mod.Player): void {
     scoring_updatePlayerScore(reviver, 'revives', 1);
 }
 
