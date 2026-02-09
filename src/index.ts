@@ -106,6 +106,8 @@ function initPayloadObjective(): void {
 
 export function OnVehicleSpawned(eventVehicle: mod.Vehicle): void {
     const vehiclePosition = mod.GetVehicleState(eventVehicle, mod.VehicleStateVector.VehiclePosition);
+    mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.vehicle_spawned));
+    mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.vehicle_spawned));
     if (mod.DistanceBetween(STATE.waypoints.get(0)!.position, vehiclePosition) < 5) {
         STATE.payloadVehicle = eventVehicle;
         mod.SetVehicleMaxHealthMultiplier(eventVehicle, 5);
@@ -119,6 +121,9 @@ export function OngoingVehicle(eventVehicle: mod.Vehicle): void {
         mod.Heal(eventVehicle, 100);
         mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.healed_vehicle));
         mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.healed_vehicle));
+    } else {
+        mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.not_assigned_payload_vehicle));
+        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.not_assigned_payload_vehicle));
     }
 }
 

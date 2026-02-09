@@ -38,7 +38,9 @@
       "checkpoint_timer_padded": "{}:{}{}",
       "assigned_payload_vehicle": "Assigned payload vehicle!",
       "moved_vehicle": "Moved payload vehicle!",
-      "healed_vehicle": "Healed payload vehicle!"
+      "healed_vehicle": "Healed payload vehicle!",
+      "not_assigned_payload_vehicle": "Not assigned payload vehicle!",
+      "vehicle_spawned": "Vehicle spawned!"
     }
   }
 }
