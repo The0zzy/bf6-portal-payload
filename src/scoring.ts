@@ -67,7 +67,7 @@ export function scoring_updatePlayerScore(player: mod.Player, type: keyof Player
             scoreTypeString = mod.stringkeys.payload.scoreboard.revives;
             break;
     }
-    mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.scoring.message, player, amount, scoreTypeString));
+    mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.scoreboard.message, player, amount, scoreTypeString));
     // Update the actual scoreboard values using column indices
     mod.SetScoreboardPlayerValues(player, score.objective, score.kills, score.assists, score.deaths, score.revives);
 }
