@@ -14,7 +14,7 @@ export function scoring_initScoreboard(): void {
         mod.Message(mod.stringkeys.payload.scoreboard.deaths),
         mod.Message(mod.stringkeys.payload.scoreboard.revives)
     );
-    // mod.SetScoreboardSorting(1);
+    mod.SetScoreboardSorting(1);
     scoring_refreshScoreboard();
 }
 
@@ -67,7 +67,7 @@ export function scoring_updatePlayerScore(player: mod.Player, type: keyof Player
             scoreTypeString = mod.stringkeys.payload.scoreboard.revives;
             break;
     }
-    mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.scoreboard.message, player, score[type], scoreTypeString));
+    // mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.scoreboard.message, player, score[type], scoreTypeString));
     // Update the actual scoreboard values using column indices
     mod.SetScoreboardPlayerValues(player, score.objective, score.kills, score.assists, score.deaths, score.revives);
 }

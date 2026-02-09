@@ -281,7 +281,7 @@ export function OnPlayerDied(victim: mod.Player, killer: mod.Player): void {
     scoring_onPlayerDied(victim, killer);
 }
 
-export function OnPlayerEarnedAssist(player: mod.Player): void {
+export function OnPlayerEarnedKillAssist(player: mod.Player, assistOn: mod.Player): void {
     scoring_onPlayerEarnedAssist(player);
 }
 
@@ -294,7 +294,7 @@ export function OnPlayerJoinGame(eventPlayer: mod.Player): void {
     scoring_refreshScoreboard();
 }
 
-export function OnPlayerRevived(reviver: mod.Player, victim: mod.Player): void {
+export function OnRevived(reviver: mod.Player, victim: mod.Player): void {
     scoring_onPlayerRevived(reviver, victim);
 }
 
@@ -307,11 +307,11 @@ export function OngoingGlobal(): void {
         // Award objective points to all players in proximity of the payload
         for (const p of counts.t1) {
             scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
-            mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.scoreboard.message, p, CONFIG.objectiveScorePerSecond, mod.stringkeys.payload.scoreboard.objective));
+            // mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.scoreboard.message, p, CONFIG.objectiveScorePerSecond, mod.stringkeys.payload.scoreboard.objective));
         }
         for (const p of counts.t2) {
             scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
-            mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.scoreboard.message, p, CONFIG.objectiveScorePerSecond, mod.stringkeys.payload.scoreboard.objective));
+            // mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.scoreboard.message, p, CONFIG.objectiveScorePerSecond, mod.stringkeys.payload.scoreboard.objective));
         }
         executeEverySecond();
     }
