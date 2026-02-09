@@ -1,7 +1,8 @@
-import { initCheckpointTimer, updateCheckpointTimer, uiSetup, updateUI, updateCheckpointUI } from './ui.ts';
+import { updateCheckpointTimer, uiSetup, updateUI, updateCheckpointUI } from './ui.ts';
 import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
+import { initScoreboard, onPlayerJoinGame } from './scoreboard.ts';
 
 
 function getOpponentTeam(team: mod.Team): mod.Team {
@@ -265,6 +266,7 @@ export function OnGameModeStarted(): void {
     initPayloadRotation();
     initPayloadObjective();
     initSounds();
+    initScoreboard();
 
     STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
 
@@ -303,6 +305,10 @@ export function OngoingPlayer(eventPlayer: mod.Player): void {
     ) {
         mod.SetTeam(eventPlayer, mod.Equals(mod.GetTeam(eventPlayer), mod.GetTeam(2)) ? mod.GetTeam(1) : mod.GetTeam(2));
     }
+}
+
+export function OnPlayerJoinGame(eventPlayer: mod.Player): void {
+    onPlayerJoinGame(eventPlayer);
 }
 
 // bugged...

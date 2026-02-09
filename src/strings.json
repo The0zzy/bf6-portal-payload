@@ -26,6 +26,15 @@
       "position": "Payload Position: ({}, {}, {})",
       "checkpoint_timer": "Next checkpoint in: {}:{}{}",
       "checkpoint_timer_padded": "{}:{}{}"
+    },
+    "scoreboard": {
+      "attackers": "Attackers",
+      "defenders": "Defenders",
+      "push_score": "Push Score",
+      "kills": "Kills",
+      "deaths": "Deaths",
+      "assists": "Assists",
+      "revives": "Revives"
     }
   }
 }
