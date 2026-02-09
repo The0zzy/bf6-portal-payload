@@ -27,7 +27,8 @@
       "kills": "Kills",
       "assists": "Assists",
       "deaths": "Deaths",
-      "objective": "Objective"
+      "objective": "Objective",
+      "revives": "Revives"
     },
     "objective": {
       "title": "PAYLOAD",

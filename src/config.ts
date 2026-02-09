@@ -13,6 +13,7 @@ export interface Config {
     speedAdditionPerPushingPlayer: number;
     payloadSpeedMultiplierT1: number;
     payloadSpeedMultiplierT2: number;
+    objectiveScorePerSecond: number;
     overtimeDuration: number;
     overtimeEnabled: boolean;
     enableDebug: boolean;
@@ -28,6 +29,7 @@ export const CONFIG: Config = {
     speedAdditionPerPushingPlayer: 0.1,
     payloadSpeedMultiplierT1: 0.035, //0.035
     payloadSpeedMultiplierT2: 0.015,
+    objectiveScorePerSecond: 5,
     overtimeDuration: 60,
     overtimeEnabled: true,
     enableDebug: true,

@@ -1,6 +1,6 @@
 import { STATE, type PlayerScoring } from './state.ts';
 
-export function initScoreboard(): void {
+export function scoring_initScoreboard(): void {
     mod.SetScoreboardType(mod.ScoreboardType.CustomTwoTeams);
 
     // Configure columns. Column indices are 1-4.
@@ -12,51 +12,57 @@ export function initScoreboard(): void {
         mod.Message(mod.stringkeys.payload.scoring.objective),
         mod.Message(mod.stringkeys.payload.scoring.kills),
         mod.Message(mod.stringkeys.payload.scoring.assists),
-        mod.Message(mod.stringkeys.payload.scoring.deaths)
+        mod.Message(mod.stringkeys.payload.scoring.deaths),
+        mod.Message(mod.stringkeys.payload.scoring.revives)
     );
-    mod.SetScoreboardColumnWidths(100, 100, 100, 100);
+    mod.SetScoreboardColumnWidths(20, 20, 20, 20, 20);
 
     // Sort by objective (Column 1) descending
     mod.SetScoreboardSorting(1);
 }
 
-export function getOrCreatePlayerScore(player: mod.Player): PlayerScoring {
+export function scoring_getOrCreatePlayerScore(player: mod.Player): PlayerScoring {
     const playerId = mod.GetObjId(player);
     if (!STATE.playerScores.has(playerId)) {
         STATE.playerScores.set(playerId, {
             kills: 0,
             assists: 0,
             deaths: 0,
-            objective: 0
+            objective: 0,
+            revives: 0
         });
     }
     return STATE.playerScores.get(playerId)!;
 }
 
-export function updatePlayerScore(player: mod.Player, type: keyof PlayerScoring, amount: number): void {
-    const score = getOrCreatePlayerScore(player);
+export function scoring_updatePlayerScore(player: mod.Player, type: keyof PlayerScoring, amount: number): void {
+    const score = scoring_getOrCreatePlayerScore(player);
     (score[type] as number) += amount;
 
     // Update the actual scoreboard values using column indices
-    mod.SetScoreboardPlayerValues(player, score.objective, score.kills, score.assists, score.deaths);
+    mod.SetScoreboardPlayerValues(player, score.objective, score.kills, score.assists, score.deaths, score.revives);
 }
 
-export function onPlayerDied(victim: mod.Player, killer: mod.Player): void {
-    updatePlayerScore(victim, 'deaths', 1);
+export function scoring_onPlayerDied(victim: mod.Player, killer: mod.Player): void {
+    scoring_updatePlayerScore(victim, 'deaths', 1);
     if (!mod.Equals(mod.GetTeam(victim), mod.GetTeam(killer))) {
-        updatePlayerScore(killer, 'kills', 1);
+        scoring_updatePlayerScore(killer, 'kills', 1);
     }
 }
 
-export function onPlayerEarnedAssist(player: mod.Player): void {
-    updatePlayerScore(player, 'assists', 1);
+export function scoring_onPlayerRevived(reviver: mod.Player, victim: mod.Player): void {
+    scoring_updatePlayerScore(reviver, 'revives', 1);
 }
 
-export function awardObjectivePoints(player: mod.Player, amount: number): void {
-    updatePlayerScore(player, 'objective', amount);
+export function scoring_onPlayerEarnedAssist(player: mod.Player): void {
+    scoring_updatePlayerScore(player, 'assists', 1);
 }
 
-export function onPlayerLeave(playerId: number): void {
+export function scoring_awardObjectivePoints(player: mod.Player, amount: number): void {
+    scoring_updatePlayerScore(player, 'objective', amount);
+}
+
+export function scoring_onPlayerLeave(playerId: number): void {
     if (STATE.playerScores.has(playerId)) {
         STATE.playerScores.delete(playerId);
     }

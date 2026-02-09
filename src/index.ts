@@ -1,8 +1,8 @@
-import { initCheckpointTimer, updateCheckpointTimer, uiSetup, updateUI, updateCheckpointUI } from './ui.ts';
+import { updateCheckpointTimer, uiSetup, updateUI, updateCheckpointUI, ui_onPlayerJoinGame } from './ui.ts';
 import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
-import { initScoreboard, onPlayerDied, onPlayerEarnedAssist, awardObjectivePoints, onPlayerLeave } from './scoring.ts';
+import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived } from './scoring.ts';
 
 
 function getOpponentTeam(team: mod.Team): mod.Team {
@@ -270,23 +270,31 @@ export function OnGameModeStarted(): void {
     initPayloadRotation();
     initPayloadObjective();
     initSounds();
+    scoring_initScoreboard();
 
     STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
 
     uiSetup();
-    initScoreboard();
 }
 
 export function OnPlayerDied(victim: mod.Player, killer: mod.Player): void {
-    onPlayerDied(victim, killer);
+    scoring_onPlayerDied(victim, killer);
 }
 
 export function OnPlayerEarnedAssist(player: mod.Player): void {
-    onPlayerEarnedAssist(player);
+    scoring_onPlayerEarnedAssist(player);
 }
 
 export function OnPlayerLeaveGame(playerId: number): void {
-    onPlayerLeave(playerId);
+    scoring_onPlayerLeave(playerId);
+}
+
+export function OnPlayerJoinGame(eventPlayer: mod.Player): void {
+    ui_onPlayerJoinGame();
+}
+
+export function OnPlayerRevived(reviver: mod.Player, victim: mod.Player): void {
+    scoring_onPlayerRevived(reviver, victim);
 }
 
 export function OngoingGlobal(): void {
@@ -296,6 +304,10 @@ export function OngoingGlobal(): void {
     if (STATE.lastElapsedSeconds != elapsedSeconds) {
         STATE.lastElapsedSeconds = elapsedSeconds;
         executeEverySecond();
+
+        // Award objective points to all players in proximity of the payload
+        for (const p of counts.t1) scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
+        for (const p of counts.t2) scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
     }
 
     if (counts.t1.length > counts.t2.length) {
@@ -308,12 +320,6 @@ export function OngoingGlobal(): void {
         setPayloadState(PayloadState.CONTESTED);
     } else {
         setPayloadState(PayloadState.IDLE);
-    }
-
-    // Award objective points to all players in proximity of the payload
-    if (STATE.payloadState != PayloadState.IDLE) {
-        for (const p of counts.t1) awardObjectivePoints(p, 1);
-        for (const p of counts.t2) awardObjectivePoints(p, 1);
     }
 }
 

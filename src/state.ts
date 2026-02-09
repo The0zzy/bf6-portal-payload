@@ -18,6 +18,7 @@ export interface PlayerScoring {
     assists: number;
     deaths: number;
     objective: number;
+    revives: number;
 }
 
 export interface State {

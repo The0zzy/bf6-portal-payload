@@ -1,34 +1,5 @@
 import { STATE } from "./state.ts";
 
-export function initCheckpointTimer(initialRemaining: number): void {
-    const mins = mod.Floor(initialRemaining / 60);
-    const secs = mod.Floor(mod.Modulo(initialRemaining, 60));
-
-    const timerKey = mins < 10 ? mod.stringkeys.payload.objective.checkpoint_timer_padded : mod.stringkeys.payload.objective.checkpoint_timer;
-
-    mod.AddUIText(
-        "checkpoint_timer",
-        mod.CreateVector(350, 45, 0),
-        mod.CreateVector(70, 30, 0),
-        mod.UIAnchor.TopCenter,
-        mod.Message(
-            timerKey,
-            mins,
-            mod.Floor(secs / 10),
-            mod.Modulo(secs, 10)
-        )
-    );
-
-    const timer = mod.FindUIWidgetWithName("checkpoint_timer");
-
-    mod.SetUIWidgetBgColor(timer, mod.CreateVector(0, 0, 0));
-    mod.SetUIWidgetBgAlpha(timer, 0.8);
-    mod.SetUITextSize(timer, 26);
-    mod.SetUITextColor(timer, mod.CreateVector(1, 1, 1));
-    mod.SetUITextAlpha(timer, 1);
-    mod.SetUITextAnchor(timer, mod.UIAnchor.Center);
-}
-
 export function updateCheckpointTimer(remainingTime: number): void {
     const mins = mod.Floor(remainingTime / 60);
     const secs = mod.Floor(mod.Modulo(remainingTime, 60));
@@ -102,4 +73,29 @@ export async function updateCheckpointUI(): Promise<void> {
         await mod.Wait(0.033);
     }
     mod.DeleteUIWidget(mod.FindUIWidgetWithName("checkpointreached"));
+}
+
+export function deleteUI(): void {
+    mod.DeleteUIWidget(mod.FindUIWidgetWithName("container"));
+    mod.DeleteUIWidget(mod.FindUIWidgetWithName("payloadstatus"));
+    mod.DeleteUIWidget(mod.FindUIWidgetWithName("progress1"));
+    mod.DeleteUIWidget(mod.FindUIWidgetWithName("progress2"));
+    mod.DeleteUIWidget(mod.FindUIWidgetWithName("progress_background1"));
+    mod.DeleteUIWidget(mod.FindUIWidgetWithName("progress_background2"));
+    mod.DeleteUIWidget(mod.FindUIWidgetWithName("checkpoint0"));
+    mod.DeleteUIWidget(mod.FindUIWidgetWithName("remaining_time1"));
+    mod.DeleteUIWidget(mod.FindUIWidgetWithName("remaining_time2"));
+    mod.DeleteUIWidget(mod.FindUIWidgetWithName("percentage1"));
+    mod.DeleteUIWidget(mod.FindUIWidgetWithName("percentage2"));
+    for (let i = 1; i < STATE.waypoints.size; i++) {
+        if (STATE.waypoints.get(i)!.isCheckpoint) {
+            mod.DeleteUIWidget(mod.FindUIWidgetWithName("checkpoint" + i));
+        }
+    }
+}
+
+// WORKAROUND FOR BUGGED UI WHEN PLAYER JOINS MID-GAME
+export function ui_onPlayerJoinGame(): void {
+    deleteUI();
+    uiSetup();
 }
