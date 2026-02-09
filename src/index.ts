@@ -102,29 +102,44 @@ function initPayloadObjective(): void {
     ) as mod.VehicleSpawner;
     mod.SetVehicleSpawnerVehicleType(vehicleSpawner, mod.VehicleList.Marauder);
     mod.ForceVehicleSpawnerSpawn(vehicleSpawner);
+    const allVehicles = mod.AllVehicles();
+    const count = mod.CountOf(allVehicles);
+    for (let i = 0; i < count; i++) {
+        const vehicle = mod.ValueInArray(allVehicles, i) as mod.Vehicle;
+        if (mod.DistanceBetween(STATE.waypoints.get(0)!.position, mod.GetVehicleState(vehicle, mod.VehicleStateVector.VehiclePosition)) < 5) {
+            STATE.payloadVehicle = vehicle;
+            mod.SetVehicleMaxHealthMultiplier(vehicle, 5);
+            mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.assigned_payload_vehicle));
+            mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.assigned_payload_vehicle));
+            break;
+        } else {
+            mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.not_assigned_payload_vehicle));
+            mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.not_assigned_payload_vehicle));
+        }
+    }
 }
 
 export function OnVehicleSpawned(eventVehicle: mod.Vehicle): void {
-    const vehiclePosition = mod.GetVehicleState(eventVehicle, mod.VehicleStateVector.VehiclePosition);
-    mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.vehicle_spawned));
-    mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.vehicle_spawned));
-    if (mod.DistanceBetween(STATE.waypoints.get(0)!.position, vehiclePosition) < 5) {
-        STATE.payloadVehicle = eventVehicle;
-        mod.SetVehicleMaxHealthMultiplier(eventVehicle, 5);
-        mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.assigned_payload_vehicle));
-        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.assigned_payload_vehicle));
-    }
+    // const vehiclePosition = mod.GetVehicleState(eventVehicle, mod.VehicleStateVector.VehiclePosition);
+    // mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.vehicle_spawned));
+    // mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.vehicle_spawned));
+    // if (mod.DistanceBetween(STATE.waypoints.get(0)!.position, vehiclePosition) < 5) {
+    //     STATE.payloadVehicle = eventVehicle;
+    //     mod.SetVehicleMaxHealthMultiplier(eventVehicle, 5);
+    //     mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.assigned_payload_vehicle));
+    //     mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.assigned_payload_vehicle));
+    // }
 }
 
 export function OngoingVehicle(eventVehicle: mod.Vehicle): void {
-    if (eventVehicle == STATE.payloadVehicle) {
-        mod.Heal(eventVehicle, 100);
-        mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.healed_vehicle));
-        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.healed_vehicle));
-    } else {
-        mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.not_assigned_payload_vehicle));
-        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.not_assigned_payload_vehicle));
-    }
+    // if (STATE.payloadVehicle && mod.GetObjId(eventVehicle) == mod.GetObjId(STATE.payloadVehicle)) {
+    //     mod.Heal(eventVehicle, 100);
+    //     mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.healed_vehicle));
+    //     mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.healed_vehicle));
+    // } else {
+    //     mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.not_assigned_payload_vehicle));
+    //     mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.not_assigned_payload_vehicle));
+    // }
 }
 
 function initSectors(): void {
@@ -311,6 +326,8 @@ export function OnGameModeStarted(): void {
     STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
 
     uiSetup();
+    mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.not_assigned_payload_vehicle));
+    mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.not_assigned_payload_vehicle));
 }
 
 export function OnPlayerDied(victim: mod.Player, killer: mod.Player): void {
