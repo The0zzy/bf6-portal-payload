@@ -55,6 +55,10 @@ export function updateUI(): void {
     mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress_background2"), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0));
 }
 
+export function updateStatusUI(state: string): void {
+    mod.SetUITextLabel(mod.FindUIWidgetWithName("payloadstatus"), mod.Message(mod.stringkeys.payload.state.message, state));
+}
+
 
 
 export async function updateCheckpointUI(): Promise<void> {
@@ -96,6 +100,7 @@ export function deleteUI(): void {
 
 // WORKAROUND FOR BUGGED UI WHEN PLAYER JOINS MID-GAME
 export function ui_onPlayerJoinGame(): void {
-    deleteUI();
-    uiSetup();
+    //mod.Wait(mod.RandomReal(5, 10));
+    //deleteUI();
+    //uiSetup();
 }

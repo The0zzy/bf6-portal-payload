@@ -4,11 +4,14 @@ let VOModule1: mod.VO;
 let VOModule2: mod.VO;
 
 let soundCheckpoint: mod.SFX;
+let reverseSound: mod.SFX;
+
 let winning1 = false;
 let winning2 = false;
 let nearend = false;
 let lowtime = false;
 let nearendVO = false;
+
 
 
 export async function initSounds() {
@@ -18,6 +21,7 @@ export async function initSounds() {
 
     //Setup Sound Object
     soundCheckpoint = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_AreaUnlock_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
+    reverseSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_Gadgets_Defibrillator_Equipped_Charge_OneShot3D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
 
     //Setup Music
     mod.LoadMusic(mod.MusicPackages.Core);
@@ -88,5 +92,9 @@ export function playNearEndMusic(): void {
         nearend = true;
         mod.PlayMusic(mod.MusicEvents.Core_Overtime_Loop);
     }
+}
+
+export function playPayloadReversingSound(location: mod.Vector): void {
+    mod.PlaySound(reverseSound, 2, location, 150);
 }
 

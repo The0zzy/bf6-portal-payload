@@ -24,7 +24,7 @@ export const CONFIG: Config = {
     gameModeTime: 60 * 60, // 60 minutes
     defaultCheckpointTime: 450, // 7.5 minutes
     enablePayloadSound: true,
-    pushProximityRadius: 5,
+    pushProximityRadius: 7.5,
     waypointProximityRadius: 0.25,
     speedAdditionPerPushingPlayer: 0.005,
     payloadSpeedMultiplierT1: 0.035,

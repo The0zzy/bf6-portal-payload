@@ -40,7 +40,8 @@
       "moved_vehicle": "Moved payload vehicle!",
       "healed_vehicle": "Healed payload vehicle!",
       "not_assigned_payload_vehicle": "Not assigned payload vehicle!",
-      "vehicle_spawned": "Vehicle spawned!"
+      "vehicle_spawned": "Vehicle spawned!",
+      "exit_message": "GET OUT AND PUSH!"
     }
   }
 }
