@@ -24,10 +24,10 @@ function initPayloadTrack(): void {
     let distance = 0;
     for (let i = 1000; i < 1999; i++) {
         const objPos = mod.GetObjectPosition(mod.GetSpatialObject(i));
-        if (!(mod.XComponentOf(objPos) == 0 && mod.YComponentOf(objPos) == 0)) {
+        if (mod.DistanceBetween(objPos, mod.CreateVector(0, 0, 0)) >= 1) {
             let isCheckpoint = false;
             const checkpointPos = mod.GetObjectPosition(mod.GetSpatialObject(i + 1000));
-            if (!(mod.XComponentOf(checkpointPos) == 0 && mod.YComponentOf(checkpointPos) == 0)) {
+            if (mod.DistanceBetween(objPos, mod.CreateVector(0, 0, 0)) >= 1) {
                 isCheckpoint = true;
                 STATE.maxCheckpoints++;
             }
