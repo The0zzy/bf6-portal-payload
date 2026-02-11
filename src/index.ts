@@ -1,6 +1,8 @@
-import { initCheckpointTimer, updateCheckpointTimer, uiSetup } from './ui.ts';
+import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI } from './ui.ts';
+import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
+import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard } from './scoring.ts';
 
 
 function getOpponentTeam(team: mod.Team): mod.Team {
@@ -64,33 +66,57 @@ function initPayloadTrack(): void {
 }
 
 function initPayloadRotation(): void {
+    const defaultFacingDirection = mod.CreateVector(0, 0, 1);
     for (let i = 0; i < STATE.waypoints.size - 1; i++) {
         const currentPos = STATE.waypoints.get(i)!.position;
         const nextPos = STATE.waypoints.get(i + 1)!.position;
         const direction = mod.DirectionTowards(currentPos, nextPos);
-        const angle = mod.AngleBetweenVectors(mod.ForwardVector(), direction);
-        const rotation = mod.CreateVector(0, angle, 0);
+        const directionXZ = mod.CreateVector(mod.XComponentOf(direction), 0, mod.ZComponentOf(direction));
+        const angle = mod.AngleBetweenVectors(defaultFacingDirection, directionXZ);
+        const radians = mod.DegreesToRadians(angle);
+        const rotation = mod.CreateVector(0, radians, 0);
         STATE.waypoints.get(i)!.rotation = rotation;
     }
 }
 
 function initPayloadObjective(): void {
     const start = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
-    STATE.payloadObject = mod.SpawnObject(
-        mod.RuntimeSpawn_Common.MCOM,
+    for (const objConfig of CONFIG.payloadObjects) {
+        const spawnPos = mod.Add(start.position, objConfig.relativeOffset);
+        const obj = mod.SpawnObject(
+            objConfig.prefab,
+            spawnPos,
+            start.rotation,
+            objConfig.initialSize
+        );
+        if (mod.IsType(obj, mod.Types.VFX)) {
+            mod.EnableVFX(obj, true);
+            mod.SetVFXScale(obj, 1.5);
+        }
+        STATE.payloadObjects.push(obj);
+    }
+    const vehicleSpawner = mod.SpawnObject(
+        mod.RuntimeSpawn_Common.VehicleSpawner,
         start.position,
         start.rotation,
         mod.CreateVector(1, 1, 1)
-    );
-    mod.Wait(1);
-    mod.AddUIIcon(
-        STATE.payloadObject!,
-        mod.WorldIconImages.BombArmed,
-        3,
-        mod.CreateVector(0.3, 0.3, 0.3),
-        mod.Message(mod.stringkeys.payload.objective.title),
-        mod.GetTeam(1)
-    );
+    ) as mod.VehicleSpawner;
+    mod.SetVehicleSpawnerVehicleType(vehicleSpawner, mod.VehicleList.M2Bradley); //Marauder - This is bugged so spawning another vehicle instead
+    mod.ForceVehicleSpawnerSpawn(vehicleSpawner);
+}
+
+export function OnVehicleSpawned(eventVehicle: mod.Vehicle): void {
+    const vehiclePosition = mod.GetVehicleState(eventVehicle, mod.VehicleStateVector.VehiclePosition);
+    if (mod.DistanceBetween(STATE.waypoints.get(0)!.position, vehiclePosition) < 5) {
+        STATE.payloadVehicle = eventVehicle;
+        mod.SetVehicleMaxHealthMultiplier(eventVehicle, 5);
+    }
+}
+
+export function OngoingVehicle(eventVehicle: mod.Vehicle): void {
+    if (STATE.payloadVehicle && mod.GetObjId(eventVehicle) == mod.GetObjId(STATE.payloadVehicle)) {
+        mod.Heal(eventVehicle, 100);
+    }
 }
 
 function initSectors(): void {
@@ -105,23 +131,24 @@ function initSectors(): void {
     }
 }
 
-function getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1: number; t2: number } {
+function getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1: mod.Player[]; t2: mod.Player[] } {
     const players = mod.AllPlayers();
-    let t1 = 0;
-    let t2 = 0;
+    let t1: mod.Player[] = [];
+    let t2: mod.Player[] = [];
     const team1 = mod.GetTeam(1);
     const team2 = mod.GetTeam(2);
+    const playerCount = mod.CountOf(players);
 
-    for (let i = 0; i < mod.CountOf(players); i++) {
+    for (let i = 0; i < playerCount; i++) {
         const player = mod.ValueInArray(players, i) as mod.Player;
         if (mod.GetSoldierState(player, mod.SoldierStateBool.IsAlive)) {
             const playerPos = mod.GetSoldierState(player, mod.SoldierStateVector.GetPosition);
             if (mod.DistanceBetween(position, playerPos) <= radius) {
                 const team = mod.GetTeam(player);
                 if (mod.Equals(team, team1)) {
-                    t1++;
+                    t1.push(player);
                 } else if (mod.Equals(team, team2)) {
-                    t2++;
+                    t2.push(player);
                 }
             }
         }
@@ -139,12 +166,14 @@ function moveTowards(targetPos: mod.Vector, speed: number): void {
 function onCheckpointReached(): void {
     if (STATE.payloadState !== PayloadState.ADVANCING) return;
 
-    mod.EnableHQ(mod.GetHQ(STATE.reachedCheckpointIndex + 300), false);
-    mod.EnableHQ(mod.GetHQ(STATE.reachedCheckpointIndex + 400), false);
+    mod.EnableHQ(mod.GetHQ((STATE.currentCheckpoint - 1) + 300), false);
+    mod.EnableHQ(mod.GetHQ((STATE.currentCheckpoint - 1) + 400), false);
     if (STATE.reachedWaypointIndex == STATE.waypoints.size - 1) {
         onFinalCheckpointReached();
         return;
     }
+    playCheckpointReachedSound();
+    updateCheckpointUI();
     STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
     mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 300), true);
     mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 400), true);
@@ -161,8 +190,12 @@ function onCheckpointReached(): void {
 function setPayloadState(state: PayloadState): void {
     if (STATE.payloadState !== state) {
         STATE.payloadState = state;
-        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.message, mod.stringkeys.payload.state[state]));
+        onPayloadStateChanged();
     }
+}
+
+function onPayloadStateChanged(): void {
+    updateStatusUI();
 }
 
 function checkWaypointReached(targetWaypointIndex: number) {
@@ -177,36 +210,58 @@ function checkWaypointReached(targetWaypointIndex: number) {
     }
 }
 
-function pushForward(counts: { t1: number; t2: number }) {
+function pushForward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
     const targetWaypointIndex = STATE.reachedWaypointIndex + 1;
     const targetWaypoint = STATE.waypoints.get(targetWaypointIndex)!;
-    const speed = CONFIG.payloadSpeedMultiplierT1 + (CONFIG.speedAdditionPerPushingPlayer * (counts.t1 - counts.t2));
+    const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t1.length - counts.t2.length);
+    const speed = CONFIG.payloadSpeedMultiplierT1 + speedAddtion;
     moveTowards(targetWaypoint.position, speed);
     setPayloadState(PayloadState.ADVANCING);
     checkWaypointReached(targetWaypointIndex);
+    VOPushing();
 }
 
-function pushBackward(counts: { t1: number; t2: number }) {
+function pushBackward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
     if (STATE.reachedWaypointIndex <= STATE.reachedCheckpointIndex) {
         setPayloadState(PayloadState.LOCKED);
         return;
     }
     const targetWaypointIndex = STATE.reachedWaypointIndex - 1;
     const targetWaypoint = STATE.waypoints.get(targetWaypointIndex)!;
-    const speed = CONFIG.payloadSpeedMultiplierT2 + (CONFIG.speedAdditionPerPushingPlayer * (counts.t2 - counts.t1));
+    const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t2.length - counts.t1.length);
+    const speed = CONFIG.payloadSpeedMultiplierT2 + speedAddtion;
     moveTowards(targetWaypoint.position, speed);
     setPayloadState(PayloadState.PUSHING_BACK);
     checkWaypointReached(targetWaypointIndex);
+    VOPushingBack();
 }
 
 function updatePayloadObject() {
-    const rotation = STATE.waypoints.get(STATE.reachedWaypointIndex)!.rotation;
-    mod.SetObjectTransform(STATE.payloadObject!, mod.CreateTransform(STATE.payloadPosition, rotation))
+    const waypoint = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
+    const rotation = waypoint.rotation;
+    for (let i = 0; i < STATE.payloadObjects.length; i++) {
+        const obj = STATE.payloadObjects[i];
+        const config = CONFIG.payloadObjects[i];
+        const worldPos = mod.Add(STATE.payloadPosition, config.relativeOffset);
+        if (mod.IsType(obj, mod.Types.VFX)) {
+            mod.MoveVFX(obj as mod.VFX, worldPos, rotation);
+        } else {
+            mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, rotation));
+        }
+    }
+    if (STATE.payloadVehicle) {
+        mod.Teleport(STATE.payloadVehicle, STATE.payloadPosition, mod.YComponentOf(rotation));
+    }
 }
 
 function onPayloadMoved() {
     calculatePayloadProgress();
     updatePayloadObject();
+    updateProgressUI();
+    if (STATE.progressInPercent > 90) {
+        playNearEndMusic();
+        playNearEndVO();
+    }
 }
 
 function executeEverySecond() {
@@ -222,6 +277,13 @@ function executeEverySecond() {
         onRunningOutOfTime();
         return;
     }
+    if (remainingTime <= 60) {
+        playNearEndMusic();
+        playLowTimeVO();
+    }
+    if (STATE.payloadState == PayloadState.PUSHING_BACK) {
+        playPayloadReversingSound(STATE.payloadPosition);
+    }
 }
 
 function onFinalCheckpointReached() {
@@ -235,37 +297,74 @@ function onRunningOutOfTime() {
 export function OnGameModeStarted(): void {
     mod.SetGameModeTimeLimit(3600);
     mod.SetGameModeTargetScore(1000);
+    mod.Wait(3);
     initSectors();
     initPayloadTrack();
     initPayloadRotation();
     initPayloadObjective();
+    initSounds();
+    scoring_initScoreboard();
 
     STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
 
     uiSetup();
 }
 
+export function OnPlayerDied(victim: mod.Player, killer: mod.Player): void {
+    scoring_onPlayerDied(victim, killer);
+}
+
+export function OnPlayerEarnedKillAssist(player: mod.Player, assistOn: mod.Player): void {
+    scoring_onPlayerEarnedAssist(player);
+}
+
+export function OnPlayerLeaveGame(playerId: number): void {
+    scoring_onPlayerLeave(playerId);
+}
+
+export function OnPlayerJoinGame(eventPlayer: mod.Player): void {
+    ui_onPlayerJoinGame();
+    scoring_refreshScoreboard();
+}
+
+export function OnRevived(victim: mod.Player, reviver: mod.Player): void {
+    scoring_onPlayerRevived(victim, reviver);
+}
+
 export function OngoingGlobal(): void {
     const elapsedSeconds = mod.GetMatchTimeElapsed();
+    const counts = getAlivePlayersInProximity(STATE.payloadPosition, CONFIG.pushProximityRadius);
+
     if (STATE.lastElapsedSeconds != elapsedSeconds) {
         STATE.lastElapsedSeconds = elapsedSeconds;
+        // Award objective points to all players in proximity of the payload
+        for (const p of counts.t1) {
+            scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
+        }
+        for (const p of counts.t2) {
+            scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
+        }
         executeEverySecond();
     }
 
-    if (!STATE.payloadObject) return;
-
-    const counts = getAlivePlayersInProximity(STATE.payloadPosition, CONFIG.pushProximityRadius);
-
-    if (counts.t1 > counts.t2) {
+    if (counts.t1.length > counts.t2.length) {
         pushForward(counts);
         onPayloadMoved();
-    } else if (counts.t2 > counts.t1) {
+    } else if (counts.t2.length > counts.t1.length) {
         pushBackward(counts);
         onPayloadMoved();
-    } else if (counts.t1 > 0 && counts.t2 > 0) {
+    } else if (counts.t1.length > 0 && counts.t2.length > 0) {
         setPayloadState(PayloadState.CONTESTED);
     } else {
         setPayloadState(PayloadState.IDLE);
+    }
+}
+
+//Force remove players from payload vehicle
+export function OnPlayerEnterVehicle(eventPlayer: mod.Player, eventVehicle: mod.Vehicle): void {
+    if (mod.CompareVehicleName(eventVehicle, mod.VehicleList.M2Bradley)) { //Direct comparison not working: eventVehicle == STATE.payloadVehicle as mod.Vehicle
+        mod.ForcePlayerExitVehicle(mod.GetVehicleFromPlayer(eventPlayer));
+        mod.DisplayNotificationMessage(mod.Message(mod.stringkeys.payload.objective.exit_message), eventPlayer);
     }
 }
 

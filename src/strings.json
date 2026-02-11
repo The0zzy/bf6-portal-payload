@@ -5,7 +5,9 @@
       "size": "Track Size: {}"
     },
     "checkpoints": {
-      "count": "No of Checkpoints: {}"
+      "count": "No of Checkpoints: {}",
+      "message": "CHECKPOINT REACHED",
+      "blankmessage": ""
     },
     "status": "TrackCurrent: {} | Track: {} | Checkpoints: {}",
     "state": {
@@ -15,14 +17,31 @@
       "locked": "LOCKED",
       "pushing_back": "PUSHING BACK",
       "message": "Payload State: {}",
+      "speed": "Base Speed: {} | Speed Addition: {} | Overall Speed: {}",
       "checkpoint_reached": "Checkpoint {}/{} reached!",
       "percentage": "{}%"
+    },
+    "scoreboard": {
+      "team1": "ATTACKERS",
+      "team2": "DEFENDERS",
+      "kills": "Kills",
+      "assists": "Assists",
+      "deaths": "Deaths",
+      "objective": "Objective",
+      "revives": "Revives",
+      "message": "{} scored {} points for {}!"
     },
     "objective": {
       "title": "PAYLOAD",
       "position": "Payload Position: ({}, {}, {})",
       "checkpoint_timer": "Next checkpoint in: {}:{}{}",
-      "checkpoint_timer_padded": "{}:{}{}"
+      "checkpoint_timer_padded": "{}:{}{}",
+      "assigned_payload_vehicle": "Assigned payload vehicle!",
+      "moved_vehicle": "Moved payload vehicle!",
+      "healed_vehicle": "Healed payload vehicle!",
+      "not_assigned_payload_vehicle": "Not assigned payload vehicle!",
+      "vehicle_spawned": "Vehicle spawned!",
+      "exit_message": "GET OUT AND PUSH!"
     }
   }
 }

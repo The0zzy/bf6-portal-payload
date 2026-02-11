@@ -13,8 +13,16 @@ export interface PayloadWaypoint {
     distance: number;
 }
 
+export interface PlayerScoring {
+    kills: number;
+    assists: number;
+    deaths: number;
+    objective: number;
+    revives: number;
+}
+
 export interface State {
-    lastElapsedSeconds: any;
+    lastElapsedSeconds: number;
     progress: number;
     firstAttackerSpawned: boolean;
     payloadState: PayloadState;
@@ -22,7 +30,7 @@ export interface State {
     waypoints: Map<number, PayloadWaypoint>;
     reachedWaypointIndex: number;
     isOvertime: boolean;
-    payloadObject: mod.Object | undefined;
+    payloadObjects: mod.Object[];
     totalDistanceInMeters: number;
     reachedCheckpointIndex: number;
     maxCheckpoints: number;
@@ -30,6 +38,8 @@ export interface State {
     checkpointStartTime: number;
     progressInMeters: number;
     progressInPercent: number;
+    playerScores: Map<number, PlayerScoring>;
+    payloadVehicle?: mod.Vehicle;
 }
 
 export const STATE: State = {
@@ -40,7 +50,7 @@ export const STATE: State = {
     waypoints: new Map<number, PayloadWaypoint>(),
     reachedWaypointIndex: 0,
     isOvertime: false,
-    payloadObject: undefined,
+    payloadObjects: [],
     totalDistanceInMeters: 0,
     reachedCheckpointIndex: 0,
     maxCheckpoints: 0,
@@ -49,4 +59,5 @@ export const STATE: State = {
     payloadPosition: mod.CreateVector(0, 0, 0),
     progressInMeters: 0,
     progressInPercent: 0,
+    playerScores: new Map<number, PlayerScoring>(),
 };
