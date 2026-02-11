@@ -150,6 +150,9 @@ function getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1:
                 } else if (mod.Equals(team, team2)) {
                     t2.push(player);
                 }
+                mod.EnableInputRestriction(player, mod.RestrictedInputs.Interact, true);
+            } else {
+                mod.EnableInputRestriction(player, mod.RestrictedInputs.Interact, false);
             }
         }
     }
@@ -297,7 +300,6 @@ function onRunningOutOfTime() {
 export function OnGameModeStarted(): void {
     mod.SetGameModeTimeLimit(3600);
     mod.SetGameModeTargetScore(1000);
-    mod.Wait(3);
     initSectors();
     initPayloadTrack();
     initPayloadRotation();
