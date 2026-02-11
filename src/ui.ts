@@ -1,4 +1,4 @@
-import { STATE } from "./state.ts";
+import { PayloadState, STATE } from "./state.ts";
 
 export function updateCheckpointTimer(remainingTime: number): void {
     const mins = mod.Floor(remainingTime / 60);
@@ -46,7 +46,7 @@ export function uiSetup(): void {
 
 }
 
-export function updateUI(): void {
+export function updateProgressUI(): void {
     mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress1"), mod.CreateVector(6 * STATE.progressInPercent, 20, 0));
     mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress2"), mod.CreateVector(6 * STATE.progressInPercent, 20, 0));
     mod.SetUITextLabel(mod.FindUIWidgetWithName("percentage1"), mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(STATE.progressInPercent)));
@@ -55,11 +55,23 @@ export function updateUI(): void {
     mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress_background2"), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0));
 }
 
-export function updateStatusUI(state: string): void {
-    mod.SetUITextLabel(mod.FindUIWidgetWithName("payloadstatus"), mod.Message(mod.stringkeys.payload.state.message, state));
+export function updateStatusUI(): void {
+    let state = mod.stringkeys.payload.state.idle;
+    switch (STATE.payloadState) {
+        case PayloadState.ADVANCING:
+            state = mod.stringkeys.payload.state.advancing;
+            break;
+        case PayloadState.PUSHING_BACK:
+            state = mod.stringkeys.payload.state.pushing_back;
+            break;
+        case PayloadState.CONTESTED:
+            state = mod.stringkeys.payload.state.contested;
+            break;
+    }
+    const statusWidget = mod.FindUIWidgetWithName("payloadstatus");
+    mod.SetUITextLabel(statusWidget, mod.Message(mod.stringkeys.payload.state.message, state));
+    mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.message, state));
 }
-
-
 
 export async function updateCheckpointUI(): Promise<void> {
     const containerWidget = mod.FindUIWidgetWithName("container");

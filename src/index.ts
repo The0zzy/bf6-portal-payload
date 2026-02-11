@@ -1,4 +1,4 @@
-import { updateCheckpointTimer, uiSetup, updateUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI } from './ui.ts';
+import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI } from './ui.ts';
 import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
@@ -103,40 +103,19 @@ function initPayloadObjective(): void {
     ) as mod.VehicleSpawner;
     mod.SetVehicleSpawnerVehicleType(vehicleSpawner, mod.VehicleList.M2Bradley); //Marauder - This is bugged so spawning another vehicle instead
     mod.ForceVehicleSpawnerSpawn(vehicleSpawner);
-
 }
 
 export function OnVehicleSpawned(eventVehicle: mod.Vehicle): void {
     const vehiclePosition = mod.GetVehicleState(eventVehicle, mod.VehicleStateVector.VehiclePosition);
-    mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.vehicle_spawned));
-    mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.vehicle_spawned));
     if (mod.DistanceBetween(STATE.waypoints.get(0)!.position, vehiclePosition) < 5) {
         STATE.payloadVehicle = eventVehicle;
         mod.SetVehicleMaxHealthMultiplier(eventVehicle, 5);
-        mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.assigned_payload_vehicle));
-        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.assigned_payload_vehicle));
     }
 }
 
 export function OngoingVehicle(eventVehicle: mod.Vehicle): void {
-    mod.Wait(2);
-    if (mod.CompareVehicleName(eventVehicle, mod.VehicleList.M2Bradley)) {
-        STATE.payloadVehicle = eventVehicle;
-        mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.assigned_payload_vehicle));
-        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.assigned_payload_vehicle));
-        mod.SetVehicleMaxHealthMultiplier(eventVehicle, 5);
-        mod.Heal(eventVehicle, 5000);
-    } else {
-        mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.not_assigned_payload_vehicle));
-        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.not_assigned_payload_vehicle));
-    }
     if (STATE.payloadVehicle && mod.GetObjId(eventVehicle) == mod.GetObjId(STATE.payloadVehicle)) {
         mod.Heal(eventVehicle, 100);
-        mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.healed_vehicle));
-        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.healed_vehicle));
-    } else {
-        mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.not_assigned_payload_vehicle));
-        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.not_assigned_payload_vehicle));
     }
 }
 
@@ -177,7 +156,6 @@ function getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1:
     return { t1, t2 };
 }
 
-
 function moveTowards(targetPos: mod.Vector, speed: number): void {
     const direction = mod.DirectionTowards(STATE.payloadPosition, targetPos);
     const moveDelta = mod.Multiply(direction, speed);
@@ -212,8 +190,12 @@ function onCheckpointReached(): void {
 function setPayloadState(state: PayloadState): void {
     if (STATE.payloadState !== state) {
         STATE.payloadState = state;
-        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.message, mod.stringkeys.payload.state[state]));
+        onPayloadStateChanged();
     }
+}
+
+function onPayloadStateChanged(): void {
+    updateStatusUI();
 }
 
 function checkWaypointReached(targetWaypointIndex: number) {
@@ -237,11 +219,6 @@ function pushForward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
     setPayloadState(PayloadState.ADVANCING);
     checkWaypointReached(targetWaypointIndex);
     VOPushing();
-    updateStatusUI(mod.stringkeys.payload.state.advancing);
-    if (STATE.progressInPercent > 90) {
-        playNearEndMusic();
-        playNearEndVO();
-    }
 }
 
 function pushBackward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
@@ -257,7 +234,6 @@ function pushBackward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
     setPayloadState(PayloadState.PUSHING_BACK);
     checkWaypointReached(targetWaypointIndex);
     VOPushingBack();
-    updateStatusUI(mod.stringkeys.payload.state.pushing_back);
 }
 
 function updatePayloadObject() {
@@ -275,15 +251,17 @@ function updatePayloadObject() {
     }
     if (STATE.payloadVehicle) {
         mod.Teleport(STATE.payloadVehicle, STATE.payloadPosition, mod.YComponentOf(rotation));
-        mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.moved_vehicle));
-        mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.moved_vehicle));
     }
 }
 
 function onPayloadMoved() {
     calculatePayloadProgress();
     updatePayloadObject();
-    updateUI();
+    updateProgressUI();
+    if (STATE.progressInPercent > 90) {
+        playNearEndMusic();
+        playNearEndVO();
+    }
 }
 
 function executeEverySecond() {
@@ -330,8 +308,6 @@ export function OnGameModeStarted(): void {
     STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
 
     uiSetup();
-    mod.SendErrorReport(mod.Message(mod.stringkeys.payload.objective.not_assigned_payload_vehicle));
-    mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.not_assigned_payload_vehicle));
 }
 
 export function OnPlayerDied(victim: mod.Player, killer: mod.Player): void {
@@ -364,11 +340,9 @@ export function OngoingGlobal(): void {
         // Award objective points to all players in proximity of the payload
         for (const p of counts.t1) {
             scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
-            // mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.scoreboard.message, p, CONFIG.objectiveScorePerSecond, mod.stringkeys.payload.scoreboard.objective));
         }
         for (const p of counts.t2) {
             scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
-            // mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.scoreboard.message, p, CONFIG.objectiveScorePerSecond, mod.stringkeys.payload.scoreboard.objective));
         }
         executeEverySecond();
     }
@@ -381,10 +355,8 @@ export function OngoingGlobal(): void {
         onPayloadMoved();
     } else if (counts.t1.length > 0 && counts.t2.length > 0) {
         setPayloadState(PayloadState.CONTESTED);
-        updateStatusUI(mod.stringkeys.payload.state.contested);
     } else {
         setPayloadState(PayloadState.IDLE);
-        updateStatusUI(mod.stringkeys.payload.state.idle);
     }
 }
 

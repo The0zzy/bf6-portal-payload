@@ -36,6 +36,9 @@ export const CONFIG: Config = {
     payloadObjects: [
         { prefab: mod.RuntimeSpawn_Common.MCOM, relativeOffset: mod.CreateVector(0, 3, 0), initialSize: mod.CreateVector(1, 1, 1) },
         { prefab: mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Target_Area, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(2.5, 1, 2.5) },
+        // { prefab: mod.RuntimeSpawn_Common.FX_Gadget_AmmoCrate_Area, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(2.5, 1, 2.5) },
+        // { prefab: mod.RuntimeSpawn_Common.FX_Gadget_VehicleSupplyCrate_Range_Indicator, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(2.5, 1, 2.5) },
+        // { prefab: mod.RuntimeSpawn_Common.FX_Gadget_VehicleSupplyCrate_Range_Indicator_Upgraded, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(2.5, 1, 2.5) },
         // { prefab: mod.RuntimeSpawn_Common.CrateAmmo_01_StackA, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(1.3, 1.3, 1.3) }
     ],
 };
