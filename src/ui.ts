@@ -24,7 +24,7 @@ export function uiSetup(): void {
     mod.SetUIWidgetDepth(containerWidget, mod.UIDepth.AboveGameUI);
 
     // Payload status
-    mod.AddUIText("payloadstatus", mod.CreateVector(0, 30, 0), mod.CreateVector(200, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, mod.CreateVector(0, 0, 0), 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.state.message, mod.stringkeys.payload.state.idle), 26, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center);
+    mod.AddUIText("payloadstatus", mod.CreateVector(0, 30, 0), mod.CreateVector(400, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, mod.CreateVector(0, 0, 0), 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.state.message, mod.stringkeys.payload.state.idle), 26, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center);
     mod.AddUIContainer("progress_background1", mod.CreateVector(150, 5, 0), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, enemycolour, 0.7, mod.UIBgFill.Solid, mod.GetTeam(1));
     mod.AddUIContainer("progress1", mod.CreateVector(150, 0, 0), mod.CreateVector(6 * STATE.progressInPercent, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, friendlycolour, 0.7, mod.UIBgFill.Solid, mod.GetTeam(1));
     mod.AddUIContainer("progress_background2", mod.CreateVector(150, 5, 0), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, friendlycolour, 0.7, mod.UIBgFill.Solid, mod.GetTeam(2));
