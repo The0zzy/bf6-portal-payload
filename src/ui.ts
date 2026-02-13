@@ -8,12 +8,13 @@ export function updateCheckpointTimer(remainingTime: number): void {
     mod.SetUITextLabel(mod.FindUIWidgetWithName("remaining_time2"), mod.Message(timerKey, mins, mod.Floor(secs / 10), mod.Modulo(secs, 10)));
 }
 
-let friendlycolour = mod.CreateVector(0, 0.8, 1); //0, 0.8, 1
+let friendlycolour = mod.CreateVector(0, 0.7, 1); //0, 0.8, 1
 let enemycolour = mod.CreateVector(1, 0.2, 0.2);
 let friendlybgcolour = mod.CreateVector(0, 0.15, 0.3);
 let enemybgcolour = mod.CreateVector(0.4, 0, 0);
 let goldcolour = mod.CreateVector(1, 0.8, 0);
 let goldbgcolour = mod.CreateVector(0.5, 0.4, 0);
+let ui_ready = false;
 
 
 export function uiSetup(): void {
@@ -34,6 +35,12 @@ export function uiSetup(): void {
     mod.AddUIText("remaining_time2", mod.CreateVector(0, -5, 0), mod.CreateVector(100, 30, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, friendlybgcolour, 0.9, mod.UIBgFill.Solid, mod.Message(mod.stringkeys.payload.state.idle), 26, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center, mod.GetTeam(2));
     mod.AddUIText("percentage1", mod.CreateVector(0, -5, 0), mod.CreateVector(100, 30, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, friendlybgcolour, 0.9, mod.UIBgFill.Solid, mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(STATE.progressInPercent)), 26, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center, mod.GetTeam(1));
     mod.AddUIText("percentage2", mod.CreateVector(0, -5, 0), mod.CreateVector(100, 30, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, enemybgcolour, 0.9, mod.UIBgFill.Solid, mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(STATE.progressInPercent)), 26, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center, mod.GetTeam(2));
+    mod.AddUIContainer("progress_backgroundflash", mod.CreateVector(150, 5, 0), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, mod.CreateVector(1, 1, 1), 0.1, mod.UIBgFill.GradientLeft);
+    mod.AddUIContainer("progressflash", mod.CreateVector(150, 0, 0), mod.CreateVector(6 * STATE.progressInPercent, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(1, 1, 1), 0.1, mod.UIBgFill.GradientRight);
+
+    // The UI alpha cannot be set to 0 as this breaks the animation. This works in blocks but not TS 
+    mod.SetUIWidgetVisible(mod.FindUIWidgetWithName("progressflash"), false);
+    mod.SetUIWidgetVisible(mod.FindUIWidgetWithName("progress_backgroundflash"), false);
 
     //Checkpoints distance on progress UI
     for (let i = 1; i < STATE.waypoints.size; i++) {
@@ -43,7 +50,7 @@ export function uiSetup(): void {
                 mod.CreateVector(4, 30, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(1, 1, 1), 1, mod.UIBgFill.Solid);
         }
     }
-
+    ui_ready = true;
 }
 
 export function updateProgressUI(): void {
@@ -53,6 +60,10 @@ export function updateProgressUI(): void {
     mod.SetUITextLabel(mod.FindUIWidgetWithName("percentage2"), mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(STATE.progressInPercent)));
     mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress_background1"), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0));
     mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress_background2"), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0));
+    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progressflash"), mod.CreateVector(6 * STATE.progressInPercent, 20, 0));
+    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress_backgroundflash"), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0));
+
+
 }
 
 export function updateStatusUI(): void {
@@ -115,4 +126,42 @@ export function ui_onPlayerJoinGame(): void {
     //mod.Wait(mod.RandomReal(5, 10));
     //deleteUI();
     //uiSetup();
+}
+
+export async function progressFlash(): Promise<void> {
+    if (ui_ready) {
+        for (let i = 8; i > 0; i -= 1) {
+            if (STATE.payloadState == PayloadState.ADVANCING) {
+                mod.SetUIWidgetVisible(mod.FindUIWidgetWithName("progressflash"), true);
+                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progressflash"), i / 10);
+            }
+            if (STATE.payloadState == PayloadState.PUSHING_BACK) {
+                mod.SetUIWidgetVisible(mod.FindUIWidgetWithName("progress_backgroundflash"), true);
+                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progress_backgroundflash"), i / 10);
+            }
+            await mod.Wait(0.033);
+        }
+        mod.SetUIWidgetVisible(mod.FindUIWidgetWithName("progressflash"), false);
+        mod.SetUIWidgetVisible(mod.FindUIWidgetWithName("progress_backgroundflash"), false);
+    }
+}
+
+export async function nukeUI(): Promise<void> {
+    mod.AddUIContainer("nuke", mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("container"), true, 0, mod.CreateVector(1, 1, 1), 1, mod.UIBgFill.Solid);
+    mod.AddUIContainer("nukeScreenEffect", mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("container"), true, 0, mod.CreateVector(1, 0.73, 0), 0.4, mod.UIBgFill.Blur);
+    let nukeStart = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_CAP_AmbWar_Rocket_Strike, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
+    mod.EnableVFX(nukeStart, true);
+    await mod.Wait(0.7);
+    for (let i = 10; i > 0; i -= 1) {
+        mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("nuke"), i / 10);
+        await mod.Wait(0.1);
+    }
+    let nukeStart2 = mod.SpawnObject(mod.RuntimeSpawn_Common.VFX_Launchers_GroundShockwave_Grass, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
+    mod.EnableVFX(nukeStart2, true);
+    mod.SetVFXScale(nukeStart2, 10);
+    mod.DeleteUIWidget(mod.FindUIWidgetWithName("nuke"));
+    let nukeMid = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Carrier_Explosion_Dist, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
+    mod.EnableVFX(nukeMid, true);
+    let nukeEnd = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Detonation, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
+    mod.EnableVFX(nukeEnd, true);
 }

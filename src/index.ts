@@ -1,5 +1,5 @@
-import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI } from './ui.ts';
-import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound } from './sounds.ts';
+import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI, progressFlash, nukeUI } from './ui.ts';
+import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
 import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard } from './scoring.ts';
@@ -24,10 +24,10 @@ function initPayloadTrack(): void {
     let distance = 0;
     for (let i = 1000; i < 1999; i++) {
         const objPos = mod.GetObjectPosition(mod.GetSpatialObject(i));
-        if (mod.DistanceBetween(objPos, mod.CreateVector(0, 0, 0)) >= 1) {
+        if (!(mod.XComponentOf(objPos) == 0 || mod.YComponentOf(objPos) == 0 || mod.ZComponentOf(objPos) == 0)) {
             let isCheckpoint = false;
             const checkpointPos = mod.GetObjectPosition(mod.GetSpatialObject(i + 1000));
-            if (mod.DistanceBetween(objPos, mod.CreateVector(0, 0, 0)) >= 1) {
+            if (!(mod.XComponentOf(checkpointPos) == 0 || mod.YComponentOf(checkpointPos) == 0 || mod.ZComponentOf(checkpointPos) == 0)) {
                 isCheckpoint = true;
                 STATE.maxCheckpoints++;
             }
@@ -150,9 +150,6 @@ function getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1:
                 } else if (mod.Equals(team, team2)) {
                     t2.push(player);
                 }
-                mod.EnableInputRestriction(player, mod.RestrictedInputs.Interact, true);
-            } else {
-                mod.EnableInputRestriction(player, mod.RestrictedInputs.Interact, false);
             }
         }
     }
@@ -284,12 +281,19 @@ function executeEverySecond() {
         playNearEndMusic();
         playLowTimeVO();
     }
+    if (STATE.payloadState == PayloadState.ADVANCING) {
+        playPayloadProgressingSound(STATE.payloadPosition);
+    }
     if (STATE.payloadState == PayloadState.PUSHING_BACK) {
         playPayloadReversingSound(STATE.payloadPosition);
     }
+    progressFlash();
 }
 
 function onFinalCheckpointReached() {
+    mod.PauseGameModeTime(true);
+    nukeUI();
+    mod.Wait(10);
     mod.EndGameMode(mod.GetTeam(1));
 }
 
@@ -300,6 +304,7 @@ function onRunningOutOfTime() {
 export function OnGameModeStarted(): void {
     mod.SetGameModeTimeLimit(3600);
     mod.SetGameModeTargetScore(1000);
+    mod.Wait(3);
     initSectors();
     initPayloadTrack();
     initPayloadRotation();
