@@ -104,3 +104,7 @@ export function playPayloadProgressingSound(location: mod.Vector): void {
     mod.PlaySound(progressSound, 0.3, location, 50);
 }
 
+export function endGameMusic(team: number): void {
+    mod.SetMusicParam(mod.MusicParams.Core_IsWinning, team);
+    mod.PlayMusic(mod.MusicEvents.Core_EndOfRound_Loop);
+}

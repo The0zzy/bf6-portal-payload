@@ -1,5 +1,5 @@
 import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI, progressFlash, nukeUI } from './ui.ts';
-import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound } from './sounds.ts';
+import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound, endGameMusic } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
 import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard } from './scoring.ts';
@@ -290,14 +290,17 @@ function executeEverySecond() {
     progressFlash();
 }
 
-function onFinalCheckpointReached() {
+async function onFinalCheckpointReached() {
     mod.PauseGameModeTime(true);
+    endGameMusic(1);
+    mod.Kill(STATE.payloadVehicle as mod.Vehicle);
     nukeUI();
-    mod.Wait(10);
+    await mod.Wait(8);
     mod.EndGameMode(mod.GetTeam(1));
 }
 
 function onRunningOutOfTime() {
+    endGameMusic(2);
     mod.EndGameMode(mod.GetTeam(2));
 }
 
