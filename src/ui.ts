@@ -44,6 +44,29 @@ export function uiSetup(): void {
         }
     }
 
+    //Game mode version display
+    mod.AddUIText(
+        "version",
+        mod.CreateVector(0, 0, 0),
+        mod.CreateVector(600, 30, 0),
+        mod.UIAnchor.BottomRight,
+        mod.GetUIRoot(),
+        true,
+        0,
+        mod.CreateVector(0, 0, 0),
+        0,
+        mod.UIBgFill.None,
+        mod.Message(
+            mod.stringkeys.payload.meta.meta_text,
+            mod.stringkeys.payload.meta.name,
+            mod.stringkeys.payload.meta.version,
+            mod.stringkeys.payload.meta.build
+        ),
+        18,
+        mod.CreateVector(0.3, 0.3, 0.3),
+        1,
+        mod.UIAnchor.BottomRight
+    );
 }
 
 export function updateProgressUI(): void {

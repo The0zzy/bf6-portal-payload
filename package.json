@@ -1,7 +1,7 @@
 {
     "name": "payload",
     "experienceName": "Payload",
-    "version": "0.0.1",
+    "version": "0.0.7",
     "type": "module",
     "description": "One team needs to deliver the Payload to the target while the other team must stop it or even push it back.",
     "engines": {
@@ -11,13 +11,13 @@
         "init": "node scripts/init.js",
         "update": "node scripts/update.js",
         "refresh-ai": "node scripts/generate-ai-context.js",
-        "build": "bf6-portal-bundler --entrypoint ./src/index.ts --outDir ./dist",
+        "build": "node scripts/sync-version.js && bf6-portal-bundler --entrypoint ./src/index.ts --outDir ./dist",
         "export-thumbnail": "node scripts/export-thumbnail.js",
         "minify-spatials": "node scripts/minify-all-spatials.js",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "prettier": "prettier --no-error-on-unmatched-pattern --write '**/*.{js,json,md,mjs,ts}'",
-        "deploy": "npm run build && node scripts/deploy.js --script dist/bundle.ts --strings dist/bundle.strings.json --versionBump patch",
+        "deploy": "npm run build && node scripts/deploy.js --script dist/bundle.ts --strings dist/bundle.strings.json --versionBump none",
         "deploy:patch": "npm run deploy",
         "deploy:minor": "npm run build && node scripts/deploy.js --script dist/bundle.ts --strings dist/bundle.strings.json --versionBump minor",
         "deploy:major": "npm run build && node scripts/deploy.js --script dist/bundle.ts --strings dist/bundle.strings.json --versionBump major"
