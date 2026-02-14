@@ -43,9 +43,9 @@
       "exit_message": "GET OUT AND PUSH!"
     },
     "meta": {
-      "version": "0.0.6",
+      "version": "0.0.8",
       "name": "payload",
-      "build": "2026-02-14T21:43:14.423Z",
+      "build": "2026-02-14T21:47:47.329Z",
       "meta_text": "{} v{} build: {}"
     }
   }

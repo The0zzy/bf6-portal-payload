@@ -1,7 +1,7 @@
 {
     "name": "payload",
     "experienceName": "Payload",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "type": "module",
     "description": "One team needs to deliver the Payload to the target while the other team must stop it or even push it back.",
     "engines": {
