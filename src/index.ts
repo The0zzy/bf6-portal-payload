@@ -371,15 +371,21 @@ export function OngoingGlobal(): void {
 }
 
 //Force remove players from payload vehicle
-export function OnPlayerEnterVehicle(eventPlayer: mod.Player, eventVehicle: mod.Vehicle): void {
-    if (mod.CompareVehicleName(eventVehicle, mod.VehicleList.M2Bradley)) { //Direct comparison not working: eventVehicle == STATE.payloadVehicle as mod.Vehicle
-        mod.ForcePlayerExitVehicle(mod.GetVehicleFromPlayer(eventPlayer));
-        mod.DisplayNotificationMessage(mod.Message(mod.stringkeys.payload.objective.exit_message), eventPlayer);
-    }
-}
+//export function OnPlayerEnterVehicle(eventPlayer: mod.Player, eventVehicle: mod.Vehicle): void {
+//    if (mod.CompareVehicleName(eventVehicle, mod.VehicleList.M2Bradley)) { //Direct comparison not working: eventVehicle == STATE.payloadVehicle as mod.Vehicle
+//        mod.ForcePlayerExitVehicle(mod.GetVehicleFromPlayer(eventPlayer));
+//        mod.DisplayNotificationMessage(mod.Message(mod.stringkeys.payload.objective.exit_message), eventPlayer);
+//    }
+//}
 
 // Team Switcher for testing
 export function OngoingPlayer(eventPlayer: mod.Player): void {
+    if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsInVehicle)) {
+        if (mod.CompareVehicleName(mod.GetVehicleFromPlayer(eventPlayer), mod.VehicleList.M2Bradley)) { //Direct comparison not working: eventVehicle == STATE.payloadVehicle as mod.Vehicle
+            mod.ForcePlayerExitVehicle(mod.GetVehicleFromPlayer(eventPlayer));
+            mod.DisplayNotificationMessage(mod.Message(mod.stringkeys.payload.objective.exit_message), eventPlayer);
+        }
+    }
     if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier)) return;
     if (!mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) return;
     if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsZooming)
