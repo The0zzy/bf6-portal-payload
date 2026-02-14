@@ -1,5 +1,5 @@
-import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI } from './ui.ts';
-import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound } from './sounds.ts';
+import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI, progressFlash, nukeUI } from './ui.ts';
+import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound, endGameMusic } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
 import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard } from './scoring.ts';
@@ -24,10 +24,10 @@ function initPayloadTrack(): void {
     let distance = 0;
     for (let i = 1000; i < 1999; i++) {
         const objPos = mod.GetObjectPosition(mod.GetSpatialObject(i));
-        if (!(mod.XComponentOf(objPos) == 0 && mod.YComponentOf(objPos) == 0)) {
+        if (!(mod.XComponentOf(objPos) == 0 || mod.YComponentOf(objPos) == 0 || mod.ZComponentOf(objPos) == 0)) {
             let isCheckpoint = false;
             const checkpointPos = mod.GetObjectPosition(mod.GetSpatialObject(i + 1000));
-            if (!(mod.XComponentOf(checkpointPos) == 0 && mod.YComponentOf(checkpointPos) == 0)) {
+            if (!(mod.XComponentOf(checkpointPos) == 0 || mod.YComponentOf(checkpointPos) == 0 || mod.ZComponentOf(checkpointPos) == 0)) {
                 isCheckpoint = true;
                 STATE.maxCheckpoints++;
             }
@@ -281,16 +281,26 @@ function executeEverySecond() {
         playNearEndMusic();
         playLowTimeVO();
     }
+    if (STATE.payloadState == PayloadState.ADVANCING) {
+        playPayloadProgressingSound(STATE.payloadPosition);
+    }
     if (STATE.payloadState == PayloadState.PUSHING_BACK) {
         playPayloadReversingSound(STATE.payloadPosition);
     }
+    progressFlash();
 }
 
-function onFinalCheckpointReached() {
+async function onFinalCheckpointReached() {
+    mod.PauseGameModeTime(true);
+    endGameMusic(1);
+    mod.Kill(STATE.payloadVehicle as mod.Vehicle);
+    nukeUI();
+    await mod.Wait(8);
     mod.EndGameMode(mod.GetTeam(1));
 }
 
 function onRunningOutOfTime() {
+    endGameMusic(2);
     mod.EndGameMode(mod.GetTeam(2));
 }
 

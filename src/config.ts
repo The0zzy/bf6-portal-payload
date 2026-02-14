@@ -27,14 +27,14 @@ export const CONFIG: Config = {
     pushProximityRadius: 7.5,
     waypointProximityRadius: 0.25,
     speedAdditionPerPushingPlayer: 0.005,
-    payloadSpeedMultiplierT1: 0.035,
+    payloadSpeedMultiplierT1: 0.035, //0.035 0.250
     payloadSpeedMultiplierT2: 0.015,
     objectiveScorePerSecond: 5,
     overtimeDuration: 60,
     overtimeEnabled: true,
     enableDebug: true,
     payloadObjects: [
-        { prefab: mod.RuntimeSpawn_Common.MCOM, relativeOffset: mod.CreateVector(0, -2, 0), initialSize: mod.CreateVector(1, 1, 1) },
+        { prefab: mod.RuntimeSpawn_Common.MCOM, relativeOffset: mod.CreateVector(0, -2.5, 0), initialSize: mod.CreateVector(1, 1, 1) },
         { prefab: mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Target_Area, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(2.5, 1, 2.5) },
         // { prefab: mod.RuntimeSpawn_Common.FX_Gadget_AmmoCrate_Area, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(2.5, 1, 2.5) },
         // { prefab: mod.RuntimeSpawn_Common.FX_Gadget_VehicleSupplyCrate_Range_Indicator, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(2.5, 1, 2.5) },

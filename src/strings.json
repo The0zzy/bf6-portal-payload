@@ -10,12 +10,12 @@
     },
     "status": "TrackCurrent: {} | Track: {} | Checkpoints: {}",
     "state": {
-      "idle": "IDLE",
+      "idle": "WAITING",
       "contested": "CONTESTED",
-      "advancing": "ADVANCING",
+      "advancing": "> > >",
       "locked": "LOCKED",
-      "pushing_back": "PUSHING BACK",
-      "message": "Payload State: {}",
+      "pushing_back": "< < <",
+      "message": "{}",
       "speed": "Base Speed: {} | Speed Addition: {} | Overall Speed: {}",
       "checkpoint_reached": "Checkpoint {}/{} reached!",
       "percentage": "{}%"
