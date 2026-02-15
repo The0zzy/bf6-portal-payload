@@ -1,5 +1,4 @@
 {
-  "portal_welcome_message": "Welcome to Portal! Let's play!",
   "payload": {
     "track": {
       "size": "Track Size: {}"
@@ -42,6 +41,12 @@
       "not_assigned_payload_vehicle": "Not assigned payload vehicle!",
       "vehicle_spawned": "Vehicle spawned!",
       "exit_message": "GET OUT AND PUSH!"
+    },
+    "meta": {
+      "version": "0.0.8",
+      "name": "payload",
+      "build": "2026-02-14T21:47:47.329Z",
+      "meta_text": "{} v{} build: {}"
     }
   }
 }

@@ -53,6 +53,30 @@ export function uiSetup(): void {
                 mod.CreateVector(4, 30, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(0.9, 0.9, 0.9), 1, mod.UIBgFill.Solid);
         }
     }
+
+    //Game mode version display
+    mod.AddUIText(
+        "version",
+        mod.CreateVector(0, 0, 0),
+        mod.CreateVector(600, 30, 0),
+        mod.UIAnchor.BottomRight,
+        mod.GetUIRoot(),
+        true,
+        0,
+        mod.CreateVector(0, 0, 0),
+        0,
+        mod.UIBgFill.None,
+        mod.Message(
+            mod.stringkeys.payload.meta.meta_text,
+            mod.stringkeys.payload.meta.name,
+            mod.stringkeys.payload.meta.version,
+            mod.stringkeys.payload.meta.build
+        ),
+        18,
+        mod.CreateVector(0.3, 0.3, 0.3),
+        1,
+        mod.UIAnchor.BottomRight
+    );
     // Payload progress icon draws last to show progress on top of Checkpoints
     mod.AddUIContainer("payload_progress_icon", mod.CreateVector(146 + (6 * STATE.progressInPercent), 0, 0), mod.CreateVector(4, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(1, 1, 0), 1, mod.UIBgFill.Solid);
     ui_ready = true;
