@@ -1,5 +1,4 @@
 {
-  "portal_welcome_message": "Welcome to Portal! Let's play!",
   "payload": {
     "track": {
       "size": "Track Size: {}"
@@ -11,12 +10,12 @@
     },
     "status": "TrackCurrent: {} | Track: {} | Checkpoints: {}",
     "state": {
-      "idle": "IDLE",
-      "contested": "CONTESTED",
-      "advancing": "ADVANCING",
+      "idle": "---",
+      "contested": ">>||<<",
+      "advancing": ">>>",
       "locked": "LOCKED",
-      "pushing_back": "PUSHING BACK",
-      "message": "Payload State: {}",
+      "pushing_back": "<<<",
+      "message": "{}",
       "speed": "Base Speed: {} | Speed Addition: {} | Overall Speed: {}",
       "checkpoint_reached": "Checkpoint {}/{} reached!",
       "percentage": "{}%"
@@ -34,14 +33,19 @@
     "objective": {
       "title": "PAYLOAD",
       "position": "Payload Position: ({}, {}, {})",
-      "checkpoint_timer": "Next checkpoint in: {}:{}{}",
-      "checkpoint_timer_padded": "{}:{}{}",
+      "checkpoint_timer": "{}:{}{}",
       "assigned_payload_vehicle": "Assigned payload vehicle!",
       "moved_vehicle": "Moved payload vehicle!",
       "healed_vehicle": "Healed payload vehicle!",
       "not_assigned_payload_vehicle": "Not assigned payload vehicle!",
       "vehicle_spawned": "Vehicle spawned!",
       "exit_message": "GET OUT AND PUSH!"
+    },
+    "meta": {
+      "version": "0.0.8",
+      "name": "payload",
+      "build": "2026-02-15T12:31:43.629Z",
+      "meta_text": "{} v{} build: {}"
     }
   }
 }
