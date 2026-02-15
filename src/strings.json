@@ -10,11 +10,11 @@
     },
     "status": "TrackCurrent: {} | Track: {} | Checkpoints: {}",
     "state": {
-      "idle": "WAITING",
-      "contested": "CONTESTED",
-      "advancing": "> > >",
+      "idle": "---",
+      "contested": ">>||<<",
+      "advancing": ">>>",
       "locked": "LOCKED",
-      "pushing_back": "< < <",
+      "pushing_back": "<<<",
       "message": "{}",
       "speed": "Base Speed: {} | Speed Addition: {} | Overall Speed: {}",
       "checkpoint_reached": "Checkpoint {}/{} reached!",
@@ -33,8 +33,7 @@
     "objective": {
       "title": "PAYLOAD",
       "position": "Payload Position: ({}, {}, {})",
-      "checkpoint_timer": "Next checkpoint in: {}:{}{}",
-      "checkpoint_timer_padded": "{}:{}{}",
+      "checkpoint_timer": "{}:{}{}",
       "assigned_payload_vehicle": "Assigned payload vehicle!",
       "moved_vehicle": "Moved payload vehicle!",
       "healed_vehicle": "Healed payload vehicle!",
@@ -45,7 +44,7 @@
     "meta": {
       "version": "0.0.8",
       "name": "payload",
-      "build": "2026-02-14T21:47:47.329Z",
+      "build": "2026-02-15T19:26:33.975Z",
       "meta_text": "{} v{} build: {}"
     }
   }
