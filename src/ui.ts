@@ -72,7 +72,7 @@ export function uiSetup(): void {
             mod.stringkeys.payload.meta.version,
             mod.stringkeys.payload.meta.build
         ),
-        18,
+        22,
         mod.CreateVector(0.3, 0.3, 0.3),
         1,
         mod.UIAnchor.BottomRight
