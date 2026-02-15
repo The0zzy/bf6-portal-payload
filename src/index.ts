@@ -156,12 +156,74 @@ function getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1:
     return { t1, t2 };
 }
 
-function moveTowards(targetPos: mod.Vector, speed: number): void {
-    const direction = mod.DirectionTowards(STATE.payloadPosition, targetPos);
-    const moveDelta = mod.Multiply(direction, speed);
-    const nextPos = mod.Add(STATE.payloadPosition, moveDelta);
-    STATE.payloadPosition = nextPos;
+function moveAlongSpline(forward: boolean, speed: number) {
+
+    const wpIndex = STATE.reachedWaypointIndex;
+
+    let prevIndex = wpIndex - 1;
+    if (prevIndex < 0) prevIndex = 0;
+
+    let nextIndex = wpIndex + 1;
+    if (nextIndex > STATE.waypoints.size - 1)
+        nextIndex = STATE.waypoints.size - 1;
+
+    let nextNextIndex = nextIndex + 1;
+    if (nextNextIndex > STATE.waypoints.size - 1)
+        nextNextIndex = STATE.waypoints.size - 1;
+
+    const prevWp = STATE.waypoints.get(prevIndex);
+    const currWp = STATE.waypoints.get(wpIndex);
+    const nextWp = STATE.waypoints.get(nextIndex);
+    const nextNextWp = STATE.waypoints.get(nextNextIndex);
+
+    if (!prevWp || !currWp || !nextWp || !nextNextWp) return;
+
+    const p0 = prevWp.position;
+    const p1 = currWp.position;
+    const p2 = nextWp.position;
+    const p3 = nextNextWp.position;
+
+    const segmentLength = mod.DistanceBetween(p1, p2);
+    if (segmentLength <= 0.001) return;
+
+    const deltaT = speed / segmentLength;
+
+    if (forward) {
+        STATE.segmentT = STATE.segmentT + deltaT;
+    } else {
+        STATE.segmentT = STATE.segmentT - deltaT;
+    }
+
+    // Manual clamp
+    if (STATE.segmentT > 1) STATE.segmentT = 1;
+    if (STATE.segmentT < 0) STATE.segmentT = 0;
+
+    const newPos = catmullRom(p0, p1, p2, p3, STATE.segmentT);
+    STATE.payloadPosition = newPos;
+
+    const tangent = getSplineTangent(p0, p1, p2, p3, STATE.segmentT);
+    STATE.payloadRotation = getRotationFromTangent(tangent);
+
+    if (STATE.segmentT >= 1 && forward && wpIndex < STATE.waypoints.size - 1) {
+
+        STATE.reachedWaypointIndex = nextIndex;
+        STATE.segmentT = 0;
+
+        if (nextWp.isCheckpoint) {
+            STATE.reachedCheckpointIndex = nextIndex;
+            STATE.currentCheckpoint = STATE.currentCheckpoint + 1;
+            onCheckpointReached();
+        }
+    }
+
+    if (STATE.segmentT <= 0 && !forward && wpIndex > 0) {
+
+        STATE.reachedWaypointIndex = wpIndex - 1;
+        STATE.segmentT = 1;
+    }
 }
+
+
 
 function onCheckpointReached(): void {
     if (STATE.payloadState !== PayloadState.ADVANCING) return;
@@ -211,13 +273,10 @@ function checkWaypointReached(targetWaypointIndex: number) {
 }
 
 function pushForward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
-    const targetWaypointIndex = STATE.reachedWaypointIndex + 1;
-    const targetWaypoint = STATE.waypoints.get(targetWaypointIndex)!;
     const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t1.length - counts.t2.length);
     const speed = CONFIG.payloadSpeedMultiplierT1 + speedAddtion;
-    moveTowards(targetWaypoint.position, speed);
+    moveAlongSpline(true, speed);
     setPayloadState(PayloadState.ADVANCING);
-    checkWaypointReached(targetWaypointIndex);
     VOPushing();
 }
 
@@ -226,19 +285,16 @@ function pushBackward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
         setPayloadState(PayloadState.LOCKED);
         return;
     }
-    const targetWaypointIndex = STATE.reachedWaypointIndex - 1;
-    const targetWaypoint = STATE.waypoints.get(targetWaypointIndex)!;
     const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t2.length - counts.t1.length);
     const speed = CONFIG.payloadSpeedMultiplierT2 + speedAddtion;
-    moveTowards(targetWaypoint.position, speed);
+    moveAlongSpline(false, speed);
     setPayloadState(PayloadState.PUSHING_BACK);
-    checkWaypointReached(targetWaypointIndex);
     VOPushingBack();
 }
 
+
 function updatePayloadObject() {
-    const waypoint = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
-    const rotation = waypoint.rotation;
+    const rotation = STATE.payloadRotation;
     for (let i = 0; i < STATE.payloadObjects.length; i++) {
         const obj = STATE.payloadObjects[i];
         const config = CONFIG.payloadObjects[i];
@@ -370,14 +426,6 @@ export function OngoingGlobal(): void {
     }
 }
 
-//Force remove players from payload vehicle
-//export function OnPlayerEnterVehicle(eventPlayer: mod.Player, eventVehicle: mod.Vehicle): void {
-//    if (mod.CompareVehicleName(eventVehicle, mod.VehicleList.M2Bradley)) { //Direct comparison not working: eventVehicle == STATE.payloadVehicle as mod.Vehicle
-//        mod.ForcePlayerExitVehicle(mod.GetVehicleFromPlayer(eventPlayer));
-//        mod.DisplayNotificationMessage(mod.Message(mod.stringkeys.payload.objective.exit_message), eventPlayer);
-//    }
-//}
-
 // Team Switcher for testing
 export function OngoingPlayer(eventPlayer: mod.Player): void {
     if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsInVehicle)) {
@@ -396,7 +444,69 @@ export function OngoingPlayer(eventPlayer: mod.Player): void {
     }
 }
 
-// bugged...
-// export function OnTimeLimitReached(): void {
-//     mod.EndGameMode(mod.GetTeam(2));
-// }
+
+function catmullRom(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, t: number): mod.Vector {
+    const t2 = t * t;
+    const t3 = t2 * t;
+
+    const x = 0.5 * (
+        (2 * mod.XComponentOf(p1)) +
+        (-mod.XComponentOf(p0) + mod.XComponentOf(p2)) * t +
+        (2 * mod.XComponentOf(p0) - 5 * mod.XComponentOf(p1) + 4 * mod.XComponentOf(p2) - mod.XComponentOf(p3)) * t2 +
+        (-mod.XComponentOf(p0) + 3 * mod.XComponentOf(p1) - 3 * mod.XComponentOf(p2) + mod.XComponentOf(p3)) * t3
+    );
+
+    const y = 0.5 * (
+        (2 * mod.YComponentOf(p1)) +
+        (-mod.YComponentOf(p0) + mod.YComponentOf(p2)) * t +
+        (2 * mod.YComponentOf(p0) - 5 * mod.YComponentOf(p1) + 4 * mod.YComponentOf(p2) - mod.YComponentOf(p3)) * t2 +
+        (-mod.YComponentOf(p0) + 3 * mod.YComponentOf(p1) - 3 * mod.YComponentOf(p2) + mod.YComponentOf(p3)) * t3
+    );
+
+    const z = 0.5 * (
+        (2 * mod.ZComponentOf(p1)) +
+        (-mod.ZComponentOf(p0) + mod.ZComponentOf(p2)) * t +
+        (2 * mod.ZComponentOf(p0) - 5 * mod.ZComponentOf(p1) + 4 * mod.ZComponentOf(p2) - mod.ZComponentOf(p3)) * t2 +
+        (-mod.ZComponentOf(p0) + 3 * mod.ZComponentOf(p1) - 3 * mod.ZComponentOf(p2) + mod.ZComponentOf(p3)) * t3
+    );
+
+    return mod.CreateVector(x, y, z);
+}
+
+// Get approximate tangent (direction) at t along spline
+function getSplineTangent(
+    p0: mod.Vector,
+    p1: mod.Vector,
+    p2: mod.Vector,
+    p3: mod.Vector,
+    t: number,
+    delta: number = 0.01
+): mod.Vector {
+
+    let t1 = t + delta;
+    if (t1 > 1) t1 = 1;
+
+    const pos = catmullRom(p0, p1, p2, p3, t);
+    const posAhead = catmullRom(p0, p1, p2, p3, t1);
+
+    return mod.DirectionTowards(pos, posAhead);
+}
+
+
+
+// Convert tangent to Y-axis rotation
+function getRotationFromTangent(tangent: mod.Vector): mod.Vector {
+
+    const forward = mod.CreateVector(0, 0, 1);
+    const tangentXZ = mod.CreateVector(
+        mod.XComponentOf(tangent),
+        0,
+        mod.ZComponentOf(tangent)
+    );
+
+    const angleDegrees = mod.AngleBetweenVectors(forward, tangentXZ);
+    const radians = mod.DegreesToRadians(angleDegrees);
+
+    return mod.CreateVector(0, radians, 0);
+}
+

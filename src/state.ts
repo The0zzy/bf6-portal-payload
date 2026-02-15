@@ -40,6 +40,8 @@ export interface State {
     progressInPercent: number;
     playerScores: Map<number, PlayerScoring>;
     payloadVehicle?: mod.Vehicle;
+    payloadRotation: mod.Vector;
+    segmentT: number;
 }
 
 export const STATE: State = {
@@ -60,4 +62,6 @@ export const STATE: State = {
     progressInMeters: 0,
     progressInPercent: 0,
     playerScores: new Map<number, PlayerScoring>(),
+    payloadRotation: mod.CreateVector(0, 0, 0),
+    segmentT: 0,
 };
