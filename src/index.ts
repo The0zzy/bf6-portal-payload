@@ -156,72 +156,164 @@ function getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1:
     return { t1, t2 };
 }
 
-function moveAlongSpline(forward: boolean, speed: number) {
 
-    const wpIndex = STATE.reachedWaypointIndex;
 
-    let prevIndex = wpIndex - 1;
-    if (prevIndex < 0) prevIndex = 0;
 
-    let nextIndex = wpIndex + 1;
-    if (nextIndex > STATE.waypoints.size - 1)
-        nextIndex = STATE.waypoints.size - 1;
+// --------------------------
+// Catmull-Rom spline
+// --------------------------
+function catmullRom(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, t: number): mod.Vector {
+    const t2 = t * t;
+    const t3 = t2 * t;
 
-    let nextNextIndex = nextIndex + 1;
-    if (nextNextIndex > STATE.waypoints.size - 1)
-        nextNextIndex = STATE.waypoints.size - 1;
+    const x = 0.5 * (
+        (2 * mod.XComponentOf(p1)) +
+        (-mod.XComponentOf(p0) + mod.XComponentOf(p2)) * t +
+        (2 * mod.XComponentOf(p0) - 5 * mod.XComponentOf(p1) + 4 * mod.XComponentOf(p2) - mod.XComponentOf(p3)) * t2 +
+        (-mod.XComponentOf(p0) + 3 * mod.XComponentOf(p1) - 3 * mod.XComponentOf(p2) + mod.XComponentOf(p3)) * t3
+    );
 
-    const prevWp = STATE.waypoints.get(prevIndex);
-    const currWp = STATE.waypoints.get(wpIndex);
-    const nextWp = STATE.waypoints.get(nextIndex);
-    const nextNextWp = STATE.waypoints.get(nextNextIndex);
+    const y = 0.5 * (
+        (2 * mod.YComponentOf(p1)) +
+        (-mod.YComponentOf(p0) + mod.YComponentOf(p2)) * t +
+        (2 * mod.YComponentOf(p0) - 5 * mod.YComponentOf(p1) + 4 * mod.YComponentOf(p2) - mod.YComponentOf(p3)) * t2 +
+        (-mod.YComponentOf(p0) + 3 * mod.YComponentOf(p1) - 3 * mod.YComponentOf(p2) + mod.YComponentOf(p3)) * t3
+    );
 
-    if (!prevWp || !currWp || !nextWp || !nextNextWp) return;
+    const z = 0.5 * (
+        (2 * mod.ZComponentOf(p1)) +
+        (-mod.ZComponentOf(p0) + mod.ZComponentOf(p2)) * t +
+        (2 * mod.ZComponentOf(p0) - 5 * mod.ZComponentOf(p1) + 4 * mod.ZComponentOf(p2) - mod.ZComponentOf(p3)) * t2 +
+        (-mod.ZComponentOf(p0) + 3 * mod.ZComponentOf(p1) - 3 * mod.ZComponentOf(p2) + mod.ZComponentOf(p3)) * t3
+    );
 
-    const p0 = prevWp.position;
-    const p1 = currWp.position;
-    const p2 = nextWp.position;
-    const p3 = nextNextWp.position;
+    return mod.CreateVector(x, y, z);
+}
 
-    const segmentLength = mod.DistanceBetween(p1, p2);
-    if (segmentLength <= 0.001) return;
+// --------------------------
+// Get t for a given distance along spline
+// --------------------------
+function getTForDistanceDynamic(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, distance: number, samples: number = 20) {
+    let lastPos = catmullRom(p0, p1, p2, p3, 0);
+    let accumulated = 0;
 
-    const deltaT = speed / segmentLength;
+    if (distance <= 0) return 0;
 
-    if (forward) {
-        STATE.segmentT = STATE.segmentT + deltaT;
-    } else {
-        STATE.segmentT = STATE.segmentT - deltaT;
-    }
-
-    // Manual clamp
-    if (STATE.segmentT > 1) STATE.segmentT = 1;
-    if (STATE.segmentT < 0) STATE.segmentT = 0;
-
-    const newPos = catmullRom(p0, p1, p2, p3, STATE.segmentT);
-    STATE.payloadPosition = newPos;
-
-    const tangent = getSplineTangent(p0, p1, p2, p3, STATE.segmentT);
-    STATE.payloadRotation = getRotationFromTangent(tangent);
-
-    if (STATE.segmentT >= 1 && forward && wpIndex < STATE.waypoints.size - 1) {
-
-        STATE.reachedWaypointIndex = nextIndex;
-        STATE.segmentT = 0;
-
-        if (nextWp.isCheckpoint) {
-            STATE.reachedCheckpointIndex = nextIndex;
-            STATE.currentCheckpoint = STATE.currentCheckpoint + 1;
-            onCheckpointReached();
+    for (let i = 1; i <= samples; i++) {
+        const t = i / samples;
+        const pos = catmullRom(p0, p1, p2, p3, t);
+        const segment = mod.DistanceBetween(lastPos, pos);
+        accumulated += segment;
+        if (accumulated >= distance) {
+            const overshoot = accumulated - distance;
+            const alpha = 1 - overshoot / segment;
+            const tPrev = (i - 1) / samples;
+            return tPrev + alpha * (t - tPrev);
         }
+        lastPos = pos;
     }
 
-    if (STATE.segmentT <= 0 && !forward && wpIndex > 0) {
+    return 1;
+}
 
-        STATE.reachedWaypointIndex = wpIndex - 1;
-        STATE.segmentT = 1;
+// --------------------------
+// Approximate tangent
+// --------------------------
+function getSplineTangent(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, t: number, delta: number = 0.01): mod.Vector {
+    const t1 = Math.min(t + delta, 1);
+    const pos = catmullRom(p0, p1, p2, p3, t);
+    const posAhead = catmullRom(p0, p1, p2, p3, t1);
+    return mod.DirectionTowards(pos, posAhead);
+}
+
+// --------------------------
+// Convert tangent to Y-rotation (signed, stable)
+// --------------------------
+function getRotationFromTangent(tangent: mod.Vector): mod.Vector {
+    const x = mod.XComponentOf(tangent);
+    const z = mod.ZComponentOf(tangent);
+
+    // Avoid near-zero tangent jitter
+    if (Math.abs(x) < 0.0001 && Math.abs(z) < 0.0001) return STATE.payloadRotation ?? mod.CreateVector(0, 0, 0);
+
+    // Signed yaw (radians)
+    const yaw = Math.atan2(x, z);
+
+    // Optional: smooth rotation
+    if (STATE.payloadRotation) {
+        const prevYaw = mod.YComponentOf(STATE.payloadRotation);
+        const diff = ((yaw - prevYaw + Math.PI) % (2 * Math.PI)) - Math.PI; // shortest angle
+        const smoothedYaw = prevYaw + diff * 0.2; // lerp factor
+        return mod.CreateVector(0, smoothedYaw, 0);
+    }
+
+    return mod.CreateVector(0, yaw, 0);
+}
+
+// --------------------------
+// Move along spline with constant speed
+// --------------------------
+function moveAlongSpline(forward: boolean, speed: number) {
+    let wpIndex = STATE.reachedWaypointIndex;
+    const wpCount = STATE.waypoints.size;
+
+    STATE.segmentDistance = STATE.segmentDistance || 0;
+    STATE.segmentDistance += forward ? speed : -speed;
+
+    // Clamp segmentDistance and switch waypoints
+    while (true) {
+        const prevIndex = Math.max(wpIndex - 1, 0);
+        const nextIndex = Math.min(wpIndex + 1, wpCount - 1);
+        const nextNextIndex = Math.min(nextIndex + 1, wpCount - 1);
+
+        const prevWp = STATE.waypoints.get(prevIndex);
+        const currWp = STATE.waypoints.get(wpIndex);
+        const nextWp = STATE.waypoints.get(nextIndex);
+        const nextNextWp = STATE.waypoints.get(nextNextIndex);
+        if (!prevWp || !currWp || !nextWp || !nextNextWp) break;
+
+        const p0 = prevWp.position;
+        const p1 = currWp.position;
+        const p2 = nextWp.position;
+        const p3 = nextNextWp.position;
+
+        const segmentLength = mod.DistanceBetween(p1, p2);
+
+        if (STATE.segmentDistance >= segmentLength && forward && wpIndex < wpCount - 1) {
+            STATE.segmentDistance -= segmentLength;
+            wpIndex = nextIndex;
+            STATE.reachedWaypointIndex = wpIndex;
+
+            if (nextWp.isCheckpoint) {
+                STATE.reachedCheckpointIndex = nextIndex;
+                STATE.currentCheckpoint++;
+                onCheckpointReached();
+            }
+            continue;
+        }
+
+        if (STATE.segmentDistance <= 0 && !forward && wpIndex > 0) {
+            wpIndex = wpIndex - 1;
+            STATE.reachedWaypointIndex = wpIndex;
+
+            const prevWpPos = STATE.waypoints.get(wpIndex)?.position!;
+            const currWpPos = STATE.waypoints.get(wpIndex + 1)?.position!;
+            STATE.segmentDistance += mod.DistanceBetween(prevWpPos, currWpPos);
+            continue;
+        }
+
+        // Compute t along current segment
+        const t = getTForDistanceDynamic(p0, p1, p2, p3, STATE.segmentDistance);
+
+        STATE.payloadPosition = catmullRom(p0, p1, p2, p3, t);
+        const tangent = getSplineTangent(p0, p1, p2, p3, t);
+        STATE.payloadRotation = getRotationFromTangent(tangent);
+        break;
     }
 }
+
+
+
 
 
 
@@ -281,7 +373,7 @@ function pushForward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
 }
 
 function pushBackward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
-    if (STATE.reachedWaypointIndex <= STATE.reachedCheckpointIndex) {
+    if (STATE.reachedWaypointIndex <= (STATE.reachedCheckpointIndex - 1)) {
         setPayloadState(PayloadState.LOCKED);
         return;
     }
@@ -445,68 +537,5 @@ export function OngoingPlayer(eventPlayer: mod.Player): void {
 }
 
 
-function catmullRom(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, t: number): mod.Vector {
-    const t2 = t * t;
-    const t3 = t2 * t;
 
-    const x = 0.5 * (
-        (2 * mod.XComponentOf(p1)) +
-        (-mod.XComponentOf(p0) + mod.XComponentOf(p2)) * t +
-        (2 * mod.XComponentOf(p0) - 5 * mod.XComponentOf(p1) + 4 * mod.XComponentOf(p2) - mod.XComponentOf(p3)) * t2 +
-        (-mod.XComponentOf(p0) + 3 * mod.XComponentOf(p1) - 3 * mod.XComponentOf(p2) + mod.XComponentOf(p3)) * t3
-    );
-
-    const y = 0.5 * (
-        (2 * mod.YComponentOf(p1)) +
-        (-mod.YComponentOf(p0) + mod.YComponentOf(p2)) * t +
-        (2 * mod.YComponentOf(p0) - 5 * mod.YComponentOf(p1) + 4 * mod.YComponentOf(p2) - mod.YComponentOf(p3)) * t2 +
-        (-mod.YComponentOf(p0) + 3 * mod.YComponentOf(p1) - 3 * mod.YComponentOf(p2) + mod.YComponentOf(p3)) * t3
-    );
-
-    const z = 0.5 * (
-        (2 * mod.ZComponentOf(p1)) +
-        (-mod.ZComponentOf(p0) + mod.ZComponentOf(p2)) * t +
-        (2 * mod.ZComponentOf(p0) - 5 * mod.ZComponentOf(p1) + 4 * mod.ZComponentOf(p2) - mod.ZComponentOf(p3)) * t2 +
-        (-mod.ZComponentOf(p0) + 3 * mod.ZComponentOf(p1) - 3 * mod.ZComponentOf(p2) + mod.ZComponentOf(p3)) * t3
-    );
-
-    return mod.CreateVector(x, y, z);
-}
-
-// Get approximate tangent (direction) at t along spline
-function getSplineTangent(
-    p0: mod.Vector,
-    p1: mod.Vector,
-    p2: mod.Vector,
-    p3: mod.Vector,
-    t: number,
-    delta: number = 0.01
-): mod.Vector {
-
-    let t1 = t + delta;
-    if (t1 > 1) t1 = 1;
-
-    const pos = catmullRom(p0, p1, p2, p3, t);
-    const posAhead = catmullRom(p0, p1, p2, p3, t1);
-
-    return mod.DirectionTowards(pos, posAhead);
-}
-
-
-
-// Convert tangent to Y-axis rotation
-function getRotationFromTangent(tangent: mod.Vector): mod.Vector {
-
-    const forward = mod.CreateVector(0, 0, 1);
-    const tangentXZ = mod.CreateVector(
-        mod.XComponentOf(tangent),
-        0,
-        mod.ZComponentOf(tangent)
-    );
-
-    const angleDegrees = mod.AngleBetweenVectors(forward, tangentXZ);
-    const radians = mod.DegreesToRadians(angleDegrees);
-
-    return mod.CreateVector(0, radians, 0);
-}
 

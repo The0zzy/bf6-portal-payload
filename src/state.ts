@@ -42,6 +42,8 @@ export interface State {
     payloadVehicle?: mod.Vehicle;
     payloadRotation: mod.Vector;
     segmentT: number;
+    splineTable: { t: number, distance: number }[] | null;
+    segmentDistance: number;
 }
 
 export const STATE: State = {
@@ -64,4 +66,6 @@ export const STATE: State = {
     playerScores: new Map<number, PlayerScoring>(),
     payloadRotation: mod.CreateVector(0, 0, 0),
     segmentT: 0,
+    splineTable: null,
+    segmentDistance: 0,
 };
