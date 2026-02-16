@@ -81,6 +81,7 @@ export function uiSetup(): void {
     );
     // Payload progress icon draws last to show progress on top of Checkpoints
     mod.AddUIContainer("payload_progress_icon", mod.CreateVector(146 + (6 * STATE.progressInPercent), 0, 0), mod.CreateVector(4, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(1, 1, 0), 1, mod.UIBgFill.Solid);
+    mod.AddUIText("credits", mod.CreateVector(0, 0, 0), mod.CreateVector(600, 30, 0), mod.UIAnchor.BottomLeft, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.credits), 14, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.BottomLeft);
     ui_ready = true;
 }
 
@@ -111,8 +112,6 @@ export function updateStatusUI(): void {
             mod.SetUIImageColor(mod.FindUIWidgetWithName("payload_icon2"), enemycolour);
             mod.SetUITextColor(mod.FindUIWidgetWithName("payloadstatus1"), friendlycolour);
             mod.SetUITextColor(mod.FindUIWidgetWithName("payloadstatus2"), enemycolour);
-            //mod.SetUITextSize(mod.FindUIWidgetWithName("payloadstatus1"), 44);
-            //mod.SetUITextSize(mod.FindUIWidgetWithName("payloadstatus2"), 44);
             break;
         case PayloadState.PUSHING_BACK:
             state = mod.stringkeys.payload.state.pushing_back;
@@ -120,8 +119,6 @@ export function updateStatusUI(): void {
             mod.SetUIImageColor(mod.FindUIWidgetWithName("payload_icon2"), friendlycolour);
             mod.SetUITextColor(mod.FindUIWidgetWithName("payloadstatus1"), enemycolour);
             mod.SetUITextColor(mod.FindUIWidgetWithName("payloadstatus2"), friendlycolour);
-            //mod.SetUITextSize(mod.FindUIWidgetWithName("payloadstatus1"), 44);
-            //mod.SetUITextSize(mod.FindUIWidgetWithName("payloadstatus2"), 44);
             break;
         case PayloadState.CONTESTED:
             state = mod.stringkeys.payload.state.contested;

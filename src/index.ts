@@ -159,6 +159,8 @@ function getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1:
 
 
 
+
+
 // --------------------------
 // Catmull-Rom spline
 // --------------------------
@@ -317,6 +319,8 @@ function moveAlongSpline(forward: boolean, speed: number) {
 
 
 
+
+
 function onCheckpointReached(): void {
     if (STATE.payloadState !== PayloadState.ADVANCING) return;
 
@@ -373,7 +377,7 @@ function pushForward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
 }
 
 function pushBackward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
-    if (STATE.reachedWaypointIndex <= (STATE.reachedCheckpointIndex - 1)) {
+    if (STATE.reachedWaypointIndex <= (STATE.reachedCheckpointIndex - 1) || STATE.reachedWaypointIndex == 0) {
         setPayloadState(PayloadState.LOCKED);
         return;
     }
