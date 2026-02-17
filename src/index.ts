@@ -65,6 +65,29 @@ function initPayloadTrack(): void {
     STATE.payloadPosition = STATE.waypoints.get(0)!.position;
 }
 
+function applyCheckpointFx(): void {
+    for (let i = 0; i < STATE.waypoints.size; i++) {
+        const waypoint = STATE.waypoints.get(i)!;
+        if (waypoint.isCheckpoint) {
+            if (!STATE.fxMap.has(i)) {
+                const fx = mod.SpawnObject(
+                    mod.RuntimeSpawn_Common.FX_Grenade_SignalSmoke_INV,
+                    waypoint.position,
+                    waypoint.rotation,
+                    mod.CreateVector(1, 1, 1)
+                );
+                STATE.fxMap.set(i, fx);
+            }
+            const fx = STATE.fxMap.get(i)!;
+            mod.EnableVFX(fx, false);
+            mod.EnableVFX(fx, true);
+            mod.SetVFXScale(fx, 1);
+            mod.SetVFXColor(fx, mod.CreateVector(1, 0, 0)); // does not have any effect on this fx
+            mod.SetVFXSpeed(fx, 1);
+        }
+    }
+}
+
 function initPayloadRotation(): void {
     const defaultFacingDirection = mod.CreateVector(0, 0, 1);
     for (let i = 0; i < STATE.waypoints.size - 1; i++) {
@@ -462,6 +485,7 @@ export function OnGameModeStarted(): void {
     mod.Wait(3);
     initSectors();
     initPayloadTrack();
+    applyCheckpointFx();
     initPayloadRotation();
     initPayloadObjective();
     initSounds();
@@ -519,6 +543,14 @@ export function OngoingGlobal(): void {
         setPayloadState(PayloadState.CONTESTED);
     } else {
         setPayloadState(PayloadState.IDLE);
+    }
+}
+
+//Force remove players from payload vehicle
+export function OnPlayerEnterVehicle(eventPlayer: mod.Player, eventVehicle: mod.Vehicle): void {
+    if (mod.CompareVehicleName(eventVehicle, mod.VehicleList.M2Bradley)) { //Direct comparison not working: eventVehicle == STATE.payloadVehicle as mod.Vehicle
+        mod.ForcePlayerExitVehicle(mod.GetVehicleFromPlayer(eventPlayer));
+        mod.DisplayNotificationMessage(mod.Message(mod.stringkeys.payload.objective.exit_message), eventPlayer);
     }
 }
 

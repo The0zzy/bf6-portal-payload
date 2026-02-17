@@ -44,6 +44,7 @@ export interface State {
     segmentT: number;
     splineTable: { t: number, distance: number }[] | null;
     segmentDistance: number;
+    fxMap: Map<number, mod.VFX>;
 }
 
 export const STATE: State = {
