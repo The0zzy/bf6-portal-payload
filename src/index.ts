@@ -72,7 +72,9 @@ function applyCheckpointFx(): void {
             if (!STATE.fxMap.has(i)) {
                 const fx = mod.SpawnObject(
                     mod.RuntimeSpawn_Common.FX_Grenade_SignalSmoke_INV,
+                    //mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Target_Area,
                     waypoint.position,
+                    //mod.Add(waypoint.position, mod.CreateVector(0, -10, 0)),
                     waypoint.rotation,
                     mod.CreateVector(1, 1, 1)
                 );
@@ -114,7 +116,7 @@ function initPayloadObjective(): void {
         );
         if (mod.IsType(obj, mod.Types.VFX)) {
             mod.EnableVFX(obj, true);
-            mod.SetVFXScale(obj, 1.5);
+            mod.SetVFXScale(obj, 2.5);
         }
         STATE.payloadObjects.push(obj);
     }

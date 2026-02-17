@@ -69,4 +69,5 @@ export const STATE: State = {
     segmentT: 0,
     splineTable: null,
     segmentDistance: 0,
+    fxMap: new Map<number, mod.VFX>(),
 };
