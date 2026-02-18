@@ -242,17 +242,10 @@ function onCheckpointReached(): void {
 
     mod.EnableHQ(mod.GetHQ((STATE.currentCheckpoint - 1) + 300), false);
     mod.EnableHQ(mod.GetHQ((STATE.currentCheckpoint - 1) + 400), false);
-    if (STATE.reachedWaypointIndex == STATE.waypoints.size - 1) {
-        onFinalCheckpointReached();
-        return;
-    }
+
     playCheckpointReachedSound();
     updateCheckpointUI();
     applyCheckpointFx();
-    STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
-    mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 300), true);
-    mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 400), true);
-    mod.EnableGameModeObjective(mod.GetSector(STATE.currentCheckpoint + 101), true);
     mod.DisplayHighlightedWorldLogMessage(
         mod.Message(
             mod.stringkeys.payload.state.checkpoint_reached,
@@ -260,6 +253,15 @@ function onCheckpointReached(): void {
             STATE.maxCheckpoints
         )
     );
+
+    if (STATE.reachedWaypointIndex == STATE.waypoints.size - 1) {
+        onFinalCheckpointReached();
+    } else {
+        STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
+        mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 300), true);
+        mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 400), true);
+        mod.EnableGameModeObjective(mod.GetSector(STATE.currentCheckpoint + 101), true);
+    }
 }
 
 function setPayloadState(state: PayloadState): void {
@@ -404,7 +406,9 @@ function executeEverySecond() {
 async function onFinalCheckpointReached() {
     mod.PauseGameModeTime(true);
     endGameMusic(1);
-    mod.Kill(STATE.payloadVehicle as mod.Vehicle);
+    if (STATE.payloadVehicle) {
+        mod.Kill(STATE.payloadVehicle as mod.Vehicle);
+    }
     nukeUI();
     await mod.Wait(8);
     mod.EndGameMode(mod.GetTeam(1));
