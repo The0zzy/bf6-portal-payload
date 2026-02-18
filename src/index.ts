@@ -151,6 +151,20 @@ function initPayloadObjective(): void {
         }
     }
 
+    // Always Spawn Objectives
+    for (let i = 0; i < CONFIG.payloadObjectives.length; i++) {
+        const objectiveConfig = CONFIG.payloadObjectives[i];
+        const spawnPos = mod.Add(start.position, objectiveConfig.relativeOffset);
+        const spawnRot = mod.Add(start.rotation, objectiveConfig.rotation);
+        const obj = mod.SpawnObject(
+            objectiveConfig.prefab,
+            spawnPos,
+            spawnRot,
+            objectiveConfig.scale
+        );
+        STATE.payloadObjectives.set(i, obj);
+    }
+
     if (CONFIG.enableVehicleSpawner) {
         const vehicleSpawner = mod.SpawnObject(
             mod.RuntimeSpawn_Common.VehicleSpawner,
@@ -312,6 +326,14 @@ function updatePayloadObject() {
     // Update Spatials
     STATE.payloadSpatials.forEach((obj, index) => {
         const config = CONFIG.payloadSpatials[index];
+        const worldPos = mod.Add(STATE.payloadPosition, config.relativeOffset);
+        const worldRot = mod.Add(rotation, config.rotation);
+        mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, worldRot));
+    });
+
+    // Update Objectives
+    STATE.payloadObjectives.forEach((obj, index) => {
+        const config = CONFIG.payloadObjectives[index];
         const worldPos = mod.Add(STATE.payloadPosition, config.relativeOffset);
         const worldRot = mod.Add(rotation, config.rotation);
         mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, worldRot));

@@ -5,6 +5,13 @@ export interface PayloadSpatialConfig {
     rotation: mod.Vector;
 }
 
+export interface PayloadObjectiveConfig {
+    prefab: any;
+    relativeOffset: mod.Vector;
+    scale: mod.Vector;
+    rotation: mod.Vector;
+}
+
 export interface PayloadVfxConfig {
     prefab: any;
     relativeOffset: mod.Vector;
@@ -28,6 +35,7 @@ export interface Config {
     overtimeEnabled: boolean;
     enableDebug: boolean;
     payloadSpatials: PayloadSpatialConfig[];
+    payloadObjectives: PayloadObjectiveConfig[];
     payloadVfx: PayloadVfxConfig[];
     checkpointFx: mod.RuntimeSpawn_Common;
     checkpointNeutralColor: mod.Vector;
@@ -50,9 +58,11 @@ export const CONFIG: Config = {
     enableDebug: true,
     enableVehicleSpawner: false,
     payloadSpatials: [
-        { prefab: mod.RuntimeSpawn_Common.MCOM, relativeOffset: mod.CreateVector(0, 1.5, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
         { prefab: mod.RuntimeSpawn_Common.CrateAmmo_01_StackA, relativeOffset: mod.CreateVector(0, 1.5, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
         { prefab: mod.RuntimeSpawn_Abbasid.GM1083CargoTruck_01_Canopy, relativeOffset: mod.CreateVector(0, 0, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
+    ],
+    payloadObjectives: [
+        { prefab: mod.RuntimeSpawn_Common.MCOM, relativeOffset: mod.CreateVector(0, 1.5, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
     ],
     payloadVfx: [
         { prefab: mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Target_Area, relativeOffset: mod.CreateVector(0, 0, 0), scale: 1.5, rotation: mod.CreateVector(0, 0, 0), color: mod.CreateVector(1, 1, 1), speed: 1 },
