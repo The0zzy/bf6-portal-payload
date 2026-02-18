@@ -18,6 +18,10 @@ export interface Config {
     overtimeEnabled: boolean;
     enableDebug: boolean;
     payloadObjects: PayloadObjectConfig[];
+    checkpointFx: mod.RuntimeSpawn_Common;
+    checkpointNeutralColor: mod.Vector;
+    checkpointCapturedColor: mod.Vector;
+    enableVehicleSpawner: boolean;
 }
 
 export const CONFIG: Config = {
@@ -33,13 +37,14 @@ export const CONFIG: Config = {
     overtimeDuration: 60,
     overtimeEnabled: true,
     enableDebug: true,
+    enableVehicleSpawner: false,
     payloadObjects: [
-        { prefab: mod.RuntimeSpawn_Common.MCOM, relativeOffset: mod.CreateVector(0, -2.5, 0), initialSize: mod.CreateVector(1, 1, 1) },
+        { prefab: mod.RuntimeSpawn_Common.MCOM, relativeOffset: mod.CreateVector(0, 1.5, 0), initialSize: mod.CreateVector(1, 1, 1) },
+        { prefab: mod.RuntimeSpawn_Common.CrateAmmo_01_StackA, relativeOffset: mod.CreateVector(0, 1.5, 0), initialSize: mod.CreateVector(1, 1, 1) },
+        { prefab: mod.RuntimeSpawn_Abbasid.GM1083CargoTruck_01_Canopy, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(1, 1, 1) },
         { prefab: mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Target_Area, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(2.5, 1, 2.5) },
-        // { prefab: mod.RuntimeSpawn_Common.FX_Gadget_AmmoCrate_Area, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(2.5, 1, 2.5) },
-        // { prefab: mod.RuntimeSpawn_Common.FX_Gadget_VehicleSupplyCrate_Range_Indicator, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(2.5, 1, 2.5) },
-        // { prefab: mod.RuntimeSpawn_Common.FX_Gadget_VehicleSupplyCrate_Range_Indicator_Upgraded, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(2.5, 1, 2.5) },
-        // { prefab: mod.RuntimeSpawn_Common.CrateAmmo_01_StackA, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(1.3, 1.3, 1.3) }
-        // { prefab: mod.RuntimeSpawn_Common.FiringRange_Mat_01, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(1, 1, 1) }
     ],
+    checkpointFx: mod.RuntimeSpawn_Common.FX_Smoke_Marker_Custom,
+    checkpointNeutralColor: mod.CreateVector(1, 1, 1),
+    checkpointCapturedColor: mod.CreateVector(0, 1, 0)
 };

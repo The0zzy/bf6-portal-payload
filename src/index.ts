@@ -69,20 +69,20 @@ function applyCheckpointFx(): void {
     for (let i = 0; i < STATE.waypoints.size; i++) {
         const waypoint = STATE.waypoints.get(i)!;
         if (waypoint.isCheckpoint) {
-            if (!STATE.fxMap.has(i)) {
+            if (!STATE.checkpointFx.has(i)) {
                 const fx = mod.SpawnObject(
-                    mod.RuntimeSpawn_Common.FX_Grenade_SignalSmoke_INV,
+                    CONFIG.checkpointFx,
                     waypoint.position,
                     waypoint.rotation,
                     mod.CreateVector(1, 1, 1)
-                );
-                STATE.fxMap.set(i, fx);
+                ) as mod.VFX;
+                STATE.checkpointFx.set(i, fx);
             }
-            const fx = STATE.fxMap.get(i)!;
+            const fx = STATE.checkpointFx.get(i)!;
             mod.EnableVFX(fx, false);
             mod.EnableVFX(fx, true);
             mod.SetVFXScale(fx, 1);
-            mod.SetVFXColor(fx, mod.CreateVector(1, 0, 0)); // does not have any effect on this fx
+            mod.SetVFXColor(fx, STATE.reachedCheckpointIndex < i ? CONFIG.checkpointNeutralColor : CONFIG.checkpointCapturedColor);
             mod.SetVFXSpeed(fx, 1);
         }
     }
@@ -118,17 +118,20 @@ function initPayloadObjective(): void {
         }
         STATE.payloadObjects.push(obj);
     }
-    const vehicleSpawner = mod.SpawnObject(
-        mod.RuntimeSpawn_Common.VehicleSpawner,
-        start.position,
-        start.rotation,
-        mod.CreateVector(1, 1, 1)
-    ) as mod.VehicleSpawner;
-    mod.SetVehicleSpawnerVehicleType(vehicleSpawner, mod.VehicleList.M2Bradley); //Marauder - This is bugged so spawning another vehicle instead
-    mod.ForceVehicleSpawnerSpawn(vehicleSpawner);
+    if (CONFIG.enableVehicleSpawner) {
+        const vehicleSpawner = mod.SpawnObject(
+            mod.RuntimeSpawn_Common.VehicleSpawner,
+            start.position,
+            start.rotation,
+            mod.CreateVector(1, 1, 1)
+        ) as mod.VehicleSpawner;
+        mod.SetVehicleSpawnerVehicleType(vehicleSpawner, mod.VehicleList.M2Bradley); //Marauder - This is bugged so spawning another vehicle instead
+        mod.ForceVehicleSpawnerSpawn(vehicleSpawner);
+    }
 }
 
 export function OnVehicleSpawned(eventVehicle: mod.Vehicle): void {
+    if (!CONFIG.enableVehicleSpawner) return;
     const vehiclePosition = mod.GetVehicleState(eventVehicle, mod.VehicleStateVector.VehiclePosition);
     if (mod.DistanceBetween(STATE.waypoints.get(0)!.position, vehiclePosition) < 5) {
         STATE.payloadVehicle = eventVehicle;
@@ -137,6 +140,7 @@ export function OnVehicleSpawned(eventVehicle: mod.Vehicle): void {
 }
 
 export function OngoingVehicle(eventVehicle: mod.Vehicle): void {
+    if (!CONFIG.enableVehicleSpawner) return;
     if (STATE.payloadVehicle && mod.GetObjId(eventVehicle) == mod.GetObjId(STATE.payloadVehicle)) {
         mod.Heal(eventVehicle, 100);
     }
@@ -197,6 +201,7 @@ function onCheckpointReached(): void {
     }
     playCheckpointReachedSound();
     updateCheckpointUI();
+    applyCheckpointFx();
     STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
     mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 300), true);
     mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 400), true);
