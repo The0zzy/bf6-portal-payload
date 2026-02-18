@@ -1,7 +1,17 @@
-export interface PayloadObjectConfig {
+export interface PayloadSpatialConfig {
     prefab: any;
     relativeOffset: mod.Vector;
-    initialSize: mod.Vector;
+    scale: mod.Vector;
+    rotation: mod.Vector;
+}
+
+export interface PayloadVfxConfig {
+    prefab: any;
+    relativeOffset: mod.Vector;
+    scale: number;
+    rotation: mod.Vector;
+    color: mod.Vector;
+    speed: number;
 }
 
 export interface Config {
@@ -17,7 +27,8 @@ export interface Config {
     overtimeDuration: number;
     overtimeEnabled: boolean;
     enableDebug: boolean;
-    payloadObjects: PayloadObjectConfig[];
+    payloadSpatials: PayloadSpatialConfig[];
+    payloadVfx: PayloadVfxConfig[];
     checkpointFx: mod.RuntimeSpawn_Common;
     checkpointNeutralColor: mod.Vector;
     checkpointCapturedColor: mod.Vector;
@@ -38,11 +49,13 @@ export const CONFIG: Config = {
     overtimeEnabled: true,
     enableDebug: true,
     enableVehicleSpawner: false,
-    payloadObjects: [
-        { prefab: mod.RuntimeSpawn_Common.MCOM, relativeOffset: mod.CreateVector(0, 1.5, 0), initialSize: mod.CreateVector(1, 1, 1) },
-        { prefab: mod.RuntimeSpawn_Common.CrateAmmo_01_StackA, relativeOffset: mod.CreateVector(0, 1.5, 0), initialSize: mod.CreateVector(1, 1, 1) },
-        { prefab: mod.RuntimeSpawn_Abbasid.GM1083CargoTruck_01_Canopy, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(1, 1, 1) },
-        { prefab: mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Target_Area, relativeOffset: mod.CreateVector(0, 0, 0), initialSize: mod.CreateVector(2.5, 1, 2.5) },
+    payloadSpatials: [
+        { prefab: mod.RuntimeSpawn_Common.MCOM, relativeOffset: mod.CreateVector(0, 1.5, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
+        { prefab: mod.RuntimeSpawn_Common.CrateAmmo_01_StackA, relativeOffset: mod.CreateVector(0, 1.5, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
+        { prefab: mod.RuntimeSpawn_Abbasid.GM1083CargoTruck_01_Canopy, relativeOffset: mod.CreateVector(0, 0, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
+    ],
+    payloadVfx: [
+        { prefab: mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Target_Area, relativeOffset: mod.CreateVector(0, 0, 0), scale: 1.5, rotation: mod.CreateVector(0, 0, 0), color: mod.CreateVector(1, 1, 1), speed: 1 },
     ],
     checkpointFx: mod.RuntimeSpawn_Common.FX_Smoke_Marker_Custom,
     checkpointNeutralColor: mod.CreateVector(1, 1, 1),

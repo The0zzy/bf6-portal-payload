@@ -30,7 +30,8 @@ export interface State {
     waypoints: Map<number, PayloadWaypoint>;
     reachedWaypointIndex: number;
     isOvertime: boolean;
-    payloadObjects: mod.Object[];
+    payloadSpatials: Map<number, mod.Object>;
+    payloadVfx: Map<number, mod.VFX>;
     totalDistanceInMeters: number;
     reachedCheckpointIndex: number;
     maxCheckpoints: number;
@@ -51,7 +52,8 @@ export const STATE: State = {
     waypoints: new Map<number, PayloadWaypoint>(),
     reachedWaypointIndex: 0,
     isOvertime: false,
-    payloadObjects: [],
+    payloadSpatials: new Map<number, mod.Object>(),
+    payloadVfx: new Map<number, mod.VFX>(),
     totalDistanceInMeters: 0,
     reachedCheckpointIndex: 0,
     maxCheckpoints: 0,

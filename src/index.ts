@@ -88,6 +88,18 @@ function applyCheckpointFx(): void {
     }
 }
 
+function applyPayloadVfx(): void {
+    STATE.payloadVfx.forEach((vfx, index) => {
+        const config = CONFIG.payloadVfx[index];
+        mod.EnableVFX(vfx, false);
+        mod.EnableVFX(vfx, true);
+        mod.SetVFXColor(vfx, config.color);
+        mod.SetVFXSpeed(vfx, config.speed);
+        mod.SetVFXScale(vfx, config.scale);
+    });
+}
+
+
 function initPayloadRotation(): void {
     const defaultFacingDirection = mod.CreateVector(0, 0, 1);
     for (let i = 0; i < STATE.waypoints.size - 1; i++) {
@@ -104,20 +116,41 @@ function initPayloadRotation(): void {
 
 function initPayloadObjective(): void {
     const start = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
-    for (const objConfig of CONFIG.payloadObjects) {
-        const spawnPos = mod.Add(start.position, objConfig.relativeOffset);
-        const obj = mod.SpawnObject(
-            objConfig.prefab,
+
+    // Spawn VFX
+    for (let i = 0; i < CONFIG.payloadVfx.length; i++) {
+        const vfxConfig = CONFIG.payloadVfx[i];
+        const spawnPos = mod.Add(start.position, vfxConfig.relativeOffset);
+        const spawnRot = mod.Add(start.rotation, vfxConfig.rotation);
+        const vfx = mod.SpawnObject(
+            vfxConfig.prefab,
             spawnPos,
-            start.rotation,
-            objConfig.initialSize
-        );
-        if (mod.IsType(obj, mod.Types.VFX)) {
-            mod.EnableVFX(obj, true);
-            mod.SetVFXScale(obj, 1.5);
-        }
-        STATE.payloadObjects.push(obj);
+            spawnRot,
+            mod.CreateVector(1, 1, 1) // Base size for VFX, scale controlled via SetVFXScale
+        ) as mod.VFX;
+        mod.EnableVFX(vfx, true);
+        mod.SetVFXScale(vfx, vfxConfig.scale);
+        mod.SetVFXColor(vfx, vfxConfig.color);
+        mod.SetVFXSpeed(vfx, vfxConfig.speed);
+        STATE.payloadVfx.set(i, vfx);
     }
+
+    // Spawn Spatials if vehicle spawner is disabled
+    if (!CONFIG.enableVehicleSpawner) {
+        for (let i = 0; i < CONFIG.payloadSpatials.length; i++) {
+            const spatialConfig = CONFIG.payloadSpatials[i];
+            const spawnPos = mod.Add(start.position, spatialConfig.relativeOffset);
+            const spawnRot = mod.Add(start.rotation, spatialConfig.rotation);
+            const obj = mod.SpawnObject(
+                spatialConfig.prefab,
+                spawnPos,
+                spawnRot,
+                spatialConfig.scale
+            );
+            STATE.payloadSpatials.set(i, obj);
+        }
+    }
+
     if (CONFIG.enableVehicleSpawner) {
         const vehicleSpawner = mod.SpawnObject(
             mod.RuntimeSpawn_Common.VehicleSpawner,
@@ -267,16 +300,23 @@ function pushBackward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
 function updatePayloadObject() {
     const waypoint = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
     const rotation = waypoint.rotation;
-    for (let i = 0; i < STATE.payloadObjects.length; i++) {
-        const obj = STATE.payloadObjects[i];
-        const config = CONFIG.payloadObjects[i];
+
+    // Update VFX
+    STATE.payloadVfx.forEach((vfx, index) => {
+        const config = CONFIG.payloadVfx[index];
         const worldPos = mod.Add(STATE.payloadPosition, config.relativeOffset);
-        if (mod.IsType(obj, mod.Types.VFX)) {
-            mod.MoveVFX(obj as mod.VFX, worldPos, rotation);
-        } else {
-            mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, rotation));
-        }
-    }
+        const worldRot = mod.Add(rotation, config.rotation);
+        mod.MoveVFX(vfx, worldPos, worldRot);
+    });
+
+    // Update Spatials
+    STATE.payloadSpatials.forEach((obj, index) => {
+        const config = CONFIG.payloadSpatials[index];
+        const worldPos = mod.Add(STATE.payloadPosition, config.relativeOffset);
+        const worldRot = mod.Add(rotation, config.rotation);
+        mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, worldRot));
+    });
+
     if (STATE.payloadVehicle) {
         mod.Teleport(STATE.payloadVehicle, STATE.payloadPosition, mod.YComponentOf(rotation));
     }
@@ -364,6 +404,8 @@ export function OnPlayerLeaveGame(playerId: number): void {
 export function OnPlayerJoinGame(eventPlayer: mod.Player): void {
     ui_onPlayerJoinGame();
     scoring_refreshScoreboard();
+    applyCheckpointFx();
+    applyPayloadVfx();
 }
 
 export function OnRevived(victim: mod.Player, reviver: mod.Player): void {
