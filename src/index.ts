@@ -69,17 +69,17 @@ function applyCheckpointFx(): void {
     for (let i = 0; i < STATE.waypoints.size; i++) {
         const waypoint = STATE.waypoints.get(i)!;
         if (waypoint.isCheckpoint) {
-            if (!STATE.checkpointFx.has(i)) {
-                const fx = mod.SpawnObject(
-                    CONFIG.checkpointFx,
-                    waypoint.position,
-                    waypoint.rotation,
-                    mod.CreateVector(1, 1, 1)
-                ) as mod.VFX;
-                STATE.checkpointFx.set(i, fx);
+            if (STATE.checkpointFx.has(i)) {
+                mod.UnspawnObject(STATE.checkpointFx.get(i)!);
+                STATE.checkpointFx.delete(i);
             }
-            const fx = STATE.checkpointFx.get(i)!;
-            mod.EnableVFX(fx, false);
+            const fx = mod.SpawnObject(
+                CONFIG.checkpointFx,
+                waypoint.position,
+                waypoint.rotation,
+                mod.CreateVector(1, 1, 1)
+            ) as mod.VFX;
+            STATE.checkpointFx.set(i, fx);
             mod.EnableVFX(fx, true);
             mod.SetVFXScale(fx, 1);
             mod.SetVFXColor(fx, STATE.reachedCheckpointIndex < i ? CONFIG.checkpointNeutralColor : CONFIG.checkpointCapturedColor);
@@ -89,13 +89,25 @@ function applyCheckpointFx(): void {
 }
 
 function applyPayloadVfx(): void {
-    STATE.payloadVfx.forEach((vfx, index) => {
-        const config = CONFIG.payloadVfx[index];
-        mod.EnableVFX(vfx, false);
+    CONFIG.payloadVfx.forEach((vfxConfig, i) => {
+        const wp = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
+        const spawnPos = mod.Add(wp.position, vfxConfig.relativeOffset);
+        const spawnRot = mod.Add(wp.rotation, vfxConfig.rotation);
+        if (STATE.payloadVfx.has(i)) {
+            mod.UnspawnObject(STATE.payloadVfx.get(i)!);
+            STATE.payloadVfx.delete(i);
+        }
+        const vfx = mod.SpawnObject(
+            vfxConfig.prefab,
+            spawnPos,
+            spawnRot,
+            mod.CreateVector(1, 1, 1)
+        ) as mod.VFX;
+        STATE.payloadVfx.set(i, vfx);
         mod.EnableVFX(vfx, true);
-        mod.SetVFXColor(vfx, config.color);
-        mod.SetVFXSpeed(vfx, config.speed);
-        mod.SetVFXScale(vfx, config.scale);
+        mod.SetVFXColor(vfx, vfxConfig.color);
+        mod.SetVFXSpeed(vfx, vfxConfig.speed);
+        mod.SetVFXScale(vfx, vfxConfig.scale);
     });
 }
 
@@ -118,22 +130,7 @@ function initPayloadObjective(): void {
     const start = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
 
     // Spawn VFX
-    for (let i = 0; i < CONFIG.payloadVfx.length; i++) {
-        const vfxConfig = CONFIG.payloadVfx[i];
-        const spawnPos = mod.Add(start.position, vfxConfig.relativeOffset);
-        const spawnRot = mod.Add(start.rotation, vfxConfig.rotation);
-        const vfx = mod.SpawnObject(
-            vfxConfig.prefab,
-            spawnPos,
-            spawnRot,
-            mod.CreateVector(1, 1, 1) // Base size for VFX, scale controlled via SetVFXScale
-        ) as mod.VFX;
-        mod.EnableVFX(vfx, true);
-        mod.SetVFXScale(vfx, vfxConfig.scale);
-        mod.SetVFXColor(vfx, vfxConfig.color);
-        mod.SetVFXSpeed(vfx, vfxConfig.speed);
-        STATE.payloadVfx.set(i, vfx);
-    }
+    applyPayloadVfx();
 
     // Spawn Spatials if vehicle spawner is disabled
     if (!CONFIG.enableVehicleSpawner) {
@@ -172,7 +169,7 @@ function initPayloadObjective(): void {
             start.rotation,
             mod.CreateVector(1, 1, 1)
         ) as mod.VehicleSpawner;
-        mod.SetVehicleSpawnerVehicleType(vehicleSpawner, mod.VehicleList.M2Bradley); //Marauder - This is bugged so spawning another vehicle instead
+        mod.SetVehicleSpawnerVehicleType(vehicleSpawner, CONFIG.payloadVehicleType); //Marauder - This is bugged so spawning another vehicle instead
         mod.ForceVehicleSpawnerSpawn(vehicleSpawner);
     }
 }

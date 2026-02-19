@@ -41,6 +41,7 @@ export interface Config {
     checkpointNeutralColor: mod.Vector;
     checkpointCapturedColor: mod.Vector;
     enableVehicleSpawner: boolean;
+    payloadVehicleType: mod.VehicleList;
 }
 
 export const CONFIG: Config = {
@@ -57,6 +58,7 @@ export const CONFIG: Config = {
     overtimeEnabled: true,
     enableDebug: true,
     enableVehicleSpawner: false,
+    payloadVehicleType: mod.VehicleList.M2Bradley,
     payloadSpatials: [
         { prefab: mod.RuntimeSpawn_Common.CrateAmmo_01_StackA, relativeOffset: mod.CreateVector(0, 1.5, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
         { prefab: mod.RuntimeSpawn_Abbasid.GM1083CargoTruck_01_Canopy, relativeOffset: mod.CreateVector(0, 0, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },

@@ -1,0 +1,11 @@
+{
+    "spatialEnabled": "Spatial Enabled",
+    "spatialDisabled": "Spatial Disabled",
+    "spatialId": "Spatial ID: {}",
+    "spatialPosition": "Spatial Position: {}, {}, {}",
+    "spatialRotation": "Spatial Rotation: {}, {}, {}",
+    "spatialScale": "Spatial Scale: {}, {}, {}",
+    "spatialType": "Spatial Type: {}",
+    "spatialIdNotFound": "Spatial ID not found: {}",
+    "spatialUndefined": "Spatial undefined"
+}
