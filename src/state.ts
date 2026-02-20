@@ -43,7 +43,9 @@ export interface State {
     progressInPercent: number;
     playerScores: Map<number, PlayerScoring>;
     payloadVehicle?: mod.Vehicle;
-    checkpointFx: Map<number, mod.VFX>;
+    checkpointSpatials: Map<string, mod.Object>;
+    checkpointObjectives: Map<string, mod.CapturePoint>;
+    checkpointVfx: Map<string, mod.VFX>;
 }
 
 export const STATE: State = {
@@ -66,5 +68,7 @@ export const STATE: State = {
     progressInMeters: 0,
     progressInPercent: 0,
     playerScores: new Map<number, PlayerScoring>(),
-    checkpointFx: new Map<number, mod.VFX>(),
+    checkpointSpatials: new Map<string, mod.Object>(),
+    checkpointObjectives: new Map<string, mod.CapturePoint>(),
+    checkpointVfx: new Map<string, mod.VFX>(),
 };
