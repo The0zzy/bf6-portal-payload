@@ -2,7 +2,7 @@ import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, u
 import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound, endGameMusic } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
-import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard } from './scoring.ts';
+import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard, scoring_getOrCreatePlayerScore } from './scoring.ts';
 
 
 function getOpponentTeam(team: mod.Team): mod.Team {
@@ -446,10 +446,18 @@ export function OnPlayerLeaveGame(playerId: number): void {
 }
 
 export function OnPlayerJoinGame(eventPlayer: mod.Player): void {
-    ui_onPlayerJoinGame();
-    scoring_refreshScoreboard();
-    applyCheckpointFx();
-    applyPayloadVfx();
+    scoring_getOrCreatePlayerScore(eventPlayer);
+}
+
+export function OnPlayerDeployed(eventPlayer: mod.Player): void {
+    const score = scoring_getOrCreatePlayerScore(eventPlayer);
+    if (!score.hasDeployed) {
+        score.hasDeployed = true;
+        ui_onPlayerJoinGame();
+        scoring_refreshScoreboard();
+        applyCheckpointFx();
+        applyPayloadVfx();
+    }
 }
 
 export function OnRevived(victim: mod.Player, reviver: mod.Player): void {

@@ -19,6 +19,7 @@ export interface PlayerScoring {
     deaths: number;
     objective: number;
     revives: number;
+    hasDeployed: boolean;
 }
 
 export interface State {
