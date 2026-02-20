@@ -19,6 +19,7 @@ export interface PlayerScoring {
     deaths: number;
     objective: number;
     revives: number;
+    hasDeployed: boolean;
 }
 
 export interface State {
@@ -30,7 +31,9 @@ export interface State {
     waypoints: Map<number, PayloadWaypoint>;
     reachedWaypointIndex: number;
     isOvertime: boolean;
-    payloadObjects: mod.Object[];
+    payloadSpatials: Map<number, mod.Object>;
+    payloadObjectives: Map<number, mod.Object>;
+    payloadVfx: Map<number, mod.VFX>;
     totalDistanceInMeters: number;
     reachedCheckpointIndex: number;
     maxCheckpoints: number;
@@ -40,6 +43,9 @@ export interface State {
     progressInPercent: number;
     playerScores: Map<number, PlayerScoring>;
     payloadVehicle?: mod.Vehicle;
+    checkpointSpatials: Map<string, mod.Object>;
+    checkpointObjectives: Map<string, mod.CapturePoint>;
+    checkpointVfx: Map<string, mod.VFX>;
 }
 
 export const STATE: State = {
@@ -50,7 +56,9 @@ export const STATE: State = {
     waypoints: new Map<number, PayloadWaypoint>(),
     reachedWaypointIndex: 0,
     isOvertime: false,
-    payloadObjects: [],
+    payloadSpatials: new Map<number, mod.Object>(),
+    payloadObjectives: new Map<number, mod.Object>(),
+    payloadVfx: new Map<number, mod.VFX>(),
     totalDistanceInMeters: 0,
     reachedCheckpointIndex: 0,
     maxCheckpoints: 0,
@@ -60,4 +68,7 @@ export const STATE: State = {
     progressInMeters: 0,
     progressInPercent: 0,
     playerScores: new Map<number, PlayerScoring>(),
+    checkpointSpatials: new Map<string, mod.Object>(),
+    checkpointObjectives: new Map<string, mod.CapturePoint>(),
+    checkpointVfx: new Map<string, mod.VFX>(),
 };
