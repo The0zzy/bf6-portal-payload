@@ -42,6 +42,7 @@ export interface Config {
     checkpointCapturedColor: mod.Vector;
     enableVehicleSpawner: boolean;
     payloadVehicleType: mod.VehicleList;
+    spatialRespawnInterval: number;
 }
 
 export const CONFIG: Config = {
@@ -71,5 +72,6 @@ export const CONFIG: Config = {
     ],
     checkpointFx: mod.RuntimeSpawn_Common.FX_Smoke_Marker_Custom,
     checkpointNeutralColor: mod.CreateVector(1, 1, 1),
-    checkpointCapturedColor: mod.CreateVector(0, 1, 0)
+    checkpointCapturedColor: mod.CreateVector(0, 1, 0),
+    spatialRespawnInterval: 5
 };

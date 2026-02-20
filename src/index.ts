@@ -360,24 +360,26 @@ function executeEverySecond() {
     }
 
     // Unspawn and respawn spatial objects to force update/refresh
-    const waypoint = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
-    const rotation = waypoint.rotation;
+    if (STATE.lastElapsedSeconds % CONFIG.spatialRespawnInterval === 0) {
+        const waypoint = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
+        const rotation = waypoint.rotation;
 
-    STATE.payloadSpatials.forEach((obj, index) => {
-        mod.UnspawnObject(obj);
+        STATE.payloadSpatials.forEach((obj, index) => {
+            mod.UnspawnObject(obj);
 
-        const config = CONFIG.payloadSpatials[index];
-        const worldPos = mod.Add(STATE.payloadPosition, config.relativeOffset);
-        const worldRot = mod.Add(rotation, config.rotation);
+            const config = CONFIG.payloadSpatials[index];
+            const worldPos = mod.Add(STATE.payloadPosition, config.relativeOffset);
+            const worldRot = mod.Add(rotation, config.rotation);
 
-        const newObj = mod.SpawnObject(
-            config.prefab,
-            worldPos,
-            worldRot,
-            config.scale
-        );
-        STATE.payloadSpatials.set(index, newObj);
-    });
+            const newObj = mod.SpawnObject(
+                config.prefab,
+                worldPos,
+                worldRot,
+                config.scale
+            );
+            STATE.payloadSpatials.set(index, newObj);
+        });
+    }
 
     // Update Checkpoint Timer
     const elapsedSinceCheckpoint = STATE.lastElapsedSeconds - STATE.checkpointStartTime;
