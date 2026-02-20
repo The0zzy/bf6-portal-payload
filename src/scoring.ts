@@ -26,7 +26,8 @@ export function scoring_getOrCreatePlayerScore(player: mod.Player): PlayerScorin
             assists: 0,
             deaths: 0,
             objective: 0,
-            revives: 0
+            revives: 0,
+            hasDeployed: false
         });
     }
     return STATE.playerScores.get(playerId)!;

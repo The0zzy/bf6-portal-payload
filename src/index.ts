@@ -2,7 +2,7 @@ import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, u
 import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound, endGameMusic } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
-import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard } from './scoring.ts';
+import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard, scoring_getOrCreatePlayerScore } from './scoring.ts';
 
 
 function getOpponentTeam(team: mod.Team): mod.Team {
@@ -68,27 +68,94 @@ function initPayloadTrack(): void {
 function applyCheckpointFx(): void {
     for (let i = 0; i < STATE.waypoints.size; i++) {
         const waypoint = STATE.waypoints.get(i)!;
-        if (waypoint.isCheckpoint) {
-            if (!STATE.fxMap.has(i)) {
-                const fx = mod.SpawnObject(
-                    mod.RuntimeSpawn_Common.FX_Grenade_SignalSmoke_INV,
-                    //mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Target_Area,
-                    waypoint.position,
-                    //mod.Add(waypoint.position, mod.CreateVector(0, -10, 0)),
-                    waypoint.rotation,
-                    mod.CreateVector(1, 1, 1)
-                );
-                STATE.fxMap.set(i, fx);
+        if (!waypoint.isCheckpoint) continue;
+
+        // Spawn Spatials
+        for (let s = 0; s < CONFIG.checkpointSpatials.length; s++) {
+            const key = `${i}-${s}`;
+            if (STATE.checkpointSpatials.has(key)) {
+                mod.UnspawnObject(STATE.checkpointSpatials.get(key)!);
+                STATE.checkpointSpatials.delete(key);
             }
-            const fx = STATE.fxMap.get(i)!;
-            mod.EnableVFX(fx, false);
-            mod.EnableVFX(fx, true);
-            mod.SetVFXScale(fx, 1);
-            mod.SetVFXColor(fx, mod.CreateVector(1, 0, 0)); // does not have any effect on this fx
-            mod.SetVFXSpeed(fx, 1);
+            const spatialConfig = CONFIG.checkpointSpatials[s];
+            const spawnPos = mod.Add(waypoint.position, spatialConfig.relativeOffset);
+            const spawnRot = mod.Add(waypoint.rotation, spatialConfig.rotation);
+            const obj = mod.SpawnObject(
+                spatialConfig.prefab,
+                spawnPos,
+                spawnRot,
+                spatialConfig.scale
+            );
+            STATE.checkpointSpatials.set(key, obj);
+        }
+
+        // Spawn Objectives
+        for (let o = 0; o < CONFIG.checkpointObjectives.length; o++) {
+            const key = `${i}-${o}`;
+            if (STATE.checkpointObjectives.has(key)) {
+                mod.UnspawnObject(STATE.checkpointObjectives.get(key)!);
+                STATE.checkpointObjectives.delete(key);
+            }
+            const objectiveConfig = CONFIG.checkpointObjectives[o];
+            const spawnPos = mod.Add(waypoint.position, objectiveConfig.relativeOffset);
+            const spawnRot = mod.Add(waypoint.rotation, objectiveConfig.rotation);
+            const obj = mod.SpawnObject(
+                objectiveConfig.prefab,
+                spawnPos,
+                spawnRot,
+                objectiveConfig.scale
+            ) as mod.CapturePoint;
+            STATE.checkpointObjectives.set(key, obj);
+        }
+
+        for (let v = 0; v < CONFIG.checkpointVfx.length; v++) {
+            const key = `${i}-${v}`;
+            if (STATE.checkpointVfx.has(key)) {
+                mod.UnspawnObject(STATE.checkpointVfx.get(key)!);
+                STATE.checkpointVfx.delete(key);
+            }
+            const vfxConfig = CONFIG.checkpointVfx[v];
+            const color = STATE.reachedCheckpointIndex < i ? vfxConfig.color1 : vfxConfig.color2;
+            const spawnPos = mod.Add(waypoint.position, vfxConfig.relativeOffset);
+            const spawnRot = mod.Add(waypoint.rotation, vfxConfig.rotation);
+            const vfx = mod.SpawnObject(
+                vfxConfig.prefab,
+                spawnPos,
+                spawnRot,
+                mod.CreateVector(1, 1, 1)
+            ) as mod.VFX;
+            STATE.checkpointVfx.set(key, vfx);
+            mod.EnableVFX(vfx, true);
+            mod.SetVFXScale(vfx, vfxConfig.scale);
+            mod.SetVFXColor(vfx, color);
+            mod.SetVFXSpeed(vfx, vfxConfig.speed);
         }
     }
 }
+
+function applyPayloadVfx(): void {
+    CONFIG.payloadVfx.forEach((vfxConfig, i) => {
+        const wp = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
+        const spawnPos = mod.Add(wp.position, vfxConfig.relativeOffset);
+        const spawnRot = mod.Add(wp.rotation, vfxConfig.rotation);
+        if (STATE.payloadVfx.has(i)) {
+            mod.UnspawnObject(STATE.payloadVfx.get(i)!);
+            STATE.payloadVfx.delete(i);
+        }
+        const vfx = mod.SpawnObject(
+            vfxConfig.prefab,
+            spawnPos,
+            spawnRot,
+            mod.CreateVector(1, 1, 1)
+        ) as mod.VFX;
+        STATE.payloadVfx.set(i, vfx);
+        mod.EnableVFX(vfx, true);
+        mod.SetVFXColor(vfx, vfxConfig.color1);
+        mod.SetVFXSpeed(vfx, vfxConfig.speed);
+        mod.SetVFXScale(vfx, vfxConfig.scale);
+    });
+}
+
 
 function initPayloadRotation(): void {
     const defaultFacingDirection = mod.CreateVector(0, 0, 1);
@@ -96,41 +163,74 @@ function initPayloadRotation(): void {
         const currentPos = STATE.waypoints.get(i)!.position;
         const nextPos = STATE.waypoints.get(i + 1)!.position;
         const direction = mod.DirectionTowards(currentPos, nextPos);
+
+        // Yaw: rotation around y-axis to face the next waypoint (horizontal plane)
         const directionXZ = mod.CreateVector(mod.XComponentOf(direction), 0, mod.ZComponentOf(direction));
-        const angle = mod.AngleBetweenVectors(defaultFacingDirection, directionXZ);
-        const radians = mod.DegreesToRadians(angle);
-        const rotation = mod.CreateVector(0, radians, 0);
+        const yawAngle = mod.AngleBetweenVectors(defaultFacingDirection, directionXZ);
+        const yawRadians = mod.DegreesToRadians(yawAngle);
+
+        // Pitch: rotation around x-axis for uphill/downhill slope
+        const dy = mod.YComponentOf(nextPos) - mod.YComponentOf(currentPos);
+        const dx = mod.XComponentOf(nextPos) - mod.XComponentOf(currentPos);
+        const dz = mod.ZComponentOf(nextPos) - mod.ZComponentOf(currentPos);
+        const horizontalDist = mod.SquareRoot(dx * dx + dz * dz);
+        const pitchRadians = horizontalDist > 0 ? -mod.ArctangentInRadians(dy / horizontalDist) : 0;
+
+        const rotation = mod.CreateVector(pitchRadians, yawRadians, 0);
         STATE.waypoints.get(i)!.rotation = rotation;
     }
 }
 
 function initPayloadObjective(): void {
     const start = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
-    for (const objConfig of CONFIG.payloadObjects) {
-        const spawnPos = mod.Add(start.position, objConfig.relativeOffset);
-        const obj = mod.SpawnObject(
-            objConfig.prefab,
-            spawnPos,
-            start.rotation,
-            objConfig.initialSize
-        );
-        if (mod.IsType(obj, mod.Types.VFX)) {
-            mod.EnableVFX(obj, true);
-            mod.SetVFXScale(obj, 2.5);
+
+    // Spawn VFX
+    applyPayloadVfx();
+
+    // Spawn Spatials if vehicle spawner is disabled
+    if (!CONFIG.enableVehicleSpawner) {
+        for (let i = 0; i < CONFIG.payloadSpatials.length; i++) {
+            const spatialConfig = CONFIG.payloadSpatials[i];
+            const spawnPos = mod.Add(start.position, spatialConfig.relativeOffset);
+            const spawnRot = mod.Add(start.rotation, spatialConfig.rotation);
+            const obj = mod.SpawnObject(
+                spatialConfig.prefab,
+                spawnPos,
+                spawnRot,
+                spatialConfig.scale
+            );
+            STATE.payloadSpatials.set(i, obj);
         }
-        STATE.payloadObjects.push(obj);
     }
-    const vehicleSpawner = mod.SpawnObject(
-        mod.RuntimeSpawn_Common.VehicleSpawner,
-        start.position,
-        start.rotation,
-        mod.CreateVector(1, 1, 1)
-    ) as mod.VehicleSpawner;
-    mod.SetVehicleSpawnerVehicleType(vehicleSpawner, mod.VehicleList.M2Bradley); //Marauder - This is bugged so spawning another vehicle instead
-    mod.ForceVehicleSpawnerSpawn(vehicleSpawner);
+
+    // Always Spawn Objectives
+    for (let i = 0; i < CONFIG.payloadObjectives.length; i++) {
+        const objectiveConfig = CONFIG.payloadObjectives[i];
+        const spawnPos = mod.Add(start.position, objectiveConfig.relativeOffset);
+        const spawnRot = mod.Add(start.rotation, objectiveConfig.rotation);
+        const obj = mod.SpawnObject(
+            objectiveConfig.prefab,
+            spawnPos,
+            spawnRot,
+            objectiveConfig.scale
+        );
+        STATE.payloadObjectives.set(i, obj);
+    }
+
+    if (CONFIG.enableVehicleSpawner) {
+        const vehicleSpawner = mod.SpawnObject(
+            mod.RuntimeSpawn_Common.VehicleSpawner,
+            start.position,
+            start.rotation,
+            mod.CreateVector(1, 1, 1)
+        ) as mod.VehicleSpawner;
+        mod.SetVehicleSpawnerVehicleType(vehicleSpawner, CONFIG.payloadVehicleType); //Marauder - This is bugged so spawning another vehicle instead
+        mod.ForceVehicleSpawnerSpawn(vehicleSpawner);
+    }
 }
 
 export function OnVehicleSpawned(eventVehicle: mod.Vehicle): void {
+    if (!CONFIG.enableVehicleSpawner) return;
     const vehiclePosition = mod.GetVehicleState(eventVehicle, mod.VehicleStateVector.VehiclePosition);
     if (mod.DistanceBetween(STATE.waypoints.get(0)!.position, vehiclePosition) < 5) {
         STATE.payloadVehicle = eventVehicle;
@@ -139,6 +239,7 @@ export function OnVehicleSpawned(eventVehicle: mod.Vehicle): void {
 }
 
 export function OngoingVehicle(eventVehicle: mod.Vehicle): void {
+    if (!CONFIG.enableVehicleSpawner) return;
     if (STATE.payloadVehicle && mod.GetObjId(eventVehicle) == mod.GetObjId(STATE.payloadVehicle)) {
         mod.Heal(eventVehicle, 100);
     }
@@ -351,16 +452,10 @@ function onCheckpointReached(): void {
 
     mod.EnableHQ(mod.GetHQ((STATE.currentCheckpoint - 1) + 300), false);
     mod.EnableHQ(mod.GetHQ((STATE.currentCheckpoint - 1) + 400), false);
-    if (STATE.reachedWaypointIndex == STATE.waypoints.size - 1) {
-        onFinalCheckpointReached();
-        return;
-    }
+
     playCheckpointReachedSound();
     updateCheckpointUI();
-    STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
-    mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 300), true);
-    mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 400), true);
-    mod.EnableGameModeObjective(mod.GetSector(STATE.currentCheckpoint + 101), true);
+    applyCheckpointFx();
     mod.DisplayHighlightedWorldLogMessage(
         mod.Message(
             mod.stringkeys.payload.state.checkpoint_reached,
@@ -368,6 +463,15 @@ function onCheckpointReached(): void {
             STATE.maxCheckpoints
         )
     );
+
+    if (STATE.reachedWaypointIndex == STATE.waypoints.size - 1) {
+        onFinalCheckpointReached();
+    } else {
+        STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
+        mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 300), true);
+        mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 400), true);
+        mod.EnableGameModeObjective(mod.GetSector(STATE.currentCheckpoint + 101), true);
+    }
 }
 
 function setPayloadState(state: PayloadState): void {
@@ -415,17 +519,33 @@ function pushBackward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
 
 
 function updatePayloadObject() {
-    const rotation = STATE.payloadRotation;
-    for (let i = 0; i < STATE.payloadObjects.length; i++) {
-        const obj = STATE.payloadObjects[i];
-        const config = CONFIG.payloadObjects[i];
+    const waypoint = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
+    const rotation = waypoint.rotation;
+
+    // Update VFX
+    STATE.payloadVfx.forEach((vfx, index) => {
+        const config = CONFIG.payloadVfx[index];
         const worldPos = mod.Add(STATE.payloadPosition, config.relativeOffset);
-        if (mod.IsType(obj, mod.Types.VFX)) {
-            mod.MoveVFX(obj as mod.VFX, worldPos, rotation);
-        } else {
-            mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, rotation));
-        }
-    }
+        const worldRot = mod.Add(rotation, config.rotation);
+        mod.MoveVFX(vfx, worldPos, worldRot);
+    });
+
+    // Update Spatials
+    STATE.payloadSpatials.forEach((obj, index) => {
+        const config = CONFIG.payloadSpatials[index];
+        const worldPos = mod.Add(STATE.payloadPosition, config.relativeOffset);
+        const worldRot = mod.Add(rotation, config.rotation);
+        mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, worldRot));
+    });
+
+    // Update Objectives
+    STATE.payloadObjectives.forEach((obj, index) => {
+        const config = CONFIG.payloadObjectives[index];
+        const worldPos = mod.Add(STATE.payloadPosition, config.relativeOffset);
+        const worldRot = mod.Add(rotation, config.rotation);
+        mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, worldRot));
+    });
+
     if (STATE.payloadVehicle) {
         mod.Teleport(STATE.payloadVehicle, STATE.payloadPosition, mod.YComponentOf(rotation));
     }
@@ -446,6 +566,12 @@ function executeEverySecond() {
         onRunningOutOfTime();
         return;
     }
+
+    // Unspawn and respawn spatial objects to force update/refresh
+    if (STATE.lastElapsedSeconds % CONFIG.spatialRespawnInterval === 0) {
+        respawnPayloadSpatials();
+    }
+
     // Update Checkpoint Timer
     const elapsedSinceCheckpoint = STATE.lastElapsedSeconds - STATE.checkpointStartTime;
     const remainingTime = CONFIG.defaultCheckpointTime - elapsedSinceCheckpoint;
@@ -467,10 +593,33 @@ function executeEverySecond() {
     progressFlash();
 }
 
+function respawnPayloadSpatials() {
+    const waypoint = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
+    const rotation = waypoint.rotation;
+
+    STATE.payloadSpatials.forEach((obj, index) => {
+        mod.UnspawnObject(obj);
+
+        const config = CONFIG.payloadSpatials[index];
+        const worldPos = mod.Add(STATE.payloadPosition, config.relativeOffset);
+        const worldRot = mod.Add(rotation, config.rotation);
+
+        const newObj = mod.SpawnObject(
+            config.prefab,
+            worldPos,
+            worldRot,
+            config.scale
+        );
+        STATE.payloadSpatials.set(index, newObj);
+    });
+}
+
 async function onFinalCheckpointReached() {
     mod.PauseGameModeTime(true);
     endGameMusic(1);
-    mod.Kill(STATE.payloadVehicle as mod.Vehicle);
+    if (STATE.payloadVehicle) {
+        mod.Kill(STATE.payloadVehicle as mod.Vehicle);
+    }
     nukeUI();
     await mod.Wait(8);
     mod.EndGameMode(mod.GetTeam(1));
@@ -511,8 +660,18 @@ export function OnPlayerLeaveGame(playerId: number): void {
 }
 
 export function OnPlayerJoinGame(eventPlayer: mod.Player): void {
+    scoring_getOrCreatePlayerScore(eventPlayer);
     ui_onPlayerJoinGame();
-    scoring_refreshScoreboard();
+}
+
+export function OnPlayerDeployed(eventPlayer: mod.Player): void {
+    const score = scoring_getOrCreatePlayerScore(eventPlayer);
+    if (!score.hasDeployed) {
+        score.hasDeployed = true;
+        scoring_refreshScoreboard();
+        applyCheckpointFx();
+        applyPayloadVfx();
+    }
 }
 
 export function OnRevived(victim: mod.Player, reviver: mod.Player): void {
@@ -523,8 +682,8 @@ export function OngoingGlobal(): void {
     const elapsedSeconds = mod.GetMatchTimeElapsed();
     const counts = getAlivePlayersInProximity(STATE.payloadPosition, CONFIG.pushProximityRadius);
 
-    if (STATE.lastElapsedSeconds != elapsedSeconds) {
-        STATE.lastElapsedSeconds = elapsedSeconds;
+    if (STATE.lastElapsedSeconds != Math.floor(elapsedSeconds)) {
+        STATE.lastElapsedSeconds = Math.floor(elapsedSeconds);
         // Award objective points to all players in proximity of the payload
         for (const p of counts.t1) {
             scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
@@ -558,12 +717,6 @@ export function OnPlayerEnterVehicle(eventPlayer: mod.Player, eventVehicle: mod.
 
 // Team Switcher for testing
 export function OngoingPlayer(eventPlayer: mod.Player): void {
-    if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsInVehicle)) {
-        if (mod.CompareVehicleName(mod.GetVehicleFromPlayer(eventPlayer), mod.VehicleList.M2Bradley)) { //Direct comparison not working: eventVehicle == STATE.payloadVehicle as mod.Vehicle
-            mod.ForcePlayerExitVehicle(mod.GetVehicleFromPlayer(eventPlayer));
-            mod.DisplayNotificationMessage(mod.Message(mod.stringkeys.payload.objective.exit_message), eventPlayer);
-        }
-    }
     if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier)) return;
     if (!mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) return;
     if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsZooming)
@@ -571,6 +724,12 @@ export function OngoingPlayer(eventPlayer: mod.Player): void {
         && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsInteracting)
     ) {
         mod.SetTeam(eventPlayer, mod.Equals(mod.GetTeam(eventPlayer), mod.GetTeam(2)) ? mod.GetTeam(1) : mod.GetTeam(2));
+    }
+    if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsInVehicle)) {
+        if (mod.CompareVehicleName(mod.GetVehicleFromPlayer(eventPlayer), mod.VehicleList.M2Bradley)) { //Direct comparison not working: eventVehicle == STATE.payloadVehicle as mod.Vehicle
+            mod.ForcePlayerExitVehicle(mod.GetVehicleFromPlayer(eventPlayer));
+            mod.DisplayNotificationMessage(mod.Message(mod.stringkeys.payload.objective.exit_message), eventPlayer);
+        }
     }
 }
 
