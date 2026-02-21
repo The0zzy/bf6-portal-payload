@@ -44,6 +44,7 @@ export interface Config {
     enableVehicleSpawner: boolean;
     payloadVehicleType: mod.VehicleList;
     spatialRespawnInterval: number;
+    splineSamplesPerSegment: number;
 }
 
 export const CONFIG: Config = {
@@ -78,5 +79,6 @@ export const CONFIG: Config = {
     checkpointVfx: [
         { prefab: mod.RuntimeSpawn_Common.FX_Smoke_Marker_Custom, relativeOffset: mod.CreateVector(0, 0, 0), scale: 1, rotation: mod.CreateVector(0, 0, 0), color1: mod.CreateVector(1, 1, 0), color2: mod.CreateVector(0, 1, 0), speed: 1 },
     ],
-    spatialRespawnInterval: 5
+    spatialRespawnInterval: 5,
+    splineSamplesPerSegment: 50
 };

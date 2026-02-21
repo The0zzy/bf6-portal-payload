@@ -319,63 +319,108 @@ function catmullRom(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vect
 }
 
 // --------------------------
-// Get t for a given distance along spline
+// Convert tangent to 3D rotation (Pitch/Yaw)
 // --------------------------
-function getTForDistanceDynamic(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, distance: number, samples: number = 20) {
-    let lastPos = catmullRom(p0, p1, p2, p3, 0);
-    let accumulated = 0;
+function rotationFromTangent(tangent: mod.Vector): mod.Vector {
+    const tx = mod.XComponentOf(tangent);
+    const ty = mod.YComponentOf(tangent);
+    const tz = mod.ZComponentOf(tangent);
 
-    if (distance <= 0) return 0;
+    // Yaw: horizontal facing direction
+    const yaw = Math.atan2(tx, tz);
 
-    for (let i = 1; i <= samples; i++) {
-        const t = i / samples;
-        const pos = catmullRom(p0, p1, p2, p3, t);
-        const segment = mod.DistanceBetween(lastPos, pos);
-        accumulated += segment;
-        if (accumulated >= distance) {
-            const overshoot = accumulated - distance;
-            const alpha = 1 - overshoot / segment;
-            const tPrev = (i - 1) / samples;
-            return tPrev + alpha * (t - tPrev);
+    // Pitch: slope angle from the tangent's vertical component
+    const horizontalDist = Math.sqrt(tx * tx + tz * tz);
+    const pitch = horizontalDist > 0.0001 ? -Math.atan2(ty, horizontalDist) : 0;
+
+    return mod.CreateVector(pitch, yaw, 0);
+}
+
+// --------------------------
+// Pre-compute spline table for all segments
+// --------------------------
+function precomputeSplineTable(): void {
+    const wpCount = STATE.waypoints.size;
+    const samplesPerSegment = CONFIG.splineSamplesPerSegment;
+
+    for (let wpIndex = 0; wpIndex < wpCount - 1; wpIndex++) {
+        const p0 = STATE.waypoints.get(Math.max(wpIndex - 1, 0))!.position;
+        const p1 = STATE.waypoints.get(wpIndex)!.position;
+        const p2 = STATE.waypoints.get(Math.min(wpIndex + 1, wpCount - 1))!.position;
+        const p3 = STATE.waypoints.get(Math.min(wpIndex + 2, wpCount - 1))!.position;
+
+        const samples: any[] = [];
+        let cumDist = 0;
+        let prevPos = catmullRom(p0, p1, p2, p3, 0);
+
+        for (let i = 0; i <= samplesPerSegment; i++) {
+            const t = i / samplesPerSegment;
+            const pos = catmullRom(p0, p1, p2, p3, t);
+
+            // Get rotation from tangent at this t
+            const tNext = Math.min(t + 0.01, 1);
+            const posNext = catmullRom(p0, p1, p2, p3, tNext);
+            const tangent = mod.DirectionTowards(pos, posNext);
+            const rotation = rotationFromTangent(tangent);
+
+            if (i > 0) {
+                cumDist += mod.DistanceBetween(prevPos, pos);
+            }
+
+            samples.push({
+                position: pos,
+                rotation: rotation,
+                arcLength: cumDist
+            });
+            prevPos = pos;
         }
-        lastPos = pos;
+        STATE.splineTable.set(wpIndex, samples);
     }
-
-    return 1;
 }
 
 // --------------------------
-// Approximate tangent
+// Runtime spline lookup with lerp
 // --------------------------
-function getSplineTangent(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, t: number, delta: number = 0.01): mod.Vector {
-    const t1 = Math.min(t + delta, 1);
-    const pos = catmullRom(p0, p1, p2, p3, t);
-    const posAhead = catmullRom(p0, p1, p2, p3, t1);
-    return mod.DirectionTowards(pos, posAhead);
-}
-
-// --------------------------
-// Convert tangent to Y-rotation (signed, stable)
-// --------------------------
-function getRotationFromTangent(tangent: mod.Vector): mod.Vector {
-    const x = mod.XComponentOf(tangent);
-    const z = mod.ZComponentOf(tangent);
-
-    // Avoid near-zero tangent jitter
-    if (Math.abs(x) < 0.0001 && Math.abs(z) < 0.0001) return STATE.payloadRotation ?? mod.CreateVector(0, 0, 0);
-
-    // Signed yaw (radians)
-    const yaw = Math.atan2(x, z);
-
-    // Optional: smooth rotation
-    if (STATE.payloadRotation) {
-        const prevYaw = mod.YComponentOf(STATE.payloadRotation);
-        const diff = ((yaw - prevYaw + Math.PI) % (2 * Math.PI)) - Math.PI; // shortest angle
-        const smoothedYaw = prevYaw + diff * 0.2; // lerp factor
-        return mod.CreateVector(0, smoothedYaw, 0);
+function lookupSplinePosition(wpIndex: number, distance: number): { position: mod.Vector; rotation: mod.Vector } {
+    const samples = STATE.splineTable.get(wpIndex);
+    if (!samples || samples.length === 0) {
+        const wp = STATE.waypoints.get(wpIndex)!;
+        return { position: wp.position, rotation: wp.rotation };
     }
 
-    return mod.CreateVector(0, yaw, 0);
+    // Binary search for the two samples bracketing 'distance'
+    let lo = 0, hi = samples.length - 1;
+    if (distance <= 0) return { position: samples[0].position, rotation: samples[0].rotation };
+    if (distance >= samples[hi].arcLength) return { position: samples[hi].position, rotation: samples[hi].rotation };
+
+    while (lo < hi - 1) {
+        const mid = (lo + hi) >> 1;
+        if (samples[mid].arcLength <= distance) lo = mid;
+        else hi = mid;
+    }
+
+    const a = samples[lo];
+    const b = samples[hi];
+    const segLen = b.arcLength - a.arcLength;
+    const alpha = segLen > 0 ? (distance - a.arcLength) / segLen : 0;
+
+    // Lerp position
+    const position = mod.Add(
+        mod.Multiply(a.position, 1 - alpha),
+        mod.Multiply(b.position, alpha)
+    );
+
+    // Lerp rotation (handle yaw wrapping)
+    const pitchA = mod.XComponentOf(a.rotation);
+    const pitchB = mod.XComponentOf(b.rotation);
+    const pitch = pitchA + (pitchB - pitchA) * alpha;
+
+    const yawA = mod.YComponentOf(a.rotation);
+    const yawB = mod.YComponentOf(b.rotation);
+    const diff = ((yawB - yawA + Math.PI) % (2 * Math.PI)) - Math.PI;
+    const yaw = yawA + diff * alpha;
+
+    return { position, rotation: mod.CreateVector(pitch, yaw, 0) };
 }
 
 // --------------------------
@@ -390,30 +435,19 @@ function moveAlongSpline(forward: boolean, speed: number) {
 
     // Clamp segmentDistance and switch waypoints
     while (true) {
-        const prevIndex = Math.max(wpIndex - 1, 0);
-        const nextIndex = Math.min(wpIndex + 1, wpCount - 1);
-        const nextNextIndex = Math.min(nextIndex + 1, wpCount - 1);
+        const samples = STATE.splineTable.get(wpIndex);
+        if (!samples) break;
 
-        const prevWp = STATE.waypoints.get(prevIndex);
-        const currWp = STATE.waypoints.get(wpIndex);
-        const nextWp = STATE.waypoints.get(nextIndex);
-        const nextNextWp = STATE.waypoints.get(nextNextIndex);
-        if (!prevWp || !currWp || !nextWp || !nextNextWp) break;
-
-        const p0 = prevWp.position;
-        const p1 = currWp.position;
-        const p2 = nextWp.position;
-        const p3 = nextNextWp.position;
-
-        const segmentLength = mod.DistanceBetween(p1, p2);
+        const segmentLength = samples[samples.length - 1].arcLength;
 
         if (STATE.segmentDistance >= segmentLength && forward && wpIndex < wpCount - 1) {
             STATE.segmentDistance -= segmentLength;
-            wpIndex = nextIndex;
+            wpIndex++;
             STATE.reachedWaypointIndex = wpIndex;
 
-            if (nextWp.isCheckpoint) {
-                STATE.reachedCheckpointIndex = nextIndex;
+            const wp = STATE.waypoints.get(wpIndex)!;
+            if (wp.isCheckpoint) {
+                STATE.reachedCheckpointIndex = wpIndex;
                 STATE.currentCheckpoint++;
                 onCheckpointReached();
             }
@@ -421,21 +455,21 @@ function moveAlongSpline(forward: boolean, speed: number) {
         }
 
         if (STATE.segmentDistance <= 0 && !forward && wpIndex > 0) {
-            wpIndex = wpIndex - 1;
+            wpIndex--;
             STATE.reachedWaypointIndex = wpIndex;
 
-            const prevWpPos = STATE.waypoints.get(wpIndex)?.position!;
-            const currWpPos = STATE.waypoints.get(wpIndex + 1)?.position!;
-            STATE.segmentDistance += mod.DistanceBetween(prevWpPos, currWpPos);
+            const prevSamples = STATE.splineTable.get(wpIndex)!;
+            STATE.segmentDistance += prevSamples[prevSamples.length - 1].arcLength;
             continue;
         }
 
-        // Compute t along current segment
-        const t = getTForDistanceDynamic(p0, p1, p2, p3, STATE.segmentDistance);
+        // Clamp to bounds
+        if (wpIndex === wpCount - 1) STATE.segmentDistance = 0;
+        if (wpIndex === 0 && STATE.segmentDistance < 0) STATE.segmentDistance = 0;
 
-        STATE.payloadPosition = catmullRom(p0, p1, p2, p3, t);
-        const tangent = getSplineTangent(p0, p1, p2, p3, t);
-        STATE.payloadRotation = getRotationFromTangent(tangent);
+        const result = lookupSplinePosition(wpIndex, STATE.segmentDistance);
+        STATE.payloadPosition = result.position;
+        STATE.payloadRotation = result.rotation;
         break;
     }
 }
@@ -506,7 +540,7 @@ function pushForward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
 }
 
 function pushBackward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
-    if (STATE.reachedWaypointIndex <= (STATE.reachedCheckpointIndex - 1) || STATE.reachedWaypointIndex == 0) {
+    if (STATE.reachedWaypointIndex <= STATE.reachedCheckpointIndex) {
         setPayloadState(PayloadState.LOCKED);
         return;
     }
@@ -519,8 +553,7 @@ function pushBackward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
 
 
 function updatePayloadObject() {
-    const waypoint = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
-    const rotation = waypoint.rotation;
+    const rotation = STATE.payloadRotation;
 
     // Update VFX
     STATE.payloadVfx.forEach((vfx, index) => {
@@ -636,6 +669,7 @@ export function OnGameModeStarted(): void {
     mod.Wait(3);
     initSectors();
     initPayloadTrack();
+    precomputeSplineTable();
     applyCheckpointFx();
     initPayloadRotation();
     initPayloadObjective();

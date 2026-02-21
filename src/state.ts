@@ -13,6 +13,12 @@ export interface PayloadWaypoint {
     distance: number;
 }
 
+export interface SplineSample {
+    position: mod.Vector;
+    rotation: mod.Vector;
+    arcLength: number;
+}
+
 export interface PlayerScoring {
     kills: number;
     assists: number;
@@ -44,9 +50,8 @@ export interface State {
     playerScores: Map<number, PlayerScoring>;
     payloadVehicle?: mod.Vehicle;
     payloadRotation: mod.Vector;
-    segmentT: number;
-    splineTable: { t: number, distance: number }[] | null;
     segmentDistance: number;
+    splineTable: Map<number, SplineSample[]>;
     checkpointSpatials: Map<string, mod.Object>;
     checkpointObjectives: Map<string, mod.CapturePoint>;
     checkpointVfx: Map<string, mod.VFX>;
@@ -73,9 +78,8 @@ export const STATE: State = {
     progressInPercent: 0,
     playerScores: new Map<number, PlayerScoring>(),
     payloadRotation: mod.CreateVector(0, 0, 0),
-    segmentT: 0,
-    splineTable: null,
     segmentDistance: 0,
+    splineTable: new Map<number, SplineSample[]>(),
     checkpointSpatials: new Map<string, mod.Object>(),
     checkpointObjectives: new Map<string, mod.CapturePoint>(),
     checkpointVfx: new Map<string, mod.VFX>(),
