@@ -1,5 +1,5 @@
 import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI, progressFlash, nukeUI } from './ui.ts';
-import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound, endGameMusic } from './sounds.ts';
+import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound, endGameMusic, playPayloadIdleSound } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
 import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard, scoring_getOrCreatePlayerScore } from './scoring.ts';
@@ -358,25 +358,48 @@ function getSplineTangent(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mo
 // Convert tangent to Y-rotation (signed, stable)
 // --------------------------
 function getRotationFromTangent(tangent: mod.Vector): mod.Vector {
+
     const x = mod.XComponentOf(tangent);
+    const y = mod.YComponentOf(tangent);
     const z = mod.ZComponentOf(tangent);
 
-    // Avoid near-zero tangent jitter
-    if (Math.abs(x) < 0.0001 && Math.abs(z) < 0.0001) return STATE.payloadRotation ?? mod.CreateVector(0, 0, 0);
-
-    // Signed yaw (radians)
-    const yaw = Math.atan2(x, z);
-
-    // Optional: smooth rotation
-    if (STATE.payloadRotation) {
-        const prevYaw = mod.YComponentOf(STATE.payloadRotation);
-        const diff = ((yaw - prevYaw + Math.PI) % (2 * Math.PI)) - Math.PI; // shortest angle
-        const smoothedYaw = prevYaw + diff * 0.2; // lerp factor
-        return mod.CreateVector(0, smoothedYaw, 0);
+    // Prevent zero-length issues
+    const length = Math.sqrt(x * x + y * y + z * z);
+    if (length < 0.0001) {
+        return STATE.payloadRotation ?? mod.CreateVector(0, 0, 0);
     }
 
-    return mod.CreateVector(0, yaw, 0);
+    // Normalize manually (safer)
+    const nx = x / length;
+    const ny = y / length;
+    const nz = z / length;
+
+    // Yaw (turn left/right)
+    const yaw = Math.atan2(nx, nz);
+
+    // Pitch (tilt up/down)
+    const pitch = -Math.asin(ny);
+
+    // Roll (keep zero for tank)
+    const roll = 0;
+
+    // Optional smoothing
+    if (STATE.payloadRotation) {
+
+        const prevPitch = mod.XComponentOf(STATE.payloadRotation);
+        const prevYaw = mod.YComponentOf(STATE.payloadRotation);
+
+        const smoothFactor = 0.2;
+
+        const smoothYaw = prevYaw + (((yaw - prevYaw + Math.PI) % (2 * Math.PI)) - Math.PI) * smoothFactor;
+        const smoothPitch = prevPitch + (pitch - prevPitch) * smoothFactor;
+
+        return mod.CreateVector(smoothPitch, smoothYaw, roll);
+    }
+
+    return mod.CreateVector(pitch, yaw, roll);
 }
+
 
 // --------------------------
 // Move along spline with constant speed
@@ -520,7 +543,8 @@ function pushBackward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
 
 function updatePayloadObject() {
     const waypoint = STATE.waypoints.get(STATE.reachedWaypointIndex)!;
-    const rotation = waypoint.rotation;
+    //const rotation = waypoint.rotation;
+    const rotation = STATE.payloadRotation;
 
     // Update VFX
     STATE.payloadVfx.forEach((vfx, index) => {
@@ -682,18 +706,6 @@ export function OngoingGlobal(): void {
     const elapsedSeconds = mod.GetMatchTimeElapsed();
     const counts = getAlivePlayersInProximity(STATE.payloadPosition, CONFIG.pushProximityRadius);
 
-    if (STATE.lastElapsedSeconds != Math.floor(elapsedSeconds)) {
-        STATE.lastElapsedSeconds = Math.floor(elapsedSeconds);
-        // Award objective points to all players in proximity of the payload
-        for (const p of counts.t1) {
-            scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
-        }
-        for (const p of counts.t2) {
-            scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
-        }
-        executeEverySecond();
-    }
-
     if (counts.t1.length > counts.t2.length) {
         pushForward(counts);
         onPayloadMoved();
@@ -704,6 +716,19 @@ export function OngoingGlobal(): void {
         setPayloadState(PayloadState.CONTESTED);
     } else {
         setPayloadState(PayloadState.IDLE);
+        playPayloadIdleSound();
+    }
+
+    if (STATE.lastElapsedSeconds != Math.floor(elapsedSeconds)) {
+        STATE.lastElapsedSeconds = Math.floor(elapsedSeconds);
+        // Award objective points to all players in proximity of the payload
+        for (const p of counts.t1) {
+            scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
+        }
+        for (const p of counts.t2) {
+            scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
+        }
+        executeEverySecond();
     }
 }
 
