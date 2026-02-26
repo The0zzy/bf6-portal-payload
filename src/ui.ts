@@ -206,6 +206,8 @@ export async function progressFlash(): Promise<void> {
 //Handles the end game explosion effects
 export async function nukeUI(): Promise<void> {
     ui_ready = false;
+    let nukePrologue = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Detonation, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
+    mod.EnableVFX(nukePrologue, true);
     mod.AddUIContainer("nuke", mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("container"), true, 0, mod.CreateVector(1, 1, 1), 1, mod.UIBgFill.Solid);
     mod.AddUIContainer("nukeScreenEffect", mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("container"), true, 0, goldcolour, 0.5, mod.UIBgFill.Blur);
     let nukeStart = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_CAP_AmbWar_Rocket_Strike, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
