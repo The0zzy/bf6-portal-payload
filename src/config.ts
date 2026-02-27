@@ -53,8 +53,8 @@ export const CONFIG: Config = {
     pushProximityRadius: 7.5,
     waypointProximityRadius: 0.25,
     speedAdditionPerPushingPlayer: 0.005,
-    payloadSpeedMultiplierT1: 0.035, //0.035 0.250
-    payloadSpeedMultiplierT2: 0.015,
+    payloadSpeedMultiplierT1: 0.035, //0.035 0.220
+    payloadSpeedMultiplierT2: 0.015, //0.015 0.220
     objectiveScorePerSecond: 5,
     overtimeDuration: 60,
     overtimeEnabled: true,
@@ -62,7 +62,7 @@ export const CONFIG: Config = {
     enableVehicleSpawner: false,
     payloadVehicleType: mod.VehicleList.M2Bradley,
     payloadSpatials: [
-        { prefab: mod.RuntimeSpawn_Common.CrateAmmo_01_StackA, relativeOffset: mod.CreateVector(0, 1.1, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
+        //{ prefab: mod.RuntimeSpawn_Common.CrateAmmo_01_StackA, relativeOffset: mod.CreateVector(0, 1.1, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
         { prefab: mod.RuntimeSpawn_Abbasid.GM1083CargoTruck_01_Canopy, relativeOffset: mod.CreateVector(0, -0.1, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
     ],
     payloadObjectives: [
