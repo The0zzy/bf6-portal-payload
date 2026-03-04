@@ -5479,6 +5479,31 @@
             "linked": [
                 "Area"
             ]
+        },
+        {
+            "name": "EnvironmentDecalVolume_Winter_Event",
+            "type": "EnvironmentDecalVolume_Winter_Event",
+            "right": {
+                "x": 2000,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 2000,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 2000
+            },
+            "position": {
+                "x": 32.9617,
+                "y": 310.934,
+                "z": -26.6493
+            },
+            "id": "EnvironmentDecalVolume_Winter_Event"
         }
     ],
     "Static": [

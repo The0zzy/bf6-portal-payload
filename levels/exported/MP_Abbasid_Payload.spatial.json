@@ -123,9 +123,9 @@
                 "z": 1
             },
             "position": {
-                "x": -243.893,
+                "x": -243.075,
                 "y": 63.9957,
-                "z": 13.2827
+                "z": 12.8473
             },
             "id": "Track/Track_2"
         },
@@ -149,9 +149,9 @@
                 "z": 1
             },
             "position": {
-                "x": -241.119,
+                "x": -238.841,
                 "y": 64.0073,
-                "z": 11.2636
+                "z": 11.1378
             },
             "id": "Track/Track_3"
         },
@@ -175,7 +175,7 @@
                 "z": 1
             },
             "position": {
-                "x": -237.103,
+                "x": -232.513,
                 "y": 64.0294,
                 "z": 10.5684
             },
@@ -331,9 +331,9 @@
                 "z": 1
             },
             "position": {
-                "x": -188.48,
+                "x": -188.252,
                 "y": 63.9938,
-                "z": -35.3518
+                "z": -23.0003
             },
             "id": "Track/Track_10"
         },
@@ -357,9 +357,9 @@
                 "z": 1
             },
             "position": {
-                "x": -188.151,
+                "x": -188.603,
                 "y": 63.9938,
-                "z": -38.1632
+                "z": -33.8608
             },
             "id": "Track/Track_11"
         },
@@ -383,9 +383,9 @@
                 "z": 1
             },
             "position": {
-                "x": -186.127,
+                "x": -187.025,
                 "y": 63.9938,
-                "z": -39.8286
+                "z": -38.8571
             },
             "id": "Track/Track_12"
         },
@@ -409,9 +409,9 @@
                 "z": 1
             },
             "position": {
-                "x": -182.163,
+                "x": -180.305,
                 "y": 63.9938,
-                "z": -40.563
+                "z": -40.3083
             },
             "id": "Track/Track_13"
         },
@@ -669,9 +669,9 @@
                 "z": 1
             },
             "position": {
-                "x": -95.1891,
+                "x": -103.104,
                 "y": 64.0103,
-                "z": -63.0339
+                "z": -63.0294
             },
             "id": "Track/Track_23"
         },
@@ -695,9 +695,9 @@
                 "z": 1
             },
             "position": {
-                "x": -90.0074,
+                "x": -93.6548,
                 "y": 64.0103,
-                "z": -59.9441
+                "z": -63.073
             },
             "id": "Track/Track_24"
         },
@@ -721,9 +721,9 @@
                 "z": 1
             },
             "position": {
-                "x": -88.4806,
+                "x": -90.6179,
                 "y": 64.0103,
-                "z": -53.3209
+                "z": -60.2494
             },
             "id": "Track/Track_25"
         },
@@ -747,9 +747,9 @@
                 "z": 1
             },
             "position": {
-                "x": -88.014,
+                "x": -89.1724,
                 "y": 64.0103,
-                "z": -39.9684
+                "z": -53.8929
             },
             "id": "Track/Track_26"
         },
@@ -773,9 +773,9 @@
                 "z": 1
             },
             "position": {
-                "x": -87.9688,
+                "x": -88.6144,
                 "y": 64.0103,
-                "z": -30.9657
+                "z": -38.3953
             },
             "id": "Track/Track_27"
         },
@@ -1813,9 +1813,9 @@
                 "z": 1
             },
             "position": {
-                "x": 124.248,
+                "x": 121.299,
                 "y": 62.075,
-                "z": -27.7538
+                "z": -27.389
             },
             "id": "Track/Track_67"
         },
@@ -1839,9 +1839,9 @@
                 "z": 1
             },
             "position": {
-                "x": 127.217,
+                "x": 127.937,
                 "y": 62.075,
-                "z": -28.496
+                "z": -29.0878
             },
             "id": "Track/Track_68"
         },
@@ -1865,9 +1865,9 @@
                 "z": 1
             },
             "position": {
-                "x": 130.068,
+                "x": 130.511,
                 "y": 62.075,
-                "z": -30.3337
+                "z": -31.7628
             },
             "id": "Track/Track_69"
         },
@@ -1891,9 +1891,9 @@
                 "z": 1
             },
             "position": {
-                "x": 130.786,
+                "x": 131.418,
                 "y": 62.075,
-                "z": -34.049
+                "z": -36.9641
             },
             "id": "Track/Track_70"
         },
@@ -4318,1006 +4318,6 @@
             "linked": [
                 "Area"
             ]
-        },
-        {
-            "name": "FiringRange_MannequinRotation_03",
-            "type": "FiringRange_MannequinRotation_02",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 1
-            },
-            "position": {
-                "x": -249.747708,
-                "y": 64.1222804,
-                "z": 26.44042
-            },
-            "id": "Cart/FiringRange_MannequinRotation_03"
-        },
-        {
-            "name": "FiringRange_MannequinRotation_05",
-            "type": "FiringRange_MannequinRotation_02",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 1
-            },
-            "position": {
-                "x": -250.73,
-                "y": 64.1222804,
-                "z": 26.44038
-            },
-            "id": "Cart/FiringRange_MannequinRotation_05"
-        },
-        {
-            "name": "FiringRange_MannequinRotation_04",
-            "type": "FiringRange_MannequinRotation_02",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 1
-            },
-            "position": {
-                "x": -249.745824,
-                "y": 64.1222804,
-                "z": 24.03563
-            },
-            "id": "Cart/FiringRange_MannequinRotation_04"
-        },
-        {
-            "name": "FiringRange_MannequinRotation_06",
-            "type": "FiringRange_MannequinRotation_02",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 1
-            },
-            "position": {
-                "x": -250.732,
-                "y": 64.1222804,
-                "z": 24.03606
-            },
-            "id": "Cart/FiringRange_MannequinRotation_06"
-        },
-        {
-            "name": "FiringRange_Ventilation_01",
-            "type": "FiringRange_Ventilation_01",
-            "right": {
-                "x": -1,
-                "y": 0,
-                "z": 8.74228e-08
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": -8.74228e-08,
-                "y": 0,
-                "z": -1
-            },
-            "position": {
-                "x": -250.524631,
-                "y": 64.512384,
-                "z": 24.16989
-            },
-            "id": "Cart/FiringRange_Ventilation_01"
-        },
-        {
-            "name": "FiringRange_Ventilation_02",
-            "type": "FiringRange_Ventilation_01",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 1
-            },
-            "position": {
-                "x": -249.955017,
-                "y": 64.512384,
-                "z": 24.16989
-            },
-            "id": "Cart/FiringRange_Ventilation_02"
-        },
-        {
-            "name": "FiringRange_Ventilation_03",
-            "type": "FiringRange_Ventilation_01",
-            "right": {
-                "x": -1,
-                "y": 0,
-                "z": 8.74228e-08
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": -8.74228e-08,
-                "y": 0,
-                "z": -1
-            },
-            "position": {
-                "x": -250.524631,
-                "y": 64.512384,
-                "z": 24.783729
-            },
-            "id": "Cart/FiringRange_Ventilation_03"
-        },
-        {
-            "name": "FiringRange_Ventilation_04",
-            "type": "FiringRange_Ventilation_01",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 1
-            },
-            "position": {
-                "x": -249.955017,
-                "y": 64.512384,
-                "z": 24.783729
-            },
-            "id": "Cart/FiringRange_Ventilation_04"
-        },
-        {
-            "name": "FiringRange_Ventilation_05",
-            "type": "FiringRange_Ventilation_01",
-            "right": {
-                "x": -1,
-                "y": 0,
-                "z": 8.74228e-08
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": -8.74228e-08,
-                "y": 0,
-                "z": -1
-            },
-            "position": {
-                "x": -250.524631,
-                "y": 64.512384,
-                "z": 25.386463
-            },
-            "id": "Cart/FiringRange_Ventilation_05"
-        },
-        {
-            "name": "FiringRange_Ventilation_06",
-            "type": "FiringRange_Ventilation_01",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 1
-            },
-            "position": {
-                "x": -249.955017,
-                "y": 64.512384,
-                "z": 25.386463
-            },
-            "id": "Cart/FiringRange_Ventilation_06"
-        },
-        {
-            "name": "FiringRange_Ventilation_07",
-            "type": "FiringRange_Ventilation_01",
-            "right": {
-                "x": -1,
-                "y": 0,
-                "z": 8.74228e-08
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": -8.74228e-08,
-                "y": 0,
-                "z": -1
-            },
-            "position": {
-                "x": -250.524631,
-                "y": 64.512384,
-                "z": 25.951481
-            },
-            "id": "Cart/FiringRange_Ventilation_07"
-        },
-        {
-            "name": "FiringRange_Ventilation_08",
-            "type": "FiringRange_Ventilation_01",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 1
-            },
-            "position": {
-                "x": -249.955017,
-                "y": 64.512384,
-                "z": 25.951481
-            },
-            "id": "Cart/FiringRange_Ventilation_08"
-        },
-        {
-            "name": "FiringRange_Ventilation_09",
-            "type": "FiringRange_Ventilation_01",
-            "right": {
-                "x": -1,
-                "y": 0,
-                "z": 8.74228e-08
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": -8.74228e-08,
-                "y": 0,
-                "z": -1
-            },
-            "position": {
-                "x": -250.524631,
-                "y": 64.512384,
-                "z": 26.44169
-            },
-            "id": "Cart/FiringRange_Ventilation_09"
-        },
-        {
-            "name": "FiringRange_Ventilation_10",
-            "type": "FiringRange_Ventilation_01",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 1
-            },
-            "position": {
-                "x": -249.955017,
-                "y": 64.512384,
-                "z": 26.44169
-            },
-            "id": "Cart/FiringRange_Ventilation_10"
-        },
-        {
-            "name": "FiringRange_Ventilation_Pipe_01",
-            "type": "FiringRange_Ventilation_Pipe_01",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": -4.37114e-08,
-                "z": -1
-            },
-            "front": {
-                "x": 0,
-                "y": 1,
-                "z": -4.37114e-08
-            },
-            "position": {
-                "x": -249.994737,
-                "y": 65.583,
-                "z": 24.86459
-            },
-            "id": "Cart/FiringRange_Ventilation_Pipe_01"
-        },
-        {
-            "name": "FiringRange_Ventilation_Pipe_02",
-            "type": "FiringRange_Ventilation_Pipe_01",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": -4.37114e-08,
-                "z": -1
-            },
-            "front": {
-                "x": 0,
-                "y": 1,
-                "z": -4.37114e-08
-            },
-            "position": {
-                "x": -250.507143,
-                "y": 65.583,
-                "z": 24.86459
-            },
-            "id": "Cart/FiringRange_Ventilation_Pipe_02"
-        },
-        {
-            "name": "FiringRange_Ventilation_Pipe_07",
-            "type": "FiringRange_Ventilation_Pipe_01",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": -4.37114e-08,
-                "z": -1
-            },
-            "front": {
-                "x": 0,
-                "y": 1,
-                "z": -4.37114e-08
-            },
-            "position": {
-                "x": -249.994737,
-                "y": 65.583,
-                "z": 25.89519
-            },
-            "id": "Cart/FiringRange_Ventilation_Pipe_07"
-        },
-        {
-            "name": "FiringRange_Ventilation_Pipe_08",
-            "type": "FiringRange_Ventilation_Pipe_01",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": -4.37114e-08,
-                "z": -1
-            },
-            "front": {
-                "x": 0,
-                "y": 1,
-                "z": -4.37114e-08
-            },
-            "position": {
-                "x": -250.507143,
-                "y": 65.583,
-                "z": 25.89519
-            },
-            "id": "Cart/FiringRange_Ventilation_Pipe_08"
-        },
-        {
-            "name": "FiringRange_Ventilation_Pipe_03",
-            "type": "FiringRange_Ventilation_Pipe_01",
-            "right": {
-                "x": -1,
-                "y": 0,
-                "z": 8.74228e-08
-            },
-            "up": {
-                "x": 8.74228e-08,
-                "y": -4.37114e-08,
-                "z": 1
-            },
-            "front": {
-                "x": 3.82137e-15,
-                "y": 1,
-                "z": 4.37114e-08
-            },
-            "position": {
-                "x": -250.507158,
-                "y": 65.58126,
-                "z": 24.791405
-            },
-            "id": "Cart/FiringRange_Ventilation_Pipe_03"
-        },
-        {
-            "name": "FiringRange_Ventilation_Pipe_04",
-            "type": "FiringRange_Ventilation_Pipe_01",
-            "right": {
-                "x": -1,
-                "y": 0,
-                "z": 8.74228e-08
-            },
-            "up": {
-                "x": 8.74228e-08,
-                "y": -4.37114e-08,
-                "z": 1
-            },
-            "front": {
-                "x": 3.82137e-15,
-                "y": 1,
-                "z": 4.37114e-08
-            },
-            "position": {
-                "x": -249.994753,
-                "y": 65.58126,
-                "z": 24.791405
-            },
-            "id": "Cart/FiringRange_Ventilation_Pipe_04"
-        },
-        {
-            "name": "FiringRange_Ventilation_Pipe_05",
-            "type": "FiringRange_Ventilation_Pipe_01",
-            "right": {
-                "x": -1,
-                "y": 0,
-                "z": 8.74228e-08
-            },
-            "up": {
-                "x": 8.74228e-08,
-                "y": -4.37114e-08,
-                "z": 1
-            },
-            "front": {
-                "x": 3.82137e-15,
-                "y": 1,
-                "z": 4.37114e-08
-            },
-            "position": {
-                "x": -250.507158,
-                "y": 65.58126,
-                "z": 25.734313
-            },
-            "id": "Cart/FiringRange_Ventilation_Pipe_05"
-        },
-        {
-            "name": "FiringRange_Ventilation_Pipe_06",
-            "type": "FiringRange_Ventilation_Pipe_01",
-            "right": {
-                "x": -1,
-                "y": 0,
-                "z": 8.74228e-08
-            },
-            "up": {
-                "x": 8.74228e-08,
-                "y": -4.37114e-08,
-                "z": 1
-            },
-            "front": {
-                "x": 3.82137e-15,
-                "y": 1,
-                "z": 4.37114e-08
-            },
-            "position": {
-                "x": -249.994753,
-                "y": 65.58126,
-                "z": 25.734313
-            },
-            "id": "Cart/FiringRange_Ventilation_Pipe_06"
-        },
-        {
-            "name": "FiringRange_Ventilation_Pipe_09",
-            "type": "FiringRange_Ventilation_Pipe_01",
-            "right": {
-                "x": -4.37114e-08,
-                "y": -1,
-                "z": 0
-            },
-            "up": {
-                "x": -4.37114e-08,
-                "y": 1.91069e-15,
-                "z": -1
-            },
-            "front": {
-                "x": 1,
-                "y": -4.37114e-08,
-                "z": -4.37114e-08
-            },
-            "position": {
-                "x": -249.58098,
-                "y": 64.935192,
-                "z": 24.86459
-            },
-            "id": "Cart/FiringRange_Ventilation_Pipe_09"
-        },
-        {
-            "name": "FiringRange_Ventilation_Pipe_10",
-            "type": "FiringRange_Ventilation_Pipe_01",
-            "right": {
-                "x": -4.37114e-08,
-                "y": -1,
-                "z": 0
-            },
-            "up": {
-                "x": -4.37114e-08,
-                "y": 1.91069e-15,
-                "z": -1
-            },
-            "front": {
-                "x": 1,
-                "y": -4.37114e-08,
-                "z": -4.37114e-08
-            },
-            "position": {
-                "x": -249.58098,
-                "y": 64.935192,
-                "z": 25.89519
-            },
-            "id": "Cart/FiringRange_Ventilation_Pipe_10"
-        },
-        {
-            "name": "FiringRange_Ventilation_Pipe_11",
-            "type": "FiringRange_Ventilation_Pipe_01",
-            "right": {
-                "x": 4.37114e-08,
-                "y": 1,
-                "z": 8.74228e-08
-            },
-            "up": {
-                "x": -4.37114e-08,
-                "y": -8.74228e-08,
-                "z": 1
-            },
-            "front": {
-                "x": 1,
-                "y": -4.37114e-08,
-                "z": 4.37114e-08
-            },
-            "position": {
-                "x": -249.582719,
-                "y": 64.935207,
-                "z": 24.791405
-            },
-            "id": "Cart/FiringRange_Ventilation_Pipe_11"
-        },
-        {
-            "name": "FiringRange_Ventilation_Pipe_12",
-            "type": "FiringRange_Ventilation_Pipe_01",
-            "right": {
-                "x": 4.37114e-08,
-                "y": 1,
-                "z": 8.74228e-08
-            },
-            "up": {
-                "x": -4.37114e-08,
-                "y": -8.74228e-08,
-                "z": 1
-            },
-            "front": {
-                "x": 1,
-                "y": -4.37114e-08,
-                "z": 4.37114e-08
-            },
-            "position": {
-                "x": -249.582719,
-                "y": 64.935207,
-                "z": 25.734313
-            },
-            "id": "Cart/FiringRange_Ventilation_Pipe_12"
-        },
-        {
-            "name": "FiringRange_Ventilation_Pipe_13",
-            "type": "FiringRange_Ventilation_Pipe_01",
-            "right": {
-                "x": -4.37114e-08,
-                "y": 1,
-                "z": 0
-            },
-            "up": {
-                "x": 4.37114e-08,
-                "y": 1.91069e-15,
-                "z": -1
-            },
-            "front": {
-                "x": -1,
-                "y": -4.37114e-08,
-                "z": -4.37114e-08
-            },
-            "position": {
-                "x": -250.894991,
-                "y": 64.935207,
-                "z": 24.864199
-            },
-            "id": "Cart/FiringRange_Ventilation_Pipe_13"
-        },
-        {
-            "name": "FiringRange_Ventilation_Pipe_14",
-            "type": "FiringRange_Ventilation_Pipe_01",
-            "right": {
-                "x": -4.37114e-08,
-                "y": 1,
-                "z": 0
-            },
-            "up": {
-                "x": 4.37114e-08,
-                "y": 1.91069e-15,
-                "z": -1
-            },
-            "front": {
-                "x": -1,
-                "y": -4.37114e-08,
-                "z": -4.37114e-08
-            },
-            "position": {
-                "x": -250.894991,
-                "y": 64.935207,
-                "z": 25.895199
-            },
-            "id": "Cart/FiringRange_Ventilation_Pipe_14"
-        },
-        {
-            "name": "FiringRange_Ventilation_Pipe_15",
-            "type": "FiringRange_Ventilation_Pipe_01",
-            "right": {
-                "x": 4.37114e-08,
-                "y": -1,
-                "z": 8.74228e-08
-            },
-            "up": {
-                "x": 4.37114e-08,
-                "y": 8.74228e-08,
-                "z": 1
-            },
-            "front": {
-                "x": -1,
-                "y": -4.37114e-08,
-                "z": 4.37114e-08
-            },
-            "position": {
-                "x": -250.89699,
-                "y": 64.935298,
-                "z": 24.791405
-            },
-            "id": "Cart/FiringRange_Ventilation_Pipe_15"
-        },
-        {
-            "name": "FiringRange_Ventilation_Pipe_16",
-            "type": "FiringRange_Ventilation_Pipe_01",
-            "right": {
-                "x": 4.37114e-08,
-                "y": -1,
-                "z": 8.74228e-08
-            },
-            "up": {
-                "x": 4.37114e-08,
-                "y": 8.74228e-08,
-                "z": 1
-            },
-            "front": {
-                "x": -1,
-                "y": -4.37114e-08,
-                "z": 4.37114e-08
-            },
-            "position": {
-                "x": -250.89699,
-                "y": 64.935298,
-                "z": 25.734313
-            },
-            "id": "Cart/FiringRange_Ventilation_Pipe_16"
-        },
-        {
-            "name": "FlagPole_01_USA",
-            "type": "FlagPole_01_USA",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 1
-            },
-            "position": {
-                "x": -250.239,
-                "y": 52.8354,
-                "z": 26.39938
-            },
-            "id": "Cart/FlagPole_01_USA"
-        },
-        {
-            "name": "FiringRange_Table_01",
-            "type": "FiringRange_Table_01",
-            "right": {
-                "x": 1.91069e-15,
-                "y": 4.37114e-08,
-                "z": 1
-            },
-            "up": {
-                "x": 1,
-                "y": -4.37114e-08,
-                "z": 0
-            },
-            "front": {
-                "x": 4.37114e-08,
-                "y": 1,
-                "z": -4.37114e-08
-            },
-            "position": {
-                "x": 0.20677,
-                "y": 0.46051,
-                "z": -1.31315
-            },
-            "id": "FiringRange_Table_01"
-        },
-        {
-            "name": "FiringRange_Table_03",
-            "type": "FiringRange_Table_01",
-            "right": {
-                "x": -8.74228e-08,
-                "y": 4.37114e-08,
-                "z": -1
-            },
-            "up": {
-                "x": -1,
-                "y": -4.37114e-08,
-                "z": 8.74228e-08
-            },
-            "front": {
-                "x": -4.37114e-08,
-                "y": 1,
-                "z": 4.37114e-08
-            },
-            "position": {
-                "x": -0.207,
-                "y": 0.461,
-                "z": 1.45082
-            },
-            "id": "FiringRange_Table_03"
-        },
-        {
-            "name": "FiringRange_Table_02",
-            "type": "FiringRange_Table_01",
-            "right": {
-                "x": 1.91069e-15,
-                "y": 4.37114e-08,
-                "z": 1
-            },
-            "up": {
-                "x": 1,
-                "y": -4.37114e-08,
-                "z": 0
-            },
-            "front": {
-                "x": 4.37114e-08,
-                "y": 1,
-                "z": -4.37114e-08
-            },
-            "position": {
-                "x": 0.16689,
-                "y": 0.95148,
-                "z": -1.31315
-            },
-            "id": "FiringRange_Table_02"
-        },
-        {
-            "name": "FiringRange_Table_04",
-            "type": "FiringRange_Table_01",
-            "right": {
-                "x": -8.74228e-08,
-                "y": 4.37114e-08,
-                "z": -1
-            },
-            "up": {
-                "x": -1,
-                "y": -4.37114e-08,
-                "z": 8.74228e-08
-            },
-            "front": {
-                "x": -4.37114e-08,
-                "y": 1,
-                "z": 4.37114e-08
-            },
-            "position": {
-                "x": -0.167,
-                "y": 0.951,
-                "z": 1.451
-            },
-            "id": "FiringRange_Table_04"
-        },
-        {
-            "name": "FiringRange_DividerSupport_02",
-            "type": "FiringRange_DividerSupport_02",
-            "right": {
-                "x": -4.37114e-08,
-                "y": 0,
-                "z": 1
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": -1,
-                "y": 0,
-                "z": -4.37114e-08
-            },
-            "position": {
-                "x": 0,
-                "y": 1.16128,
-                "z": -1.13029
-            },
-            "id": "FiringRange_DividerSupport_02"
-        },
-        {
-            "name": "FiringRange_Mat_01",
-            "type": "FiringRange_Mat_01",
-            "right": {
-                "x": 3.17091e-07,
-                "y": 4.2,
-                "z": 0
-            },
-            "up": {
-                "x": -4.2,
-                "y": 3.17091e-07,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 4.2
-            },
-            "position": {
-                "x": -1.65951,
-                "y": -3.18653,
-                "z": -3.12875
-            },
-            "id": "FiringRange_Mat_01"
-        },
-        {
-            "name": "FiringRange_Mat_02",
-            "type": "FiringRange_Mat_01",
-            "right": {
-                "x": 3.17091e-07,
-                "y": 4.2,
-                "z": 0
-            },
-            "up": {
-                "x": -4.2,
-                "y": 3.17091e-07,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 4.2
-            },
-            "position": {
-                "x": 1.66,
-                "y": -3.187,
-                "z": -3.129
-            },
-            "id": "FiringRange_Mat_02"
-        },
-        {
-            "name": "FiringRange_Mat_03",
-            "type": "FiringRange_Mat_01",
-            "right": {
-                "x": -7.09525e-15,
-                "y": 2.15,
-                "z": -1.6232e-07
-            },
-            "up": {
-                "x": 9.39795e-08,
-                "y": 1.6232e-07,
-                "z": 2.15
-            },
-            "front": {
-                "x": 2.15,
-                "y": 4.336e-22,
-                "z": -9.39795e-08
-            },
-            "position": {
-                "x": -1.66689,
-                "y": -0.726061,
-                "z": -3.13982
-            },
-            "id": "FiringRange_Mat_03"
-        },
-        {
-            "name": "FiringRange_Mat_04",
-            "type": "FiringRange_Mat_01",
-            "right": {
-                "x": -7.09525e-15,
-                "y": 2.15,
-                "z": -1.6232e-07
-            },
-            "up": {
-                "x": 9.39795e-08,
-                "y": 1.6232e-07,
-                "z": 2.15
-            },
-            "front": {
-                "x": 2.15,
-                "y": 4.336e-22,
-                "z": -9.39795e-08
-            },
-            "position": {
-                "x": -1.66689,
-                "y": -1.33163,
-                "z": 3.3887
-            },
-            "id": "FiringRange_Mat_04"
         }
     ],
     "Static": [

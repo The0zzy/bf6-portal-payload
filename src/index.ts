@@ -3,6 +3,7 @@ import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playN
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
 import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard, scoring_getOrCreatePlayerScore } from './scoring.ts';
+import { initWeather } from './weather.ts';
 
 
 function getOpponentTeam(team: mod.Team): mod.Team {
@@ -434,7 +435,7 @@ function moveAlongSpline(forward: boolean, speed: number) {
             wpIndex = nextIndex;
             STATE.reachedWaypointIndex = wpIndex;
 
-            if (nextWp.isCheckpoint) {
+            if (nextWp.isCheckpoint && STATE.reachedCheckpointIndex < nextIndex) {
                 STATE.reachedCheckpointIndex = nextIndex;
                 STATE.currentCheckpoint++;
                 onCheckpointReached();
@@ -506,7 +507,7 @@ function checkWaypointReached(targetWaypointIndex: number) {
     const targetWaypoint = STATE.waypoints.get(targetWaypointIndex)!;
     if (mod.DistanceBetween(STATE.payloadPosition, targetWaypoint.position) <= CONFIG.waypointProximityRadius) {
         STATE.reachedWaypointIndex = targetWaypointIndex;
-        if (targetWaypoint.isCheckpoint) {
+        if (targetWaypoint.isCheckpoint && STATE.reachedCheckpointIndex < targetWaypointIndex) {
             STATE.reachedCheckpointIndex = targetWaypointIndex;
             STATE.currentCheckpoint++;
             onCheckpointReached();
@@ -677,6 +678,7 @@ export function OnGameModeStarted(): void {
     STATE.checkpointStartTime = mod.GetMatchTimeElapsed();
 
     uiSetup();
+    initWeather();
 }
 
 export function OnPlayerDied(victim: mod.Player, killer: mod.Player): void {
