@@ -23,6 +23,7 @@ export interface PlayerScoring {
 }
 
 export interface State {
+    checkpointIndexes: Array<number>;
     lastElapsedSeconds: number;
     progress: number;
     firstAttackerSpawned: boolean;
@@ -79,4 +80,5 @@ export const STATE: State = {
     checkpointSpatials: new Map<string, mod.Object>(),
     checkpointObjectives: new Map<string, mod.CapturePoint>(),
     checkpointVfx: new Map<string, mod.VFX>(),
+    checkpointIndexes: []
 };

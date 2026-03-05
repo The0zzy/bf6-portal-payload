@@ -41,7 +41,7 @@
     "homepage": "https://github.com/The0zzy/bf6-portal-payload#readme",
     "devDependencies": {
         "@bf6mods/portal": "^1.1.0",
-        "@clack/prompts": "^1.0.1",
+        "@clack/prompts": "^1.1.0",
         "@typescript-eslint/eslint-plugin": "^8.56.1",
         "@typescript-eslint/parser": "^8.56.1",
         "bf6-portal-bundler": "^1.3.0",
@@ -52,11 +52,11 @@
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.5",
         "prettier": "^3.8.1",
-        "quickjs-types": "^1.1.0",
+        "quickjs-types": "^1.2.0",
         "sharp": "^0.34.5",
         "ts-node": "^10.9.2",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.56.1"
     },
-    "templateVersion": "1.4.2"
+    "templateVersion": "1.5.0"
 }

@@ -5,12 +5,6 @@ import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
 import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard, scoring_getOrCreatePlayerScore } from './scoring.ts';
 import { initWeather } from './weather.ts';
 
-
-function getOpponentTeam(team: mod.Team): mod.Team {
-    const teamId = mod.GetObjId(team);
-    return teamId === 1 ? mod.GetTeam(2) : mod.GetTeam(1);
-}
-
 function calculatePayloadProgress(): void {
     let traveledDistance = 0;
     traveledDistance = STATE.waypoints.get(STATE.reachedWaypointIndex)!.distance;
@@ -62,6 +56,13 @@ function initPayloadTrack(): void {
     STATE.totalDistanceInMeters = distance;
     STATE.reachedWaypointIndex = 0;
     STATE.reachedCheckpointIndex = 0;
+    STATE.checkpointIndexes = [];
+    for (let i = 0; i < STATE.waypoints.size; i++) {
+        const waypoint = STATE.waypoints.get(i)!;
+        if (waypoint.isCheckpoint) {
+            STATE.checkpointIndexes.push(i);
+        }
+    }
     STATE.currentCheckpoint = 1;
     STATE.payloadPosition = STATE.waypoints.get(0)!.position;
 }
@@ -91,22 +92,25 @@ function applyCheckpointFx(): void {
         }
 
         // Spawn Objectives
+        // limit to the next checkpoint to be reached only
         for (let o = 0; o < CONFIG.checkpointObjectives.length; o++) {
             const key = `${i}-${o}`;
             if (STATE.checkpointObjectives.has(key)) {
                 mod.UnspawnObject(STATE.checkpointObjectives.get(key)!);
                 STATE.checkpointObjectives.delete(key);
             }
-            const objectiveConfig = CONFIG.checkpointObjectives[o];
-            const spawnPos = mod.Add(waypoint.position, objectiveConfig.relativeOffset);
-            const spawnRot = mod.Add(waypoint.rotation, objectiveConfig.rotation);
-            const obj = mod.SpawnObject(
-                objectiveConfig.prefab,
-                spawnPos,
-                spawnRot,
-                objectiveConfig.scale
-            ) as mod.CapturePoint;
-            STATE.checkpointObjectives.set(key, obj);
+            if (STATE.currentCheckpoint < STATE.checkpointIndexes.length && STATE.checkpointIndexes[STATE.currentCheckpoint] === i) {
+                const objectiveConfig = CONFIG.checkpointObjectives[o];
+                const spawnPos = mod.Add(waypoint.position, objectiveConfig.relativeOffset);
+                const spawnRot = mod.Add(waypoint.rotation, objectiveConfig.rotation);
+                const obj = mod.SpawnObject(
+                    objectiveConfig.prefab,
+                    spawnPos,
+                    spawnRot,
+                    objectiveConfig.scale
+                );
+                STATE.checkpointObjectives.set(key, obj);
+            }
         }
 
         for (let v = 0; v < CONFIG.checkpointVfx.length; v++) {
@@ -501,18 +505,6 @@ function setPayloadState(state: PayloadState): void {
 
 function onPayloadStateChanged(): void {
     updateStatusUI();
-}
-
-function checkWaypointReached(targetWaypointIndex: number) {
-    const targetWaypoint = STATE.waypoints.get(targetWaypointIndex)!;
-    if (mod.DistanceBetween(STATE.payloadPosition, targetWaypoint.position) <= CONFIG.waypointProximityRadius) {
-        STATE.reachedWaypointIndex = targetWaypointIndex;
-        if (targetWaypoint.isCheckpoint && STATE.reachedCheckpointIndex < targetWaypointIndex) {
-            STATE.reachedCheckpointIndex = targetWaypointIndex;
-            STATE.currentCheckpoint++;
-            onCheckpointReached();
-        }
-    }
 }
 
 function pushForward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
