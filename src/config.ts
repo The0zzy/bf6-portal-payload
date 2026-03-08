@@ -53,7 +53,7 @@ export const CONFIG: Config = {
     pushProximityRadius: 7.5,
     waypointProximityRadius: 0.25,
     speedAdditionPerPushingPlayer: 0.005,
-    payloadSpeedMultiplierT1: 0.035, //0.035 0.220
+    payloadSpeedMultiplierT1: 0.220, //0.035 0.220
     payloadSpeedMultiplierT2: 0.015, //0.015 0.220
     objectiveScorePerSecond: 5,
     overtimeDuration: 60,
@@ -67,14 +67,14 @@ export const CONFIG: Config = {
         //{ prefab: mod.RuntimeSpawn_Abbasid.GM1083CargoTruck_01_Canopy, relativeOffset: mod.CreateVector(0, -0.1, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
     ],
     payloadObjectives: [
-        { prefab: mod.RuntimeSpawn_Common.MCOM, relativeOffset: mod.CreateVector(0, 1.1, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
+        { prefab: mod.RuntimeSpawn_Common.MCOM, relativeOffset: mod.CreateVector(0, 0.9, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
     ],
     payloadVfx: [
         { prefab: mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Target_Area, relativeOffset: mod.CreateVector(0, 0, 0), scale: 1.5, rotation: mod.CreateVector(0, 0, 0), color1: mod.CreateVector(1, 1, 1), color2: mod.CreateVector(1, 1, 1), speed: 1 },
     ],
     checkpointSpatials: [],
     checkpointObjectives: [
-        { prefab: mod.RuntimeSpawn_Common.CapturePoint, relativeOffset: mod.CreateVector(0, -2, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
+        { prefab: mod.RuntimeSpawn_Common.CapturePoint, relativeOffset: mod.CreateVector(0, -5, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
     ],
     checkpointVfx: [
         { prefab: mod.RuntimeSpawn_Common.FX_Smoke_Marker_Custom, relativeOffset: mod.CreateVector(0, 0, 0), scale: 1, rotation: mod.CreateVector(0, 0, 0), color1: mod.CreateVector(1, 1, 0), color2: mod.CreateVector(0, 1, 0), speed: 1 },

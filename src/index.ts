@@ -1,5 +1,5 @@
 import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI, progressFlash, nukeUI } from './ui.ts';
-import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound, endGameMusic, playPayloadIdleSound } from './sounds.ts';
+import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound, endGameMusic, playPayloadIdleSound, stopPayloadSound } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
 import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard, scoring_getOrCreatePlayerScore } from './scoring.ts';
@@ -639,6 +639,7 @@ function respawnPayloadSpatials() {
 
 async function onFinalCheckpointReached() {
     mod.PauseGameModeTime(true);
+    stopPayloadSound();
     endGameMusic(1);
     if (STATE.payloadVehicle) {
         mod.Kill(STATE.payloadVehicle as mod.Vehicle);
@@ -721,6 +722,7 @@ export function OngoingGlobal(): void {
         onPayloadMoved();
     } else if (counts.t1.length > 0 && counts.t2.length > 0) {
         setPayloadState(PayloadState.CONTESTED);
+        playPayloadIdleSound();
     } else {
         setPayloadState(PayloadState.IDLE);
         playPayloadIdleSound();

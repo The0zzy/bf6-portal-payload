@@ -14,7 +14,8 @@ let winning2 = false;
 let nearend = false;
 let lowtime = false;
 let nearendVO = false;
-let idle = false
+let idle = false;
+let payloadenabled = true;
 
 
 export async function initSounds() {
@@ -58,6 +59,7 @@ export function playCheckpointReachedSound(): void {
 
 //Play VO for team 1 pushing
 export function VOPushing(): void {
+    if (!payloadenabled) return;
     if (idle || !winning1) {
         playPayloadMovingSound();
         idle = false;
@@ -73,6 +75,7 @@ export function VOPushing(): void {
 
 //Play VO for team 2 pushing
 export function VOPushingBack(): void {
+    if (!payloadenabled) return;
     if (idle || !winning2) {
         playPayloadMovingSound();
         idle = false;
@@ -92,12 +95,19 @@ export function playPayloadMovingSound(): void {
 }
 
 export function playPayloadIdleSound(): void {
+    if (!payloadenabled) return;
     if (!idle) {
         mod.PlaySound(payloadIdle, 1, mod.CreateVector(mod.XComponentOf(STATE.payloadPosition), mod.YComponentOf(STATE.payloadPosition) - 1, mod.ZComponentOf(STATE.payloadPosition)), 50);
         mod.StopSound(payloadMoving)
         idle = true;
     }
     //mod.MoveObject(payloadIdle, mod.CreateVector(mod.XComponentOf(STATE.payloadPosition), mod.YComponentOf(STATE.payloadPosition) - 1, mod.ZComponentOf(STATE.payloadPosition)), mod.CreateVector(0, 0, 0));
+}
+
+export function stopPayloadSound(): void {
+    payloadenabled = false;
+    mod.StopSound(payloadMoving);
+    mod.StopSound(payloadIdle);
 }
 
 // Play VO for low time
