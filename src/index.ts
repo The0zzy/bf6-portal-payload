@@ -391,8 +391,13 @@ function getRotationFromTangent(tangent: mod.Vector, useSmoothing: boolean = tru
 
         const smoothFactor = 0.2;
 
-        const smoothYaw = prevYaw + (((yaw - prevYaw + Math.PI) % (2 * Math.PI)) - Math.PI) * smoothFactor;
-        const smoothPitch = prevPitch + (pitch - prevPitch) * smoothFactor;
+        const diff = (yaw - prevYaw + Math.PI) % (2 * Math.PI);
+        const wrappedDiff = (diff < 0 ? diff + (2 * Math.PI) : diff) - Math.PI;
+        const smoothYaw = prevYaw + wrappedDiff * smoothFactor;
+
+        const pitchDiff = (pitch - prevPitch + Math.PI) % (2 * Math.PI);
+        const wrappedPitchDiff = (pitchDiff < 0 ? pitchDiff + (2 * Math.PI) : pitchDiff) - Math.PI;
+        const smoothPitch = prevPitch + wrappedPitchDiff * smoothFactor;
 
         return mod.CreateVector(smoothPitch, smoothYaw, roll);
     }

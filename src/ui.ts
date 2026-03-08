@@ -18,6 +18,32 @@ let mins = 7;
 let secs = 30;
 let timer = mod.stringkeys.payload.objective.checkpoint_timer;
 
+// Cached UI Widgets for performance
+let cachedWidgets: {
+    progress1?: mod.UIWidget,
+    progress2?: mod.UIWidget,
+    percentage1?: mod.UIWidget,
+    percentage2?: mod.UIWidget,
+    progress_background1?: mod.UIWidget,
+    progress_background2?: mod.UIWidget,
+    progressflash1?: mod.UIWidget,
+    progressflash2?: mod.UIWidget,
+    progress_backgroundflash1?: mod.UIWidget,
+    progress_backgroundflash2?: mod.UIWidget,
+    payload_progress_icon?: mod.UIWidget,
+    container?: mod.UIWidget,
+    payload_icon1?: mod.UIWidget,
+    payload_icon2?: mod.UIWidget,
+    payloadstatus1?: mod.UIWidget,
+    payloadstatus2?: mod.UIWidget
+} = {};
+
+function getWidget(name: string): mod.UIWidget | undefined {
+    if (!cachedWidgets[name as keyof typeof cachedWidgets]) {
+        cachedWidgets[name as keyof typeof cachedWidgets] = mod.FindUIWidgetWithName(name);
+    }
+    return cachedWidgets[name as keyof typeof cachedWidgets];
+}
 
 export function uiSetup(): void {
     // Container setup
@@ -80,21 +106,45 @@ export function uiSetup(): void {
     // Payload progress icon draws last to show progress on top of Checkpoints
     mod.AddUIContainer("payload_progress_icon", mod.CreateVector(146 + (6 * STATE.progressInPercent), 0, 0), mod.CreateVector(4, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(1, 1, 0), 1, mod.UIBgFill.Solid);
     mod.AddUIText("credits", mod.CreateVector(0, 0, 0), mod.CreateVector(600, 30, 0), mod.UIAnchor.BottomLeft, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.credits), 14, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.BottomLeft);
+
+    // Refresh cache after setup
+    cachedWidgets = {};
     ui_ready = true;
 }
 
 export function updateProgressUI(): void {
-    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress1"), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0));
-    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress2"), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0));
-    mod.SetUITextLabel(mod.FindUIWidgetWithName("percentage1"), mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(STATE.progressInPercent)));
-    mod.SetUITextLabel(mod.FindUIWidgetWithName("percentage2"), mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(STATE.progressInPercent)));
-    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress_background1"), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0));
-    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress_background2"), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0));
-    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progressflash1"), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0));
-    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progressflash2"), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0));
-    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress_backgroundflash1"), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0));
-    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress_backgroundflash2"), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0));
-    mod.SetUIWidgetPosition(mod.FindUIWidgetWithName("payload_progress_icon"), mod.CreateVector(146 + (6 * STATE.progressInPercent), 0, 0));
+    const leftProgress = (6 * STATE.progressInPercent) - 2;
+    const rightProgress = 600 - (6 * STATE.progressInPercent);
+    const progressIconPos = 146 + (6 * STATE.progressInPercent);
+
+    const wProgress1 = getWidget("progress1");
+    const wProgress2 = getWidget("progress2");
+    const wPercentage1 = getWidget("percentage1");
+    const wPercentage2 = getWidget("percentage2");
+    const wBg1 = getWidget("progress_background1");
+    const wBg2 = getWidget("progress_background2");
+    const wFlash1 = getWidget("progressflash1");
+    const wFlash2 = getWidget("progressflash2");
+    const wBgFlash1 = getWidget("progress_backgroundflash1");
+    const wBgFlash2 = getWidget("progress_backgroundflash2");
+    const wIcon = getWidget("payload_progress_icon");
+
+    if (wProgress1) mod.SetUIWidgetSize(wProgress1, mod.CreateVector(leftProgress, 20, 0));
+    if (wProgress2) mod.SetUIWidgetSize(wProgress2, mod.CreateVector(leftProgress, 20, 0));
+
+    if (wPercentage1) mod.SetUITextLabel(wPercentage1, mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(STATE.progressInPercent)));
+    if (wPercentage2) mod.SetUITextLabel(wPercentage2, mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(STATE.progressInPercent)));
+
+    if (wBg1) mod.SetUIWidgetSize(wBg1, mod.CreateVector(rightProgress, 10, 0));
+    if (wBg2) mod.SetUIWidgetSize(wBg2, mod.CreateVector(rightProgress, 10, 0));
+
+    if (wFlash1) mod.SetUIWidgetSize(wFlash1, mod.CreateVector(leftProgress, 20, 0));
+    if (wFlash2) mod.SetUIWidgetSize(wFlash2, mod.CreateVector(leftProgress, 20, 0));
+
+    if (wBgFlash1) mod.SetUIWidgetSize(wBgFlash1, mod.CreateVector(rightProgress, 10, 0));
+    if (wBgFlash2) mod.SetUIWidgetSize(wBgFlash2, mod.CreateVector(rightProgress, 10, 0));
+
+    if (wIcon) mod.SetUIWidgetPosition(wIcon, mod.CreateVector(progressIconPos, 0, 0));
 }
 
 export function updateStatusUI(): void {
@@ -226,7 +276,7 @@ export async function nukeUI(): Promise<void> {
     mod.EnableVFX(nukeStart, true);
     let ROF = mod.SpawnObject(mod.RuntimeSpawn_Common.RingOfFire, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
 
-    await mod.Wait(0.7);
+    await mod.Wait(0.8);
     for (let i = 10; i > 0; i -= 0.25) {
         mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("nuke"), i / 10);
         await mod.Wait(0.066);
