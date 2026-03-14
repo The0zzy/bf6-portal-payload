@@ -12063,6 +12063,32 @@
                 "z": 212.703
             },
             "id": "FiringRangeCrateWeapon_01_EnableWeather"
+        },
+        {
+            "name": "GM1083CargoTruck_01_Canopy",
+            "ObjId": 5000,
+            "type": "Basketball_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "id": "payloadObjects/GM1083CargoTruck_01_Canopy"
         }
     ],
     "Static": [

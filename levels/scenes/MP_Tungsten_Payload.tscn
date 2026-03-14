@@ -1,6 +1,5 @@
-[gd_scene load_steps=14 format=3 uid="uid://foq00g1a2xnb"]
+[gd_scene load_steps=13 format=3 uid="uid://foq00g1a2xnb"]
 
-[ext_resource type="Texture2D" uid="uid://b3nimnwwy2h4i" path="res://images/Mirak Valley HQ.png" id="1_b3qp6"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/HQ_PlayerSpawner.tscn" id="1_g02yh"]
 [ext_resource type="PackedScene" uid="uid://jv31so3xcr7p" path="res://addons/bf_portal/portal_tools/types/PolygonVolume/PolygonVolume.tscn" id="2_1gqvr"]
 [ext_resource type="PackedScene" path="res://objects/entities/SpawnPoint.tscn" id="3_cii4s"]
@@ -12,7 +11,7 @@
 [ext_resource type="PackedScene" path="res://objects/props/FireAlarmButton_01.tscn" id="8_eh7ot"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/Sector.tscn" id="9_yjseg"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/AreaTrigger.tscn" id="10_7cykl"]
-[ext_resource type="PackedScene" path="res://objects/uncategorized/GM1083CargoTruck_01_Canopy_Cargo01.tscn" id="13_b3qp6"]
+[ext_resource type="PackedScene" path="res://objects/props/Basketball_01.tscn" id="12_eav7t"]
 
 [node name="MP_Tungsten" type="Node3D"]
 
@@ -20,13 +19,10 @@
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57.6368, 0, -340.045)
 visible = false
 size = Vector3(1347.51, 500, 762.271)
-texture_albedo = ExtResource("1_b3qp6")
-texture_emission = ExtResource("1_b3qp6")
 emission_energy = 0.0
 normal_fade = 0.889
 
-[node name="CombatArea" parent="." node_paths=PackedStringArray("CombatVolume") instance=ExtResource("4_3p3eq")]
-CombatVolume = NodePath("")
+[node name="CombatArea" parent="." instance=ExtResource("4_3p3eq")]
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.101056, 0.994881, 0, -0.994881, 0.101056, -15.5236, 408.54, -265.293)
@@ -845,9 +841,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.69048, 15.0514, 4.1679)
 ObjId = 605
 Area = NodePath("../SectorArea5")
 
-[node name="GM1083CargoTruck_01_Canopy_Cargo01" parent="." instance=ExtResource("13_b3qp6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -397.185, 47.8605, -224.429)
-ObjId = 4000
+[node name="payloadObjects" type="Node3D" parent="."]
+
+[node name="GM1083CargoTruck_01_Canopy_cargo01" parent="payloadObjects" instance=ExtResource("12_eav7t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+ObjId = 5001
 
 [editable path="Static/MP_Tungsten_Terrain"]
 [editable path="Static/MP_Tungsten_Terrain/Mesh"]

@@ -27,31 +27,6 @@
             "id": "Camera3D/DeployCam"
         },
         {
-            "name": "CarSUV_01",
-            "type": "CarSUV_01",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 1
-            },
-            "position": {
-                "x": -172.003,
-                "y": 64.0049,
-                "z": 9.71465
-            },
-            "id": "Payload/CarSUV_01"
-        },
-        {
             "name": "Track_0",
             "ObjId": 1000,
             "type": "FiringRange_MatDecal_01",
@@ -4318,6 +4293,32 @@
             "linked": [
                 "Area"
             ]
+        },
+        {
+            "name": "GM1083CargoTruck_01_Canopy",
+            "ObjId": 5000,
+            "type": "Basketball_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "id": "payloadObjects/GM1083CargoTruck_01_Canopy"
         }
     ],
     "Static": [

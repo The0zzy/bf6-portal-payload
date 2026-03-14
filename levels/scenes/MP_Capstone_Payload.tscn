@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://gsd0a760017j"]
+[gd_scene load_steps=14 format=3 uid="uid://gsd0a760017j"]
 
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/HQ_PlayerSpawner.tscn" id="1_v85km"]
 [ext_resource type="PackedScene" uid="uid://jv31so3xcr7p" path="res://addons/bf_portal/portal_tools/types/PolygonVolume/PolygonVolume.tscn" id="2_q5qn4"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" path="res://static/MP_Capstone_Assets.tscn" id="7_ylyfr"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/AreaTrigger.tscn" id="9_frqbd"]
 [ext_resource type="PackedScene" path="res://objects/uncategorized/EnvironmentDecalVolume_Winter_Event.tscn" id="12_0ppsj"]
+[ext_resource type="PackedScene" path="res://objects/props/Basketball_01.tscn" id="13_4owo6"]
 
 [node name="MP_Capstone" type="Node3D"]
 
@@ -819,3 +820,9 @@ Area = NodePath("../SectorArea6")
 
 [node name="EnvironmentDecalVolume_Winter_Event" parent="." instance=ExtResource("12_0ppsj")]
 transform = Transform3D(2000, 0, 0, 0, 2000, 0, 0, 0, 2000, 32.9617, 310.934, -26.6493)
+
+[node name="payloadObjects" type="Node3D" parent="."]
+
+[node name="GM1083CargoTruck_01_Canopy" parent="payloadObjects" instance=ExtResource("13_4owo6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+ObjId = 5000

@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/HQ_PlayerSpawner.tscn" id="1_ruukq"]
 [ext_resource type="PackedScene" uid="uid://jv31so3xcr7p" path="res://addons/bf_portal/portal_tools/types/PolygonVolume/PolygonVolume.tscn" id="2_wuecr"]
 [ext_resource type="PackedScene" path="res://objects/entities/SpawnPoint.tscn" id="3_b17jw"]
-[ext_resource type="PackedScene" path="res://objects/props/CarSUV_01.tscn" id="4_0dmue"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/DeployCam.tscn" id="5_7k826"]
 [ext_resource type="PackedScene" path="res://objects/props/FiringRange_MatDecal_01.tscn" id="5_n56xi"]
 [ext_resource type="PackedScene" path="res://static/MP_Abbasid_Terrain.tscn" id="6_3of6p"]
@@ -11,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://static/MP_Abbasid_Assets.tscn" id="7_i0t1x"]
 [ext_resource type="PackedScene" path="res://objects/props/FireAlarmButton_01.tscn" id="8_v6rb8"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/AreaTrigger.tscn" id="9_ofkm8"]
+[ext_resource type="PackedScene" path="res://objects/props/Basketball_01.tscn" id="11_fp84v"]
 
 [node name="MP_Abbasid" type="Node3D"]
 
@@ -27,11 +27,6 @@ metadata/_edit_lock_ = true
 
 [node name="MP_Abbasid_Assets" parent="Static" instance=ExtResource("7_i0t1x")]
 metadata/_edit_lock_ = true
-
-[node name="Payload" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -172.003, 64.0049, 9.71465)
-
-[node name="CarSUV_01" parent="Payload" instance=ExtResource("4_0dmue")]
 
 [node name="Track" type="Node3D" parent="."]
 
@@ -654,3 +649,9 @@ height = 100.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.69048, 23.1401, 4.1679)
 ObjId = 605
 Area = NodePath("../SectorArea5")
+
+[node name="payloadObjects" type="Node3D" parent="."]
+
+[node name="GM1083CargoTruck_01_Canopy" parent="payloadObjects" instance=ExtResource("11_fp84v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+ObjId = 5000

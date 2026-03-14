@@ -193,6 +193,31 @@ function initPayloadObjective(): void {
 
     // Spawn Spatials if vehicle spawner is disabled
     if (!CONFIG.enableVehicleSpawner) {
+        for (const payloadSpatialId of CONFIG.payloadSpatialIdentifiers) {
+            const payloadIdentifierObject = mod.GetSpatialObject(payloadSpatialId);
+            const payloadIdentifierX = mod.XComponentOf(mod.GetObjectPosition(payloadIdentifierObject));
+            if (payloadIdentifierX >= 1 && payloadSpatialId === 5000) {
+                CONFIG.payloadSpatials.push(
+                    {
+                        prefab: mod.RuntimeSpawn_Abbasid.GM1083CargoTruck_01_Canopy,
+                        relativeOffset: mod.CreateVector(0, -0.1, 0),
+                        scale: mod.CreateVector(1, 1, 1),
+                        rotation: mod.CreateVector(0, 0, 0)
+                    }
+                );
+            }
+            if (payloadIdentifierX >= 1 && payloadSpatialId === 5001) {
+                CONFIG.payloadSpatials.push(
+                    {
+                        prefab: mod.RuntimeSpawn_Tungsten.GM1083CargoTruck_01_Canopy_Cargo01,
+                        relativeOffset: mod.CreateVector(0, -0.1, 0),
+                        scale: mod.CreateVector(1, 1, 1),
+                        rotation: mod.CreateVector(0, 0, 0)
+                    }
+                );
+            }
+        }
+
         for (let i = 0; i < CONFIG.payloadSpatials.length; i++) {
             const spatialConfig = CONFIG.payloadSpatials[i];
             const spawnPos = mod.Add(start.position, spatialConfig.relativeOffset);

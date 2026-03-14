@@ -11,12 +11,12 @@
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/Sector.tscn" id="7_bjasm"]
 [ext_resource type="PackedScene" path="res://static/MP_Contaminated_Assets.tscn" id="7_yh2he"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/AreaTrigger.tscn" id="9_2cgwf"]
-[ext_resource type="PackedScene" uid="uid://bgva3omvxelw4" path="res://objects/gameplay/common/VehicleSpawner.tscn" id="12_2uuea"]
-[ext_resource type="Texture2D" uid="uid://b8ew4kcx8oium" path="res://images/Map Contaminated2.jpg" id="13_7sxqi"]
+[ext_resource type="PackedScene" path="res://objects/gameplay/common/VehicleSpawner.tscn" id="12_2uuea"]
 [ext_resource type="PackedScene" path="res://objects/uncategorized/WreckTank_Abra01_All.tscn" id="14_gm2oy"]
 [ext_resource type="PackedScene" path="res://objects/props/WreckTruck_01_Bed.tscn" id="15_q7yoa"]
 [ext_resource type="PackedScene" path="res://objects/nature/RockpileLarge_02.tscn" id="16_tl4ko"]
 [ext_resource type="PackedScene" path="res://objects/nature/RockpileLarge_03.tscn" id="17_4pwv0"]
+[ext_resource type="PackedScene" path="res://objects/props/Basketball_01.tscn" id="19_5qo0f"]
 [ext_resource type="PackedScene" path="res://objects/fx/FX_Snow_BlowingSnow_L_01_TerrainSnap.tscn" id="19_q7yoa"]
 [ext_resource type="PackedScene" path="res://objects/props/FiringRangeCrateWeapon_01.tscn" id="19_tl4ko"]
 
@@ -26,7 +26,6 @@
 transform = Transform3D(50.6672, 11.6975, 5.11312e-07, 0, -2.27299e-06, 52, 11.6975, -50.6672, -2.21474e-06, 153.997, 449.989, 27.5707)
 transparency = 0.55
 modulate = Color(0.647395, 0.647395, 0.647395, 1)
-texture = ExtResource("13_7sxqi")
 
 [node name="CombatArea" parent="." instance=ExtResource("4_cy8ex")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -85.6095, 287.693, 253.579)
@@ -2036,6 +2035,12 @@ metadata/_edit_group_ = true
 [node name="FiringRangeCrateWeapon_01_EnableWeather" parent="." instance=ExtResource("19_tl4ko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 439.106, 298.258, 212.703)
 ObjId = 4000
+
+[node name="payloadObjects" type="Node3D" parent="."]
+
+[node name="GM1083CargoTruck_01_Canopy" parent="payloadObjects" instance=ExtResource("19_5qo0f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+ObjId = 5000
 
 [editable path="Static/MP_Contaminated_Terrain"]
 [editable path="Static/MP_Contaminated_Terrain/Mesh"]

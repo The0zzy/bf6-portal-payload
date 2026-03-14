@@ -2,7 +2,6 @@
     "Portal_Dynamic": [
         {
             "name": "CombatArea",
-            "CombatVolume": null,
             "type": "CombatArea",
             "right": {
                 "x": 1,
@@ -24,10 +23,7 @@
                 "y": 0,
                 "z": 0
             },
-            "id": "CombatArea",
-            "linked": [
-                "CombatVolume"
-            ]
+            "id": "CombatArea"
         },
         {
             "name": "DeployCam",
@@ -5008,9 +5004,9 @@
             ]
         },
         {
-            "name": "GM1083CargoTruck_01_Canopy_Cargo01",
-            "ObjId": 4000,
-            "type": "GM1083CargoTruck_01_Canopy_Cargo01",
+            "name": "GM1083CargoTruck_01_Canopy_cargo01",
+            "ObjId": 5001,
+            "type": "Basketball_01",
             "right": {
                 "x": 1,
                 "y": 0,
@@ -5027,11 +5023,11 @@
                 "z": 1
             },
             "position": {
-                "x": -397.185,
-                "y": 47.8605,
-                "z": -224.429
+                "x": 1,
+                "y": 0,
+                "z": 0
             },
-            "id": "GM1083CargoTruck_01_Canopy_Cargo01"
+            "id": "payloadObjects/GM1083CargoTruck_01_Canopy_cargo01"
         }
     ],
     "Static": [
