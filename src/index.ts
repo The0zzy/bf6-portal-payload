@@ -539,7 +539,7 @@ function onPayloadStateChanged(): void {
 
 function pushForward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
     const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t1.length - counts.t2.length);
-    const speed = CONFIG.payloadSpeedMultiplierT1 + speedAddtion;
+    const speed = (CONFIG.payloadSpeedT1 + speedAddtion) / STATE.tickrate;
     setPayloadState(PayloadState.ADVANCING);
     moveAlongSpline(true, speed);
     VOPushing();
@@ -554,7 +554,7 @@ function pushBackward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
         return;
     }
     const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t2.length - counts.t1.length);
-    const speed = CONFIG.payloadSpeedMultiplierT2 + speedAddtion;
+    const speed = (CONFIG.payloadSpeedT2 + speedAddtion) / STATE.tickrate;
     setPayloadState(PayloadState.PUSHING_BACK);
     moveAlongSpline(false, speed);
     VOPushingBack();
@@ -762,8 +762,22 @@ export function OngoingGlobal(): void {
         for (const p of counts.t2) {
             scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
         }
-        executeEverySecond();
+
+        // update tickrate
+        STATE.pastTickRates.shift();
+        STATE.pastTickRates.push(STATE.ticks);
+        // smooth out (avg)
+        const newTickrate = STATE.pastTickRates.reduce((a, b) => a + b) / STATE.pastTickRates.length;
+        // only apply if the change is significant
+        if (newTickrate != STATE.tickrate && Math.abs(newTickrate - STATE.tickrate) > 5) {
+            STATE.tickrate = newTickrate;
+        }
+        STATE.ticks = 0;
     }
+
+    executeEverySecond();
+
+    STATE.ticks++;
 }
 
 //Force remove players from payload vehicle

@@ -30,8 +30,8 @@ export interface Config {
     pushProximityRadius: number;
     waypointProximityRadius: number;
     speedAdditionPerPushingPlayer: number;
-    payloadSpeedMultiplierT1: number;
-    payloadSpeedMultiplierT2: number;
+    payloadSpeedT1: number;
+    payloadSpeedT2: number;
     objectiveScorePerSecond: number;
     overtimeDuration: number;
     overtimeEnabled: boolean;
@@ -54,9 +54,9 @@ export const CONFIG: Config = {
     enablePayloadSound: true,
     pushProximityRadius: 7.5,
     waypointProximityRadius: 0.25,
-    speedAdditionPerPushingPlayer: 0.005,
-    payloadSpeedMultiplierT1: 0.035, //0.035 0.220
-    payloadSpeedMultiplierT2: 0.015, //0.015 0.220
+    speedAdditionPerPushingPlayer: 0.15,
+    payloadSpeedT1: 1.05, //6
+    payloadSpeedT2: 0.45, //6
     objectiveScorePerSecond: 5,
     overtimeDuration: 60,
     overtimeEnabled: true,

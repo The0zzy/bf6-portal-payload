@@ -39,7 +39,8 @@
       "healed_vehicle": "Healed payload vehicle!",
       "not_assigned_payload_vehicle": "Not assigned payload vehicle!",
       "vehicle_spawned": "Vehicle spawned!",
-      "exit_message": "GET OUT AND PUSH!"
+      "exit_message": "GET OUT AND PUSH!",
+      "score_message": "+ {} PTFO score"
     },
     "meta": {
       "version": "0.0.10",
