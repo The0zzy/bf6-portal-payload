@@ -295,3 +295,11 @@ export async function nukeUI(): Promise<void> {
     let nukeEnd = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Detonation, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
     mod.EnableVFX(nukeEnd, true);
 }
+
+export async function updateDebugUI(): Promise<void> {
+    let debugText = mod.FindUIWidgetWithName("debugText");
+    if (!debugText) {
+        mod.AddUIText("debugText", mod.CreateVector(0, 0, 0), mod.CreateVector(600, 30, 0), mod.UIAnchor.BottomCenter, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.debug.tickrate), 14, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center);
+    }
+    mod.SetUITextLabel(debugText, mod.Message(mod.stringkeys.payload.debug.tickrate, STATE.ticks, STATE.tickrate));
+}
