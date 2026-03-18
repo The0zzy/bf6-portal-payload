@@ -90,6 +90,7 @@ export function scoring_onPlayerEarnedAssist(player: mod.Player): void {
 
 export function scoring_awardObjectivePoints(player: mod.Player, amount: number): void {
     scoring_updatePlayerScore(player, 'objective', amount);
+    mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.score_message, amount), player);
 }
 
 export function scoring_onPlayerLeave(playerId: number): void {

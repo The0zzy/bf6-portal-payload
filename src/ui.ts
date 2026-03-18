@@ -18,6 +18,32 @@ let mins = 7;
 let secs = 30;
 let timer = mod.stringkeys.payload.objective.checkpoint_timer;
 
+// Cached UI Widgets for performance
+let cachedWidgets: {
+    progress1?: mod.UIWidget,
+    progress2?: mod.UIWidget,
+    percentage1?: mod.UIWidget,
+    percentage2?: mod.UIWidget,
+    progress_background1?: mod.UIWidget,
+    progress_background2?: mod.UIWidget,
+    progressflash1?: mod.UIWidget,
+    progressflash2?: mod.UIWidget,
+    progress_backgroundflash1?: mod.UIWidget,
+    progress_backgroundflash2?: mod.UIWidget,
+    payload_progress_icon?: mod.UIWidget,
+    container?: mod.UIWidget,
+    payload_icon1?: mod.UIWidget,
+    payload_icon2?: mod.UIWidget,
+    payloadstatus1?: mod.UIWidget,
+    payloadstatus2?: mod.UIWidget
+} = {};
+
+function getWidget(name: string): mod.UIWidget | undefined {
+    if (!cachedWidgets[name as keyof typeof cachedWidgets]) {
+        cachedWidgets[name as keyof typeof cachedWidgets] = mod.FindUIWidgetWithName(name);
+    }
+    return cachedWidgets[name as keyof typeof cachedWidgets];
+}
 
 export function uiSetup(): void {
     // Container setup
@@ -31,21 +57,19 @@ export function uiSetup(): void {
     mod.AddUIText("payloadstatus2", mod.CreateVector(0, 55, 0), mod.CreateVector(150, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, mod.CreateVector(0.5, 0.5, 0.5), 0.4, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.state.message, mod.stringkeys.payload.state.idle), 38, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center, mod.GetTeam(2));
     mod.AddUIImage("payload_icon1", mod.CreateVector(0, 20, 0), mod.CreateVector(50, 40, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, mod.CreateVector(1, 1, 1), 0.7, mod.UIBgFill.None, mod.UIImageType.CrownSolid, mod.CreateVector(1, 1, 1), 1, mod.GetTeam(1));
     mod.AddUIImage("payload_icon2", mod.CreateVector(0, 20, 0), mod.CreateVector(50, 40, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, mod.CreateVector(1, 1, 1), 0.7, mod.UIBgFill.None, mod.UIImageType.CrownSolid, mod.CreateVector(1, 1, 1), 1, mod.GetTeam(2));
-    mod.AddUIContainer("progress_background1", mod.CreateVector(150, 5, 0), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, enemycolour, 0.7, mod.UIBgFill.Solid, mod.GetTeam(1));
-    mod.AddUIContainer("progress1", mod.CreateVector(150, 0, 0), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, friendlycolour, 0.7, mod.UIBgFill.Solid, mod.GetTeam(1));
-    mod.AddUIContainer("progress_background2", mod.CreateVector(150, 5, 0), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, friendlycolour, 0.7, mod.UIBgFill.Solid, mod.GetTeam(2));
-    mod.AddUIContainer("progress2", mod.CreateVector(150, 0, 0), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, enemycolour, 0.7, mod.UIBgFill.Solid, mod.GetTeam(2));
+    mod.AddUIContainer("progress_background1", mod.CreateVector(150, 5, 0), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, enemybgcolour, 0.9, mod.UIBgFill.Solid, mod.GetTeam(1));
+    mod.AddUIContainer("progress1", mod.CreateVector(150, 0, 0), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, friendlybgcolour, 0.9, mod.UIBgFill.Solid, mod.GetTeam(1));
+    mod.AddUIContainer("progress_background2", mod.CreateVector(150, 5, 0), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, friendlybgcolour, 0.9, mod.UIBgFill.Solid, mod.GetTeam(2));
+    mod.AddUIContainer("progress2", mod.CreateVector(150, 0, 0), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, enemybgcolour, 0.9, mod.UIBgFill.Solid, mod.GetTeam(2));
     mod.AddUIContainer("checkpoint0", mod.CreateVector(146, -5, 0), mod.CreateVector(4, 30, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(0.9, 0.9, 0.9), 1, mod.UIBgFill.Solid);
     mod.AddUIText("remaining_time1", mod.CreateVector(0, -5, 0), mod.CreateVector(100, 30, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, enemybgcolour, 0.9, mod.UIBgFill.Solid, mod.Message(timer, mins, mod.Floor(secs / 10), mod.Modulo(secs, 10)), 26, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center, mod.GetTeam(1));
     mod.AddUIText("remaining_time2", mod.CreateVector(0, -5, 0), mod.CreateVector(100, 30, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, friendlybgcolour, 0.9, mod.UIBgFill.Solid, mod.Message(timer, mins, mod.Floor(secs / 10), mod.Modulo(secs, 10)), 26, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center, mod.GetTeam(2));
     mod.AddUIText("percentage1", mod.CreateVector(0, -5, 0), mod.CreateVector(100, 30, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, friendlybgcolour, 0.9, mod.UIBgFill.Solid, mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(STATE.progressInPercent)), 26, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center, mod.GetTeam(1));
     mod.AddUIText("percentage2", mod.CreateVector(0, -5, 0), mod.CreateVector(100, 30, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, enemybgcolour, 0.9, mod.UIBgFill.Solid, mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(STATE.progressInPercent)), 26, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center, mod.GetTeam(2));
-    mod.AddUIContainer("progress_backgroundflash", mod.CreateVector(150, 5, 0), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, mod.CreateVector(1, 1, 1), 0.1, mod.UIBgFill.GradientLeft);
-    mod.AddUIContainer("progressflash", mod.CreateVector(150, 0, 0), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(1, 1, 1), 0.1, mod.UIBgFill.GradientRight);
-
-    // The UI alpha cannot be set to 0 as this breaks the animation. This works in blocks but not TS 
-    mod.SetUIWidgetVisible(mod.FindUIWidgetWithName("progressflash"), false);
-    mod.SetUIWidgetVisible(mod.FindUIWidgetWithName("progress_backgroundflash"), false);
+    mod.AddUIContainer("progress_backgroundflash1", mod.CreateVector(150, 5, 0), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, enemycolour, 0.01, mod.UIBgFill.GradientLeft, mod.GetTeam(1));
+    mod.AddUIContainer("progress_backgroundflash2", mod.CreateVector(150, 5, 0), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, friendlycolour, 0.01, mod.UIBgFill.GradientLeft, mod.GetTeam(2));
+    mod.AddUIContainer("progressflash1", mod.CreateVector(150, 0, 0), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, friendlycolour, 0.01, mod.UIBgFill.GradientRight, mod.GetTeam(1));
+    mod.AddUIContainer("progressflash2", mod.CreateVector(150, 0, 0), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, enemycolour, 0.01, mod.UIBgFill.GradientRight, mod.GetTeam(2));
 
     //Checkpoints distance on progress UI
     for (let i = 1; i < STATE.waypoints.size; i++) {
@@ -74,26 +98,53 @@ export function uiSetup(): void {
             mod.stringkeys.payload.meta.version,
             mod.stringkeys.payload.meta.build
         ),
-        22,
+        18,
         mod.CreateVector(0.3, 0.3, 0.3),
         1,
         mod.UIAnchor.BottomRight
     );
     // Payload progress icon draws last to show progress on top of Checkpoints
     mod.AddUIContainer("payload_progress_icon", mod.CreateVector(146 + (6 * STATE.progressInPercent), 0, 0), mod.CreateVector(4, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(1, 1, 0), 1, mod.UIBgFill.Solid);
+    mod.AddUIText("credits", mod.CreateVector(0, 0, 0), mod.CreateVector(600, 30, 0), mod.UIAnchor.BottomLeft, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.credits), 14, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.BottomLeft);
+
+    // Refresh cache after setup
+    cachedWidgets = {};
     ui_ready = true;
 }
 
 export function updateProgressUI(): void {
-    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress1"), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0));
-    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress2"), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0));
-    mod.SetUITextLabel(mod.FindUIWidgetWithName("percentage1"), mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(STATE.progressInPercent)));
-    mod.SetUITextLabel(mod.FindUIWidgetWithName("percentage2"), mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(STATE.progressInPercent)));
-    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress_background1"), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0));
-    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress_background2"), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0));
-    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progressflash"), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0));
-    mod.SetUIWidgetSize(mod.FindUIWidgetWithName("progress_backgroundflash"), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0));
-    mod.SetUIWidgetPosition(mod.FindUIWidgetWithName("payload_progress_icon"), mod.CreateVector(146 + (6 * STATE.progressInPercent), 0, 0));
+    const leftProgress = (6 * STATE.progressInPercent) - 2;
+    const rightProgress = 600 - (6 * STATE.progressInPercent);
+    const progressIconPos = 146 + (6 * STATE.progressInPercent);
+
+    const wProgress1 = getWidget("progress1");
+    const wProgress2 = getWidget("progress2");
+    const wPercentage1 = getWidget("percentage1");
+    const wPercentage2 = getWidget("percentage2");
+    const wBg1 = getWidget("progress_background1");
+    const wBg2 = getWidget("progress_background2");
+    const wFlash1 = getWidget("progressflash1");
+    const wFlash2 = getWidget("progressflash2");
+    const wBgFlash1 = getWidget("progress_backgroundflash1");
+    const wBgFlash2 = getWidget("progress_backgroundflash2");
+    const wIcon = getWidget("payload_progress_icon");
+
+    if (wProgress1) mod.SetUIWidgetSize(wProgress1, mod.CreateVector(leftProgress, 20, 0));
+    if (wProgress2) mod.SetUIWidgetSize(wProgress2, mod.CreateVector(leftProgress, 20, 0));
+
+    if (wPercentage1) mod.SetUITextLabel(wPercentage1, mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(STATE.progressInPercent)));
+    if (wPercentage2) mod.SetUITextLabel(wPercentage2, mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(STATE.progressInPercent)));
+
+    if (wBg1) mod.SetUIWidgetSize(wBg1, mod.CreateVector(rightProgress, 10, 0));
+    if (wBg2) mod.SetUIWidgetSize(wBg2, mod.CreateVector(rightProgress, 10, 0));
+
+    if (wFlash1) mod.SetUIWidgetSize(wFlash1, mod.CreateVector(leftProgress, 20, 0));
+    if (wFlash2) mod.SetUIWidgetSize(wFlash2, mod.CreateVector(leftProgress, 20, 0));
+
+    if (wBgFlash1) mod.SetUIWidgetSize(wBgFlash1, mod.CreateVector(rightProgress, 10, 0));
+    if (wBgFlash2) mod.SetUIWidgetSize(wBgFlash2, mod.CreateVector(rightProgress, 10, 0));
+
+    if (wIcon) mod.SetUIWidgetPosition(wIcon, mod.CreateVector(progressIconPos, 0, 0));
 }
 
 export function updateStatusUI(): void {
@@ -111,8 +162,6 @@ export function updateStatusUI(): void {
             mod.SetUIImageColor(mod.FindUIWidgetWithName("payload_icon2"), enemycolour);
             mod.SetUITextColor(mod.FindUIWidgetWithName("payloadstatus1"), friendlycolour);
             mod.SetUITextColor(mod.FindUIWidgetWithName("payloadstatus2"), enemycolour);
-            //mod.SetUITextSize(mod.FindUIWidgetWithName("payloadstatus1"), 44);
-            //mod.SetUITextSize(mod.FindUIWidgetWithName("payloadstatus2"), 44);
             break;
         case PayloadState.PUSHING_BACK:
             state = mod.stringkeys.payload.state.pushing_back;
@@ -120,8 +169,6 @@ export function updateStatusUI(): void {
             mod.SetUIImageColor(mod.FindUIWidgetWithName("payload_icon2"), friendlycolour);
             mod.SetUITextColor(mod.FindUIWidgetWithName("payloadstatus1"), enemycolour);
             mod.SetUITextColor(mod.FindUIWidgetWithName("payloadstatus2"), friendlycolour);
-            //mod.SetUITextSize(mod.FindUIWidgetWithName("payloadstatus1"), 44);
-            //mod.SetUITextSize(mod.FindUIWidgetWithName("payloadstatus2"), 44);
             break;
         case PayloadState.CONTESTED:
             state = mod.stringkeys.payload.state.contested;
@@ -178,50 +225,81 @@ export async function ui_onPlayerJoinGame(): Promise<void> {
 export async function progressFlash(): Promise<void> {
     if (ui_ready) {
         for (let i = 10; i > 0; i -= 1) {
+            const alpha = i / 10;
+            const alphaNegative = 1 - alpha;
             if (STATE.payloadState == PayloadState.ADVANCING) {
-                mod.SetUIWidgetVisible(mod.FindUIWidgetWithName("progressflash"), true);
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progressflash"), i / 10);
+                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progressflash1"), alpha);
+                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progressflash2"), alpha);
             }
             if (STATE.payloadState == PayloadState.PUSHING_BACK) {
-                mod.SetUIWidgetVisible(mod.FindUIWidgetWithName("progress_backgroundflash"), true);
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progress_backgroundflash"), i / 10);
+                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progress_backgroundflash1"), alpha);
+                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progress_backgroundflash2"), alpha);
             }
             if (STATE.payloadState == PayloadState.IDLE || STATE.payloadState == PayloadState.LOCKED) {
                 mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus1"), 1);
                 mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus2"), 1);
             } else {
-                mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus1"), i / 10);
-                mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus2"), i / 10);
+                mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus1"), alpha);
+                mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus2"), alpha);
             }
-            await mod.Wait(0.033);
+            await mod.Wait(0.066);
         }
-        mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus1"), 1);
-        mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus2"), 1);
-        mod.SetUIWidgetVisible(mod.FindUIWidgetWithName("progressflash"), false);
-        mod.SetUIWidgetVisible(mod.FindUIWidgetWithName("progress_backgroundflash"), false);
+        if (STATE.payloadState == PayloadState.IDLE || STATE.payloadState == PayloadState.LOCKED) {
+            mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus1"), 1);
+            mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus2"), 1);
+        } else {
+            mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus1"), 0.1);
+            mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus2"), 0.1);
+        }
+        mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progressflash1"), 0.01);
+        mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progressflash2"), 0.01);
+        mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progress_backgroundflash1"), 0.01);
+        mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progress_backgroundflash2"), 0.01);
     }
 }
 
 //Handles the end game explosion effects
 export async function nukeUI(): Promise<void> {
     ui_ready = false;
+    let nukePrologue = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Detonation, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
+    mod.EnableVFX(nukePrologue, true);
+
+    let nukeFire = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Gadget_Sabotage_02_SparkLoop, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
+    mod.SetVFXScale(nukeFire, 20);
+    mod.EnableVFX(nukeFire, true);
+    mod.SetVFXScale(nukeFire, 20);
+
     mod.AddUIContainer("nuke", mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("container"), true, 0, mod.CreateVector(1, 1, 1), 1, mod.UIBgFill.Solid);
     mod.AddUIContainer("nukeScreenEffect", mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("container"), true, 0, goldcolour, 0.5, mod.UIBgFill.Blur);
+
     let nukeStart = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_CAP_AmbWar_Rocket_Strike, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
     mod.EnableVFX(nukeStart, true);
     let ROF = mod.SpawnObject(mod.RuntimeSpawn_Common.RingOfFire, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
-    await mod.Wait(0.7);
+
+    await mod.Wait(0.8);
     for (let i = 10; i > 0; i -= 0.25) {
         mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("nuke"), i / 10);
         await mod.Wait(0.066);
     }
+
     //let nukeStart2 = mod.SpawnObject(mod.RuntimeSpawn_Common.VFX_Launchers_GroundShockwave_Grass, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
     let nukeStart2 = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_BASE_DeployClouds_Var_A, mod.Add(STATE.payloadPosition, mod.CreateVector(0, 30, 0)), mod.CreateVector(0, 0, 0));
     mod.EnableVFX(nukeStart2, true);
     mod.SetVFXScale(nukeStart2, 20);
+
     mod.DeleteUIWidget(mod.FindUIWidgetWithName("nuke"));
+
     let nukeMid = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Carrier_Explosion_Dist, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
     mod.EnableVFX(nukeMid, true);
+
     let nukeEnd = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Detonation, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
     mod.EnableVFX(nukeEnd, true);
+}
+
+export async function updateDebugUI(): Promise<void> {
+    let debugText = mod.FindUIWidgetWithName("debugText");
+    if (!debugText) {
+        mod.AddUIText("debugText", mod.CreateVector(0, 0, 0), mod.CreateVector(600, 30, 0), mod.UIAnchor.BottomCenter, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.debug.tickrate), 14, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center);
+    }
+    mod.SetUITextLabel(debugText, mod.Message(mod.stringkeys.payload.debug.tickrate, STATE.ticks, STATE.tickrate));
 }

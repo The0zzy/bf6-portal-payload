@@ -23,6 +23,10 @@ export interface PlayerScoring {
 }
 
 export interface State {
+    ticks: number;
+    tickrate: number;
+    pastTickRates: number[];
+    checkpointIndexes: Array<number>;
     lastElapsedSeconds: number;
     progress: number;
     firstAttackerSpawned: boolean;
@@ -43,6 +47,10 @@ export interface State {
     progressInPercent: number;
     playerScores: Map<number, PlayerScoring>;
     payloadVehicle?: mod.Vehicle;
+    payloadRotation: mod.Vector;
+    segmentT: number;
+    splineTable: { t: number, distance: number }[] | null;
+    segmentDistance: number;
     checkpointSpatials: Map<string, mod.Object>;
     checkpointObjectives: Map<string, mod.CapturePoint>;
     checkpointVfx: Map<string, mod.VFX>;
@@ -68,7 +76,15 @@ export const STATE: State = {
     progressInMeters: 0,
     progressInPercent: 0,
     playerScores: new Map<number, PlayerScoring>(),
+    payloadRotation: mod.CreateVector(0, 0, 0),
+    segmentT: 0,
+    splineTable: null,
+    segmentDistance: 0,
     checkpointSpatials: new Map<string, mod.Object>(),
     checkpointObjectives: new Map<string, mod.CapturePoint>(),
     checkpointVfx: new Map<string, mod.VFX>(),
+    checkpointIndexes: [],
+    ticks: 0,
+    tickrate: 30,
+    pastTickRates: [30, 30, 30, 30, 30]
 };

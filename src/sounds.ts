@@ -6,13 +6,16 @@ let VOModule2: mod.VO;
 let soundCheckpoint: mod.SFX;
 let progressSound: mod.SFX;
 let reverseSound: mod.SFX;
+let payloadMoving: mod.SFX;
+let payloadIdle: mod.SFX;
 
 let winning1 = false;
 let winning2 = false;
 let nearend = false;
 let lowtime = false;
 let nearendVO = false;
-
+let idle = false;
+let payloadenabled = true;
 
 
 export async function initSounds() {
@@ -24,6 +27,10 @@ export async function initSounds() {
     soundCheckpoint = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_AreaUnlock_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
     progressSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_CapturingTickFriendly_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
     reverseSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_CapturingTickEnemy_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
+
+    //Payload Sounds
+    payloadMoving = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_Gamemodes_Payload_Breacher_Exterior_Accel_SimpleLoop3D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
+    payloadIdle = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_Gamemodes_Payload_Breacher_Idle_SimpleLoop3D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
 
     //Setup Music
     mod.LoadMusic(mod.MusicPackages.Core);
@@ -52,22 +59,55 @@ export function playCheckpointReachedSound(): void {
 
 //Play VO for team 1 pushing
 export function VOPushing(): void {
+    if (!payloadenabled) return;
+    if (idle || !winning1) {
+        playPayloadMovingSound();
+        idle = false;
+    }
     if (!winning1) {
         winning1 = true;
         winning2 = false;
         mod.PlayVO(VOModule1, mod.VoiceOverEvents2D.ProgressMidWinning, mod.VoiceOverFlags.Alpha, mod.GetTeam(1));
         mod.PlayVO(VOModule2, mod.VoiceOverEvents2D.ProgressMidLosing, mod.VoiceOverFlags.Alpha, mod.GetTeam(2));
     }
+    //mod.MoveObject(payloadMoving, mod.CreateVector(mod.XComponentOf(STATE.payloadPosition), mod.YComponentOf(STATE.payloadPosition) - 1, mod.ZComponentOf(STATE.payloadPosition)), mod.CreateVector(0, 0, 0));
 }
 
 //Play VO for team 2 pushing
 export function VOPushingBack(): void {
+    if (!payloadenabled) return;
+    if (idle || !winning2) {
+        playPayloadMovingSound();
+        idle = false;
+    }
     if (!winning2) {
         winning2 = true;
         winning1 = false;
         mod.PlayVO(VOModule2, mod.VoiceOverEvents2D.ProgressMidWinning, mod.VoiceOverFlags.Alpha, mod.GetTeam(2));
         mod.PlayVO(VOModule1, mod.VoiceOverEvents2D.ProgressMidLosing, mod.VoiceOverFlags.Alpha, mod.GetTeam(1));
     }
+    //mod.MoveObject(payloadMoving, mod.CreateVector(mod.XComponentOf(STATE.payloadPosition), mod.YComponentOf(STATE.payloadPosition) - 1, mod.ZComponentOf(STATE.payloadPosition)), mod.CreateVector(0, 0, 0));
+}
+
+export function playPayloadMovingSound(): void {
+    mod.PlaySound(payloadMoving, 1, mod.CreateVector(mod.XComponentOf(STATE.payloadPosition), mod.YComponentOf(STATE.payloadPosition) - 1, mod.ZComponentOf(STATE.payloadPosition)), 50);
+    mod.StopSound(payloadIdle)
+}
+
+export function playPayloadIdleSound(): void {
+    if (!payloadenabled) return;
+    if (!idle) {
+        mod.PlaySound(payloadIdle, 1, mod.CreateVector(mod.XComponentOf(STATE.payloadPosition), mod.YComponentOf(STATE.payloadPosition) - 1, mod.ZComponentOf(STATE.payloadPosition)), 50);
+        mod.StopSound(payloadMoving)
+        idle = true;
+    }
+    //mod.MoveObject(payloadIdle, mod.CreateVector(mod.XComponentOf(STATE.payloadPosition), mod.YComponentOf(STATE.payloadPosition) - 1, mod.ZComponentOf(STATE.payloadPosition)), mod.CreateVector(0, 0, 0));
+}
+
+export function stopPayloadSound(): void {
+    payloadenabled = false;
+    mod.StopSound(payloadMoving);
+    mod.StopSound(payloadIdle);
 }
 
 // Play VO for low time

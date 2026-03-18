@@ -1,22 +1,23 @@
-[gd_scene load_steps=12 format=3 uid="uid://gsd0a760017j"]
+[gd_scene load_steps=14 format=3 uid="uid://gsd0a760017j"]
 
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/HQ_PlayerSpawner.tscn" id="1_v85km"]
 [ext_resource type="PackedScene" uid="uid://jv31so3xcr7p" path="res://addons/bf_portal/portal_tools/types/PolygonVolume/PolygonVolume.tscn" id="2_q5qn4"]
 [ext_resource type="PackedScene" path="res://objects/entities/SpawnPoint.tscn" id="3_3epr5"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/CombatArea.tscn" id="4_dptp0"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/DeployCam.tscn" id="5_ir1o1"]
-[ext_resource type="PackedScene" path="res://objects/Global/Props/FiringRange_MatDecal_01.tscn" id="5_ud0gn"]
-[ext_resource type="PackedScene" path="res://objects/Global/Generic/Common/Props/FireAlarmButton_01.tscn" id="6_0ppsj"]
+[ext_resource type="PackedScene" path="res://objects/props/FiringRange_MatDecal_01.tscn" id="5_ud0gn"]
+[ext_resource type="PackedScene" path="res://objects/props/FireAlarmButton_01.tscn" id="6_0ppsj"]
 [ext_resource type="PackedScene" path="res://static/MP_Capstone_Terrain.tscn" id="6_4u1u0"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/Sector.tscn" id="7_u0w7l"]
 [ext_resource type="PackedScene" path="res://static/MP_Capstone_Assets.tscn" id="7_ylyfr"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/AreaTrigger.tscn" id="9_frqbd"]
+[ext_resource type="PackedScene" path="res://objects/uncategorized/EnvironmentDecalVolume_Winter_Event.tscn" id="12_0ppsj"]
+[ext_resource type="PackedScene" path="res://objects/props/Basketball_01.tscn" id="13_4owo6"]
 
 [node name="MP_Capstone" type="Node3D"]
 
-[node name="CombatArea" parent="." node_paths=PackedStringArray("CombatVolume") instance=ExtResource("4_dptp0")]
+[node name="CombatArea" parent="." instance=ExtResource("4_dptp0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1458.32, 33.5003, 0)
-CombatVolume = NodePath("")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.101056, 0.994881, 0, -0.994881, 0.101056, 70.5201, 368.595, 119.788)
@@ -38,23 +39,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -172.003, 129.177, 9.71465)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 65.1721, 0)
 
 [node name="Track_0" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -272.317, 66.1913, 124.247)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -272.317, 66.2202, 124.247)
 ObjId = 1000
 
 [node name="Track_1" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -255.823, 68.0616, 135.641)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -255.823, 68.1034, 135.641)
 ObjId = 1001
 
 [node name="Track_2" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -238.383, 70.593, 150.898)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -238.383, 70.6154, 150.898)
 ObjId = 1002
 
 [node name="Track_3" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -227.527, 71.723, 161.04)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -227.527, 71.768, 161.04)
 ObjId = 1003
 
 [node name="Track_4" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -224.136, 71.9315, 163.961)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -224.136, 71.9663, 163.961)
 ObjId = 1004
 
 [node name="Track_5" parent="Track" instance=ExtResource("5_ud0gn")]
@@ -174,7 +175,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.7056, 68.7047, 65.0695)
 ObjId = 1033
 
 [node name="Track_34" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49.8724, 68.7084, 62.739)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46.8769, 68.7084, 63.8513)
 ObjId = 1034
 
 [node name="Track_35" parent="Track" instance=ExtResource("5_ud0gn")]
@@ -246,7 +247,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 176.209, 69.3912, 120.49)
 ObjId = 1051
 
 [node name="Track_52" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 174.486, 70.173, 127.613)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 174.486, 70.2559, 127.613)
 ObjId = 1052
 
 [node name="Track_53" parent="Track" instance=ExtResource("5_ud0gn")]
@@ -254,7 +255,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 171.704, 71.1227, 133.178)
 ObjId = 1053
 
 [node name="Track_54" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 166.479, 72.1548, 141.144)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 166.479, 72.1836, 141.144)
 ObjId = 1054
 
 [node name="Track_55" parent="Track" instance=ExtResource("5_ud0gn")]
@@ -266,15 +267,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 154.788, 72.8918, 158.501)
 ObjId = 1056
 
 [node name="Track_57" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 152.411, 73.7419, 165.771)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 152.411, 73.8166, 165.771)
 ObjId = 1057
 
 [node name="Track_58" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150.809, 75.2181, 173.38)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150.809, 75.2734, 173.38)
 ObjId = 1058
 
 [node name="Track_59" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 149.7, 76.4634, 180.542)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 149.7, 76.5302, 180.542)
 ObjId = 1059
 
 [node name="Track_60" parent="Track" instance=ExtResource("5_ud0gn")]
@@ -302,11 +303,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 161.684, 76.9925, 212.603)
 ObjId = 1065
 
 [node name="Track_66" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 158.743, 77.3044, 217.33)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 158.743, 77.3255, 217.33)
 ObjId = 1066
 
 [node name="Track_67" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 151.393, 79.5312, 227.48)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 151.393, 79.5845, 227.48)
 ObjId = 1067
 
 [node name="Track_68" parent="Track" instance=ExtResource("5_ud0gn")]
@@ -318,11 +319,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 143.943, 83.8263, 239.896)
 ObjId = 1069
 
 [node name="Track_70" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 144.026, 85.1733, 244.559)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 144.026, 85.1999, 244.559)
 ObjId = 1070
 
 [node name="Track_71" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 147.101, 86.5825, 248.741)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 147.101, 86.6407, 248.741)
 ObjId = 1071
 
 [node name="Track_72" parent="Track" instance=ExtResource("5_ud0gn")]
@@ -354,7 +355,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 166.509, 94.7619, 286.393)
 ObjId = 1078
 
 [node name="Track_79" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 167.558, 94.5685, 286.468)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 163.099, 95.4021, 288.101)
 ObjId = 1079
 
 [node name="Track_80" parent="Track" instance=ExtResource("5_ud0gn")]
@@ -394,15 +395,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 115.585, 99.6712, 313.4)
 ObjId = 1088
 
 [node name="Track_89" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110.874, 99.9282, 317.657)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110.874, 99.971, 317.657)
 ObjId = 1089
 
 [node name="Track_90" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 108.731, 100.662, 323.949)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 108.392, 100.698, 323.949)
 ObjId = 1090
 
 [node name="Track_91" parent="Track" instance=ExtResource("5_ud0gn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 108.731, 101.893, 329.982)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 108.731, 101.932, 329.982)
 ObjId = 1091
 
 [node name="Track_92" parent="Track" instance=ExtResource("5_ud0gn")]
@@ -478,7 +479,7 @@ SectorArea = NodePath("SectorArea0")
 
 [node name="SectorArea0" parent="Sectors/Sector0" instance=ExtResource("2_q5qn4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.21477, -0.797188, -10.3386)
-points = PackedVector2Array(25.1519, -17.1553, 7.7558, -36.6472, -35.8709, -55.1811, -68.9917, -63.2609, -99.1727, -40.6477, -94.1534, -13.3693, -81.5933, 2.18032, -69.1619, 14.4248, -60.9169, 27.9055, -18.2939, 62.5531, 12.2581, 34.1595, 1.85309, 28.5324)
+points = PackedVector2Array(47.792, -6.21406, 7.7558, -36.6472, -35.8709, -55.1811, -68.9917, -63.2609, -99.1727, -40.6477, -94.1534, -13.3693, -68.1069, 26.0651, -43.2241, 45.1007, -13.1831, 44.7215, 12.2531, 34.1646, 15.2104, 25.278, 28.8927, 6.30682)
 height = 100.0
 
 [node name="AreaTrigger0" parent="Sectors/Sector0" node_paths=PackedStringArray("Area") instance=ExtResource("9_frqbd")]
@@ -490,11 +491,11 @@ Area = NodePath("../SectorArea0")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -147.587, 57, 160.533)
 ObjId = 101
 SectorArea = NodePath("SectorArea1")
-MCOMs = [NodePath(""), NodePath("")]
+MCOMs = [null, null]
 
 [node name="SectorArea1" parent="Sectors/Sector1" instance=ExtResource("2_q5qn4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 166.771, -0.565224, -10.3386)
-points = PackedVector2Array(-257.939, -48.0096, -280.579, -58.9655, -303.917, -13.2638, -293.487, -7.6255, -271.476, 24.0736, -247.97, 42.9439, -208.028, 59.0105, -155.364, 57.1224, -145.782, 45.0098, -156.865, 6.66386, -166.28, -44.0361, -220.694, -42.5136)
+points = PackedVector2Array(-257.939, -48.0096, -276.853, -35.492, -290.549, -16.527, -293.487, -7.6255, -271.476, 24.0736, -247.97, 42.9439, -208.028, 59.0105, -155.364, 57.1224, -145.782, 45.0098, -156.865, 6.66386, -166.28, -44.0361, -220.694, -42.5136)
 height = 100.0
 
 [node name="AreaTrigger1" parent="Sectors/Sector1" node_paths=PackedStringArray("Area") instance=ExtResource("9_frqbd")]
@@ -529,7 +530,7 @@ transform = Transform3D(-0.350959, 0, 0.93639, 0, 1, 0, -0.93639, 0, -0.350959, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57.5406, 11.5613, -23.5309)
 Team = 2
 AltTeam = 0
-ObjId = 405
+ObjId = 401
 HQArea = NodePath("HQ_Team2")
 InfantrySpawns = [NodePath("SpawnPoint_2_1"), NodePath("SpawnPoint_2_2"), NodePath("SpawnPoint_2_3"), NodePath("SpawnPoint_2_4")]
 
@@ -553,7 +554,7 @@ transform = Transform3D(0.936489, 0, -0.350698, 0, 1, 0, 0.350698, 0, 0.936489, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.6454, 57, 126.875)
 ObjId = 102
 SectorArea = NodePath("SectorArea2")
-MCOMs = [NodePath(""), NodePath("")]
+MCOMs = [null, null]
 
 [node name="SectorArea2" parent="Sectors/Sector2" instance=ExtResource("2_q5qn4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 165.781, -4.41735, -12.9133)
@@ -616,11 +617,11 @@ transform = Transform3D(0.333707, 0, -0.942677, 0, 1, 0, 0.942677, 0, 0.333707, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.971, 57, 63.1845)
 ObjId = 103
 SectorArea = NodePath("SectorArea3")
-MCOMs = [NodePath(""), NodePath("")]
+MCOMs = [null, null]
 
 [node name="SectorArea3" parent="Sectors/Sector3" instance=ExtResource("2_q5qn4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.04131, -6.28848, -10.3386)
-points = PackedVector2Array(27.1755, -45.676, -28.5221, -26.6099, -45.1672, -17.6626, -43.5648, 34.3168, -24.8856, 68.2726, 2.4938, 66.2227, 35.995, 88.8475, 72.7224, 108.67, 100.524, 66.6834, 110.771, 69.1859, 121.032, 56.2506, 133, 50.2036, 141.697, 37.1253, 160.758, 23.7096, 138.901, 0.159103, 111.69, -25.6109, 72.6746, -43.2954)
+points = PackedVector2Array(27.1755, -45.676, -28.5221, -26.6099, -45.1672, -17.6626, -43.5648, 34.3168, -24.8856, 68.2726, 7.28893, 70.4255, 36.5541, 94.246, 60.0532, 137.625, 100.524, 66.6834, 110.771, 69.1859, 121.032, 56.2506, 133, 50.2036, 141.697, 37.1253, 160.758, 23.7096, 138.901, 0.159103, 111.69, -25.6109, 72.6746, -43.2954)
 height = 100.0
 
 [node name="AreaTrigger3" parent="Sectors/Sector3" node_paths=PackedStringArray("Area") instance=ExtResource("9_frqbd")]
@@ -679,11 +680,11 @@ transform = Transform3D(-0.999449, 0, -0.0331724, 0, 1, 0, 0.0331724, 0, -0.9994
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 133.178, 57, 194.63)
 ObjId = 104
 SectorArea = NodePath("SectorArea4")
-MCOMs = [NodePath(""), NodePath("")]
+MCOMs = [null, null]
 
 [node name="SectorArea4" parent="Sectors/Sector4" instance=ExtResource("2_q5qn4")]
 transform = Transform3D(1, 0, 6.98132e-05, 0, 1, 0, -6.98132e-05, 0, 1, 5.04131, -6.19255, -10.3386)
-points = PackedVector2Array(15.5595, -62.2889, 5.31163, -64.784, -22.5016, -22.7722, -40.9729, 33.4867, 12.6929, 44.7003, 73.6741, 93.8718, 102.957, 62.2775, 111.715, -30.4427, 109.017, -55.5828, 96.9705, -76.8965, 65.5436, -107.738, 46.4772, -94.334, 37.7573, -81.2857, 25.8069, -75.2265)
+points = PackedVector2Array(15.5595, -62.2889, 5.31163, -64.784, -35.1871, 6.14198, -40.9729, 33.4867, 12.6929, 44.7003, 73.6741, 93.8718, 102.957, 62.2775, 111.715, -30.4427, 109.017, -55.5828, 96.9705, -76.8965, 65.5436, -107.738, 46.4772, -94.334, 37.7573, -81.2857, 25.8069, -75.2265)
 height = 100.0
 
 [node name="AreaTrigger4" parent="Sectors/Sector4" node_paths=PackedStringArray("Area") instance=ExtResource("9_frqbd")]
@@ -742,7 +743,7 @@ transform = Transform3D(-0.859147, 0, 0.511728, 0, 1, 0, -0.511728, 0, -0.859147
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 122.131, 57.0001, 357.656)
 ObjId = 105
 SectorArea = NodePath("SectorArea5")
-MCOMs = [NodePath(""), NodePath("")]
+MCOMs = [null, null]
 
 [node name="SectorArea5" parent="Sectors/Sector5" instance=ExtResource("2_q5qn4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.04131, -6.19255, -10.3386)
@@ -781,7 +782,7 @@ transform = Transform3D(0.547666, 0, 0.836697, 0, 1, 0, -0.836697, 0, 0.547666, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 118.626, 20.122, 79.2477)
 Team = 2
 AltTeam = 0
-ObjId = 406
+ObjId = 405
 HQArea = NodePath("HQ_Team2")
 InfantrySpawns = [NodePath("SpawnPoint_2_1"), NodePath("SpawnPoint_2_2"), NodePath("SpawnPoint_2_3"), NodePath("SpawnPoint_2_4")]
 
@@ -805,7 +806,7 @@ transform = Transform3D(-0.666012, 0, -0.745941, 0, 1, 0, 0.745941, 0, -0.666012
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 227.65, 57.0001, 441.24)
 ObjId = 106
 SectorArea = NodePath("SectorArea6")
-MCOMs = [NodePath(""), NodePath("")]
+MCOMs = [null, null]
 
 [node name="SectorArea6" parent="Sectors/Sector6" instance=ExtResource("2_q5qn4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.04131, -6.19255, -10.3386)
@@ -816,3 +817,12 @@ height = 100.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.69048, 15.0514, 4.1679)
 ObjId = 606
 Area = NodePath("../SectorArea6")
+
+[node name="EnvironmentDecalVolume_Winter_Event" parent="." instance=ExtResource("12_0ppsj")]
+transform = Transform3D(2000, 0, 0, 0, 2000, 0, 0, 0, 2000, 32.9617, 310.934, -26.6493)
+
+[node name="payloadObjects" type="Node3D" parent="."]
+
+[node name="GM1083CargoTruck_01_Canopy" parent="payloadObjects" instance=ExtResource("13_4owo6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+ObjId = 5000

@@ -39,13 +39,18 @@
       "healed_vehicle": "Healed payload vehicle!",
       "not_assigned_payload_vehicle": "Not assigned payload vehicle!",
       "vehicle_spawned": "Vehicle spawned!",
-      "exit_message": "GET OUT AND PUSH!"
+      "exit_message": "GET OUT AND PUSH!",
+      "score_message": "+ {} PTFO score"
     },
     "meta": {
       "version": "0.0.10",
       "name": "payload",
-      "build": "2026-02-20T21:35:13.398Z",
+      "build": "2026-03-18T16:00:35.718Z",
       "meta_text": "{} v{} build: {}"
+    },
+    "credits": "Payload | TheOzzy | andy6170",
+    "debug": {
+      "tickrate": "Ticks: {} | Tickrate: {}"
     }
   }
 }
