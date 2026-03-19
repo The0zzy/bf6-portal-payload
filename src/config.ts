@@ -60,7 +60,7 @@ export const CONFIG: Config = {
     objectiveScorePerSecond: 5,
     overtimeDuration: 60,
     overtimeEnabled: true,
-    enableDebug: true,
+    enableDebug: false,
     enableVehicleSpawner: false,
     payloadVehicleType: mod.VehicleList.M2Bradley,
     payloadSpatials: [

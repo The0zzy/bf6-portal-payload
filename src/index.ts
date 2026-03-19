@@ -1,4 +1,4 @@
-import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI, progressFlash, nukeUI } from './ui.ts';
+import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI, progressFlash, nukeUI, updateDebugUI } from './ui.ts';
 import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound, endGameMusic, playPayloadIdleSound, stopPayloadSound } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
@@ -811,11 +811,12 @@ export function OngoingGlobal(): void {
             STATE.tickrate = newTickrate;
         }
         STATE.ticks = 0;
+        executeEverySecond();
     }
-
-    executeEverySecond();
-
     STATE.ticks++;
+    if (CONFIG.enableDebug) {
+        updateDebugUI();
+    }
 }
 */
 

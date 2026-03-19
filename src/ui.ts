@@ -310,3 +310,11 @@ export async function nukeUI(): Promise<void> {
     //mod.MoveObjectOverTime(mod.GetSpatialObject(51), mod.CreateVector(0, 1, 0), mod.CreateVector(0, 0, 0), 0.1, true, true);
     mod.SetObjectTransformOverTime(mod.GetSpatialObject(51), mod.CreateTransform(mod.Add(mod.GetObjectPosition(mod.GetSpatialObject(51)), mod.CreateVector(0, 1, 0)), mod.GetObjectRotation(mod.GetSpatialObject(51))), 0.1, true, true);
 }
+
+export async function updateDebugUI(): Promise<void> {
+    let debugText = mod.FindUIWidgetWithName("debugText");
+    if (!debugText) {
+        mod.AddUIText("debugText", mod.CreateVector(0, 0, 0), mod.CreateVector(600, 30, 0), mod.UIAnchor.BottomCenter, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.debug.tickrate), 14, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center);
+    }
+    mod.SetUITextLabel(debugText, mod.Message(mod.stringkeys.payload.debug.tickrate, STATE.ticks, STATE.tickrate));
+}
