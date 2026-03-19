@@ -261,6 +261,13 @@ export async function progressFlash(): Promise<void> {
 //Handles the end game explosion effects
 export async function nukeUI(): Promise<void> {
     ui_ready = false;
+    mod.SetCameraTypeForAll(mod.Cameras.Fixed, 50);
+    //mod.MoveObjectOverTime(mod.GetSpatialObject(50), mod.CreateVector(0, 2, 0), mod.CreateVector(0, 0, 0), 3, false, false);
+    mod.SetObjectTransformOverTime(mod.GetSpatialObject(50), mod.CreateTransform(mod.Add(mod.GetObjectPosition(mod.GetSpatialObject(50)), mod.CreateVector(0, 2, 0)), mod.GetObjectRotation(mod.GetSpatialObject(50))), 3, false, false);
+    await mod.Wait(3);
+
+    mod.SetCameraTypeForAll(mod.Cameras.Fixed, 51);
+    await mod.Wait(2);
     let nukePrologue = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Detonation, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
     mod.EnableVFX(nukePrologue, true);
 
@@ -276,7 +283,8 @@ export async function nukeUI(): Promise<void> {
     mod.EnableVFX(nukeStart, true);
     let ROF = mod.SpawnObject(mod.RuntimeSpawn_Common.RingOfFire, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
 
-    await mod.Wait(0.8);
+    await mod.Wait(1.5);
+
     for (let i = 10; i > 0; i -= 0.25) {
         mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("nuke"), i / 10);
         await mod.Wait(0.066);
@@ -294,6 +302,13 @@ export async function nukeUI(): Promise<void> {
 
     let nukeEnd = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Detonation, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
     mod.EnableVFX(nukeEnd, true);
+
+    let nukeEnd2 = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Detonation, mod.GetObjectPosition(mod.GetSpatialObject(52)), mod.CreateVector(0, 0, 0));
+    mod.EnableVFX(nukeEnd2, true);
+
+    await mod.Wait(1);
+    //mod.MoveObjectOverTime(mod.GetSpatialObject(51), mod.CreateVector(0, 1, 0), mod.CreateVector(0, 0, 0), 0.1, true, true);
+    mod.SetObjectTransformOverTime(mod.GetSpatialObject(51), mod.CreateTransform(mod.Add(mod.GetObjectPosition(mod.GetSpatialObject(51)), mod.CreateVector(0, 1, 0)), mod.GetObjectRotation(mod.GetSpatialObject(51))), 0.1, true, true);
 }
 
 export async function updateDebugUI(): Promise<void> {

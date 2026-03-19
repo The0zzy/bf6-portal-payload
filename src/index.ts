@@ -196,6 +196,7 @@ function initPayloadObjective(): void {
         for (const payloadSpatialId of CONFIG.payloadSpatialIdentifiers) {
             const payloadIdentifierObject = mod.GetSpatialObject(payloadSpatialId);
             const payloadIdentifierX = mod.XComponentOf(mod.GetObjectPosition(payloadIdentifierObject));
+            /*
             if (payloadIdentifierX >= 1 && payloadSpatialId === 5000) {
                 CONFIG.payloadSpatials.push(
                     {
@@ -204,7 +205,7 @@ function initPayloadObjective(): void {
                         scale: mod.CreateVector(1, 1, 1),
                         rotation: mod.CreateVector(0, 0, 0)
                     }
-                );
+            );
             }
             if (payloadIdentifierX >= 1 && payloadSpatialId === 5001) {
                 CONFIG.payloadSpatials.push(
@@ -214,8 +215,9 @@ function initPayloadObjective(): void {
                         scale: mod.CreateVector(1, 1, 1),
                         rotation: mod.CreateVector(0, 0, 0)
                     }
-                );
+            );
             }
+            */
         }
 
         for (let i = 0; i < CONFIG.payloadSpatials.length; i++) {
@@ -350,7 +352,7 @@ function catmullRom(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vect
 // --------------------------
 // Get t for a given distance along spline
 // --------------------------
-function getTForDistanceDynamic(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, distance: number, samples: number = 20) {
+function getTForDistanceDynamic(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, distance: number, samples: number = 40) {
     let lastPos = catmullRom(p0, p1, p2, p3, 0);
     let accumulated = 0;
 
@@ -374,13 +376,30 @@ function getTForDistanceDynamic(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, 
 }
 
 // --------------------------
-// Approximate tangent
+// Approximate tangent (using analytical derivative)
 // --------------------------
-function getSplineTangent(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, t: number, delta: number = 0.01): mod.Vector {
-    const t1 = Math.min(t + delta, 1);
-    const pos = catmullRom(p0, p1, p2, p3, t);
-    const posAhead = catmullRom(p0, p1, p2, p3, t1);
-    return mod.DirectionTowards(pos, posAhead);
+function getSplineTangent(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, t: number): mod.Vector {
+    const t2 = t * t;
+
+    const dx = 0.5 * (
+        (-mod.XComponentOf(p0) + mod.XComponentOf(p2)) +
+        2 * (2 * mod.XComponentOf(p0) - 5 * mod.XComponentOf(p1) + 4 * mod.XComponentOf(p2) - mod.XComponentOf(p3)) * t +
+        3 * (-mod.XComponentOf(p0) + 3 * mod.XComponentOf(p1) - 3 * mod.XComponentOf(p2) + mod.XComponentOf(p3)) * t2
+    );
+
+    const dy = 0.5 * (
+        (-mod.YComponentOf(p0) + mod.YComponentOf(p2)) +
+        2 * (2 * mod.YComponentOf(p0) - 5 * mod.YComponentOf(p1) + 4 * mod.YComponentOf(p2) - mod.YComponentOf(p3)) * t +
+        3 * (-mod.YComponentOf(p0) + 3 * mod.YComponentOf(p1) - 3 * mod.YComponentOf(p2) + mod.YComponentOf(p3)) * t2
+    );
+
+    const dz = 0.5 * (
+        (-mod.ZComponentOf(p0) + mod.ZComponentOf(p2)) +
+        2 * (2 * mod.ZComponentOf(p0) - 5 * mod.ZComponentOf(p1) + 4 * mod.ZComponentOf(p2) - mod.ZComponentOf(p3)) * t +
+        3 * (-mod.ZComponentOf(p0) + 3 * mod.ZComponentOf(p1) - 3 * mod.ZComponentOf(p2) + mod.ZComponentOf(p3)) * t2
+    );
+
+    return mod.CreateVector(dx, dy, dz);
 }
 
 // --------------------------
@@ -418,7 +437,7 @@ function getRotationFromTangent(tangent: mod.Vector, useSmoothing: boolean = tru
         const prevPitch = mod.XComponentOf(STATE.payloadRotation);
         const prevYaw = mod.YComponentOf(STATE.payloadRotation);
 
-        const smoothFactor = 0.2;
+        const smoothFactor = 0.1;
 
         const diff = (yaw - prevYaw + Math.PI) % (2 * Math.PI);
         const wrappedDiff = (diff < 0 ? diff + (2 * Math.PI) : diff) - Math.PI;
@@ -442,6 +461,10 @@ function moveAlongSpline(forward: boolean, speed: number) {
     let wpIndex = STATE.reachedWaypointIndex;
     const wpCount = STATE.waypoints.size;
 
+    if (wpIndex >= wpCount - 1 && forward) {
+        return;
+    }
+
     STATE.segmentDistance = STATE.segmentDistance || 0;
     STATE.segmentDistance += forward ? speed : -speed;
 
@@ -463,6 +486,12 @@ function moveAlongSpline(forward: boolean, speed: number) {
         const p3 = nextNextWp.position;
 
         const segmentLength = mod.DistanceBetween(p1, p2);
+
+        if (wpIndex >= wpCount - 1) {
+            STATE.segmentDistance = 0;
+            STATE.payloadPosition = p1;
+            break;
+        }
 
         if (STATE.segmentDistance >= segmentLength && forward && wpIndex < wpCount - 1) {
             STATE.segmentDistance -= segmentLength;
@@ -538,6 +567,11 @@ function onPayloadStateChanged(): void {
 }
 
 function pushForward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
+    if (STATE.reachedWaypointIndex >= STATE.waypoints.size - 1) {
+        setPayloadState(PayloadState.LOCKED);
+        playPayloadIdleSound();
+        return;
+    }
     const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t1.length - counts.t2.length);
     const speed = (CONFIG.payloadSpeedT1 + speedAddtion) / STATE.tickrate;
     setPayloadState(PayloadState.ADVANCING);
@@ -589,6 +623,9 @@ function updatePayloadObject() {
         const worldRot = mod.Add(rotation, config.rotation);
         mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, worldRot));
     });
+
+    //mod.MoveObject(payloadMoving, STATE.payloadPosition, rotation);
+    //mod.MoveObject(payloadIdle, STATE.payloadPosition, rotation);
 
     if (STATE.payloadVehicle) {
         mod.Teleport(STATE.payloadVehicle, STATE.payloadPosition, mod.YComponentOf(rotation));
@@ -664,17 +701,17 @@ function respawnPayloadSpatials() {
 
 async function onFinalCheckpointReached() {
     mod.PauseGameModeTime(true);
-    stopPayloadSound();
+    playPayloadIdleSound();
     endGameMusic(1);
     if (STATE.payloadVehicle) {
         mod.Kill(STATE.payloadVehicle as mod.Vehicle);
-    } else {
-        STATE.payloadSpatials.forEach((obj) => {
-            mod.UnspawnObject(obj);
-        });
-        STATE.payloadObjectives.forEach((obj) => {
-            mod.UnspawnObject(obj);
-        });
+        //} else {
+        //    STATE.payloadSpatials.forEach((obj) => {
+        //        mod.UnspawnObject(obj);
+        //    });
+        //    STATE.payloadObjectives.forEach((obj) => {
+        //        mod.UnspawnObject(obj);
+        //    });
     }
     nukeUI();
     await mod.Wait(8);
@@ -735,6 +772,7 @@ export function OnRevived(victim: mod.Player, reviver: mod.Player): void {
     scoring_onPlayerRevived(victim, reviver);
 }
 
+/*
 export function OngoingGlobal(): void {
     const elapsedSeconds = mod.GetMatchTimeElapsed();
     const counts = getAlivePlayersInProximity(STATE.payloadPosition, CONFIG.pushProximityRadius);
@@ -778,6 +816,38 @@ export function OngoingGlobal(): void {
     STATE.ticks++;
     if (CONFIG.enableDebug) {
         updateDebugUI();
+    }
+}
+*/
+
+export function OngoingGlobal(): void {
+    const elapsedSeconds = mod.GetMatchTimeElapsed();
+    const counts = getAlivePlayersInProximity(STATE.payloadPosition, CONFIG.pushProximityRadius);
+
+    if (STATE.lastElapsedSeconds != elapsedSeconds) {
+        STATE.lastElapsedSeconds = elapsedSeconds;
+        // Award objective points to all players in proximity of the payload
+        for (const p of counts.t1) {
+            scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
+        }
+        for (const p of counts.t2) {
+            scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
+        }
+        executeEverySecond();
+    }
+
+    if (counts.t1.length > counts.t2.length) {
+        pushForward(counts);
+        onPayloadMoved();
+    } else if (counts.t2.length > counts.t1.length) {
+        pushBackward(counts);
+        onPayloadMoved();
+    } else if (counts.t1.length > 0 && counts.t2.length > 0) {
+        setPayloadState(PayloadState.CONTESTED);
+        playPayloadIdleSound();
+    } else {
+        setPayloadState(PayloadState.IDLE);
+        playPayloadIdleSound();
     }
 }
 
