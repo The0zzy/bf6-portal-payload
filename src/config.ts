@@ -55,7 +55,7 @@ export const CONFIG: Config = {
     pushProximityRadius: 7.5,
     waypointProximityRadius: 0.25,
     speedAdditionPerPushingPlayer: 0.15,
-    payloadSpeedT1: 1.05, //6
+    payloadSpeedT1: 7.05, //6
     payloadSpeedT2: 0.45, //6
     objectiveScorePerSecond: 5,
     overtimeDuration: 60,
@@ -63,7 +63,10 @@ export const CONFIG: Config = {
     enableDebug: true,
     enableVehicleSpawner: false,
     payloadVehicleType: mod.VehicleList.M2Bradley,
-    payloadSpatials: [],
+    payloadSpatials: [
+        { prefab: mod.RuntimeSpawn_Abbasid.GM1083CargoTruck_01_Canopy, relativeOffset: mod.CreateVector(0, -0.1, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
+        //{ prefab: mod.RuntimeSpawn_Tungsten.GM1083CargoTruck_01_Canopy_Cargo01, relativeOffset: mod.CreateVector(0, -0.1, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
+    ],
     payloadObjectives: [
         { prefab: mod.RuntimeSpawn_Common.MCOM, relativeOffset: mod.CreateVector(0, 0.9, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
     ],
@@ -72,7 +75,7 @@ export const CONFIG: Config = {
     ],
     checkpointSpatials: [],
     checkpointObjectives: [
-        { prefab: mod.RuntimeSpawn_Common.CapturePoint, relativeOffset: mod.CreateVector(0, -5, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
+        { prefab: mod.RuntimeSpawn_Common.CapturePoint, relativeOffset: mod.CreateVector(0, -5.5, 0), scale: mod.CreateVector(1, 1, 1), rotation: mod.CreateVector(0, 0, 0) },
     ],
     checkpointVfx: [
         { prefab: mod.RuntimeSpawn_Common.FX_Smoke_Marker_Custom, relativeOffset: mod.CreateVector(0, 0, 0), scale: 1, rotation: mod.CreateVector(0, 0, 0), color1: mod.CreateVector(1, 1, 0), color2: mod.CreateVector(0, 1, 0), speed: 1 },

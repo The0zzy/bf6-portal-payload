@@ -2728,19 +2728,19 @@
             "ObjId": 2017,
             "type": "FireAlarmButton_01",
             "right": {
-                "x": 10,
+                "x": 1,
                 "y": 0,
                 "z": 0
             },
             "up": {
                 "x": 0,
-                "y": 10,
+                "y": 1,
                 "z": 0
             },
             "front": {
                 "x": 0,
                 "y": 0,
-                "z": 10
+                "z": 1
             },
             "position": {
                 "x": -174.6198,
@@ -2754,19 +2754,19 @@
             "ObjId": 2039,
             "type": "FireAlarmButton_01",
             "right": {
-                "x": 10,
+                "x": 1,
                 "y": 0,
                 "z": 0
             },
             "up": {
                 "x": 0,
-                "y": 10,
+                "y": 1,
                 "z": 0
             },
             "front": {
                 "x": 0,
                 "y": 0,
-                "z": 10
+                "z": 1
             },
             "position": {
                 "x": -174.6198,
@@ -2780,19 +2780,19 @@
             "ObjId": 2063,
             "type": "FireAlarmButton_01",
             "right": {
-                "x": 10,
+                "x": 1,
                 "y": 0,
                 "z": 0
             },
             "up": {
                 "x": 0,
-                "y": 10,
+                "y": 1,
                 "z": 0
             },
             "front": {
                 "x": 0,
                 "y": 0,
-                "z": 10
+                "z": 1
             },
             "position": {
                 "x": -174.6198,
@@ -2806,19 +2806,19 @@
             "ObjId": 2098,
             "type": "FireAlarmButton_01",
             "right": {
-                "x": 10,
+                "x": 1,
                 "y": 0,
                 "z": 0
             },
             "up": {
                 "x": 0,
-                "y": 10,
+                "y": 1,
                 "z": 0
             },
             "front": {
                 "x": 0,
                 "y": 0,
-                "z": 10
+                "z": 1
             },
             "position": {
                 "x": -174.6198,
@@ -2909,14 +2909,14 @@
                     "z": -156.1836
                 },
                 {
-                    "x": -363.32583,
+                    "x": -350.88783,
                     "y": 62.674392,
-                    "z": -231.8455
+                    "z": -211.8663
                 },
                 {
-                    "x": -362.84183,
+                    "x": -359.82513,
                     "y": 62.674392,
-                    "z": -257.9046
+                    "z": -249.7142
                 },
                 {
                     "x": -358.14983,
@@ -3367,14 +3367,14 @@
                     "z": -284.7863
                 },
                 {
-                    "x": -362.92,
+                    "x": -359.964,
                     "y": 62.906356,
-                    "z": -257.9102
+                    "z": -249.70675
                 },
                 {
-                    "x": -363.372,
+                    "x": -354.626,
                     "y": 62.906356,
-                    "z": -231.81437
+                    "z": -227.4793
                 },
                 {
                     "x": -336.284,
@@ -5004,9 +5004,9 @@
             ]
         },
         {
-            "name": "GM1083CargoTruck_01_Canopy_cargo01",
-            "ObjId": 5001,
-            "type": "Basketball_01",
+            "name": "GM1083CargoTruck_01_Canopy_Cargo01",
+            "ObjId": 4000,
+            "type": "GM1083CargoTruck_01_Canopy_Cargo01",
             "right": {
                 "x": 1,
                 "y": 0,
@@ -5023,11 +5023,2113 @@
                 "z": 1
             },
             "position": {
+                "x": -397.185,
+                "y": 47.8605,
+                "z": -224.429
+            },
+            "id": "GM1083CargoTruck_01_Canopy_Cargo01"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "ObjId": 3000,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
                 "x": 1,
                 "y": 0,
                 "z": 0
             },
-            "id": "payloadObjects/GM1083CargoTruck_01_Canopy_cargo01"
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 368.563,
+                "y": 81.6224,
+                "z": -380.792
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap2",
+            "ObjId": 3001,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 414.552,
+                "y": 81.2459,
+                "z": -394.599
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap2"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap3",
+            "ObjId": 3002,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 455.357,
+                "y": 79.6683,
+                "z": -399.978
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap3"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap4",
+            "ObjId": 3003,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 502.623,
+                "y": 78.7791,
+                "z": -436.756
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap4"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap5",
+            "ObjId": 3004,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 532.775,
+                "y": 78.4405,
+                "z": -468.023
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap5"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap6",
+            "ObjId": 3005,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 515.406,
+                "y": 86.1498,
+                "z": -508.836
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap6"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap7",
+            "ObjId": 3006,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 459.175,
+                "y": 87.2757,
+                "z": -471.821
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap7"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap8",
+            "ObjId": 3007,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 411.401,
+                "y": 89.3363,
+                "z": -458.763
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap8"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap9",
+            "ObjId": 3008,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 497.833,
+                "y": 86.7714,
+                "z": -550.422
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap9"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap10",
+            "ObjId": 3009,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 442.554,
+                "y": 90.2863,
+                "z": -541.724
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap10"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap11",
+            "ObjId": 3010,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 386.69,
+                "y": 91.1819,
+                "z": -532.208
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap11"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap12",
+            "ObjId": 3011,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 461.471,
+                "y": 84.041,
+                "z": -585.583
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap12"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap13",
+            "ObjId": 3012,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 405.274,
+                "y": 86.0355,
+                "z": -585.19
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap13"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap14",
+            "ObjId": 3013,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 344.396,
+                "y": 88.2235,
+                "z": -551.523
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap14"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap15",
+            "ObjId": 3014,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 358.224,
+                "y": 82.2246,
+                "z": -374.339
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap15"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap16",
+            "ObjId": 3015,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 293.754,
+                "y": 83.538,
+                "z": -325.539
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap16"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap17",
+            "ObjId": 3016,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 234.25,
+                "y": 87.6394,
+                "z": -316.548
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap17"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap18",
+            "ObjId": 3017,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 168.238,
+                "y": 91.9676,
+                "z": -313.148
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap18"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap19",
+            "ObjId": 3018,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 150.543,
+                "y": 98.5992,
+                "z": -353.653
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap19"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap20",
+            "ObjId": 3019,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 203.518,
+                "y": 96.4461,
+                "z": -341.888
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap20"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap21",
+            "ObjId": 3020,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 265.994,
+                "y": 85.9076,
+                "z": -387.817
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap21"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap22",
+            "ObjId": 3021,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 332.035,
+                "y": 83.1804,
+                "z": -427.249
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap22"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap23",
+            "ObjId": 3022,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 307.542,
+                "y": 83.0125,
+                "z": -462.501
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap23"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap24",
+            "ObjId": 3023,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 278.696,
+                "y": 83.745,
+                "z": -514.325
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap24"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap25",
+            "ObjId": 3024,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 208.467,
+                "y": 84.9664,
+                "z": -525.061
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap25"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap26",
+            "ObjId": 3025,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 132.893,
+                "y": 86.4191,
+                "z": -481.414
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap26"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap27",
+            "ObjId": 3026,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 135.463,
+                "y": 94.5602,
+                "z": -426.972
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap27"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap28",
+            "ObjId": 3027,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 169.54,
+                "y": 92.698,
+                "z": -438.848
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap28"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap29",
+            "ObjId": 3028,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 224.546,
+                "y": 86.8654,
+                "z": -434.645
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap29"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap30",
+            "ObjId": 3029,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 136.167,
+                "y": 93.6748,
+                "z": -295.183
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap30"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap31",
+            "ObjId": 3030,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 95.6775,
+                "y": 95.8087,
+                "z": -282.436
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap31"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap32",
+            "ObjId": 3031,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 53.1612,
+                "y": 95.126,
+                "z": -266.504
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap32"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap33",
+            "ObjId": 3032,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 111.743,
+                "y": 89.9363,
+                "z": -346.63
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap33"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap34",
+            "ObjId": 3033,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 98.2104,
+                "y": 88.808,
+                "z": -402.609
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap34"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap35",
+            "ObjId": 3034,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 71.475,
+                "y": 87.4862,
+                "z": -447.134
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap35"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap36",
+            "ObjId": 3035,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 32.8503,
+                "y": 89.4971,
+                "z": -447.743
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap36"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap37",
+            "ObjId": 3036,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 13.0868,
+                "y": 85.7403,
+                "z": -388.596
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap37"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap38",
+            "ObjId": 3037,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -27.2232,
+                "y": 86.0496,
+                "z": -381.848
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap38"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap39",
+            "ObjId": 3038,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -46.2444,
+                "y": 86.9843,
+                "z": -422.76
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap39"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap40",
+            "ObjId": 3039,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 6.16493,
+                "y": 93.6967,
+                "z": -267.863
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap40"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap41",
+            "ObjId": 3040,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 51.0552,
+                "y": 94.1421,
+                "z": -241.851
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap41"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap42",
+            "ObjId": 3041,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -5.40227,
+                "y": 94.4279,
+                "z": -237.959
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap42"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap43",
+            "ObjId": 3042,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -52.351,
+                "y": 94.0223,
+                "z": -260.138
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap43"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap44",
+            "ObjId": 3043,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -58.8946,
+                "y": 86.2735,
+                "z": -366.603
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap44"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap45",
+            "ObjId": 3044,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -65.0577,
+                "y": 89.7875,
+                "z": -408.796
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap45"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap46",
+            "ObjId": 3045,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -107.032,
+                "y": 96.5879,
+                "z": -395.363
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap46"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap47",
+            "ObjId": 3046,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -89.4121,
+                "y": 87.2485,
+                "z": -331.102
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap47"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap48",
+            "ObjId": 3047,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -86.704,
+                "y": 87.1054,
+                "z": -287.203
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap48"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap49",
+            "ObjId": 3048,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -93.5166,
+                "y": 92.2443,
+                "z": -234.136
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap49"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap50",
+            "ObjId": 3049,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -112.814,
+                "y": 91.8049,
+                "z": -203.207
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap50"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap51",
+            "ObjId": 3050,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -170.902,
+                "y": 87.5355,
+                "z": -202.763
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap51"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap52",
+            "ObjId": 3051,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -167.029,
+                "y": 87.645,
+                "z": -270.148
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap52"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap53",
+            "ObjId": 3052,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -161.307,
+                "y": 90.8001,
+                "z": -333.245
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap53"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap54",
+            "ObjId": 3053,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -150.724,
+                "y": 88.3073,
+                "z": -379.67
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap54"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap55",
+            "ObjId": 3054,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -218.13,
+                "y": 85.3177,
+                "z": -190.451
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap55"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap56",
+            "ObjId": 3055,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -266.163,
+                "y": 86.2249,
+                "z": -160.778
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap56"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap57",
+            "ObjId": 3056,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -328.777,
+                "y": 86.4265,
+                "z": -156.294
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap57"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap58",
+            "ObjId": 3057,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -324.98,
+                "y": 83.7523,
+                "z": -198.231
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap58"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap59",
+            "ObjId": 3058,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -258.927,
+                "y": 84.8706,
+                "z": -200.903
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap59"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap60",
+            "ObjId": 3059,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -207.496,
+                "y": 84.698,
+                "z": -264.911
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap60"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap61",
+            "ObjId": 3060,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -262.844,
+                "y": 84.2332,
+                "z": -265.449
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap61"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap62",
+            "ObjId": 3061,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -343.266,
+                "y": 84.7413,
+                "z": -245.187
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap62"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap63",
+            "ObjId": 3062,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -345.094,
+                "y": 84.558,
+                "z": -299.709
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap63"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap64",
+            "ObjId": 3063,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -285.603,
+                "y": 84.4813,
+                "z": -331.891
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap64"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap65",
+            "ObjId": 3064,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -195.346,
+                "y": 85.9313,
+                "z": -354.973
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap65"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap66",
+            "ObjId": 3065,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -365.898,
+                "y": 85.4898,
+                "z": -163.704
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap66"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap67",
+            "ObjId": 3066,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -431.132,
+                "y": 86.0502,
+                "z": -138.224
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap67"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap68",
+            "ObjId": 3067,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -490.885,
+                "y": 82.2541,
+                "z": -183.099
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap68"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap69",
+            "ObjId": 3068,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -480.213,
+                "y": 79.805,
+                "z": -251.831
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap69"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap70",
+            "ObjId": 3069,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -413.243,
+                "y": 83.3363,
+                "z": -187.479
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap70"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap71",
+            "ObjId": 3070,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -460.484,
+                "y": 86.0092,
+                "z": -282.895
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap71"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap72",
+            "ObjId": 3071,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -438.604,
+                "y": 86.5199,
+                "z": -330.223
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap72"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap73",
+            "ObjId": 3072,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -378.966,
+                "y": 87.0233,
+                "z": -318.962
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap73"
+        },
+        {
+            "name": "FX_Snow_BlowingSnow_L_01_TerrainSnap74",
+            "ObjId": 3073,
+            "metadata/_edit_group_": true,
+            "type": "FX_Snow_BlowingSnow_L_01_TerrainSnap",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -414.374,
+                "y": 83.8926,
+                "z": -263.215
+            },
+            "id": "Snow Effects/FX_Snow_BlowingSnow_L_01_TerrainSnap74"
+        },
+        {
+            "name": "Payload 5001",
+            "ObjId": 5001,
+            "type": "FireAlarmButton_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -280.049,
+                "y": 43.5838,
+                "z": 20.8314
+            },
+            "id": "Payload 5001"
+        },
+        {
+            "name": "FixedCamera",
+            "ObjId": 50,
+            "type": "FixedCamera",
+            "right": {
+                "x": 0.0331378,
+                "y": 0,
+                "z": -0.999451
+            },
+            "up": {
+                "x": 0.260917,
+                "y": 0.965322,
+                "z": 0.00865096
+            },
+            "front": {
+                "x": 0.964792,
+                "y": -0.261061,
+                "z": 0.0319886
+            },
+            "position": {
+                "x": 302.781,
+                "y": 95.5326,
+                "z": -448.135
+            },
+            "id": "FixedCamera"
+        },
+        {
+            "name": "FixedCamera2",
+            "ObjId": 51,
+            "type": "FixedCamera",
+            "right": {
+                "x": -0.427358,
+                "y": 0,
+                "z": -0.904082
+            },
+            "up": {
+                "x": -0.258286,
+                "y": 0.958322,
+                "z": 0.122091
+            },
+            "front": {
+                "x": 0.866402,
+                "y": 0.285688,
+                "z": -0.409546
+            },
+            "position": {
+                "x": 202.82,
+                "y": 98.9898,
+                "z": -394.29
+            },
+            "id": "FixedCamera2"
+        },
+        {
+            "name": "ExplosionSound",
+            "ObjId": 52,
+            "type": "FireAlarmButton_01",
+            "right": {
+                "x": -0.0427358,
+                "y": 0,
+                "z": -0.0904082
+            },
+            "up": {
+                "x": -0.0258286,
+                "y": 0.0958322,
+                "z": 0.0122091
+            },
+            "front": {
+                "x": 0.0866402,
+                "y": 0.0285688,
+                "z": -0.0409546
+            },
+            "position": {
+                "x": 197.65428,
+                "y": 118.15624,
+                "z": -391.84818
+            },
+            "id": "FixedCamera2/ExplosionSound"
         }
     ],
     "Static": [
