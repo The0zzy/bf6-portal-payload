@@ -79,6 +79,7 @@ export function VOPushing(): void {
         mod.PlayVO(VOModule1, mod.VoiceOverEvents2D.ProgressMidWinning, mod.VoiceOverFlags.Alpha, mod.GetTeam(1));
         mod.PlayVO(VOModule2, mod.VoiceOverEvents2D.ProgressMidLosing, mod.VoiceOverFlags.Alpha, mod.GetTeam(2));
     }
+    //mod.MoveObject(payloadMoving, mod.CreateVector(mod.XComponentOf(STATE.payloadPosition), mod.YComponentOf(STATE.payloadPosition) - 1, mod.ZComponentOf(STATE.payloadPosition)), mod.CreateVector(0, 0, 0));
 }
 
 //Play VO for team 2 pushing
@@ -97,6 +98,28 @@ export function VOPushingBack(): void {
         mod.PlayVO(VOModule2, mod.VoiceOverEvents2D.ProgressMidWinning, mod.VoiceOverFlags.Alpha, mod.GetTeam(2));
         mod.PlayVO(VOModule1, mod.VoiceOverEvents2D.ProgressMidLosing, mod.VoiceOverFlags.Alpha, mod.GetTeam(1));
     }
+    //mod.MoveObject(payloadMoving, mod.CreateVector(mod.XComponentOf(STATE.payloadPosition), mod.YComponentOf(STATE.payloadPosition) - 1, mod.ZComponentOf(STATE.payloadPosition)), mod.CreateVector(0, 0, 0));
+}
+
+export function playPayloadMovingSound(): void {
+    mod.PlaySound(payloadMoving, 1, mod.CreateVector(mod.XComponentOf(STATE.payloadPosition), mod.YComponentOf(STATE.payloadPosition) - 1, mod.ZComponentOf(STATE.payloadPosition)), 50);
+    mod.StopSound(payloadIdle)
+}
+
+export function playPayloadIdleSound(): void {
+    if (!payloadenabled) return;
+    if (!idle) {
+        mod.PlaySound(payloadIdle, 1, mod.CreateVector(mod.XComponentOf(STATE.payloadPosition), mod.YComponentOf(STATE.payloadPosition) - 1, mod.ZComponentOf(STATE.payloadPosition)), 50);
+        mod.StopSound(payloadMoving)
+        idle = true;
+    }
+    //mod.MoveObject(payloadIdle, mod.CreateVector(mod.XComponentOf(STATE.payloadPosition), mod.YComponentOf(STATE.payloadPosition) - 1, mod.ZComponentOf(STATE.payloadPosition)), mod.CreateVector(0, 0, 0));
+}
+
+export function stopPayloadSound(): void {
+    payloadenabled = false;
+    mod.StopSound(payloadMoving);
+    mod.StopSound(payloadIdle);
 }
 
 export function playPayloadMovingSound(): void {
