@@ -101,21 +101,6 @@ export function VOPushingBack(): void {
     //mod.MoveObject(payloadMoving, mod.CreateVector(mod.XComponentOf(STATE.payloadPosition), mod.YComponentOf(STATE.payloadPosition) - 1, mod.ZComponentOf(STATE.payloadPosition)), mod.CreateVector(0, 0, 0));
 }
 
-export function playPayloadMovingSound(): void {
-    mod.PlaySound(payloadMoving, 1, mod.CreateVector(mod.XComponentOf(STATE.payloadPosition), mod.YComponentOf(STATE.payloadPosition) - 1, mod.ZComponentOf(STATE.payloadPosition)), 50);
-    mod.StopSound(payloadIdle)
-}
-
-export function playPayloadIdleSound(): void {
-    if (!payloadenabled) return;
-    if (!idle) {
-        mod.PlaySound(payloadIdle, 1, mod.CreateVector(mod.XComponentOf(STATE.payloadPosition), mod.YComponentOf(STATE.payloadPosition) - 1, mod.ZComponentOf(STATE.payloadPosition)), 50);
-        mod.StopSound(payloadMoving)
-        idle = true;
-    }
-    //mod.MoveObject(payloadIdle, mod.CreateVector(mod.XComponentOf(STATE.payloadPosition), mod.YComponentOf(STATE.payloadPosition) - 1, mod.ZComponentOf(STATE.payloadPosition)), mod.CreateVector(0, 0, 0));
-}
-
 export function stopPayloadSound(): void {
     payloadenabled = false;
     mod.StopSound(payloadMoving);
@@ -141,12 +126,6 @@ export function playPayloadIdleSound(): void {
         mod.SetObjectTransform(payloadIdle, mod.CreateTransform(mod.CreateVector(-342.899, 84.692, -242.237), mod.CreateVector(0, 0, 0)));
         mod.SetObjectTransform(door, mod.CreateTransform(mod.CreateVector(-342.899, 84.692, -242.237), mod.CreateVector(0, 0, 0)));
     }
-}
-
-export function stopPayloadSound(): void {
-    payloadenabled = false;
-    mod.StopSound(payloadMoving);
-    mod.StopSound(payloadIdle);
 }
 
 // Play VO for low time

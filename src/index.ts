@@ -352,7 +352,7 @@ function catmullRom(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vect
 // --------------------------
 // Get t for a given distance along spline
 // --------------------------
-function getTForDistanceDynamic(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, distance: number, samples: number = 40) {
+function getTForDistanceDynamic(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, distance: number, samples: number = 30) {
     let lastPos = catmullRom(p0, p1, p2, p3, 0);
     let accumulated = 0;
 

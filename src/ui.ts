@@ -263,7 +263,7 @@ export async function nukeUI(): Promise<void> {
     ui_ready = false;
     mod.SetCameraTypeForAll(mod.Cameras.Fixed, 50);
     //mod.MoveObjectOverTime(mod.GetSpatialObject(50), mod.CreateVector(0, 2, 0), mod.CreateVector(0, 0, 0), 3, false, false);
-    mod.SetObjectTransformOverTime(mod.GetSpatialObject(50), mod.CreateTransform(mod.Add(mod.GetObjectPosition(mod.GetSpatialObject(50)), mod.CreateVector(0, 2, 0)), mod.GetObjectRotation(mod.GetSpatialObject(50))), 3, false, false);
+    mod.MoveObjectOverTime(mod.GetFixedCamera(50), mod.CreateVector(0, 2, 0), mod.CreateVector(0, 0, 0), 3, false, false);
     await mod.Wait(3);
 
     mod.SetCameraTypeForAll(mod.Cameras.Fixed, 51);
@@ -306,9 +306,15 @@ export async function nukeUI(): Promise<void> {
     let nukeEnd2 = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Detonation, mod.GetObjectPosition(mod.GetSpatialObject(52)), mod.CreateVector(0, 0, 0));
     mod.EnableVFX(nukeEnd2, true);
 
-    await mod.Wait(1);
+    await mod.Wait(0.4);
     //mod.MoveObjectOverTime(mod.GetSpatialObject(51), mod.CreateVector(0, 1, 0), mod.CreateVector(0, 0, 0), 0.1, true, true);
-    mod.SetObjectTransformOverTime(mod.GetSpatialObject(51), mod.CreateTransform(mod.Add(mod.GetObjectPosition(mod.GetSpatialObject(51)), mod.CreateVector(0, 1, 0)), mod.GetObjectRotation(mod.GetSpatialObject(51))), 0.1, true, true);
+    mod.MoveObjectOverTime(mod.GetFixedCamera(51), mod.CreateVector(0, 2, 0), mod.CreateVector(0, 0, 0), 0.05, true, true);
+    await mod.Wait(1.0);
+    mod.MoveObjectOverTime(mod.GetFixedCamera(51), mod.CreateVector(0, 1, 0), mod.CreateVector(0, 0, 0), 0.05, true, true);
+    await mod.Wait(0.5);
+    mod.MoveObjectOverTime(mod.GetFixedCamera(51), mod.CreateVector(0, 0.5, 0), mod.CreateVector(0, 0, 0), 0.05, true, true);
+    await mod.Wait(0.5);
+    mod.StopActiveMovementForObject(mod.GetFixedCamera(51));
 }
 
 export async function updateDebugUI(): Promise<void> {
