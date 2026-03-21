@@ -1,5 +1,5 @@
 import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI, progressFlash, nukeUI, updateDebugUI } from './ui.ts';
-import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound, endGameMusic, playPayloadIdleSound, stopPayloadSound } from './sounds.ts';
+import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound, endGameMusic, playPayloadIdleSound, updateSoundPositions } from './sounds.ts';
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
 import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard, scoring_getOrCreatePlayerScore } from './scoring.ts';
@@ -849,6 +849,7 @@ export function OngoingGlobal(): void {
         setPayloadState(PayloadState.IDLE);
         playPayloadIdleSound();
     }
+    updateSoundPositions();
 }
 
 //Force remove players from payload vehicle
