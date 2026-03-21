@@ -1,0 +1,7 @@
+{
+    "start": "Sound Beginning X:{} Y:{} Z:{}",
+    "new_location": "Sound New Location: X:{} Y:{} Z:{}",
+    "barrel_start": "Barrel BeginningX:{} Y:{} Z:{}",
+    "barrel_new_location": "Barrel New Location: X:{} Y:{} Z:{}",
+    "sound_type": "Sound Type is SFX (1)?: {}"
+}
