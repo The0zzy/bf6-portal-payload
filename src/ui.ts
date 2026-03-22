@@ -261,13 +261,18 @@ export async function progressFlash(): Promise<void> {
 //Handles the end game explosion effects
 export async function nukeUI(): Promise<void> {
     ui_ready = false;
+    mod.DeployAllPlayers
     mod.SetCameraTypeForAll(mod.Cameras.Fixed, 50);
     //mod.MoveObjectOverTime(mod.GetSpatialObject(50), mod.CreateVector(0, 2, 0), mod.CreateVector(0, 0, 0), 3, false, false);
     mod.MoveObjectOverTime(mod.GetFixedCamera(50), mod.CreateVector(0, 2, 0), mod.CreateVector(0, 0, 0), 3, false, false);
+    let siren = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_GameModes_BR_Mission_DemoCrew_Alarm_Close_SimpleLoop3D, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
+    mod.PlaySound(siren, 1, STATE.payloadPosition, 500);
     await mod.Wait(3);
+    mod.DeployAllPlayers();
 
     mod.SetCameraTypeForAll(mod.Cameras.Fixed, 51);
     await mod.Wait(2);
+    mod.DeployAllPlayers();
     let nukePrologue = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Detonation, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
     mod.EnableVFX(nukePrologue, true);
 
@@ -276,8 +281,13 @@ export async function nukeUI(): Promise<void> {
     mod.EnableVFX(nukeFire, true);
     mod.SetVFXScale(nukeFire, 20);
 
+    mod.StopSound(siren);
     mod.AddUIContainer("nuke", mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("container"), true, 0, mod.CreateVector(1, 1, 1), 1, mod.UIBgFill.Solid);
     mod.AddUIContainer("nukeScreenEffect", mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("container"), true, 0, goldcolour, 0.5, mod.UIBgFill.Blur);
+
+    STATE.payloadSpatials.forEach((payloadSpatials) => {
+        mod.UnspawnObject(payloadSpatials);
+    });
 
     let nukeStart = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_CAP_AmbWar_Rocket_Strike, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
     mod.EnableVFX(nukeStart, true);
@@ -307,13 +317,14 @@ export async function nukeUI(): Promise<void> {
     mod.EnableVFX(nukeEnd2, true);
 
     await mod.Wait(0.4);
-    //mod.MoveObjectOverTime(mod.GetSpatialObject(51), mod.CreateVector(0, 1, 0), mod.CreateVector(0, 0, 0), 0.1, true, true);
+    mod.MoveObjectOverTime(mod.GetFixedCamera(51), mod.CreateVector(0, 4, 0), mod.CreateVector(0, 0, 0), 0.05, true, true);
+    await mod.Wait(0.5);
     mod.MoveObjectOverTime(mod.GetFixedCamera(51), mod.CreateVector(0, 2, 0), mod.CreateVector(0, 0, 0), 0.05, true, true);
-    await mod.Wait(1.0);
+    await mod.Wait(0.5);
     mod.MoveObjectOverTime(mod.GetFixedCamera(51), mod.CreateVector(0, 1, 0), mod.CreateVector(0, 0, 0), 0.05, true, true);
     await mod.Wait(0.5);
     mod.MoveObjectOverTime(mod.GetFixedCamera(51), mod.CreateVector(0, 0.5, 0), mod.CreateVector(0, 0, 0), 0.05, true, true);
-    await mod.Wait(0.5);
+    await mod.Wait(1);
     mod.StopActiveMovementForObject(mod.GetFixedCamera(51));
 }
 

@@ -708,11 +708,11 @@ async function onFinalCheckpointReached() {
     if (STATE.payloadVehicle) {
         mod.Kill(STATE.payloadVehicle as mod.Vehicle);
     } else {
-        STATE.payloadSpatials.forEach((obj) => {
-            mod.UnspawnObject(obj);
-        });
         STATE.payloadObjectives.forEach((obj) => {
             mod.UnspawnObject(obj);
+        });
+        STATE.payloadVfx.forEach((vfx) => {
+            mod.UnspawnObject(vfx);
         });
     }
     nukeUI();
