@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://bsf32s3oije31"]
+[gd_scene load_steps=13 format=3 uid="uid://bsf32s3oije31"]
 
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/HQ_PlayerSpawner.tscn" id="1_ruukq"]
 [ext_resource type="PackedScene" uid="uid://jv31so3xcr7p" path="res://addons/bf_portal/portal_tools/types/PolygonVolume/PolygonVolume.tscn" id="2_wuecr"]
 [ext_resource type="PackedScene" path="res://objects/entities/SpawnPoint.tscn" id="3_b17jw"]
+[ext_resource type="PackedScene" path="res://objects/props/CarSUV_01.tscn" id="4_0dmue"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/DeployCam.tscn" id="5_7k826"]
 [ext_resource type="PackedScene" path="res://objects/props/FiringRange_MatDecal_01.tscn" id="5_n56xi"]
 [ext_resource type="PackedScene" path="res://static/MP_Abbasid_Terrain.tscn" id="6_3of6p"]
@@ -10,7 +11,7 @@
 [ext_resource type="PackedScene" path="res://static/MP_Abbasid_Assets.tscn" id="7_i0t1x"]
 [ext_resource type="PackedScene" path="res://objects/props/FireAlarmButton_01.tscn" id="8_v6rb8"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/AreaTrigger.tscn" id="9_ofkm8"]
-[ext_resource type="PackedScene" path="res://objects/props/Basketball_01.tscn" id="11_fp84v"]
+[ext_resource type="PackedScene" path="res://objects/gameplay/common/FixedCamera.tscn" id="12_n56xi"]
 
 [node name="MP_Abbasid" type="Node3D"]
 
@@ -28,341 +29,346 @@ metadata/_edit_lock_ = true
 [node name="MP_Abbasid_Assets" parent="Static" instance=ExtResource("7_i0t1x")]
 metadata/_edit_lock_ = true
 
+[node name="Payload" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -172.003, 64.0049, 9.71465)
+
+[node name="CarSUV_01" parent="Payload" instance=ExtResource("4_0dmue")]
+
 [node name="Track" type="Node3D" parent="."]
 
 [node name="Track_0" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -245.294, 64.0338, 25.0164)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -245.294, 64.0338, 25.0164)
 ObjId = 1000
 
 [node name="Track_1" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -245.294, 64.0057, 16.8398)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -245.294, 64.0057, 16.8398)
 ObjId = 1001
 
 [node name="Track_2" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -243.075, 63.9957, 12.8473)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -243.075, 63.9957, 12.8473)
 ObjId = 1002
 
 [node name="Track_3" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -238.841, 64.0073, 11.1378)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -238.841, 64.0073, 11.1378)
 ObjId = 1003
 
 [node name="Track_4" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -232.513, 64.0294, 10.5684)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -232.513, 64.0294, 10.5684)
 ObjId = 1004
 
 [node name="Track_5" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -218.351, 63.9938, 10.5684)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -218.351, 63.9938, 10.5684)
 ObjId = 1005
 
 [node name="Track_6" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -199.003, 63.9938, 10.5684)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -199.003, 63.9938, 10.5684)
 ObjId = 1006
 
 [node name="Track_7" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -191.221, 63.9938, 9.00673)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -191.221, 63.9938, 9.00673)
 ObjId = 1007
 
 [node name="Track_8" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -189.012, 63.9938, 4.93947)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -189.012, 63.9938, 4.93947)
 ObjId = 1008
 
 [node name="Track_9" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -188.469, 63.9938, -3.78482)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -188.469, 63.9938, -3.78482)
 ObjId = 1009
 
 [node name="Track_10" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -188.252, 63.9938, -23.0003)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -188.252, 63.9938, -23.0003)
 ObjId = 1010
 
 [node name="Track_11" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -188.603, 63.9938, -33.8608)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -188.603, 63.9938, -33.8608)
 ObjId = 1011
 
 [node name="Track_12" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -187.025, 63.9938, -38.8571)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -187.025, 63.9938, -38.8571)
 ObjId = 1012
 
 [node name="Track_13" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -180.305, 63.9938, -40.3083)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -180.305, 63.9938, -40.3083)
 ObjId = 1013
 
 [node name="Track_14" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -173.086, 64.0103, -39.7564)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -173.086, 64.0103, -39.7564)
 ObjId = 1014
 
 [node name="Track_15" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -158.58, 64.0103, -40.0097)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -158.58, 64.0103, -40.0097)
 ObjId = 1015
 
 [node name="Track_16" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -147.761, 64.0103, -40.0097)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -147.761, 64.0103, -40.0097)
 ObjId = 1016
 
 [node name="Track_17" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -142.913, 64.0103, -40.8157)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -142.913, 64.0103, -40.8157)
 ObjId = 1017
 
 [node name="Track_18" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -139.964, 64.0103, -43.8412)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -139.964, 64.0103, -43.8412)
 ObjId = 1018
 
 [node name="Track_19" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -134.242, 64.0103, -55.8089)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -134.242, 64.0103, -55.8089)
 ObjId = 1019
 
 [node name="Track_20" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -131.694, 64.0103, -60.091)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -131.694, 64.0103, -60.091)
 ObjId = 1020
 
 [node name="Track_21" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -127.158, 64.0103, -62.3307)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -127.158, 64.0103, -62.3307)
 ObjId = 1021
 
 [node name="Track_22" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -118.131, 64.0103, -62.7827)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -118.131, 64.0103, -62.7827)
 ObjId = 1022
 
 [node name="Track_23" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -103.104, 64.0103, -63.0294)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -103.104, 64.0103, -63.0294)
 ObjId = 1023
 
 [node name="Track_24" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -93.6548, 64.0103, -63.073)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -93.6548, 64.0103, -63.073)
 ObjId = 1024
 
 [node name="Track_25" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.6179, 64.0103, -60.2494)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -90.6179, 64.0103, -60.2494)
 ObjId = 1025
 
 [node name="Track_26" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -89.1724, 64.0103, -53.8929)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -89.1724, 64.0103, -53.8929)
 ObjId = 1026
 
 [node name="Track_27" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -88.6144, 64.0103, -38.3953)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -88.6144, 64.0103, -38.3953)
 ObjId = 1027
 
 [node name="Track_28" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -87.4411, 64.0103, -24.0093)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -87.4411, 64.0103, -24.0093)
 ObjId = 1028
 
 [node name="Track_29" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -85.4674, 64.0103, -19.4545)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -85.4674, 64.0103, -19.4545)
 ObjId = 1029
 
 [node name="Track_30" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -83.2741, 62.6894, -16.0782)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -83.2741, 62.6894, -16.0782)
 ObjId = 1030
 
 [node name="Track_31" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81.563, 61.8833, -13.7627)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -81.563, 61.8833, -13.7627)
 ObjId = 1031
 
 [node name="Track_32" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.783, 62.189, -11.6915)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -79.783, 62.189, -11.6915)
 ObjId = 1032
 
 [node name="Track_33" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.5582, 62.7643, -9.97398)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -78.5582, 62.7643, -9.97398)
 ObjId = 1033
 
 [node name="Track_34" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.7346, 64.0103, -7.619)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -76.7346, 64.0103, -7.619)
 ObjId = 1034
 
 [node name="Track_35" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -75.955, 64.008, -3.09304)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -75.955, 64.008, -3.09304)
 ObjId = 1035
 
 [node name="Track_36" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.3464, 64.008, 6.66694)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -76.3464, 64.008, 6.66694)
 ObjId = 1036
 
 [node name="Track_37" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.7122, 64.008, 22.8647)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -76.7122, 64.008, 22.8647)
 ObjId = 1037
 
 [node name="Track_38" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.0132, 64.008, 27.781)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -76.0132, 64.008, 27.781)
 ObjId = 1038
 
 [node name="Track_39" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -72.3581, 64.008, 31.6896)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -72.3581, 64.008, 31.6896)
 ObjId = 1039
 
 [node name="Track_40" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -67.2656, 64.0629, 33.056)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -67.2656, 64.0629, 33.056)
 ObjId = 1040
 
 [node name="Track_41" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -57.6944, 64.0086, 33.3338)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -57.6944, 64.0086, 33.3338)
 ObjId = 1041
 
 [node name="Track_42" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.4664, 64.0086, 33.3338)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -46.4664, 64.0086, 33.3338)
 ObjId = 1042
 
 [node name="Track_43" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.922, 64.0086, 33.3338)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -34.922, 64.0086, 33.3338)
 ObjId = 1043
 
 [node name="Track_44" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.7489, 65.0367, 33.3338)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -26.7489, 65.0367, 33.3338)
 ObjId = 1044
 
 [node name="Track_45" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.9784, 64.3348, 33.4904)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -20.9784, 64.3348, 33.4904)
 ObjId = 1045
 
 [node name="Track_46" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.4752, 64.0288, 33.8228)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -17.4752, 64.0288, 33.8228)
 ObjId = 1046
 
 [node name="Track_47" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.46, 64.0038, 34.5847)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -12.46, 64.0038, 34.5847)
 ObjId = 1047
 
 [node name="Track_48" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.2057, 63.8706, 33.4406)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -7.2057, 63.8706, 33.4406)
 ObjId = 1048
 
 [node name="Track_49" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.94413, 63.5092, 32.8734)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -4.94413, 63.5092, 32.8734)
 ObjId = 1049
 
 [node name="Track_50" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50448, 63.0465, 31.9108)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -1.50448, 63.0465, 31.9108)
 ObjId = 1050
 
 [node name="Track_51" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.77276, 62.9522, 30.7962)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0.77276, 62.9522, 30.7962)
 ObjId = 1051
 
 [node name="Track_52" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.92682, 63.4306, 29.2123)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 3.92682, 63.4306, 29.2123)
 ObjId = 1052
 
 [node name="Track_53" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.01262, 63.9528, 27.9673)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 6.01262, 63.9528, 27.9673)
 ObjId = 1053
 
 [node name="Track_54" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.82431, 64.0125, 25.0004)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 8.82431, 64.0125, 25.0004)
 ObjId = 1054
 
 [node name="Track_55" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.7756, 64.0125, 13.5414)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 19.7756, 64.0125, 13.5414)
 ObjId = 1055
 
 [node name="Track_56" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.9343, 63.5143, 3.65262)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 30.9343, 63.5143, 3.65262)
 ObjId = 1056
 
 [node name="Track_57" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.0499, 63.1481, -4.37879)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 37.0499, 63.1481, -4.37879)
 ObjId = 1057
 
 [node name="Track_58" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.8842, 62.776, -12.3215)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 43.8842, 62.776, -12.3215)
 ObjId = 1058
 
 [node name="Track_59" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.4807, 62.271, -23.9963)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 55.4807, 62.271, -23.9963)
 ObjId = 1059
 
 [node name="Track_60" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.4922, 62.115, -27.1559)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 62.4922, 62.115, -27.1559)
 ObjId = 1060
 
 [node name="Track_61" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68.2804, 62.115, -27.5102)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 68.2804, 62.115, -27.5102)
 ObjId = 1061
 
 [node name="Track_62" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.118, 62.115, -26.7511)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 82.118, 62.115, -26.7511)
 ObjId = 1062
 
 [node name="Track_63" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 91.6212, 62.115, -26.7511)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 91.6212, 62.115, -26.7511)
 ObjId = 1063
 
 [node name="Track_64" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 98.5525, 62.5226, -26.7511)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 98.5525, 62.5226, -26.7511)
 ObjId = 1064
 
 [node name="Track_65" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 107.073, 62.0898, -27.4546)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 107.073, 62.0898, -27.4546)
 ObjId = 1065
 
 [node name="Track_66" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 114.073, 62.075, -27.7538)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 114.073, 62.075, -27.7538)
 ObjId = 1066
 
 [node name="Track_67" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 121.299, 62.075, -27.389)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 121.299, 62.075, -27.389)
 ObjId = 1067
 
 [node name="Track_68" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 127.937, 62.075, -29.0878)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 127.937, 62.075, -29.0878)
 ObjId = 1068
 
 [node name="Track_69" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 130.511, 62.075, -31.7628)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 130.511, 62.075, -31.7628)
 ObjId = 1069
 
 [node name="Track_70" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 131.418, 62.075, -36.9641)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 131.418, 62.075, -36.9641)
 ObjId = 1070
 
 [node name="Track_71" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 132.001, 62.075, -45.4306)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 132.001, 62.075, -45.4306)
 ObjId = 1071
 
 [node name="Track_72" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 132.001, 62.5108, -53.2898)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 132.001, 62.5108, -53.2898)
 ObjId = 1072
 
 [node name="Track_73" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 133.13, 62.2142, -58.713)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 133.13, 62.2142, -58.713)
 ObjId = 1073
 
 [node name="Track_74" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 133.827, 62.288, -62.0094)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 133.827, 62.288, -62.0094)
 ObjId = 1074
 
 [node name="Track_75" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 133.809, 62.3342, -65.3529)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 133.809, 62.3342, -65.3529)
 ObjId = 1075
 
 [node name="Track_76" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 133.204, 62.1846, -70.0687)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 133.204, 62.1846, -70.0687)
 ObjId = 1076
 
 [node name="Track_77" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 131.227, 62.0451, -80.0826)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 131.227, 62.0451, -80.0826)
 ObjId = 1077
 
 [node name="Track_78" parent="Track" instance=ExtResource("5_n56xi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 131.227, 62.111, -89.6506)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 131.227, 62.111, -89.6506)
 ObjId = 1078
 
 [node name="Checkpoints" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -69.1908, 143.918, 0)
 
 [node name="checkpoint0" parent="Checkpoints" instance=ExtResource("8_v6rb8")]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -105.429, -82.7531, 10.4157)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -105.429, -82.7531, 10.4157)
 ObjId = 2018
 
 [node name="checkpoint1" parent="Checkpoints" instance=ExtResource("8_v6rb8")]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -105.429, -82.7531, 10.4157)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -105.429, -82.7531, 10.4157)
 ObjId = 2037
 
 [node name="checkpoint2" parent="Checkpoints" instance=ExtResource("8_v6rb8")]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -105.429, -82.7531, 10.4157)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -105.429, -82.7531, 10.4157)
 ObjId = 2058
 
 [node name="checkpoint3" parent="Checkpoints" instance=ExtResource("8_v6rb8")]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -105.429, -82.7531, 10.4157)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -105.429, -82.7531, 10.4157)
 ObjId = 2078
 
 [node name="Sectors" type="Node3D" parent="."]
@@ -578,7 +584,7 @@ SectorArea = NodePath("SectorArea4")
 MCOMs = [null, null]
 
 [node name="SectorArea4" parent="Sectors/Sector4" instance=ExtResource("2_wuecr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.04131, -6.19255, -10.3386)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.04131, -6.19255, -11.3386)
 points = PackedVector2Array(8.75593, -56.2343, -7.53383, -52.2544, -12.7058, -36.2026, -17.474, -11.9265, -26.5827, 4.65946, 14.8079, 49.9666, 31.554, 43.1509, 80.6139, 42.1879, 81.86, -103.007, 42.4068, -104.246, 28.7648, -73.0222, 28.4231, -57.055)
 height = 100.0
 
@@ -650,8 +656,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.69048, 23.1401, 4.1679)
 ObjId = 605
 Area = NodePath("../SectorArea5")
 
-[node name="payloadObjects" type="Node3D" parent="."]
-
-[node name="GM1083CargoTruck_01_Canopy" parent="payloadObjects" instance=ExtResource("11_fp84v")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+[node name="Payload 5000" parent="." instance=ExtResource("8_v6rb8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -174.62, 55.0866, 10.4157)
 ObjId = 5000
+
+[node name="FixedCamera" parent="." instance=ExtResource("12_n56xi")]
+transform = Transform3D(-0.942157, 0.0356807, 0.333267, 3.72529e-09, 0.994318, -0.106455, -0.335172, -0.100297, -0.936803, 118.424, 73.2692, -48.4561)
+ObjId = 50
+
+[node name="FixedCamera2" parent="." instance=ExtResource("12_n56xi")]
+transform = Transform3D(-0.392337, -0.346059, 0.852241, 0, 0.926528, 0.376224, -0.919822, 0.147607, -0.363512, 3.68951, 81.465, -32.2506)
+ObjId = 51
+
+[node name="ExplosionSound" parent="FixedCamera2" instance=ExtResource("8_v6rb8")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 20, 0)
+ObjId = 52
