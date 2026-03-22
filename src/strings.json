@@ -40,12 +40,12 @@
       "not_assigned_payload_vehicle": "Not assigned payload vehicle!",
       "vehicle_spawned": "Vehicle spawned!",
       "exit_message": "GET OUT AND PUSH!",
-      "score_message": "+ {} PTFO score"
+      "score_message": "+ {}"
     },
     "meta": {
       "version": "0.0.10",
       "name": "payload",
-      "build": "2026-03-18T16:00:35.718Z",
+      "build": "2026-03-22T12:57:46.180Z",
       "meta_text": "{} v{} build: {}"
     },
     "credits": "Payload | TheOzzy | andy6170",
