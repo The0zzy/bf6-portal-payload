@@ -18,7 +18,7 @@ let nearendVO = false;
 let idle = false;
 let payloadenabled = true;
 let lastSoundUpdatePos: mod.Vector = mod.CreateVector(0, 0, 0);
-
+let musicPlayed = false;
 
 export async function initSounds() {
     //Setup VO Modules
@@ -33,7 +33,7 @@ export async function initSounds() {
     //Payload Sounds
     payloadMoving = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_Gamemodes_Payload_Breacher_Exterior_Accel_SimpleLoop3D, STATE.payloadPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
     payloadIdle = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_Gamemodes_Payload_Breacher_Idle_SimpleLoop3D, STATE.payloadPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
-    door = mod.SpawnObject(mod.RuntimeSpawn_Common.FiringRange_ExitDoor_01, STATE.payloadPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
+    //door = mod.SpawnObject(mod.RuntimeSpawn_Common.FiringRange_ExitDoor_01, STATE.payloadPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
 
     //Setup Music
     mod.LoadMusic(mod.MusicPackages.Core);
@@ -109,7 +109,7 @@ export function playPayloadIdleSound(): void {
         idle = true;
         lastSoundUpdatePos = STATE.payloadPosition;
         mod.SetObjectTransform(payloadIdle, mod.CreateTransform(STATE.payloadPosition, mod.CreateVector(0, 0, 0)));
-        mod.SetObjectTransform(door, mod.CreateTransform(STATE.payloadPosition, mod.CreateVector(0, 0, 0)));
+        //mod.SetObjectTransform(door, mod.CreateTransform(STATE.payloadPosition, mod.CreateVector(0, 0, 0)));
     }
 }
 
@@ -117,7 +117,7 @@ export function updateSoundPositions(): void {
     if (mod.DistanceBetween(STATE.payloadPosition, lastSoundUpdatePos) > 1.5) {
         lastSoundUpdatePos = STATE.payloadPosition;
         mod.SetObjectTransform(payloadMoving, mod.CreateTransform(STATE.payloadPosition, mod.CreateVector(0, 0, 0)));
-        mod.SetObjectTransform(door, mod.CreateTransform(STATE.payloadPosition, mod.CreateVector(0, 0, 0)));
+        //mod.SetObjectTransform(door, mod.CreateTransform(STATE.payloadPosition, mod.CreateVector(0, 0, 0)));
     }
 }
 
@@ -156,6 +156,10 @@ export function playPayloadProgressingSound(location: mod.Vector): void {
 }
 
 export function endGameMusic(team: number): void {
-    mod.SetMusicParam(mod.MusicParams.Core_IsWinning, team);
+    if (musicPlayed) return;
+    musicPlayed = true;
+    if (STATE.progressInPercent > 99) {
+        mod.SetMusicParam(mod.MusicParams.Core_IsWinning, team);
+    }
     mod.PlayMusic(mod.MusicEvents.Core_EndOfRound_Loop);
 }

@@ -1,10 +1,25 @@
 import { PayloadState, STATE } from "./state.ts";
+import { CONFIG } from "./config.ts";
 
 export function updateCheckpointTimer(remainingTime: number): void {
     mins = mod.Floor(remainingTime / 60);
     secs = mod.Floor(mod.Modulo(remainingTime, 60));
-    mod.SetUITextLabel(mod.FindUIWidgetWithName("remaining_time1"), mod.Message(timer, mins, mod.Floor(secs / 10), mod.Modulo(secs, 10)));
-    mod.SetUITextLabel(mod.FindUIWidgetWithName("remaining_time2"), mod.Message(timer, mins, mod.Floor(secs / 10), mod.Modulo(secs, 10)));
+    if (CONFIG.overtime && remainingTime <= 0) {
+        mod.SetUITextLabel(mod.FindUIWidgetWithName("remaining_time1"), mod.Message(mod.stringkeys.payload.state.overtime));
+        mod.SetUITextLabel(mod.FindUIWidgetWithName("remaining_time2"), mod.Message(mod.stringkeys.payload.state.overtime));
+        mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName("remaining_time1"), goldbgcolour);
+        mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName("remaining_time2"), goldbgcolour);
+    } else if (remainingTime > 0) {
+        mod.SetUITextLabel(mod.FindUIWidgetWithName("remaining_time1"), mod.Message(timer, mins, mod.Floor(secs / 10), mod.Modulo(secs, 10)));
+        mod.SetUITextLabel(mod.FindUIWidgetWithName("remaining_time2"), mod.Message(timer, mins, mod.Floor(secs / 10), mod.Modulo(secs, 10)));
+        mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName("remaining_time1"), enemybgcolour);
+        mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName("remaining_time2"), friendlybgcolour);
+    } else {
+        mod.SetUITextLabel(mod.FindUIWidgetWithName("remaining_time1"), mod.Message(timer, 0, 0, 0));
+        mod.SetUITextLabel(mod.FindUIWidgetWithName("remaining_time2"), mod.Message(timer, 0, 0, 0));
+        mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName("remaining_time1"), enemybgcolour);
+        mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName("remaining_time2"), friendlybgcolour);
+    }
 }
 
 let friendlycolour = mod.CreateVector(0, 0.7, 1); //0, 0.8, 1
@@ -105,7 +120,7 @@ export function uiSetup(): void {
     );
     // Payload progress icon draws last to show progress on top of Checkpoints
     mod.AddUIContainer("payload_progress_icon", mod.CreateVector(146 + (6 * STATE.progressInPercent), 0, 0), mod.CreateVector(4, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(1, 1, 0), 1, mod.UIBgFill.Solid);
-    mod.AddUIText("credits", mod.CreateVector(0, 0, 0), mod.CreateVector(600, 30, 0), mod.UIAnchor.BottomLeft, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.credits), 14, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.BottomLeft);
+    mod.AddUIText("credits", mod.CreateVector(10, 2, 0), mod.CreateVector(600, 30, 0), mod.UIAnchor.BottomLeft, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.credits), 14, mod.CreateVector(1, 1, 1), 0.3, mod.UIAnchor.BottomLeft);
 
     // Refresh cache after setup
     cachedWidgets = {};
@@ -263,8 +278,8 @@ export async function nukeUI(): Promise<void> {
     ui_ready = false;
     mod.DeployAllPlayers
     mod.SetCameraTypeForAll(mod.Cameras.Fixed, 50);
-    //mod.MoveObjectOverTime(mod.GetSpatialObject(50), mod.CreateVector(0, 2, 0), mod.CreateVector(0, 0, 0), 3, false, false);
     mod.MoveObjectOverTime(mod.GetFixedCamera(50), mod.CreateVector(0, 2, 0), mod.CreateVector(0, 0, 0), 3, false, false);
+
     let siren = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_GameModes_BR_Mission_DemoCrew_Alarm_Close_SimpleLoop3D, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
     mod.PlaySound(siren, 1, STATE.payloadPosition, 500);
     await mod.Wait(3);
@@ -284,6 +299,9 @@ export async function nukeUI(): Promise<void> {
     mod.StopSound(siren);
     mod.AddUIContainer("nuke", mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("container"), true, 0, mod.CreateVector(1, 1, 1), 1, mod.UIBgFill.Solid);
     mod.AddUIContainer("nukeScreenEffect", mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("container"), true, 0, goldcolour, 0.5, mod.UIBgFill.Blur);
+    let vehicleSpawner = mod.SpawnObject(mod.RuntimeSpawn_Common.VehicleSpawner, STATE.payloadPosition, STATE.payloadRotation);
+    mod.SetVehicleSpawnerVehicleType(vehicleSpawner, mod.VehicleList.M2Bradley);
+    mod.ForceVehicleSpawnerSpawn(vehicleSpawner);
 
     STATE.payloadSpatials.forEach((payloadSpatials) => {
         mod.UnspawnObject(payloadSpatials);
@@ -291,6 +309,8 @@ export async function nukeUI(): Promise<void> {
 
     let nukeStart = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_CAP_AmbWar_Rocket_Strike, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
     mod.EnableVFX(nukeStart, true);
+    let nukeStart2 = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_CAP_AmbWar_Rocket_Strike, mod.Add(STATE.payloadPosition, mod.CreateVector(0, 10, 0)), mod.CreateVector(0, 3.14, 0));
+    mod.EnableVFX(nukeStart2, true);
     let ROF = mod.SpawnObject(mod.RuntimeSpawn_Common.RingOfFire, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
 
     await mod.Wait(1.5);
@@ -300,15 +320,13 @@ export async function nukeUI(): Promise<void> {
         await mod.Wait(0.066);
     }
 
-    //let nukeStart2 = mod.SpawnObject(mod.RuntimeSpawn_Common.VFX_Launchers_GroundShockwave_Grass, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
-    let nukeStart2 = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_BASE_DeployClouds_Var_A, mod.Add(STATE.payloadPosition, mod.CreateVector(0, 30, 0)), mod.CreateVector(0, 0, 0));
-    mod.EnableVFX(nukeStart2, true);
-    mod.SetVFXScale(nukeStart2, 20);
-
     mod.DeleteUIWidget(mod.FindUIWidgetWithName("nuke"));
 
     let nukeMid = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Carrier_Explosion_Dist, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
     mod.EnableVFX(nukeMid, true);
+
+    let nukeMid2 = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Carrier_Explosion_Dist, mod.Subtract(STATE.payloadPosition, mod.CreateVector(0, 20, 0)), mod.CreateVector(0, 3.14, 0));
+    mod.EnableVFX(nukeMid2, true);
 
     let nukeEnd = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Detonation, STATE.payloadPosition, mod.CreateVector(0, 0, 0));
     mod.EnableVFX(nukeEnd, true);

@@ -266,6 +266,10 @@ function initPayloadObjective(): void {
 }
 
 export function OnVehicleSpawned(eventVehicle: mod.Vehicle): void {
+    if (!CONFIG.gameOngoing) {
+        mod.Kill(eventVehicle);
+        return;
+    }
     if (!CONFIG.enableVehicleSpawner) return;
     const vehiclePosition = mod.GetVehicleState(eventVehicle, mod.VehicleStateVector.VehiclePosition);
     if (mod.DistanceBetween(STATE.waypoints.get(0)!.position, vehiclePosition) < 5) {
@@ -645,7 +649,7 @@ function onPayloadMoved() {
 }
 
 function executeEverySecond() {
-    if (STATE.lastElapsedSeconds >= CONFIG.gameModeTime) {
+    if (STATE.lastElapsedSeconds >= CONFIG.gameModeTime && !CONFIG.overtime) {
         onRunningOutOfTime();
         return;
     }
@@ -663,7 +667,7 @@ function executeEverySecond() {
     if (STATE.progressInPercent < 100) {
         updateCheckpointTimer(remainingTime);
     }
-    if (remainingTime <= 0) {
+    if (remainingTime <= 0 && !CONFIG.overtime) {
         onRunningOutOfTime();
         return;
     }
@@ -702,6 +706,8 @@ function respawnPayloadSpatials() {
 }
 
 async function onFinalCheckpointReached() {
+    if (!CONFIG.gameOngoing) return;
+    CONFIG.gameOngoing = false;
     mod.PauseGameModeTime(true);
     playPayloadIdleSound();
     endGameMusic(1);
@@ -716,12 +722,15 @@ async function onFinalCheckpointReached() {
         });
     }
     nukeUI();
-    await mod.Wait(8);
+    await mod.Wait(8.5);
     mod.EndGameMode(mod.GetTeam(1));
 }
 
 function onRunningOutOfTime() {
+    if (!CONFIG.gameOngoing) return;
+    CONFIG.gameOngoing = false;
     endGameMusic(2);
+    mod.PauseGameModeTime(true);
     mod.EndGameMode(mod.GetTeam(2));
 }
 
@@ -781,15 +790,19 @@ export function OngoingGlobal(): void {
     if (counts.t1.length > counts.t2.length) {
         pushForward(counts);
         onPayloadMoved();
+        CONFIG.overtime = true;
     } else if (counts.t2.length > counts.t1.length) {
         pushBackward(counts);
         onPayloadMoved();
+        CONFIG.overtime = false;
     } else if (counts.t1.length > 0 && counts.t2.length > 0) {
         setPayloadState(PayloadState.CONTESTED);
         playPayloadIdleSound();
+        CONFIG.overtime = false;
     } else {
         setPayloadState(PayloadState.IDLE);
         playPayloadIdleSound();
+        CONFIG.overtime = false;
     }
 
     updateSoundPositions();
@@ -846,8 +859,15 @@ export function OngoingPlayer(eventPlayer: mod.Player): void {
             mod.DisplayNotificationMessage(mod.Message(mod.stringkeys.payload.objective.exit_message), eventPlayer);
         }
     }
+    playerEndState(eventPlayer);
 }
 
-
+export function playerEndState(eventPlayer: mod.Player): void {
+    if (!CONFIG.gameOngoing && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) {
+        mod.SetPlayerMaxHealth(eventPlayer, 500);
+        mod.Heal(eventPlayer, 500);
+    } else if (!CONFIG.gameOngoing && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsManDown))
+        mod.ForceRevive(eventPlayer);
+}
 
 

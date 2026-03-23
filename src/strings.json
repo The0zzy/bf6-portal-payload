@@ -18,7 +18,8 @@
       "message": "{}",
       "speed": "Base Speed: {} | Speed Addition: {} | Overall Speed: {}",
       "checkpoint_reached": "Checkpoint {}/{} reached!",
-      "percentage": "{}%"
+      "percentage": "{}%",
+      "overtime": "OVERTIME"
     },
     "scoreboard": {
       "team1": "ATTACKERS",
@@ -45,10 +46,10 @@
     "meta": {
       "version": "0.0.10",
       "name": "payload",
-      "build": "2026-03-22T18:19:21.033Z",
+      "build": "2026-03-23T01:53:00.610Z",
       "meta_text": "{} v{} build: {}"
     },
-    "credits": "Payload | TheOzzy | andy6170",
+    "credits": "TheOzzy | andy6170 | Payload V1.0",
     "debug": {
       "tickrate": "Ticks: {} | Tickrate: {}"
     }
