@@ -3,7 +3,7 @@ import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playN
 import { CONFIG } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
 import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard, scoring_getOrCreatePlayerScore } from './scoring.ts';
-import { initWeather } from './weather.ts';
+import { initWeather, resetWeatherVFX } from './weather.ts';
 
 function calculatePayloadProgress(): void {
     let traveledDistance = 0;
@@ -767,6 +767,7 @@ export function OnPlayerLeaveGame(playerId: number): void {
 export function OnPlayerJoinGame(eventPlayer: mod.Player): void {
     scoring_getOrCreatePlayerScore(eventPlayer);
     ui_onPlayerJoinGame();
+    resetWeatherVFX();
 }
 
 export function OnPlayerDeployed(eventPlayer: mod.Player): void {

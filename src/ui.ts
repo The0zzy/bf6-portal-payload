@@ -232,6 +232,7 @@ export function deleteUI(): void {
 // WORKAROUND FOR BUGGED UI WHEN PLAYER JOINS MID-GAME
 export async function ui_onPlayerJoinGame(): Promise<void> {
     if (ui_ready) {
+        await mod.Wait(5);
         deleteUI();
         uiSetup();
     }

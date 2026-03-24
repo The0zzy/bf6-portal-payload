@@ -56,8 +56,8 @@ export const CONFIG: Config = {
     enablePayloadSound: true,
     pushProximityRadius: 7.5,
     waypointProximityRadius: 0.25,
-    speedAdditionPerPushingPlayer: 0.15,
-    payloadSpeedT1: 6.05, //6
+    speedAdditionPerPushingPlayer: 0.25,
+    payloadSpeedT1: 1.05, //6
     payloadSpeedT2: 0.45, //6
     objectiveScorePerSecond: 5,
     overtimeDuration: 60,

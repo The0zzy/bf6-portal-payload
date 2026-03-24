@@ -97,14 +97,14 @@ export function stopPayloadSound(): void {
 }
 
 export function playPayloadMovingSound(): void {
-    mod.PlaySound(payloadMoving, 1, STATE.payloadPosition, 50);
+    //mod.PlaySound(payloadMoving, 1, STATE.payloadPosition, 50);
     mod.StopSound(payloadIdle);
 }
 
 export function playPayloadIdleSound(): void {
     if (!payloadenabled) return;
     if (!idle) {
-        mod.PlaySound(payloadIdle, 1, STATE.payloadPosition, 50);
+        //mod.PlaySound(payloadIdle, 1, STATE.payloadPosition, 50);
         mod.StopSound(payloadMoving);
         idle = true;
         lastSoundUpdatePos = STATE.payloadPosition;
