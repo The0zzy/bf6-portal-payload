@@ -96,31 +96,10 @@ export function uiSetup(): void {
     }
 
     //Game mode version display
-    mod.AddUIText(
-        "version",
-        mod.CreateVector(0, 0, 0),
-        mod.CreateVector(600, 30, 0),
-        mod.UIAnchor.BottomRight,
-        mod.GetUIRoot(),
-        true,
-        0,
-        mod.CreateVector(0, 0, 0),
-        0,
-        mod.UIBgFill.None,
-        mod.Message(
-            mod.stringkeys.payload.meta.meta_text,
-            mod.stringkeys.payload.meta.name,
-            mod.stringkeys.payload.meta.version,
-            mod.stringkeys.payload.meta.build
-        ),
-        18,
-        mod.CreateVector(0.3, 0.3, 0.3),
-        1,
-        mod.UIAnchor.BottomRight
-    );
+    //mod.AddUIText("version", mod.CreateVector(0, 0, 0), mod.CreateVector(600, 30, 0), mod.UIAnchor.BottomRight, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.meta.meta_text, mod.stringkeys.payload.meta.name, mod.stringkeys.payload.meta.version, mod.stringkeys.payload.meta.build), 18, mod.CreateVector(0.3, 0.3, 0.3), 1, mod.UIAnchor.BottomRight);
     // Payload progress icon draws last to show progress on top of Checkpoints
     mod.AddUIContainer("payload_progress_icon", mod.CreateVector(146 + (6 * STATE.progressInPercent), 0, 0), mod.CreateVector(4, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(1, 1, 0), 1, mod.UIBgFill.Solid);
-    mod.AddUIText("credits", mod.CreateVector(10, 2, 0), mod.CreateVector(600, 30, 0), mod.UIAnchor.BottomLeft, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.credits), 14, mod.CreateVector(1, 1, 1), 0.3, mod.UIAnchor.BottomLeft);
+    mod.AddUIText("credits", mod.CreateVector(10, 2, 0), mod.CreateVector(300, 30, 0), mod.UIAnchor.BottomLeft, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0.8, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.credits), 14, mod.CreateVector(1, 1, 1), 0.6, mod.UIAnchor.Center, mod.UIDepth.AboveGameUI);
 
     // Refresh cache after setup
     cachedWidgets = {};
@@ -227,6 +206,7 @@ export async function updateCheckpointUI(): Promise<void> {
 
 export function deleteUI(): void {
     mod.DeleteUIWidget(mod.FindUIWidgetWithName("container"));
+    mod.DeleteUIWidget(mod.FindUIWidgetWithName("credits"));
 }
 
 // WORKAROUND FOR BUGGED UI WHEN PLAYER JOINS MID-GAME
@@ -235,6 +215,7 @@ export async function ui_onPlayerJoinGame(): Promise<void> {
         await mod.Wait(5);
         deleteUI();
         uiSetup();
+        updateStatusUI();
     }
 }
 

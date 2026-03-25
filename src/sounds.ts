@@ -27,7 +27,7 @@ export async function initSounds() {
 
     //Setup Sound Object
     soundCheckpoint = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_AreaUnlock_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
-    progressSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_CapturingTickFriendly_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
+    progressSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_CapturingTickIcon_IsFriendly_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
     reverseSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_CapturingTickEnemy_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
 
     //Payload Sounds
@@ -46,7 +46,7 @@ export function playCheckpointReachedSound(): void {
     nearend = false;
     lowtime = false;
     nearendVO = false;
-    mod.PlaySound(soundCheckpoint, 1);
+    mod.PlaySound(soundCheckpoint, 0.7);
     mod.PlayMusic(mod.MusicEvents.Core_PhaseBegin);
     if (STATE.currentCheckpoint == (STATE.maxCheckpoints - 1)) {
         mod.PlayVO(VOModule1, mod.VoiceOverEvents2D.CheckPointMovingToLastFriendly, mod.VoiceOverFlags.Alpha, mod.GetTeam(1));
@@ -147,12 +147,12 @@ export function playNearEndMusic(): void {
     }
 }
 
-export function playPayloadReversingSound(location: mod.Vector): void {
-    mod.PlaySound(reverseSound, 0.3, location, 50);
+export function playPayloadReversingSound(player: mod.Player): void {
+    mod.PlaySound(reverseSound, 0.3, player);
 }
 
-export function playPayloadProgressingSound(location: mod.Vector): void {
-    mod.PlaySound(progressSound, 0.3, location, 50);
+export function playPayloadProgressingSound(player: mod.Player): void {
+    mod.PlaySound(progressSound, 0.3, player);
 }
 
 export function endGameMusic(team: number): void {

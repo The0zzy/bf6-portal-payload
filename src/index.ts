@@ -675,12 +675,6 @@ function executeEverySecond() {
         playNearEndMusic();
         playLowTimeVO();
     }
-    if (STATE.payloadState == PayloadState.ADVANCING) {
-        playPayloadProgressingSound(STATE.payloadPosition);
-    }
-    if (STATE.payloadState == PayloadState.PUSHING_BACK) {
-        playPayloadReversingSound(STATE.payloadPosition);
-    }
     progressFlash();
 }
 
@@ -813,9 +807,19 @@ export function OngoingGlobal(): void {
         // Award objective points to all players in proximity of the payload
         for (const p of counts.t1) {
             scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
+            if (STATE.payloadState == PayloadState.ADVANCING) {
+                playPayloadProgressingSound(p);
+            } else if (STATE.payloadState == PayloadState.PUSHING_BACK) {
+                playPayloadReversingSound(p);
+            }
         }
         for (const p of counts.t2) {
             scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
+            if (STATE.payloadState == PayloadState.PUSHING_BACK) {
+                playPayloadProgressingSound(p);
+            } else if (STATE.payloadState == PayloadState.ADVANCING) {
+                playPayloadReversingSound(p);
+            }
         }
 
         // update tickrate
