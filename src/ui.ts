@@ -85,10 +85,10 @@ export function uiSetup(): void {
     mod.AddUIContainer("progress_backgroundflash2", mod.CreateVector(152, 5, 0), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, friendlycolour, 0.01, mod.UIBgFill.GradientLeft, mod.GetTeam(2));
     mod.AddUIContainer("progressflash1", mod.CreateVector(150, 0, 0), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, friendlycolour, 0.01, mod.UIBgFill.GradientRight, mod.GetTeam(1));
     mod.AddUIContainer("progressflash2", mod.CreateVector(150, 0, 0), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, enemycolour, 0.01, mod.UIBgFill.GradientRight, mod.GetTeam(2));
-    mod.AddUIText("left_player_count1", mod.CreateVector(-35, 25, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, friendlycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, friendlycolour, 1, mod.UIAnchor.Center, mod.GetTeam(1));
-    mod.AddUIText("left_player_count2", mod.CreateVector(-35, 25, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, friendlycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, friendlycolour, 1, mod.UIAnchor.Center, mod.GetTeam(2));
-    mod.AddUIText("right_player_count1", mod.CreateVector(35, 25, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, enemycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, enemycolour, 1, mod.UIAnchor.Center, mod.GetTeam(1));
-    mod.AddUIText("right_player_count2", mod.CreateVector(35, 25, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, enemycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, enemycolour, 1, mod.UIAnchor.Center, mod.GetTeam(2));
+    mod.AddUIText("left_player_count1", mod.CreateVector(-35, 26, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, friendlycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, friendlycolour, 1, mod.UIAnchor.Center, mod.GetTeam(1));
+    mod.AddUIText("left_player_count2", mod.CreateVector(-35, 26, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, friendlycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, friendlycolour, 1, mod.UIAnchor.Center, mod.GetTeam(2));
+    mod.AddUIText("right_player_count1", mod.CreateVector(35, 26, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, enemycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, enemycolour, 1, mod.UIAnchor.Center, mod.GetTeam(1));
+    mod.AddUIText("right_player_count2", mod.CreateVector(35, 26, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, enemycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, enemycolour, 1, mod.UIAnchor.Center, mod.GetTeam(2));
 
     //Checkpoints distance on progress UI
     for (let i = 1; i < STATE.waypoints.size; i++) {
@@ -102,7 +102,7 @@ export function uiSetup(): void {
     //Game mode version display
     //mod.AddUIText("version", mod.CreateVector(0, 0, 0), mod.CreateVector(600, 30, 0), mod.UIAnchor.BottomRight, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.meta.meta_text, mod.stringkeys.payload.meta.name, mod.stringkeys.payload.meta.version, mod.stringkeys.payload.meta.build), 18, mod.CreateVector(0.3, 0.3, 0.3), 1, mod.UIAnchor.BottomRight);
     // Payload progress icon draws last to show progress on top of Checkpoints
-    mod.AddUIContainer("payload_progress_icon", mod.CreateVector(146 + (6 * STATE.progressInPercent), 0, 0), mod.CreateVector(4, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(1, 1, 0), 1, mod.UIBgFill.Solid);
+    mod.AddUIContainer("payload_progress_icon", mod.CreateVector(mod.RoundToInteger((146 + (6 * STATE.progressInPercent)) * 10) / 10, 0, 0), mod.CreateVector(4, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(1, 1, 0), 1, mod.UIBgFill.Solid);
     mod.AddUIText("credits", mod.CreateVector(10, 2, 0), mod.CreateVector(300, 30, 0), mod.UIAnchor.BottomLeft, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0.8, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.credits), 14, mod.CreateVector(1, 1, 1), 0.6, mod.UIAnchor.Center, mod.UIDepth.AboveGameUI);
 
     // Refresh cache after setup
@@ -113,7 +113,7 @@ export function uiSetup(): void {
 export function updateProgressUI(): void {
     const leftProgress = mod.RoundToInteger(6 * STATE.progressInPercent) - 2;
     const rightProgress = mod.RoundToInteger(600 - (6 * STATE.progressInPercent));
-    const progressIconPos = 146 + (6 * STATE.progressInPercent);
+    const progressIconPos = mod.RoundToInteger((146 + (6 * STATE.progressInPercent)) * 100) / 100;
 
     const wProgress1 = getWidget("progress1");
     const wProgress2 = getWidget("progress2");
