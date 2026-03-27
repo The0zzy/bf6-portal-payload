@@ -26,7 +26,7 @@ emission_energy = 0.0
 normal_fade = 0.889
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.101056, 0.994881, 0, -0.994881, 0.101056, -15.5236, 408.54, -265.293)
+transform = Transform3D(0.96371, -0.266953, 0, 0.0269771, 0.0973886, 0.994881, -0.265586, -0.958776, 0.101056, -15.5236, 408.54, -265.293)
 
 [node name="DeployCam" parent="Camera3D" instance=ExtResource("5_ho822")]
 

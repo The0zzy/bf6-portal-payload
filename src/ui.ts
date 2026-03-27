@@ -347,7 +347,7 @@ export async function nukeUI(): Promise<void> {
     let nukeEnd2 = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Detonation, mod.GetObjectPosition(mod.GetSpatialObject(52)), mod.CreateVector(0, 0, 0));
     mod.EnableVFX(nukeEnd2, true);
 
-    await mod.Wait(0.4);
+    await mod.Wait(0.2);
     mod.MoveObjectOverTime(mod.GetFixedCamera(51), mod.CreateVector(0, 4, 0), mod.CreateVector(0, 0, 0), 0.05, true, true);
     await mod.Wait(0.5);
     mod.MoveObjectOverTime(mod.GetFixedCamera(51), mod.CreateVector(0, 2, 0), mod.CreateVector(0, 0, 0), 0.05, true, true);

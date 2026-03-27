@@ -36,7 +36,7 @@
 [node name="MP_Capstone" type="Node3D"]
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.101056, 0.994881, 0, -0.994881, 0.101056, 70.5201, 368.595, 119.788)
+transform = Transform3D(0.891553, 0.452917, 1.86265e-09, -0.04577, 0.0900967, 0.994881, 0.450599, -0.886989, 0.101056, 70.5201, 368.595, 119.788)
 
 [node name="DeployCam" parent="Camera3D" instance=ExtResource("5_ir1o1")]
 

@@ -562,6 +562,7 @@ function onCheckpointReached(): void {
         mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 300), true);
         mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 400), true);
         mod.EnableGameModeObjective(mod.GetSector(STATE.currentCheckpoint + 101), true);
+        mod.EnableGameModeObjective(mod.GetSector(STATE.currentCheckpoint + 98), false);
     }
 }
 
