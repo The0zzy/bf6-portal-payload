@@ -83,3 +83,17 @@ export const CONFIG: Config = {
     overtime: false,
     gameOngoing: true
 };
+
+export interface PLAYER {
+    UniquePlayerID: number;
+    PlayArea: number;
+    OutofBounds: number;
+    OOBTimer: number;
+}
+
+export const PLAYER: PLAYER = {
+    UniquePlayerID: 0,
+    PlayArea: 1,
+    OutofBounds: 2,
+    OOBTimer: 3,
+}

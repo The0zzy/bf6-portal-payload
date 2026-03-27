@@ -584,8 +584,8 @@ SectorArea = NodePath("SectorArea4")
 MCOMs = [null, null]
 
 [node name="SectorArea4" parent="Sectors/Sector4" instance=ExtResource("2_wuecr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.04131, -6.19255, -11.3386)
-points = PackedVector2Array(8.75593, -56.2343, -7.53383, -52.2544, -12.7058, -36.2026, -17.474, -11.9265, -26.5827, 4.65946, 14.8079, 49.9666, 31.554, 43.1509, 80.6139, 42.1879, 81.86, -103.007, 42.4068, -104.246, 28.7648, -73.0222, 28.4231, -57.055)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.53431, -6.19255, -10.1876)
+points = PackedVector2Array(-0.622398, -59.8979, -7.53383, -52.2544, -12.7058, -36.2026, -17.474, -11.9265, -26.4897, 4.73846, 14.3182, 49.694, 31.554, 43.1509, 80.1433, 42.0268, 81.3802, -103.127, 42.4068, -104.246, 28.7648, -73.0222, 28.0421, -58.8673)
 height = 100.0
 
 [node name="AreaTrigger4" parent="Sectors/Sector4" node_paths=PackedStringArray("Area") instance=ExtResource("9_ofkm8")]

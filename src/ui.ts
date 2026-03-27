@@ -85,6 +85,10 @@ export function uiSetup(): void {
     mod.AddUIContainer("progress_backgroundflash2", mod.CreateVector(152, 5, 0), mod.CreateVector(600 - (6 * STATE.progressInPercent), 10, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, friendlycolour, 0.01, mod.UIBgFill.GradientLeft, mod.GetTeam(2));
     mod.AddUIContainer("progressflash1", mod.CreateVector(150, 0, 0), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, friendlycolour, 0.01, mod.UIBgFill.GradientRight, mod.GetTeam(1));
     mod.AddUIContainer("progressflash2", mod.CreateVector(150, 0, 0), mod.CreateVector((6 * STATE.progressInPercent) - 2, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, enemycolour, 0.01, mod.UIBgFill.GradientRight, mod.GetTeam(2));
+    mod.AddUIText("left_player_count1", mod.CreateVector(-35, 25, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, friendlycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, friendlycolour, 1, mod.UIAnchor.Center, mod.GetTeam(1));
+    mod.AddUIText("left_player_count2", mod.CreateVector(-35, 25, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, friendlycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, friendlycolour, 1, mod.UIAnchor.Center, mod.GetTeam(2));
+    mod.AddUIText("right_player_count1", mod.CreateVector(35, 25, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, enemycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, enemycolour, 1, mod.UIAnchor.Center, mod.GetTeam(1));
+    mod.AddUIText("right_player_count2", mod.CreateVector(35, 25, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, enemycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, enemycolour, 1, mod.UIAnchor.Center, mod.GetTeam(2));
 
     //Checkpoints distance on progress UI
     for (let i = 1; i < STATE.waypoints.size; i++) {
@@ -204,6 +208,27 @@ export async function updateCheckpointUI(): Promise<void> {
     mod.DeleteUIWidget(mod.FindUIWidgetWithName("checkpointreached"));
 }
 
+export function updatePlayerCountUI(team1: number, team2: number): void {
+    mod.SetUITextLabel(mod.FindUIWidgetWithName("left_player_count1"), mod.Message(mod.stringkeys.payload.counter, team1));
+    mod.SetUITextLabel(mod.FindUIWidgetWithName("left_player_count2"), mod.Message(mod.stringkeys.payload.counter, team2));
+    mod.SetUITextLabel(mod.FindUIWidgetWithName("right_player_count1"), mod.Message(mod.stringkeys.payload.counter, team2));
+    mod.SetUITextLabel(mod.FindUIWidgetWithName("right_player_count2"), mod.Message(mod.stringkeys.payload.counter, team1));
+    if (team1 == 0) {
+        mod.SetUITextColor(mod.FindUIWidgetWithName("left_player_count1"), mod.CreateVector(1, 1, 1));
+        mod.SetUITextColor(mod.FindUIWidgetWithName("right_player_count2"), mod.CreateVector(1, 1, 1));
+    } else {
+        mod.SetUITextColor(mod.FindUIWidgetWithName("left_player_count1"), friendlycolour);
+        mod.SetUITextColor(mod.FindUIWidgetWithName("right_player_count2"), enemycolour);
+    }
+    if (team2 == 0) {
+        mod.SetUITextColor(mod.FindUIWidgetWithName("left_player_count2"), mod.CreateVector(1, 1, 1));
+        mod.SetUITextColor(mod.FindUIWidgetWithName("right_player_count1"), mod.CreateVector(1, 1, 1));
+    } else {
+        mod.SetUITextColor(mod.FindUIWidgetWithName("left_player_count2"), friendlycolour);
+        mod.SetUITextColor(mod.FindUIWidgetWithName("right_player_count1"), enemycolour);
+    }
+}
+
 export function deleteUI(): void {
     mod.DeleteUIWidget(mod.FindUIWidgetWithName("container"));
     mod.DeleteUIWidget(mod.FindUIWidgetWithName("credits"));
@@ -258,7 +283,7 @@ export async function progressFlash(): Promise<void> {
 //Handles the end game explosion effects
 export async function nukeUI(): Promise<void> {
     ui_ready = false;
-    mod.DeployAllPlayers
+    mod.DeployAllPlayers();
     mod.SetCameraTypeForAll(mod.Cameras.Fixed, 50);
     mod.MoveObjectOverTime(mod.GetFixedCamera(50), mod.CreateVector(0, 2, 0), mod.CreateVector(0, 0, 0), 3, false, false);
 
@@ -266,6 +291,12 @@ export async function nukeUI(): Promise<void> {
     mod.PlaySound(siren, 1, STATE.payloadPosition, 500);
     await mod.Wait(3);
     mod.DeployAllPlayers();
+    for (let i = 0; i < mod.CountOf(mod.AllPlayers()); i++) {
+        const player = mod.ValueInArray(mod.AllPlayers(), i);
+        if (mod.GetSoldierState(player, mod.SoldierStateBool.IsAISoldier)) {
+            mod.UndeployPlayer(player);
+        }
+    }
 
     mod.SetCameraTypeForAll(mod.Cameras.Fixed, 51);
     await mod.Wait(2);

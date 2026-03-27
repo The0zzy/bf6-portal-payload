@@ -9,6 +9,7 @@ let reverseSound: mod.SFX;
 let payloadMoving: mod.SFX;
 let payloadIdle: mod.SFX;
 let door: mod.Object;
+let OOBSound: mod.SFX;
 
 let winning1 = false;
 let winning2 = false;
@@ -29,6 +30,7 @@ export async function initSounds() {
     soundCheckpoint = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_AreaUnlock_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
     progressSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_CapturingTickIcon_IsFriendly_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
     reverseSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_CapturingTickEnemy_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
+    OOBSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_OutOfBounds_Countdown_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
 
     //Payload Sounds
     payloadMoving = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_Gamemodes_Payload_Breacher_Exterior_Accel_SimpleLoop3D, STATE.payloadPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
@@ -162,4 +164,8 @@ export function endGameMusic(team: number): void {
         mod.SetMusicParam(mod.MusicParams.Core_IsWinning, team);
     }
     mod.PlayMusic(mod.MusicEvents.Core_EndOfRound_Loop);
+}
+
+export function playOOBsound(player: mod.Player): void {
+    mod.PlaySound(OOBSound, 0.6, player);
 }

@@ -1,10 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://foq00g1a2xnb"]
+[gd_scene load_steps=15 format=3 uid="uid://foq00g1a2xnb"]
 
 [ext_resource type="Texture2D" uid="uid://b3nimnwwy2h4i" path="res://images/Mirak Valley HQ.png" id="1_b3qp6"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/HQ_PlayerSpawner.tscn" id="1_g02yh"]
 [ext_resource type="PackedScene" uid="uid://jv31so3xcr7p" path="res://addons/bf_portal/portal_tools/types/PolygonVolume/PolygonVolume.tscn" id="2_1gqvr"]
 [ext_resource type="PackedScene" path="res://objects/entities/SpawnPoint.tscn" id="3_cii4s"]
-[ext_resource type="PackedScene" path="res://objects/Gameplay/Common/CombatArea.tscn" id="4_3p3eq"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/DeployCam.tscn" id="5_ho822"]
 [ext_resource type="PackedScene" path="res://static/MP_Tungsten_Terrain.tscn" id="6_4wlxo"]
 [ext_resource type="PackedScene" path="res://objects/props/FiringRange_MatDecal_01.tscn" id="7_b3qp6"]
@@ -26,8 +25,6 @@ texture_emission = ExtResource("1_b3qp6")
 emission_energy = 0.0
 normal_fade = 0.889
 
-[node name="CombatArea" parent="." instance=ExtResource("4_3p3eq")]
-
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.101056, 0.994881, 0, -0.994881, 0.101056, -15.5236, 408.54, -265.293)
 
@@ -45,7 +42,7 @@ metadata/_edit_lock_ = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 65.1721, 0)
 
 [node name="Track_0" parent="Track" instance=ExtResource("7_b3qp6")]
-transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -389.213, 17.5521, -229.136)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -389.213, 17.5521, -228.502)
 ObjId = 1000
 metadata/_edit_group_ = true
 
@@ -1230,7 +1227,7 @@ transform = Transform3D(0.0331378, 0.260917, 0.964792, 0, 0.965322, -0.261061, -
 ObjId = 50
 
 [node name="FixedCamera2" parent="." instance=ExtResource("15_yjseg")]
-transform = Transform3D(-0.427358, -0.258286, 0.866402, 0, 0.958322, 0.285688, -0.904082, 0.122091, -0.409546, 202.82, 98.9898, -394.29)
+transform = Transform3D(-0.427358, -0.258286, 0.866402, 0, 0.958322, 0.285688, -0.904082, 0.122091, -0.409546, 160.352, 103.545, -367.325)
 ObjId = 51
 
 [node name="ExplosionSound" parent="FixedCamera2" instance=ExtResource("8_eh7ot")]

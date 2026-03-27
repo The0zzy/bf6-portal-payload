@@ -1,9 +1,10 @@
-import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI, progressFlash, nukeUI, updateDebugUI } from './ui.ts';
+import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI, progressFlash, nukeUI, updateDebugUI, updatePlayerCountUI } from './ui.ts';
 import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound, endGameMusic, playPayloadIdleSound, stopPayloadSound, updateSoundPositions } from './sounds.ts';
-import { CONFIG } from './config.ts';
+import { CONFIG, PLAYER } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
 import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard, scoring_getOrCreatePlayerScore } from './scoring.ts';
 import { initWeather, resetWeatherVFX } from './weather.ts';
+import { playerUI_onPlayerJoinGame, OutofBoundsUI } from './playerUI.ts';
 
 function calculatePayloadProgress(): void {
     let traveledDistance = 0;
@@ -596,8 +597,8 @@ function pushBackward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
         setPayloadState(PayloadState.LOCKED);
         return;
     }
-    const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t2.length - counts.t1.length);
-    const speed = (CONFIG.payloadSpeedT2 + speedAddtion) / STATE.tickrate;
+    //const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t2.length - counts.t1.length);
+    const speed = (CONFIG.payloadSpeedT2) / STATE.tickrate;
     setPayloadState(PayloadState.PUSHING_BACK);
     moveAlongSpline(false, speed);
     VOPushingBack();
@@ -762,15 +763,57 @@ export function OnPlayerJoinGame(eventPlayer: mod.Player): void {
     scoring_getOrCreatePlayerScore(eventPlayer);
     ui_onPlayerJoinGame();
     resetWeatherVFX();
+    playerUI_onPlayerJoinGame(eventPlayer);
+    mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds), false);
+    mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea), 0);
+    mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OOBTimer), false);
+}
+
+export function OnPlayerEnterAreaTrigger(eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger): void {
+    mod.SendErrorReport(mod.Message(mod.stringkeys.test1));
+    mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea), mod.GetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea)) + 1);
+    if (mod.Equals(mod.GetTeam(eventPlayer), mod.GetTeam(1))) {
+        if (mod.GetObjId(eventAreaTrigger) > (STATE.currentCheckpoint + 600)) {
+            mod.SendErrorReport(mod.Message(mod.stringkeys.test2));
+            OutofBoundsUI(eventPlayer);
+        } else {
+            mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds), false);
+        }
+    } else {
+        if (mod.GetObjId(eventAreaTrigger) < (STATE.currentCheckpoint + 600)) {
+            mod.SendErrorReport(mod.Message(mod.stringkeys.test3));
+            OutofBoundsUI(eventPlayer);
+        } else {
+            mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds), false);
+        }
+    }
+}
+
+export async function OnPlayerExitAreaTrigger(eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger): Promise<void> {
+    mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea), mod.GetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea)) - 1);
+    await mod.Wait(0.066);
+    if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) {
+        if (mod.GetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea)) <= 0) {
+            mod.SendErrorReport(mod.Message(mod.stringkeys.test4));
+            OutofBoundsUI(eventPlayer);
+        }
+    }
 }
 
 export function OnPlayerDeployed(eventPlayer: mod.Player): void {
     const score = scoring_getOrCreatePlayerScore(eventPlayer);
+    mod.SkipManDown(eventPlayer, false);
     if (!score.hasDeployed) {
         score.hasDeployed = true;
         scoring_refreshScoreboard();
         applyCheckpointFx();
         applyPayloadVfx();
+    }
+    mod.Wait(0.1);
+    if (mod.GetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds))) {
+        mod.Wait(0.6);
+        mod.UndeployPlayer(eventPlayer);
+        mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds), false);
     }
 }
 
@@ -779,6 +822,7 @@ export function OnRevived(victim: mod.Player, reviver: mod.Player): void {
 }
 
 export function OngoingGlobal(): void {
+    if (!CONFIG.gameOngoing) return;
     const elapsedSeconds = mod.GetMatchTimeElapsed();
     const counts = getAlivePlayersInProximity(STATE.payloadPosition, CONFIG.pushProximityRadius);
 
@@ -793,7 +837,7 @@ export function OngoingGlobal(): void {
     } else if (counts.t1.length > 0 && counts.t2.length > 0) {
         setPayloadState(PayloadState.CONTESTED);
         playPayloadIdleSound();
-        CONFIG.overtime = false;
+        CONFIG.overtime = true;
     } else {
         setPayloadState(PayloadState.IDLE);
         playPayloadIdleSound();
@@ -801,22 +845,23 @@ export function OngoingGlobal(): void {
     }
 
     updateSoundPositions();
+    updatePlayerCountUI(counts.t1.length, counts.t2.length);
 
     if (STATE.lastElapsedSeconds != Math.floor(elapsedSeconds)) {
         STATE.lastElapsedSeconds = Math.floor(elapsedSeconds);
         // Award objective points to all players in proximity of the payload
         for (const p of counts.t1) {
-            scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
             if (STATE.payloadState == PayloadState.ADVANCING) {
                 playPayloadProgressingSound(p);
+                scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
             } else if (STATE.payloadState == PayloadState.PUSHING_BACK) {
                 playPayloadReversingSound(p);
             }
         }
         for (const p of counts.t2) {
-            scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
             if (STATE.payloadState == PayloadState.PUSHING_BACK) {
                 playPayloadProgressingSound(p);
+                scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
             } else if (STATE.payloadState == PayloadState.ADVANCING) {
                 playPayloadReversingSound(p);
             }
@@ -871,8 +916,12 @@ export function playerEndState(eventPlayer: mod.Player): void {
     if (!CONFIG.gameOngoing && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) {
         mod.SetPlayerMaxHealth(eventPlayer, 500);
         mod.Heal(eventPlayer, 500);
-    } else if (!CONFIG.gameOngoing && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsManDown))
+    } else if (!CONFIG.gameOngoing && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsManDown)) {
         mod.ForceRevive(eventPlayer);
+    }
 }
 
-
+export function OnPlayerUndeploy(eventPlayer: mod.Player): void {
+    mod.SkipManDown(eventPlayer, false);
+    mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds), false);
+}

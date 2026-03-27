@@ -1,31 +1,6 @@
 {
     "Portal_Dynamic": [
         {
-            "name": "CombatArea",
-            "type": "CombatArea",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 1
-            },
-            "position": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-            },
-            "id": "CombatArea"
-        },
-        {
             "name": "DeployCam",
             "type": "DeployCam",
             "right": {
@@ -73,7 +48,7 @@
             "position": {
                 "x": -389.213,
                 "y": 82.7242,
-                "z": -229.136
+                "z": -228.502
             },
             "id": "Track/Track_0"
         },
@@ -7099,9 +7074,9 @@
                 "z": -0.409546
             },
             "position": {
-                "x": 202.82,
-                "y": 98.9898,
-                "z": -394.29
+                "x": 160.352,
+                "y": 103.545,
+                "z": -367.325
             },
             "id": "FixedCamera2"
         },
@@ -7125,9 +7100,9 @@
                 "z": -0.0409546
             },
             "position": {
-                "x": 197.65428,
-                "y": 118.15624,
-                "z": -391.84818
+                "x": 155.18628,
+                "y": 122.71144,
+                "z": -364.88318
             },
             "id": "FixedCamera2/ExplosionSound"
         }

@@ -1,9 +1,8 @@
-[gd_scene load_steps=34 format=3 uid="uid://gsd0a760017j"]
+[gd_scene load_steps=33 format=3 uid="uid://gsd0a760017j"]
 
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/HQ_PlayerSpawner.tscn" id="1_v85km"]
 [ext_resource type="PackedScene" uid="uid://jv31so3xcr7p" path="res://addons/bf_portal/portal_tools/types/PolygonVolume/PolygonVolume.tscn" id="2_q5qn4"]
 [ext_resource type="PackedScene" path="res://objects/entities/SpawnPoint.tscn" id="3_3epr5"]
-[ext_resource type="PackedScene" path="res://objects/Gameplay/Common/CombatArea.tscn" id="4_dptp0"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/DeployCam.tscn" id="5_ir1o1"]
 [ext_resource type="PackedScene" path="res://objects/props/FiringRange_MatDecal_01.tscn" id="5_ud0gn"]
 [ext_resource type="PackedScene" path="res://objects/props/FireAlarmButton_01.tscn" id="6_0ppsj"]
@@ -35,9 +34,6 @@
 [ext_resource type="PackedScene" path="res://objects/gameplay/common/FixedCamera.tscn" id="33_awgf7"]
 
 [node name="MP_Capstone" type="Node3D"]
-
-[node name="CombatArea" parent="." instance=ExtResource("4_dptp0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1458.32, 33.5003, 0)
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.101056, 0.994881, 0, -0.994881, 0.101056, 70.5201, 368.595, 119.788)
@@ -476,23 +472,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -69.1908, 209.09, 0)
 
 [node name="checkpoint1" parent="Checkpoints" instance=ExtResource("6_0ppsj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -105.429, -82.7531, 10.4157)
-ObjId = 2012
+ObjId = 2014
 
 [node name="checkpoint2" parent="Checkpoints" instance=ExtResource("6_0ppsj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -105.429, -82.7531, 10.4157)
-ObjId = 2028
+ObjId = 2030
 
 [node name="checkpoint3" parent="Checkpoints" instance=ExtResource("6_0ppsj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -105.429, -82.7531, 10.4157)
-ObjId = 2046
+ObjId = 2048
 
 [node name="checkpoint4" parent="Checkpoints" instance=ExtResource("6_0ppsj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -105.429, -82.7531, 10.4157)
-ObjId = 2066
+ObjId = 2068
 
 [node name="checkpoint5" parent="Checkpoints" instance=ExtResource("6_0ppsj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -105.429, -82.7531, 10.4157)
-ObjId = 2103
+ObjId = 2105
 
 [node name="Sectors" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 65.1721, 0)
@@ -1960,7 +1956,7 @@ transform = Transform3D(0.288022, 0.214106, 0.933382, -0.0212833, 0.975876, -0.2
 ObjId = 50
 
 [node name="FixedCamera2" parent="." instance=ExtResource("33_awgf7")]
-transform = Transform3D(0.781686, -0.298634, 0.547526, 0.043743, 0.901997, 0.42952, -0.622136, -0.311799, 0.718141, 88.0159, 170.323, 283.878)
+transform = Transform3D(0.901832, -0.179183, 0.393181, 0, 0.909961, 0.414693, -0.432086, -0.373984, 0.820632, 93.6784, 175.81, 257.639)
 ObjId = 51
 
 [node name="ExplosionSound" parent="FixedCamera2" instance=ExtResource("6_0ppsj")]
