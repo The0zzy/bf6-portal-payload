@@ -18,7 +18,8 @@
       "message": "{}",
       "speed": "Base Speed: {} | Speed Addition: {} | Overall Speed: {}",
       "checkpoint_reached": "Checkpoint {}/{} reached!",
-      "percentage": "{}%"
+      "percentage": "{}%",
+      "overtime": "OVERTIME"
     },
     "scoreboard": {
       "team1": "ATTACKERS",
@@ -40,17 +41,29 @@
       "not_assigned_payload_vehicle": "Not assigned payload vehicle!",
       "vehicle_spawned": "Vehicle spawned!",
       "exit_message": "GET OUT AND PUSH!",
-      "score_message": "+ {} PTFO score"
+      "score_message": "+ {}"
     },
     "meta": {
       "version": "0.0.10",
       "name": "payload",
-      "build": "2026-03-18T16:00:35.718Z",
+      "build": "2026-03-27T15:57:05.839Z",
       "meta_text": "{} v{} build: {}"
     },
-    "credits": "Payload | TheOzzy | andy6170",
+    "credits": "TheOzzy | andy6170 | Payload V1.0",
+    "outofbounds": "OUT OF BOUNDS",
+    "counter": "{}",
     "debug": {
       "tickrate": "Ticks: {} | Tickrate: {}"
     }
-  }
+  },
+  "test1": "Area Trigger",
+  "test2": "Team 1 Area Trigger",
+  "test3": "Team 2 Area Trigger",
+  "test4": "Out of Bounds",
+  "test5": "UI Start",
+  "test6": "UI Created",
+  "test7": "UI Destroyed",
+  "test8": "test8",
+  "test9": "test9",
+  "test10": "test10"
 }

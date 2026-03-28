@@ -1,9 +1,10 @@
-import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI, progressFlash, nukeUI, updateDebugUI } from './ui.ts';
-import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound, endGameMusic, playPayloadIdleSound, stopPayloadSound } from './sounds.ts';
-import { CONFIG } from './config.ts';
+import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI, progressFlash, nukeUI, updateDebugUI, updatePlayerCountUI } from './ui.ts';
+import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound, endGameMusic, playPayloadIdleSound, stopPayloadSound, updateSoundPositions } from './sounds.ts';
+import { CONFIG, PLAYER } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
 import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard, scoring_getOrCreatePlayerScore } from './scoring.ts';
-import { initWeather } from './weather.ts';
+import { initWeather, resetWeatherVFX } from './weather.ts';
+import { playerUI_onPlayerJoinGame, OutofBoundsUI } from './playerUI.ts';
 
 function calculatePayloadProgress(): void {
     let traveledDistance = 0;
@@ -195,8 +196,15 @@ function initPayloadObjective(): void {
     if (!CONFIG.enableVehicleSpawner) {
         for (const payloadSpatialId of CONFIG.payloadSpatialIdentifiers) {
             const payloadIdentifierObject = mod.GetSpatialObject(payloadSpatialId);
-            const payloadIdentifierX = mod.XComponentOf(mod.GetObjectPosition(payloadIdentifierObject));
-            if (payloadIdentifierX >= 1 && payloadSpatialId === 5000) {
+            const payloadIdentifierPos = mod.GetObjectPosition(payloadIdentifierObject);
+            let payloadDetected = false;
+            if (!(mod.XComponentOf(payloadIdentifierPos) == 0 || mod.YComponentOf(payloadIdentifierPos) == 0 || mod.ZComponentOf(payloadIdentifierPos) == 0)) {
+                payloadDetected = true;
+            }
+            else {
+                payloadDetected = false;
+            }
+            if (payloadDetected && payloadSpatialId === 5000) {
                 CONFIG.payloadSpatials.push(
                     {
                         prefab: mod.RuntimeSpawn_Abbasid.GM1083CargoTruck_01_Canopy,
@@ -206,7 +214,7 @@ function initPayloadObjective(): void {
                     }
                 );
             }
-            if (payloadIdentifierX >= 1 && payloadSpatialId === 5001) {
+            if (payloadDetected && payloadSpatialId === 5001) {
                 CONFIG.payloadSpatials.push(
                     {
                         prefab: mod.RuntimeSpawn_Tungsten.GM1083CargoTruck_01_Canopy_Cargo01,
@@ -259,6 +267,10 @@ function initPayloadObjective(): void {
 }
 
 export function OnVehicleSpawned(eventVehicle: mod.Vehicle): void {
+    if (!CONFIG.gameOngoing) {
+        mod.Kill(eventVehicle);
+        return;
+    }
     if (!CONFIG.enableVehicleSpawner) return;
     const vehiclePosition = mod.GetVehicleState(eventVehicle, mod.VehicleStateVector.VehiclePosition);
     if (mod.DistanceBetween(STATE.waypoints.get(0)!.position, vehiclePosition) < 5) {
@@ -350,7 +362,7 @@ function catmullRom(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vect
 // --------------------------
 // Get t for a given distance along spline
 // --------------------------
-function getTForDistanceDynamic(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, distance: number, samples: number = 20) {
+function getTForDistanceDynamic(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, distance: number, samples: number = 30) {
     let lastPos = catmullRom(p0, p1, p2, p3, 0);
     let accumulated = 0;
 
@@ -376,11 +388,28 @@ function getTForDistanceDynamic(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, 
 // --------------------------
 // Approximate tangent
 // --------------------------
-function getSplineTangent(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, t: number, delta: number = 0.01): mod.Vector {
-    const t1 = Math.min(t + delta, 1);
-    const pos = catmullRom(p0, p1, p2, p3, t);
-    const posAhead = catmullRom(p0, p1, p2, p3, t1);
-    return mod.DirectionTowards(pos, posAhead);
+function getSplineTangent(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, t: number): mod.Vector {
+    const t2 = t * t;
+
+    const dx = 0.5 * (
+        (-mod.XComponentOf(p0) + mod.XComponentOf(p2)) +
+        2 * (2 * mod.XComponentOf(p0) - 5 * mod.XComponentOf(p1) + 4 * mod.XComponentOf(p2) - mod.XComponentOf(p3)) * t +
+        3 * (-mod.XComponentOf(p0) + 3 * mod.XComponentOf(p1) - 3 * mod.XComponentOf(p2) + mod.XComponentOf(p3)) * t2
+    );
+
+    const dy = 0.5 * (
+        (-mod.YComponentOf(p0) + mod.YComponentOf(p2)) +
+        2 * (2 * mod.YComponentOf(p0) - 5 * mod.YComponentOf(p1) + 4 * mod.YComponentOf(p2) - mod.YComponentOf(p3)) * t +
+        3 * (-mod.YComponentOf(p0) + 3 * mod.YComponentOf(p1) - 3 * mod.YComponentOf(p2) + mod.YComponentOf(p3)) * t2
+    );
+
+    const dz = 0.5 * (
+        (-mod.ZComponentOf(p0) + mod.ZComponentOf(p2)) +
+        2 * (2 * mod.ZComponentOf(p0) - 5 * mod.ZComponentOf(p1) + 4 * mod.ZComponentOf(p2) - mod.ZComponentOf(p3)) * t +
+        3 * (-mod.ZComponentOf(p0) + 3 * mod.ZComponentOf(p1) - 3 * mod.ZComponentOf(p2) + mod.ZComponentOf(p3)) * t2
+    );
+
+    return mod.CreateVector(dx, dy, dz);
 }
 
 // --------------------------
@@ -418,7 +447,7 @@ function getRotationFromTangent(tangent: mod.Vector, useSmoothing: boolean = tru
         const prevPitch = mod.XComponentOf(STATE.payloadRotation);
         const prevYaw = mod.YComponentOf(STATE.payloadRotation);
 
-        const smoothFactor = 0.2;
+        const smoothFactor = 0.1;
 
         const diff = (yaw - prevYaw + Math.PI) % (2 * Math.PI);
         const wrappedDiff = (diff < 0 ? diff + (2 * Math.PI) : diff) - Math.PI;
@@ -442,6 +471,10 @@ function moveAlongSpline(forward: boolean, speed: number) {
     let wpIndex = STATE.reachedWaypointIndex;
     const wpCount = STATE.waypoints.size;
 
+    if (wpIndex >= wpCount - 1 && forward) {
+        return;
+    }
+
     STATE.segmentDistance = STATE.segmentDistance || 0;
     STATE.segmentDistance += forward ? speed : -speed;
 
@@ -463,6 +496,12 @@ function moveAlongSpline(forward: boolean, speed: number) {
         const p3 = nextNextWp.position;
 
         const segmentLength = mod.DistanceBetween(p1, p2);
+
+        if (wpIndex >= wpCount - 1) {
+            STATE.segmentDistance = 0;
+            STATE.payloadPosition = p1;
+            break;
+        }
 
         if (STATE.segmentDistance >= segmentLength && forward && wpIndex < wpCount - 1) {
             STATE.segmentDistance -= segmentLength;
@@ -523,6 +562,7 @@ function onCheckpointReached(): void {
         mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 300), true);
         mod.EnableHQ(mod.GetHQ(STATE.currentCheckpoint + 400), true);
         mod.EnableGameModeObjective(mod.GetSector(STATE.currentCheckpoint + 101), true);
+        mod.EnableGameModeObjective(mod.GetSector(STATE.currentCheckpoint + 98), false);
     }
 }
 
@@ -538,6 +578,11 @@ function onPayloadStateChanged(): void {
 }
 
 function pushForward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
+    if (STATE.reachedWaypointIndex >= STATE.waypoints.size - 1) {
+        setPayloadState(PayloadState.LOCKED);
+        playPayloadIdleSound();
+        return;
+    }
     const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t1.length - counts.t2.length);
     const speed = (CONFIG.payloadSpeedT1 + speedAddtion) / STATE.tickrate;
     setPayloadState(PayloadState.ADVANCING);
@@ -553,8 +598,8 @@ function pushBackward(counts: { t1: mod.Player[]; t2: mod.Player[] }) {
         setPayloadState(PayloadState.LOCKED);
         return;
     }
-    const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t2.length - counts.t1.length);
-    const speed = (CONFIG.payloadSpeedT2 + speedAddtion) / STATE.tickrate;
+    //const speedAddtion = CONFIG.speedAdditionPerPushingPlayer * (counts.t2.length - counts.t1.length);
+    const speed = (CONFIG.payloadSpeedT2) / STATE.tickrate;
     setPayloadState(PayloadState.PUSHING_BACK);
     moveAlongSpline(false, speed);
     VOPushingBack();
@@ -606,7 +651,7 @@ function onPayloadMoved() {
 }
 
 function executeEverySecond() {
-    if (STATE.lastElapsedSeconds >= CONFIG.gameModeTime) {
+    if (STATE.lastElapsedSeconds >= CONFIG.gameModeTime && !CONFIG.overtime) {
         onRunningOutOfTime();
         return;
     }
@@ -624,19 +669,13 @@ function executeEverySecond() {
     if (STATE.progressInPercent < 100) {
         updateCheckpointTimer(remainingTime);
     }
-    if (remainingTime <= 0) {
+    if (remainingTime <= 0 && !CONFIG.overtime) {
         onRunningOutOfTime();
         return;
     }
     if (remainingTime <= 60) {
         playNearEndMusic();
         playLowTimeVO();
-    }
-    if (STATE.payloadState == PayloadState.ADVANCING) {
-        playPayloadProgressingSound(STATE.payloadPosition);
-    }
-    if (STATE.payloadState == PayloadState.PUSHING_BACK) {
-        playPayloadReversingSound(STATE.payloadPosition);
     }
     progressFlash();
 }
@@ -663,26 +702,31 @@ function respawnPayloadSpatials() {
 }
 
 async function onFinalCheckpointReached() {
+    if (!CONFIG.gameOngoing) return;
+    CONFIG.gameOngoing = false;
     mod.PauseGameModeTime(true);
-    stopPayloadSound();
+    playPayloadIdleSound();
     endGameMusic(1);
     if (STATE.payloadVehicle) {
         mod.Kill(STATE.payloadVehicle as mod.Vehicle);
     } else {
-        STATE.payloadSpatials.forEach((obj) => {
-            mod.UnspawnObject(obj);
-        });
         STATE.payloadObjectives.forEach((obj) => {
             mod.UnspawnObject(obj);
         });
+        STATE.payloadVfx.forEach((vfx) => {
+            mod.UnspawnObject(vfx);
+        });
     }
     nukeUI();
-    await mod.Wait(8);
+    await mod.Wait(8.5);
     mod.EndGameMode(mod.GetTeam(1));
 }
 
 function onRunningOutOfTime() {
+    if (!CONFIG.gameOngoing) return;
+    CONFIG.gameOngoing = false;
     endGameMusic(2);
+    mod.PauseGameModeTime(true);
     mod.EndGameMode(mod.GetTeam(2));
 }
 
@@ -719,15 +763,58 @@ export function OnPlayerLeaveGame(playerId: number): void {
 export function OnPlayerJoinGame(eventPlayer: mod.Player): void {
     scoring_getOrCreatePlayerScore(eventPlayer);
     ui_onPlayerJoinGame();
+    resetWeatherVFX();
+    playerUI_onPlayerJoinGame(eventPlayer);
+    mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds), false);
+    mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea), 0);
+    mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OOBTimer), false);
+}
+
+export function OnPlayerEnterAreaTrigger(eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger): void {
+    mod.SendErrorReport(mod.Message(mod.stringkeys.test1));
+    mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea), mod.GetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea)) + 1);
+    if (mod.Equals(mod.GetTeam(eventPlayer), mod.GetTeam(1))) {
+        if (mod.GetObjId(eventAreaTrigger) > (STATE.currentCheckpoint + 600)) {
+            mod.SendErrorReport(mod.Message(mod.stringkeys.test2));
+            OutofBoundsUI(eventPlayer);
+        } else {
+            mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds), false);
+        }
+    } else {
+        if (mod.GetObjId(eventAreaTrigger) < (STATE.currentCheckpoint + 600)) {
+            mod.SendErrorReport(mod.Message(mod.stringkeys.test3));
+            OutofBoundsUI(eventPlayer);
+        } else {
+            mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds), false);
+        }
+    }
+}
+
+export async function OnPlayerExitAreaTrigger(eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger): Promise<void> {
+    mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea), mod.GetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea)) - 1);
+    await mod.Wait(0.066);
+    if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) {
+        if (mod.GetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea)) <= 0) {
+            mod.SendErrorReport(mod.Message(mod.stringkeys.test4));
+            OutofBoundsUI(eventPlayer);
+        }
+    }
 }
 
 export function OnPlayerDeployed(eventPlayer: mod.Player): void {
     const score = scoring_getOrCreatePlayerScore(eventPlayer);
+    mod.SkipManDown(eventPlayer, false);
     if (!score.hasDeployed) {
         score.hasDeployed = true;
         scoring_refreshScoreboard();
         applyCheckpointFx();
         applyPayloadVfx();
+    }
+    mod.Wait(0.1);
+    if (mod.GetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds))) {
+        mod.Wait(0.6);
+        mod.UndeployPlayer(eventPlayer);
+        mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds), false);
     }
 }
 
@@ -736,31 +823,49 @@ export function OnRevived(victim: mod.Player, reviver: mod.Player): void {
 }
 
 export function OngoingGlobal(): void {
+    if (!CONFIG.gameOngoing) return;
     const elapsedSeconds = mod.GetMatchTimeElapsed();
     const counts = getAlivePlayersInProximity(STATE.payloadPosition, CONFIG.pushProximityRadius);
 
     if (counts.t1.length > counts.t2.length) {
         pushForward(counts);
         onPayloadMoved();
+        CONFIG.overtime = true;
     } else if (counts.t2.length > counts.t1.length) {
         pushBackward(counts);
         onPayloadMoved();
+        CONFIG.overtime = false;
     } else if (counts.t1.length > 0 && counts.t2.length > 0) {
         setPayloadState(PayloadState.CONTESTED);
         playPayloadIdleSound();
+        CONFIG.overtime = true;
     } else {
         setPayloadState(PayloadState.IDLE);
         playPayloadIdleSound();
+        CONFIG.overtime = false;
     }
+
+    updateSoundPositions();
+    updatePlayerCountUI(counts.t1.length, counts.t2.length);
 
     if (STATE.lastElapsedSeconds != Math.floor(elapsedSeconds)) {
         STATE.lastElapsedSeconds = Math.floor(elapsedSeconds);
         // Award objective points to all players in proximity of the payload
         for (const p of counts.t1) {
-            scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
+            if (STATE.payloadState == PayloadState.ADVANCING) {
+                playPayloadProgressingSound(p);
+                scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
+            } else if (STATE.payloadState == PayloadState.PUSHING_BACK) {
+                playPayloadReversingSound(p);
+            }
         }
         for (const p of counts.t2) {
-            scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
+            if (STATE.payloadState == PayloadState.PUSHING_BACK) {
+                playPayloadProgressingSound(p);
+                scoring_awardObjectivePoints(p, CONFIG.objectiveScorePerSecond);
+            } else if (STATE.payloadState == PayloadState.ADVANCING) {
+                playPayloadReversingSound(p);
+            }
         }
 
         // update tickrate
@@ -805,8 +910,19 @@ export function OngoingPlayer(eventPlayer: mod.Player): void {
             mod.DisplayNotificationMessage(mod.Message(mod.stringkeys.payload.objective.exit_message), eventPlayer);
         }
     }
+    playerEndState(eventPlayer);
 }
 
+export function playerEndState(eventPlayer: mod.Player): void {
+    if (!CONFIG.gameOngoing && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) {
+        mod.SetPlayerMaxHealth(eventPlayer, 500);
+        mod.Heal(eventPlayer, 500);
+    } else if (!CONFIG.gameOngoing && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsManDown)) {
+        mod.ForceRevive(eventPlayer);
+    }
+}
 
-
-
+export function OnPlayerUndeploy(eventPlayer: mod.Player): void {
+    mod.SkipManDown(eventPlayer, false);
+    mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds), false);
+}
