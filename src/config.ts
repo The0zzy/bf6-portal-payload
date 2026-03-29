@@ -57,7 +57,7 @@ export const CONFIG: Config = {
     pushProximityRadius: 7.5,
     waypointProximityRadius: 0.25,
     speedAdditionPerPushingPlayer: 0.25,
-    payloadSpeedT1: 6.05, //6
+    payloadSpeedT1: 1.05, //6
     payloadSpeedT2: 0.45, //6
     objectiveScorePerSecond: 5,
     overtimeDuration: 60,
@@ -96,4 +96,12 @@ export const PLAYER: PLAYER = {
     PlayArea: 1,
     OutofBounds: 2,
     OOBTimer: 3,
+}
+
+export interface UI {
+    alpha: number;
+}
+
+export const UI: UI = {
+    alpha: 1,
 }

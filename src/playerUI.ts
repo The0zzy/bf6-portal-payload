@@ -94,7 +94,6 @@ export function getPlayerUIWidget(player: mod.Player): mod.UIWidget {
 export async function OutofBoundsUI(player: mod.Player): Promise<void> {
     if (mod.GetVariable(mod.ObjectVariable(player, PLAYER.OutofBounds)) as boolean) return;
     if (mod.GetVariable(mod.ObjectVariable(player, PLAYER.OOBTimer)) as boolean) return;
-    mod.SendErrorReport(mod.Message(mod.stringkeys.test5));
     const playerUI = getPlayerUIWidget(player);
     mod.SetVariable(mod.ObjectVariable(player, PLAYER.OutofBounds), true);
     mod.SetVariable(mod.ObjectVariable(player, PLAYER.OOBTimer), true);
@@ -102,7 +101,6 @@ export async function OutofBoundsUI(player: mod.Player): Promise<void> {
     mod.AddUIContainer("OOBBackground", mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.TopCenter, playerUI, true, 1, mod.CreateVector(0, 0, 0), 0.9, mod.UIBgFill.Blur, player);
     mod.AddUIText("OOBText", mod.CreateVector(0, 470, 0), mod.CreateVector(450, 150, 0), mod.UIAnchor.TopCenter, playerUI, true, 1, mod.CreateVector(0.6, 0.1, 0.1), 0.8, mod.UIBgFill.Blur, mod.Message(mod.stringkeys.payload.outofbounds), 56, mod.CreateVector(1, 0.2, 0.2), 1, mod.UIAnchor.TopCenter, player);
     mod.AddUIText("Countdown", mod.CreateVector(0, 470, 0), mod.CreateVector(450, 150, 0), mod.UIAnchor.TopCenter, playerUI, true, 1, mod.CreateVector(0, 0, 0), 1, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 5), 72, mod.CreateVector(1, 0.2, 0.2), 1, mod.UIAnchor.BottomCenter, player);
-    mod.SendErrorReport(mod.Message(mod.stringkeys.test6));
     for (let i = 5; i > 0; i--) {
         mod.SetUITextLabel(mod.FindUIWidgetWithName("Countdown", playerUI), mod.Message(mod.stringkeys.payload.counter, i));
         playOOBsound(player);
@@ -119,5 +117,14 @@ export async function OutofBoundsUI(player: mod.Player): Promise<void> {
     mod.DeleteUIWidget(mod.FindUIWidgetWithName("OOBText", playerUI));
     mod.DeleteUIWidget(mod.FindUIWidgetWithName("Countdown", playerUI));
     mod.SetVariable(mod.ObjectVariable(player, PLAYER.OutofBounds), false);
-    mod.SendErrorReport(mod.Message(mod.stringkeys.test7));
+}
+
+
+export async function DeployBoundsCheck(player: mod.Player): Promise<void> {
+    await mod.Wait(0.1);
+    if (mod.GetVariable(mod.ObjectVariable(player, PLAYER.OutofBounds))) {
+        await mod.Wait(0.6);
+        mod.UndeployPlayer(player);
+        mod.SetVariable(mod.ObjectVariable(player, PLAYER.OutofBounds), false);
+    }
 }

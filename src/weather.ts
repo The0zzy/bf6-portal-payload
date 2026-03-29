@@ -13,7 +13,7 @@ export function initWeather() {
             const snow4 = mod.SpawnObject(mod.RuntimeSpawn_Common.EnvironmentDecalVolume_Winter_Event, objPos, mod.CreateVector(1, 0, 0), mod.CreateVector(10000, 10000, 10000));
             const snow5 = mod.SpawnObject(mod.RuntimeSpawn_Common.EnvironmentDecalVolume_Winter_Event, objPos, mod.CreateVector(0, 0, 1), mod.CreateVector(10000, 10000, 10000));
             const snow6 = mod.SpawnObject(mod.RuntimeSpawn_Common.EnvironmentDecalVolume_Winter_Event, objPos, mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 10000));
-            for (let i = 3000; i < 3999; i++) {
+            for (let i = 3000; i < 3300; i++) {
                 mod.EnableVFX(mod.GetVFX(i), true);
             }
         }
@@ -21,13 +21,16 @@ export function initWeather() {
 }
 
 export async function resetWeatherVFX() {
-    for (let i = 3000; i < 3999; i++) {
-        mod.EnableVFX(mod.GetVFX(i), false);
+    if (weather > 0) {
+        for (let i = 3000; i < 3300; i++) {
+            mod.EnableVFX(mod.GetVFX(i), false);
+            await mod.Wait(0.033);
+        }
     }
-    await mod.Wait(1);
     if (weather === 1) {
-        for (let i = 3000; i < 3999; i++) {
+        for (let i = 3000; i < 3300; i++) {
             mod.EnableVFX(mod.GetVFX(i), true);
+            await mod.Wait(0.033);
         }
     }
 }

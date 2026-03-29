@@ -1,10 +1,10 @@
 import { updateCheckpointTimer, uiSetup, updateProgressUI, updateCheckpointUI, ui_onPlayerJoinGame, updateStatusUI, progressFlash, nukeUI, updateDebugUI, updatePlayerCountUI } from './ui.ts';
 import { initSounds, playCheckpointReachedSound, VOPushing, VOPushingBack, playNearEndMusic, playLowTimeVO, playNearEndVO, playPayloadReversingSound, playPayloadProgressingSound, endGameMusic, playPayloadIdleSound, stopPayloadSound, updateSoundPositions } from './sounds.ts';
-import { CONFIG, PLAYER } from './config.ts';
+import { CONFIG, PLAYER, UI } from './config.ts';
 import { STATE, PayloadState, type PayloadWaypoint } from './state.ts';
 import { scoring_initScoreboard, scoring_onPlayerDied, scoring_onPlayerEarnedAssist, scoring_awardObjectivePoints, scoring_onPlayerLeave, scoring_onPlayerRevived, scoring_refreshScoreboard, scoring_getOrCreatePlayerScore } from './scoring.ts';
 import { initWeather, resetWeatherVFX } from './weather.ts';
-import { playerUI_onPlayerJoinGame, OutofBoundsUI } from './playerUI.ts';
+import { playerUI_onPlayerJoinGame, OutofBoundsUI, DeployBoundsCheck } from './playerUI.ts';
 
 function calculatePayloadProgress(): void {
     let traveledDistance = 0;
@@ -677,7 +677,8 @@ function executeEverySecond() {
         playNearEndMusic();
         playLowTimeVO();
     }
-    progressFlash();
+    UI.alpha = 10;
+    //progressFlash();
 }
 
 function respawnPayloadSpatials() {
@@ -761,28 +762,21 @@ export function OnPlayerLeaveGame(playerId: number): void {
 }
 
 export function OnPlayerJoinGame(eventPlayer: mod.Player): void {
-    scoring_getOrCreatePlayerScore(eventPlayer);
-    ui_onPlayerJoinGame();
-    resetWeatherVFX();
-    playerUI_onPlayerJoinGame(eventPlayer);
     mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds), false);
     mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea), 0);
     mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OOBTimer), false);
 }
 
 export function OnPlayerEnterAreaTrigger(eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger): void {
-    mod.SendErrorReport(mod.Message(mod.stringkeys.test1));
     mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea), mod.GetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea)) + 1);
     if (mod.Equals(mod.GetTeam(eventPlayer), mod.GetTeam(1))) {
         if (mod.GetObjId(eventAreaTrigger) > (STATE.currentCheckpoint + 600)) {
-            mod.SendErrorReport(mod.Message(mod.stringkeys.test2));
             OutofBoundsUI(eventPlayer);
         } else {
             mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds), false);
         }
     } else {
         if (mod.GetObjId(eventAreaTrigger) < (STATE.currentCheckpoint + 600)) {
-            mod.SendErrorReport(mod.Message(mod.stringkeys.test3));
             OutofBoundsUI(eventPlayer);
         } else {
             mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds), false);
@@ -795,7 +789,6 @@ export async function OnPlayerExitAreaTrigger(eventPlayer: mod.Player, eventArea
     await mod.Wait(0.066);
     if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) {
         if (mod.GetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea)) <= 0) {
-            mod.SendErrorReport(mod.Message(mod.stringkeys.test4));
             OutofBoundsUI(eventPlayer);
         }
     }
@@ -809,13 +802,12 @@ export function OnPlayerDeployed(eventPlayer: mod.Player): void {
         scoring_refreshScoreboard();
         applyCheckpointFx();
         applyPayloadVfx();
+        scoring_getOrCreatePlayerScore(eventPlayer);
+        ui_onPlayerJoinGame();
+        playerUI_onPlayerJoinGame(eventPlayer);
+        resetWeatherVFX();
     }
-    mod.Wait(0.1);
-    if (mod.GetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds))) {
-        mod.Wait(0.6);
-        mod.UndeployPlayer(eventPlayer);
-        mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds), false);
-    }
+    DeployBoundsCheck(eventPlayer);
 }
 
 export function OnRevived(victim: mod.Player, reviver: mod.Player): void {
@@ -883,6 +875,13 @@ export function OngoingGlobal(): void {
     STATE.ticks++;
     if (CONFIG.enableDebug) {
         updateDebugUI();
+    }
+    progressFlash();
+    if (UI.alpha > 0) {
+        UI.alpha = UI.alpha - 0.5;
+    }
+    if (UI.alpha < 0) {
+        UI.alpha = 0;
     }
 }
 

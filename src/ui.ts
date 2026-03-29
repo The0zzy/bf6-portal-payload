@@ -1,5 +1,5 @@
 import { PayloadState, STATE } from "./state.ts";
-import { CONFIG } from "./config.ts";
+import { CONFIG, UI } from "./config.ts";
 
 export function updateCheckpointTimer(remainingTime: number): void {
     mins = mod.Floor(remainingTime / 60);
@@ -211,7 +211,7 @@ export async function updateCheckpointUI(): Promise<void> {
 export function updatePlayerCountUI(team1: number, team2: number): void {
     mod.SetUITextLabel(mod.FindUIWidgetWithName("left_player_count1"), mod.Message(mod.stringkeys.payload.counter, team1));
     mod.SetUITextLabel(mod.FindUIWidgetWithName("left_player_count2"), mod.Message(mod.stringkeys.payload.counter, team2));
-    mod.SetUITextLabel(mod.FindUIWidgetWithName("right_player_count1"), mod.Message(mod.stringkeys.payload.counter, team2));
+    mod.SetUITextLabel(mod.FindUIWidgetWithName("right_player_count1"), mod.Message(mod.stringkeys.payload.counter, UI.alpha));
     mod.SetUITextLabel(mod.FindUIWidgetWithName("right_player_count2"), mod.Message(mod.stringkeys.payload.counter, team1));
     if (team1 == 0) {
         mod.SetUITextColor(mod.FindUIWidgetWithName("left_player_count1"), mod.CreateVector(1, 1, 1));
@@ -237,7 +237,7 @@ export function deleteUI(): void {
 // WORKAROUND FOR BUGGED UI WHEN PLAYER JOINS MID-GAME
 export async function ui_onPlayerJoinGame(): Promise<void> {
     if (ui_ready) {
-        await mod.Wait(5);
+        //await mod.Wait(5);
         deleteUI();
         uiSetup();
         updateStatusUI();
@@ -245,38 +245,34 @@ export async function ui_onPlayerJoinGame(): Promise<void> {
 }
 
 export async function progressFlash(): Promise<void> {
+    let alpha = 0.1;
     if (ui_ready) {
-        for (let i = 10; i > 0; i -= 1) {
-            const alpha = i / 10;
-            const alphaNegative = 1 - alpha;
-            if (STATE.payloadState == PayloadState.ADVANCING) {
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progressflash1"), alpha);
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progressflash2"), alpha);
-            }
-            if (STATE.payloadState == PayloadState.PUSHING_BACK) {
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progress_backgroundflash1"), alpha);
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progress_backgroundflash2"), alpha);
-            }
-            if (STATE.payloadState == PayloadState.IDLE || STATE.payloadState == PayloadState.LOCKED) {
-                mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus1"), 1);
-                mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus2"), 1);
-            } else {
-                mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus1"), alpha);
-                mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus2"), alpha);
-            }
-            await mod.Wait(0.066);
+        if (UI.alpha > 0) {
+            alpha = UI.alpha / 10;
+        }
+        if (STATE.payloadState == PayloadState.ADVANCING) {
+            mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progressflash1"), alpha);
+            mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progressflash2"), alpha);
+            mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progress_backgroundflash1"), 0.01);
+            mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progress_backgroundflash2"), 0.01);
+        } else if (STATE.payloadState == PayloadState.PUSHING_BACK) {
+            mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progress_backgroundflash1"), alpha);
+            mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progress_backgroundflash2"), alpha);
+            mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progressflash1"), 0.01);
+            mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progressflash2"), 0.01);
+        } else {
+            mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progressflash1"), 0.01);
+            mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progressflash2"), 0.01);
+            mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progress_backgroundflash1"), 0.01);
+            mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progress_backgroundflash2"), 0.01);
         }
         if (STATE.payloadState == PayloadState.IDLE || STATE.payloadState == PayloadState.LOCKED) {
             mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus1"), 1);
             mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus2"), 1);
         } else {
-            mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus1"), 0.1);
-            mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus2"), 0.1);
+            mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus1"), alpha);
+            mod.SetUITextAlpha(mod.FindUIWidgetWithName("payloadstatus2"), alpha);
         }
-        mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progressflash1"), 0.01);
-        mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progressflash2"), 0.01);
-        mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progress_backgroundflash1"), 0.01);
-        mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName("progress_backgroundflash2"), 0.01);
     }
 }
 
