@@ -18,6 +18,10 @@
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
         "target": "ES2022",
+        "baseUrl": ".",
+        "paths": {
+            "bf6-portal-utils/*": ["node_modules/bf6-portal-utils/*/index.d.ts"]
+        },
         "types": ["quickjs-types", "bf6-portal-mod-types"],
         "useDefineForClassFields": true,
         "verbatimModuleSyntax": true

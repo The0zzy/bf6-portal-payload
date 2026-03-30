@@ -1,63 +1,72 @@
+import { Events } from 'bf6-portal-utils/events';
 import { PayloadCore } from './PayloadCore.ts';
 
 export class Payload {
+    private static subscribed = false;
+
     public static init(): void {
+        if (Payload.subscribed) {
+            return;
+        }
+
         PayloadCore.OnGameModeStarted();
-    }
 
-    public static onPlayerDied(victim: mod.Player, killer: mod.Player): void {
-        PayloadCore.OnPlayerDied(victim, killer);
-    }
+        Events.OnPlayerDied.subscribe((victim: mod.Player, killer: mod.Player) => {
+            PayloadCore.OnPlayerDied(victim, killer);
+        });
 
-    public static onPlayerEarnedKillAssist(player: mod.Player, assistOn: mod.Player): void {
-        PayloadCore.OnPlayerEarnedKillAssist(player, assistOn);
-    }
+        Events.OnPlayerEarnedKillAssist.subscribe((player: mod.Player, assistOn: mod.Player) => {
+            PayloadCore.OnPlayerEarnedKillAssist(player, assistOn);
+        });
 
-    public static onPlayerLeaveGame(playerId: number): void {
-        PayloadCore.OnPlayerLeaveGame(playerId);
-    }
+        Events.OnPlayerLeaveGame.subscribe((playerId: number) => {
+            PayloadCore.OnPlayerLeaveGame(playerId);
+        });
 
-    public static onPlayerJoinGame(player: mod.Player): void {
-        PayloadCore.OnPlayerJoinGame(player);
-    }
+        Events.OnPlayerJoinGame.subscribe((eventPlayer: mod.Player) => {
+            PayloadCore.OnPlayerJoinGame(eventPlayer);
+        });
 
-    public static onPlayerEnterAreaTrigger(player: mod.Player, trigger: mod.AreaTrigger): void {
-        PayloadCore.OnPlayerEnterAreaTrigger(player, trigger);
-    }
+        Events.OnPlayerEnterAreaTrigger.subscribe((eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger) => {
+            PayloadCore.OnPlayerEnterAreaTrigger(eventPlayer, eventAreaTrigger);
+        });
 
-    public static onPlayerExitAreaTrigger(player: mod.Player, trigger: mod.AreaTrigger): Promise<void> {
-        return PayloadCore.OnPlayerExitAreaTrigger(player, trigger);
-    }
+        Events.OnPlayerExitAreaTrigger.subscribe(async (eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger) => {
+            await PayloadCore.OnPlayerExitAreaTrigger(eventPlayer, eventAreaTrigger);
+        });
 
-    public static onPlayerDeployed(player: mod.Player): void {
-        PayloadCore.OnPlayerDeployed(player);
-    }
+        Events.OnPlayerDeployed.subscribe((eventPlayer: mod.Player) => {
+            PayloadCore.OnPlayerDeployed(eventPlayer);
+        });
 
-    public static onRevived(victim: mod.Player, reviver: mod.Player): void {
-        PayloadCore.OnRevived(victim, reviver);
-    }
+        Events.OnRevived.subscribe((victim: mod.Player, reviver: mod.Player) => {
+            PayloadCore.OnRevived(victim, reviver);
+        });
 
-    public static ongoingGlobal(): void {
-        PayloadCore.OngoingGlobal();
-    }
+        Events.OngoingGlobal.subscribe(() => {
+            PayloadCore.OngoingGlobal();
+        });
 
-    public static onPlayerEnterVehicle(player: mod.Player, vehicle: mod.Vehicle): void {
-        PayloadCore.OnPlayerEnterVehicle(player, vehicle);
-    }
+        Events.OnPlayerEnterVehicle.subscribe((eventPlayer: mod.Player, eventVehicle: mod.Vehicle) => {
+            PayloadCore.OnPlayerEnterVehicle(eventPlayer, eventVehicle);
+        });
 
-    public static ongoingPlayer(player: mod.Player): void {
-        PayloadCore.OngoingPlayer(player);
-    }
+        Events.OngoingPlayer.subscribe((eventPlayer: mod.Player) => {
+            PayloadCore.OngoingPlayer(eventPlayer);
+        });
 
-    public static onPlayerUndeploy(player: mod.Player): void {
-        PayloadCore.OnPlayerUndeploy(player);
-    }
+        Events.OnPlayerUndeploy.subscribe((eventPlayer: mod.Player) => {
+            PayloadCore.OnPlayerUndeploy(eventPlayer);
+        });
 
-    public static onVehicleSpawned(vehicle: mod.Vehicle): void {
-        PayloadCore.OnVehicleSpawned(vehicle);
-    }
+        Events.OnVehicleSpawned.subscribe((eventVehicle: mod.Vehicle) => {
+            PayloadCore.OnVehicleSpawned(eventVehicle);
+        });
 
-    public static ongoingVehicle(vehicle: mod.Vehicle): void {
-        PayloadCore.OngoingVehicle(vehicle);
+        Events.OngoingVehicle.subscribe((eventVehicle: mod.Vehicle) => {
+            PayloadCore.OngoingVehicle(eventVehicle);
+        });
+
+        Payload.subscribed = true;
     }
 }
