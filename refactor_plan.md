@@ -153,3 +153,4 @@ without disrupting the existing codebase. The migration will be done as follows:
 - comment all code in `old_index.ts` in order for the bundler and lint to not complain about duplicate symbols. We will
   keep it around for reference during the migration and testing phase.
 - Once the new architecture is fully implemented and tested, we can remove the old files.
+- update AGENTS.md documentation to reflect the new architecture and guidelines for contributing to the codebase.
