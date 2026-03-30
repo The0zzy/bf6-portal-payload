@@ -17,14 +17,18 @@
 ## Architecture
 
 - This is an event-driven Battlefield Portal mod written in strict TypeScript.
-- `src/index.ts` is the router for Portal event handlers and ongoing loops.
-- Current main modules:
-    - `src/config.ts`: mostly static configuration values.
-    - `src/state.ts`: runtime mutable game state.
-    - `src/ui.ts` and `src/playerUI.ts`: global and per-player UI.
-    - `src/scoring.ts`: score tracking and scoreboard interactions.
-    - `src/sounds.ts`: VO/music/SFX orchestration.
-    - `src/weather.ts`: weather and environment effects.
+- `src/index.ts` is the thin router for Portal event handlers and ongoing loops.
+- Payload game mode implementation lives under `src/Payload/`:
+    - `Payload.ts`: central event router for Payload mode.
+    - `PayloadCore.ts`: game loop, spline movement, checkpoint progression, and objective flow.
+    - `PayloadConfig.ts`: static configuration data and player variable keys.
+    - `PayloadState.ts`: singleton runtime state (including runtime-only flags like overtime/gameOngoing).
+    - `PayloadUI.ts`: global and per-player UI handling.
+    - `PayloadScoring.ts`: scoreboard and objective points.
+    - `PayloadSounds.ts`: VO/music/SFX orchestration.
+    - `PayloadWeather.ts`: weather and VFX reset logic.
+- Runtime-populated payload spatial definitions are stored in state (`PayloadState.payloadSpatialsConfig`), not config.
+- Legacy pre-refactor entrypoint is kept as `src/old_index.ts` for reference.
 - Ongoing handlers run ~30 times per second. Keep per-tick logic minimal and allocation-light.
 
 ## Portal API Conventions
