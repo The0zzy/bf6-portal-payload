@@ -761,10 +761,16 @@ export function OnPlayerLeaveGame(playerId: number): void {
     scoring_onPlayerLeave(playerId);
 }
 
-export function OnPlayerJoinGame(eventPlayer: mod.Player): void {
+export async function OnPlayerJoinGame(eventPlayer: mod.Player): Promise<void> {
     mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds), false);
     mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea), 0);
     mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OOBTimer), false);
+    ui_onPlayerJoinGame();
+    await mod.Wait(5);
+    if (mod.GetMatchTimeElapsed() > 1 && mod.Not(mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier))) {
+        playerUI_onPlayerJoinGame(eventPlayer);
+        resetWeatherVFX();
+    }
 }
 
 export function OnPlayerEnterAreaTrigger(eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger): void {
@@ -803,9 +809,6 @@ export function OnPlayerDeployed(eventPlayer: mod.Player): void {
         applyCheckpointFx();
         applyPayloadVfx();
         scoring_getOrCreatePlayerScore(eventPlayer);
-        ui_onPlayerJoinGame();
-        playerUI_onPlayerJoinGame(eventPlayer);
-        resetWeatherVFX();
     }
     DeployBoundsCheck(eventPlayer);
 }

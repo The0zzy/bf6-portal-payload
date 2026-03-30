@@ -100,8 +100,10 @@ export const PLAYER: PLAYER = {
 
 export interface UI {
     alpha: number;
+    weatherReset: boolean;
 }
 
 export const UI: UI = {
     alpha: 1,
+    weatherReset: false,
 }

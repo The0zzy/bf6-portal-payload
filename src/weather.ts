@@ -1,3 +1,5 @@
+import { UI } from "./config.ts";
+
 let weather = 0;
 
 // This is working and is a false positive
@@ -21,16 +23,25 @@ export function initWeather() {
 }
 
 export async function resetWeatherVFX() {
+    while (UI.weatherReset) {
+        await mod.Wait(1);
+    }
+    UI.weatherReset = true
     if (weather > 0) {
         for (let i = 3000; i < 3300; i++) {
             mod.EnableVFX(mod.GetVFX(i), false);
-            await mod.Wait(0.033);
+            if (i % 10 === 0) {
+                await mod.Wait(0.066);
+            }
         }
     }
     if (weather === 1) {
         for (let i = 3000; i < 3300; i++) {
             mod.EnableVFX(mod.GetVFX(i), true);
-            await mod.Wait(0.033);
+            if (i % 10 === 0) {
+                await mod.Wait(0.066);
+            }
         }
     }
+    UI.weatherReset = false
 }
