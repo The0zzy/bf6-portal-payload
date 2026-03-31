@@ -1,19 +1,19 @@
 export interface SpatialConfig {
-    prefab: any;
+    prefab: mod.RuntimeSpawn_Common | mod.RuntimeSpawn_Abbasid | mod.RuntimeSpawn_Tungsten;
     relativeOffset: mod.Vector;
     scale: mod.Vector;
     rotation: mod.Vector;
 }
 
 export interface ObjectiveConfig {
-    prefab: any;
+    prefab: mod.RuntimeSpawn_Common;
     relativeOffset: mod.Vector;
     scale: mod.Vector;
     rotation: mod.Vector;
 }
 
 export interface VfxConfig {
-    prefab: any;
+    prefab: mod.RuntimeSpawn_Common;
     relativeOffset: mod.Vector;
     scale: number;
     rotation: mod.Vector;
