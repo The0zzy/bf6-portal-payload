@@ -765,10 +765,10 @@ export async function OnPlayerJoinGame(eventPlayer: mod.Player): Promise<void> {
     mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OutofBounds), false);
     mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.PlayArea), 0);
     mod.SetVariable(mod.ObjectVariable(eventPlayer, PLAYER.OOBTimer), false);
-    ui_onPlayerJoinGame();
     await mod.Wait(5);
+    playerUI_onPlayerJoinGame(eventPlayer);
     if (mod.GetMatchTimeElapsed() > 1 && mod.Not(mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier))) {
-        playerUI_onPlayerJoinGame(eventPlayer);
+        ui_onPlayerJoinGame();
         resetWeatherVFX();
     }
 }

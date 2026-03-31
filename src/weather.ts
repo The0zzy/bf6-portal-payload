@@ -27,21 +27,18 @@ export async function resetWeatherVFX() {
         await mod.Wait(1);
     }
     UI.weatherReset = true
-    if (weather > 0) {
-        for (let i = 3000; i < 3300; i++) {
-            mod.EnableVFX(mod.GetVFX(i), false);
-            if (i % 10 === 0) {
-                await mod.Wait(0.066);
-            }
-        }
-    }
     if (weather === 1) {
-        for (let i = 3000; i < 3300; i++) {
-            mod.EnableVFX(mod.GetVFX(i), true);
-            if (i % 10 === 0) {
-                await mod.Wait(0.066);
-            }
-        }
+        toggleWeather(3000, 3300);
     }
     UI.weatherReset = false
+}
+
+async function toggleWeather(start: number, end: number) {
+    for (let i = start; i < end; i++) {
+        mod.EnableVFX(mod.GetVFX(i), false);
+        mod.EnableVFX(mod.GetVFX(i), true);
+        if (i % 5 === 0) {
+            await mod.Wait(0.066);
+        }
+    }
 }

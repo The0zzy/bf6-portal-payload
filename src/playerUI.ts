@@ -86,16 +86,14 @@ export function getPlayerUIContainerName(player: mod.Player): string {
  * Use this as the parent widget when assigning child UI elements specific to this player.
  */
 export function getPlayerUIWidget(player: mod.Player): mod.UIWidget {
-    const containerName = getPlayerUIContainerName(player);
-    return mod.FindUIWidgetWithName(containerName);
+    return mod.FindUIWidgetWithName((mod.GetVariable(mod.ObjectVariable(player, PLAYER.UniquePlayerID))));
 }
 
 
 export async function OutofBoundsUI(player: mod.Player): Promise<void> {
-    if (mod.GetVariable(mod.ObjectVariable(player, PLAYER.OutofBounds)) as boolean) return;
-    if (mod.GetVariable(mod.ObjectVariable(player, PLAYER.OOBTimer)) as boolean) return;
-    const playerUI = getPlayerUIWidget(player);
     mod.SetVariable(mod.ObjectVariable(player, PLAYER.OutofBounds), true);
+    if (mod.GetVariable(mod.ObjectVariable(player, PLAYER.OOBTimer))) return;
+    const playerUI = getPlayerUIWidget(player);
     mod.SetVariable(mod.ObjectVariable(player, PLAYER.OOBTimer), true);
     mod.SkipManDown(player, true);
     mod.AddUIContainer("OOBBackground", mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.TopCenter, playerUI, true, 1, mod.CreateVector(0, 0, 0), 0.9, mod.UIBgFill.Blur, player);

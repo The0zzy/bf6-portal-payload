@@ -211,7 +211,7 @@ export async function updateCheckpointUI(): Promise<void> {
 export function updatePlayerCountUI(team1: number, team2: number): void {
     mod.SetUITextLabel(mod.FindUIWidgetWithName("left_player_count1"), mod.Message(mod.stringkeys.payload.counter, team1));
     mod.SetUITextLabel(mod.FindUIWidgetWithName("left_player_count2"), mod.Message(mod.stringkeys.payload.counter, team2));
-    mod.SetUITextLabel(mod.FindUIWidgetWithName("right_player_count1"), mod.Message(mod.stringkeys.payload.counter, UI.alpha));
+    mod.SetUITextLabel(mod.FindUIWidgetWithName("right_player_count1"), mod.Message(mod.stringkeys.payload.counter, team2));
     mod.SetUITextLabel(mod.FindUIWidgetWithName("right_player_count2"), mod.Message(mod.stringkeys.payload.counter, team1));
     if (team1 == 0) {
         mod.SetUITextColor(mod.FindUIWidgetWithName("left_player_count1"), mod.CreateVector(1, 1, 1));
@@ -237,7 +237,6 @@ export function deleteUI(): void {
 // WORKAROUND FOR BUGGED UI WHEN PLAYER JOINS MID-GAME
 export async function ui_onPlayerJoinGame(): Promise<void> {
     if (ui_ready) {
-        //await mod.Wait(5);
         deleteUI();
         uiSetup();
         updateStatusUI();
