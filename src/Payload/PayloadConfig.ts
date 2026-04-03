@@ -22,22 +22,24 @@ export interface VfxConfig {
     speed: number;
 }
 
+export interface PayloadSpeedConfig {
+    meterPerSecond: number;
+    meterPerSecondPerPlayer: number;
+}
+
 export class PayloadConfig {
+    public static readonly enableTeamSwitch = true;
     public static readonly payloadSpatialIdentifiers: number[] = [5000, 5001];
     public static readonly gameModeTime = 60 * 60;
     public static readonly defaultCheckpointTime = 450;
     public static readonly enablePayloadSound = true;
     public static readonly pushProximityRadius = 7.5;
-    public static readonly waypointProximityRadius = 0.25;
-    public static readonly speedAdditionPerPushingPlayer = 0.25;
-    public static readonly payloadSpeedT1 = 6.05;
-    public static readonly payloadSpeedT2 = 0.45;
+    public static readonly payloadSpeedT1: PayloadSpeedConfig = { meterPerSecond: 6.05, meterPerSecondPerPlayer: 0.25 };
+    public static readonly payloadSpeedT2: PayloadSpeedConfig = { meterPerSecond: 0.45, meterPerSecondPerPlayer: 0.0 };
     public static readonly objectiveScorePerSecond = 5;
     public static readonly overtimeDuration = 60;
-    public static readonly overtimeEnabled = true;
+    public static readonly enableOvertime = true;
     public static readonly enableDebug = false;
-    public static readonly enableVehicleSpawner = false;
-    public static readonly payloadVehicleType = mod.VehicleList.M2Bradley;
     public static readonly spatialRespawnInterval = 5;
 
     public static readonly payloadObjectives: ObjectiveConfig[] = [

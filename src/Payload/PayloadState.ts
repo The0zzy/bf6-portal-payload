@@ -41,7 +41,7 @@ export class PayloadState {
     public firstAttackerSpawned = false;
     public payloadState = PayloadStateType.IDLE;
     public payloadPosition = mod.CreateVector(0, 0, 0);
-    public waypoints: Map<number, PayloadWaypoint> = new Map<number, PayloadWaypoint>();
+    public waypoints: PayloadWaypoint[] = [];
     public reachedWaypointIndex = 0;
     public isOvertime = false;
     public payloadSpatials: Map<number, mod.Object> = new Map<number, mod.Object>();
@@ -55,7 +55,6 @@ export class PayloadState {
     public progressInMeters = 0;
     public progressInPercent = 0;
     public playerScores: Map<number, PlayerScoring> = new Map<number, PlayerScoring>();
-    public payloadVehicle?: mod.Vehicle;
     public payloadRotation = mod.CreateVector(0, 0, 0);
     public segmentT = 0;
     public splineTable: { t: number; distance: number }[] | null = null;

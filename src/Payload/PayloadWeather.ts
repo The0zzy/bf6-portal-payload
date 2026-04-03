@@ -1,9 +1,12 @@
+import { PayloadCore } from "./PayloadCore.ts";
+
 export class PayloadWeather {
     private static weather = 0;
 
     public static init(): void {
-        const objPos = mod.GetObjectPosition(mod.GetSpatialObject(4000));
-        if (!(mod.XComponentOf(objPos) == 0 || mod.YComponentOf(objPos) == 0 || mod.ZComponentOf(objPos) == 0)) {
+        const weatherIndicatorObj = mod.GetSpatialObject(4000);
+        if(PayloadCore.isSpatialValid(weatherIndicatorObj)) {
+            const objPos = mod.GetObjectPosition(weatherIndicatorObj);
             PayloadWeather.weather = mod.RoundToInteger(mod.RandomReal(0, 1));
             if (PayloadWeather.weather === 1) {
                 mod.AddUIContainer('WinterFilter', mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName('container'), true, 0, mod.CreateVector(0, 0.8, 1), 0.1, mod.UIBgFill.Blur);

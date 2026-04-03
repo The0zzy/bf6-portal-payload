@@ -5,13 +5,38 @@ import { PayloadSounds } from './PayloadSounds.ts';
 import { PayloadUI } from './PayloadUI.ts';
 import { PayloadWeather } from './PayloadWeather.ts';
 
+/**
+ * Manages the core gameplay logic for the Payload game mode.
+ * 
+ * Handles initialization and updates for:
+ * - Payload track waypoints and checkpoint system
+ * - Payload movement along spline curves
+ * - Visual effects and spatial objects positioning
+ * - Game state management (advancing, idle, contested, etc.)
+ * - Player proximity detection for payload pushing mechanics
+ * - Objective scoring and time management
+ * 
+ * @class PayloadCore
+ * @static
+ */
 export class PayloadCore {
     private static readonly state = PayloadState.getInstance();
 
+    public static isSpatialValid(spatial: number | mod.SpatialObject): boolean {
+        const obj = typeof spatial === 'number' ? mod.GetSpatialObject(spatial) : spatial;
+        if (!obj) return false;
+        const pos = mod.GetObjectPosition(obj);
+        return !(
+            mod.XComponentOf(pos) === 0 ||
+            mod.YComponentOf(pos) === 0 ||
+            mod.ZComponentOf(pos) === 0
+        );
+    }
+
     private static calculatePayloadProgress(): void {
         let traveledDistance = 0;
-        traveledDistance = PayloadCore.state.waypoints.get(PayloadCore.state.reachedWaypointIndex)!.distance;
-        traveledDistance += mod.DistanceBetween(PayloadCore.state.waypoints.get(PayloadCore.state.reachedWaypointIndex)!.position, PayloadCore.state.payloadPosition);
+        traveledDistance = PayloadCore.state.waypoints[PayloadCore.state.reachedWaypointIndex].distance;
+        traveledDistance += mod.DistanceBetween(PayloadCore.state.waypoints[PayloadCore.state.reachedWaypointIndex].position, PayloadCore.state.payloadPosition);
         PayloadCore.state.progressInMeters = traveledDistance;
         PayloadCore.state.progressInPercent = (traveledDistance / PayloadCore.state.totalDistanceInMeters) * 100;
     }
@@ -19,20 +44,20 @@ export class PayloadCore {
     private static initPayloadTrack(): void {
         let waypointIndex = 0;
         let distance = 0;
-        for (let i = 1000; i < 1999; i++) {
-            const objPos = mod.GetObjectPosition(mod.GetSpatialObject(i));
-            if (!(mod.XComponentOf(objPos) == 0 || mod.YComponentOf(objPos) == 0 || mod.ZComponentOf(objPos) == 0)) {
+        for (let waypointSpatialId = 1000; waypointSpatialId < 1999; waypointSpatialId++) {
+            if (PayloadCore.isSpatialValid(waypointSpatialId)) {
                 let isCheckpoint = false;
-                const checkpointPos = mod.GetObjectPosition(mod.GetSpatialObject(i + 1000));
-                if (!(mod.XComponentOf(checkpointPos) == 0 || mod.YComponentOf(checkpointPos) == 0 || mod.ZComponentOf(checkpointPos) == 0)) {
+                let checkPointSpatialId = waypointSpatialId + 1000;
+                if (PayloadCore.isSpatialValid(checkPointSpatialId)) {
                     isCheckpoint = true;
                     PayloadCore.state.maxCheckpoints++;
                 }
+                const waypointPosition = mod.GetObjectPosition(mod.GetSpatialObject(waypointSpatialId));
                 if (waypointIndex > 0) {
-                    distance += mod.DistanceBetween(PayloadCore.state.waypoints.get(waypointIndex - 1)!.position, objPos);
+                    distance += mod.DistanceBetween(PayloadCore.state.waypoints[waypointIndex - 1].position, waypointPosition);
                 }
-                PayloadCore.state.waypoints.set(waypointIndex, {
-                    position: objPos,
+                PayloadCore.state.waypoints.push({
+                    position: waypointPosition,
                     isCheckpoint,
                     rotation: mod.CreateVector(0, 0, 0),
                     distance
@@ -41,13 +66,14 @@ export class PayloadCore {
             }
         }
 
-        const firstWaypoint = PayloadCore.state.waypoints.get(0);
+        // Ensure first and last waypoints are checkpoints
+        const firstWaypoint = PayloadCore.state.waypoints[0];
         if (firstWaypoint && !firstWaypoint.isCheckpoint) {
             firstWaypoint.isCheckpoint = true;
             PayloadCore.state.maxCheckpoints++;
         }
 
-        const lastWaypoint = PayloadCore.state.waypoints.get(PayloadCore.state.waypoints.size - 1);
+        const lastWaypoint = PayloadCore.state.waypoints[PayloadCore.state.waypoints.length - 1];
         if (lastWaypoint && !lastWaypoint.isCheckpoint) {
             lastWaypoint.isCheckpoint = true;
             PayloadCore.state.maxCheckpoints++;
@@ -57,19 +83,19 @@ export class PayloadCore {
         PayloadCore.state.reachedWaypointIndex = 0;
         PayloadCore.state.reachedCheckpointIndex = 0;
         PayloadCore.state.checkpointIndexes = [];
-        for (let i = 0; i < PayloadCore.state.waypoints.size; i++) {
-            const waypoint = PayloadCore.state.waypoints.get(i)!;
+        for (let i = 0; i < PayloadCore.state.waypoints.length; i++) {
+            const waypoint = PayloadCore.state.waypoints[i];
             if (waypoint.isCheckpoint) {
                 PayloadCore.state.checkpointIndexes.push(i);
             }
         }
         PayloadCore.state.currentCheckpoint = 1;
-        PayloadCore.state.payloadPosition = PayloadCore.state.waypoints.get(0)!.position;
+        PayloadCore.state.payloadPosition = PayloadCore.state.waypoints[0].position;
     }
 
     private static applyCheckpointFx(): void {
-        for (let i = 0; i < PayloadCore.state.waypoints.size; i++) {
-            const waypoint = PayloadCore.state.waypoints.get(i)!;
+        for (let i = 0; i < PayloadCore.state.waypoints.length; i++) {
+            const waypoint = PayloadCore.state.waypoints[i];
             if (!waypoint.isCheckpoint) continue;
 
             for (let s = 0; s < PayloadConfig.checkpointSpatials.length; s++) {
@@ -137,7 +163,7 @@ export class PayloadCore {
 
     private static applyPayloadVfx(): void {
         PayloadConfig.payloadVfx.forEach((vfxConfig, i) => {
-            const wp = PayloadCore.state.waypoints.get(PayloadCore.state.reachedWaypointIndex)!;
+            const wp = PayloadCore.state.waypoints[PayloadCore.state.reachedWaypointIndex];
             const spawnPos = mod.Add(wp.position, vfxConfig.relativeOffset);
             const spawnRot = mod.Add(wp.rotation, vfxConfig.rotation);
             if (PayloadCore.state.payloadVfx.has(i)) {
@@ -159,21 +185,21 @@ export class PayloadCore {
     }
 
     private static initPayloadRotation(): void {
-        const wpCount = PayloadCore.state.waypoints.size;
+        const wpCount = PayloadCore.state.waypoints.length;
         for (let i = 0; i < wpCount; i++) {
             const prevIndex = Math.max(i - 1, 0);
             const nextIndex = Math.min(i + 1, wpCount - 1);
             const nextNextIndex = Math.min(i + 2, wpCount - 1);
 
-            const p0 = PayloadCore.state.waypoints.get(prevIndex)!.position;
-            const p1 = PayloadCore.state.waypoints.get(i)!.position;
-            const p2 = PayloadCore.state.waypoints.get(nextIndex)!.position;
-            const p3 = PayloadCore.state.waypoints.get(nextNextIndex)!.position;
+            const p0 = PayloadCore.state.waypoints[prevIndex].position;
+            const p1 = PayloadCore.state.waypoints[i].position;
+            const p2 = PayloadCore.state.waypoints[nextIndex].position;
+            const p3 = PayloadCore.state.waypoints[nextNextIndex].position;
 
             const tangent = PayloadCore.getSplineTangent(p0, p1, p2, p3, 0);
             const rotation = PayloadCore.getRotationFromTangent(tangent, false);
 
-            PayloadCore.state.waypoints.get(i)!.rotation = rotation;
+            PayloadCore.state.waypoints[i].rotation = rotation;
 
             if (i === 0) {
                 PayloadCore.state.payloadRotation = rotation;
@@ -182,53 +208,44 @@ export class PayloadCore {
     }
 
     private static initPayloadObjective(): void {
-        const start = PayloadCore.state.waypoints.get(PayloadCore.state.reachedWaypointIndex)!;
-
+        const start = PayloadCore.state.waypoints[PayloadCore.state.reachedWaypointIndex];
         PayloadCore.applyPayloadVfx();
 
-        if (!PayloadConfig.enableVehicleSpawner) {
-            PayloadCore.state.payloadSpatialsConfig = [];
-            for (const payloadSpatialId of PayloadConfig.payloadSpatialIdentifiers) {
-                const payloadIdentifierObject = mod.GetSpatialObject(payloadSpatialId);
-                const payloadIdentifierPos = mod.GetObjectPosition(payloadIdentifierObject);
-                let payloadDetected = false;
-                if (!(mod.XComponentOf(payloadIdentifierPos) == 0 || mod.YComponentOf(payloadIdentifierPos) == 0 || mod.ZComponentOf(payloadIdentifierPos) == 0)) {
-                    payloadDetected = true;
-                }
-                if (payloadDetected && payloadSpatialId === 5000) {
-                    PayloadCore.state.payloadSpatialsConfig.push(
-                        {
-                            prefab: mod.RuntimeSpawn_Abbasid.GM1083CargoTruck_01_Canopy,
-                            relativeOffset: mod.CreateVector(0, -0.1, 0),
-                            scale: mod.CreateVector(1, 1, 1),
-                            rotation: mod.CreateVector(0, 0, 0)
-                        }
-                    );
-                }
-                if (payloadDetected && payloadSpatialId === 5001) {
-                    PayloadCore.state.payloadSpatialsConfig.push(
-                        {
-                            prefab: mod.RuntimeSpawn_Tungsten.GM1083CargoTruck_01_Canopy_Cargo01,
-                            relativeOffset: mod.CreateVector(0, -0.1, 0),
-                            scale: mod.CreateVector(1, 1, 1),
-                            rotation: mod.CreateVector(0, 0, 0)
-                        }
-                    );
-                }
-            }
-
-            for (let i = 0; i < PayloadCore.state.payloadSpatialsConfig.length; i++) {
-                const spatialConfig = PayloadCore.state.payloadSpatialsConfig[i];
-                const spawnPos = mod.Add(start.position, spatialConfig.relativeOffset);
-                const spawnRot = mod.Add(start.rotation, spatialConfig.rotation);
-                const obj = mod.SpawnObject(
-                    spatialConfig.prefab,
-                    spawnPos,
-                    spawnRot,
-                    spatialConfig.scale
+        PayloadCore.state.payloadSpatialsConfig = [];
+        for (const payloadSpatialId of PayloadConfig.payloadSpatialIdentifiers) {
+            if(PayloadCore.isSpatialValid(payloadSpatialId) && payloadSpatialId === 5000) {
+                PayloadCore.state.payloadSpatialsConfig.push(
+                    {
+                        prefab: mod.RuntimeSpawn_Abbasid.GM1083CargoTruck_01_Canopy,
+                        relativeOffset: mod.CreateVector(0, -0.1, 0),
+                        scale: mod.CreateVector(1, 1, 1),
+                        rotation: mod.CreateVector(0, 0, 0)
+                    }
                 );
-                PayloadCore.state.payloadSpatials.set(i, obj);
             }
+            if (PayloadCore.isSpatialValid(payloadSpatialId) && payloadSpatialId === 5001) {
+                PayloadCore.state.payloadSpatialsConfig.push(
+                    {
+                        prefab: mod.RuntimeSpawn_Tungsten.GM1083CargoTruck_01_Canopy_Cargo01,
+                        relativeOffset: mod.CreateVector(0, -0.1, 0),
+                        scale: mod.CreateVector(1, 1, 1),
+                        rotation: mod.CreateVector(0, 0, 0)
+                    }
+                );
+            }
+        }
+
+        for (let i = 0; i < PayloadCore.state.payloadSpatialsConfig.length; i++) {
+            const spatialConfig = PayloadCore.state.payloadSpatialsConfig[i];
+            const spawnPos = mod.Add(start.position, spatialConfig.relativeOffset);
+            const spawnRot = mod.Add(start.rotation, spatialConfig.rotation);
+            const obj = mod.SpawnObject(
+                spatialConfig.prefab,
+                spawnPos,
+                spawnRot,
+                spatialConfig.scale
+            );
+            PayloadCore.state.payloadSpatials.set(i, obj);
         }
 
         for (let i = 0; i < PayloadConfig.payloadObjectives.length; i++) {
@@ -242,37 +259,6 @@ export class PayloadCore {
                 objectiveConfig.scale
             );
             PayloadCore.state.payloadObjectives.set(i, obj);
-        }
-
-        if (PayloadConfig.enableVehicleSpawner) {
-            const vehicleSpawner = mod.SpawnObject(
-                mod.RuntimeSpawn_Common.VehicleSpawner,
-                start.position,
-                start.rotation,
-                mod.CreateVector(1, 1, 1)
-            ) as mod.VehicleSpawner;
-            mod.SetVehicleSpawnerVehicleType(vehicleSpawner, PayloadConfig.payloadVehicleType);
-            mod.ForceVehicleSpawnerSpawn(vehicleSpawner);
-        }
-    }
-
-    public static OnVehicleSpawned(eventVehicle: mod.Vehicle): void {
-        if (!PayloadCore.state.gameOngoing) {
-            mod.Kill(eventVehicle);
-            return;
-        }
-        if (!PayloadConfig.enableVehicleSpawner) return;
-        const vehiclePosition = mod.GetVehicleState(eventVehicle, mod.VehicleStateVector.VehiclePosition);
-        if (mod.DistanceBetween(PayloadCore.state.waypoints.get(0)!.position, vehiclePosition) < 5) {
-            PayloadCore.state.payloadVehicle = eventVehicle;
-            mod.SetVehicleMaxHealthMultiplier(eventVehicle, 5);
-        }
-    }
-
-    public static OngoingVehicle(eventVehicle: mod.Vehicle): void {
-        if (!PayloadConfig.enableVehicleSpawner) return;
-        if (PayloadCore.state.payloadVehicle && mod.GetObjId(eventVehicle) == mod.GetObjId(PayloadCore.state.payloadVehicle)) {
-            mod.Heal(eventVehicle, 100);
         }
     }
 
@@ -428,7 +414,7 @@ export class PayloadCore {
 
     private static moveAlongSpline(forward: boolean, speed: number): void {
         let wpIndex = PayloadCore.state.reachedWaypointIndex;
-        const wpCount = PayloadCore.state.waypoints.size;
+        const wpCount = PayloadCore.state.waypoints.length;
 
         if (wpIndex >= wpCount - 1 && forward) {
             return;
@@ -442,10 +428,10 @@ export class PayloadCore {
             const nextIndex = Math.min(wpIndex + 1, wpCount - 1);
             const nextNextIndex = Math.min(nextIndex + 1, wpCount - 1);
 
-            const prevWp = PayloadCore.state.waypoints.get(prevIndex);
-            const currWp = PayloadCore.state.waypoints.get(wpIndex);
-            const nextWp = PayloadCore.state.waypoints.get(nextIndex);
-            const nextNextWp = PayloadCore.state.waypoints.get(nextNextIndex);
+            const prevWp = PayloadCore.state.waypoints[prevIndex];
+            const currWp = PayloadCore.state.waypoints[wpIndex];
+            const nextWp = PayloadCore.state.waypoints[nextIndex];
+            const nextNextWp = PayloadCore.state.waypoints[nextNextIndex];
             if (!prevWp || !currWp || !nextWp || !nextNextWp) break;
 
             const p0 = prevWp.position;
@@ -478,8 +464,8 @@ export class PayloadCore {
                 wpIndex = wpIndex - 1;
                 PayloadCore.state.reachedWaypointIndex = wpIndex;
 
-                const prevWaypoint = PayloadCore.state.waypoints.get(wpIndex);
-                const currentWaypoint = PayloadCore.state.waypoints.get(wpIndex + 1);
+                const prevWaypoint = PayloadCore.state.waypoints[wpIndex];
+                const currentWaypoint = PayloadCore.state.waypoints[wpIndex + 1];
                 if (!prevWaypoint || !currentWaypoint) {
                     break;
                 }
@@ -503,7 +489,7 @@ export class PayloadCore {
 
         PayloadSounds.playCheckpointReachedSound();
 
-        if (PayloadCore.state.reachedWaypointIndex == PayloadCore.state.waypoints.size - 1) {
+        if (PayloadCore.state.reachedWaypointIndex == PayloadCore.state.waypoints.length - 1) {
             void PayloadCore.onFinalCheckpointReached();
         } else {
             mod.EnableHQ(mod.GetHQ((PayloadCore.state.currentCheckpoint - 1) + 300), false);
@@ -529,13 +515,13 @@ export class PayloadCore {
     }
 
     private static pushForward(counts: { t1: mod.Player[]; t2: mod.Player[] }): void {
-        if (PayloadCore.state.reachedWaypointIndex >= PayloadCore.state.waypoints.size - 1) {
+        if (PayloadCore.state.reachedWaypointIndex >= PayloadCore.state.waypoints.length - 1) {
             PayloadCore.setPayloadState(PayloadStateType.LOCKED);
             PayloadSounds.playPayloadIdleSound();
             return;
         }
-        const speedAddtion = PayloadConfig.speedAdditionPerPushingPlayer * (counts.t1.length - counts.t2.length);
-        const speed = (PayloadConfig.payloadSpeedT1 + speedAddtion) / PayloadCore.state.tickrate;
+        const speedAddtion = PayloadConfig.payloadSpeedT1.meterPerSecondPerPlayer * (counts.t1.length - counts.t2.length);
+        const speed = (PayloadConfig.payloadSpeedT1.meterPerSecond + speedAddtion) / PayloadCore.state.tickrate;
         PayloadCore.setPayloadState(PayloadStateType.ADVANCING);
         PayloadCore.moveAlongSpline(true, speed);
         PayloadSounds.VOPushing();
@@ -549,7 +535,8 @@ export class PayloadCore {
             PayloadCore.setPayloadState(PayloadStateType.LOCKED);
             return;
         }
-        const speed = (PayloadConfig.payloadSpeedT2) / PayloadCore.state.tickrate;
+        const speedAddtion = PayloadConfig.payloadSpeedT2.meterPerSecondPerPlayer * (counts.t2.length - counts.t1.length);
+        const speed = (PayloadConfig.payloadSpeedT2.meterPerSecond + speedAddtion) / PayloadCore.state.tickrate;
         PayloadCore.setPayloadState(PayloadStateType.PUSHING_BACK);
         PayloadCore.moveAlongSpline(false, speed);
         PayloadSounds.VOPushingBack();
@@ -583,10 +570,6 @@ export class PayloadCore {
             const worldRot = mod.Add(rotation, config.rotation);
             mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, worldRot));
         });
-
-        if (PayloadCore.state.payloadVehicle) {
-            mod.Teleport(PayloadCore.state.payloadVehicle, PayloadCore.state.payloadPosition, mod.YComponentOf(rotation));
-        }
     }
 
     private static onPayloadMoved(): void {
@@ -654,18 +637,13 @@ export class PayloadCore {
         mod.PauseGameModeTime(true);
         PayloadSounds.playPayloadIdleSound();
         PayloadSounds.endGameMusic(1);
-        if (PayloadCore.state.payloadVehicle) {
-            mod.Kill(PayloadCore.state.payloadVehicle as mod.Vehicle);
-        } else {
-            PayloadCore.state.payloadObjectives.forEach((obj) => {
-                mod.UnspawnObject(obj);
-            });
-            PayloadCore.state.payloadVfx.forEach((vfx) => {
-                mod.UnspawnObject(vfx);
-            });
-        }
-        void PayloadUI.nukeUI();
-        await mod.Wait(8.5);
+        PayloadCore.state.payloadObjectives.forEach((obj) => {
+            mod.UnspawnObject(obj);
+        });
+        PayloadCore.state.payloadVfx.forEach((vfx) => {
+            mod.UnspawnObject(vfx);
+        });
+        await PayloadUI.nukeUI();
         mod.EndGameMode(mod.GetTeam(1));
     }
 
@@ -823,37 +801,35 @@ export class PayloadCore {
         }
     }
 
-    public static OnPlayerEnterVehicle(eventPlayer: mod.Player, eventVehicle: mod.Vehicle): void {
-        if (mod.CompareVehicleName(eventVehicle, mod.VehicleList.M2Bradley)) {
-            mod.ForcePlayerExitVehicle(mod.GetVehicleFromPlayer(eventPlayer));
-            mod.DisplayNotificationMessage(mod.Message(mod.stringkeys.payload.objective.exit_message), eventPlayer);
-        }
-    }
-
-    public static OngoingPlayer(eventPlayer: mod.Player): void {
+    /**
+     * Checks for team switch conditions and switches the player's team if conditions are met.
+     * @method checkTeamSwitchConditions
+     * @param {mod.Player} eventPlayer - The player to check for team switch conditions
+    */
+    public static async checkTeamSwitchConditions(eventPlayer: mod.Player): Promise<void> {
         if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier)) return;
         if (!mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) return;
+        if (!PayloadConfig.enableTeamSwitch) return;
         if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsZooming)
             && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsCrouching)
             && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsInteracting)
         ) {
             mod.SetTeam(eventPlayer, mod.Equals(mod.GetTeam(eventPlayer), mod.GetTeam(2)) ? mod.GetTeam(1) : mod.GetTeam(2));
         }
-        if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsInVehicle)) {
-            if (mod.CompareVehicleName(mod.GetVehicleFromPlayer(eventPlayer), mod.VehicleList.M2Bradley)) {
-                mod.ForcePlayerExitVehicle(mod.GetVehicleFromPlayer(eventPlayer));
-                mod.DisplayNotificationMessage(mod.Message(mod.stringkeys.payload.objective.exit_message), eventPlayer);
-            }
-        }
-        PayloadCore.playerEndState(eventPlayer);
     }
 
-    public static playerEndState(eventPlayer: mod.Player): void {
-        if (!PayloadCore.state.gameOngoing && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) {
-            mod.SetPlayerMaxHealth(eventPlayer, 500);
-            mod.Heal(eventPlayer, 500);
-        } else if (!PayloadCore.state.gameOngoing && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsManDown)) {
-            mod.ForceRevive(eventPlayer);
+    /**
+     * Makes a player immortal during the end screen phase of the game.
+     * @param eventPlayer - The player who should be made immortal
+     */
+    public static async playerEndState(eventPlayer: mod.Player): Promise<void> {
+        if (!PayloadCore.state.gameOngoing) {
+            if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) {
+                mod.SetPlayerMaxHealth(eventPlayer, 500);
+                mod.Heal(eventPlayer, 500);
+            } else if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsManDown)) {
+                mod.ForceRevive(eventPlayer);
+            }
         }
     }
 

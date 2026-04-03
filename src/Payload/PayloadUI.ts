@@ -92,10 +92,10 @@ export class PayloadUI {
         mod.AddUIText('right_player_count1', mod.CreateVector(35, 26, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, PayloadUI.enemycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, PayloadUI.enemycolour, 1, mod.UIAnchor.Center, mod.GetTeam(1));
         mod.AddUIText('right_player_count2', mod.CreateVector(35, 26, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, PayloadUI.enemycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, PayloadUI.enemycolour, 1, mod.UIAnchor.Center, mod.GetTeam(2));
 
-        for (let i = 1; i < PayloadUI.state.waypoints.size; i++) {
-            if (PayloadUI.state.waypoints.get(i)!.isCheckpoint) {
+        for (let i = 1; i < PayloadUI.state.waypoints.length; i++) {
+            if (PayloadUI.state.waypoints[i].isCheckpoint) {
                 mod.AddUIContainer('checkpoint' + i,
-                    mod.CreateVector(146 + (6 * ((PayloadUI.state.waypoints.get(i)!.distance / PayloadUI.state.totalDistanceInMeters) * 100)), -5, 0),
+                    mod.CreateVector(146 + (6 * ((PayloadUI.state.waypoints[i].distance / PayloadUI.state.totalDistanceInMeters) * 100)), -5, 0),
                     mod.CreateVector(4, 30, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(0.9, 0.9, 0.9), 1, mod.UIBgFill.Solid);
             }
         }

@@ -11,6 +11,17 @@ export class Payload {
 
         PayloadCore.OnGameModeStarted();
 
+        // SECTION: Tick-based events
+        Events.OngoingGlobal.subscribe(() => {
+            PayloadCore.OngoingGlobal();
+        });
+
+        Events.OngoingPlayer.subscribe(async (eventPlayer: mod.Player) => {
+            PayloadCore.checkTeamSwitchConditions(eventPlayer);
+            PayloadCore.playerEndState(eventPlayer);
+        });
+
+
         Events.OnPlayerDied.subscribe((victim: mod.Player, killer: mod.Player) => {
             PayloadCore.OnPlayerDied(victim, killer);
         });
@@ -43,28 +54,8 @@ export class Payload {
             PayloadCore.OnRevived(victim, reviver);
         });
 
-        Events.OngoingGlobal.subscribe(() => {
-            PayloadCore.OngoingGlobal();
-        });
-
-        Events.OnPlayerEnterVehicle.subscribe((eventPlayer: mod.Player, eventVehicle: mod.Vehicle) => {
-            PayloadCore.OnPlayerEnterVehicle(eventPlayer, eventVehicle);
-        });
-
-        Events.OngoingPlayer.subscribe((eventPlayer: mod.Player) => {
-            PayloadCore.OngoingPlayer(eventPlayer);
-        });
-
         Events.OnPlayerUndeploy.subscribe((eventPlayer: mod.Player) => {
             PayloadCore.OnPlayerUndeploy(eventPlayer);
-        });
-
-        Events.OnVehicleSpawned.subscribe((eventVehicle: mod.Vehicle) => {
-            PayloadCore.OnVehicleSpawned(eventVehicle);
-        });
-
-        Events.OngoingVehicle.subscribe((eventVehicle: mod.Vehicle) => {
-            PayloadCore.OngoingVehicle(eventVehicle);
         });
 
         Payload.subscribed = true;
