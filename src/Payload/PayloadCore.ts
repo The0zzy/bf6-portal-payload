@@ -1,5 +1,5 @@
 import { PayloadConfig, PayloadPlayerVars, type SpatialConfig } from './PayloadConfig.ts';
-import { PayloadState, PayloadStateType } from './PayloadState.ts';
+import { PayloadState, PayloadMovementState } from './PayloadState.ts';
 import { PayloadScoring } from './PayloadScoring.ts';
 import { PayloadSounds } from './PayloadSounds.ts';
 import { PayloadUI } from './PayloadUI.ts';
@@ -20,7 +20,6 @@ import { PayloadWeather } from './PayloadWeather.ts';
  * @static
  */
 export class PayloadCore {
-    private static readonly state = PayloadState.getInstance();
 
     public static isSpatialValid(spatial: number | mod.SpatialObject): boolean {
         const obj = typeof spatial === 'number' ? mod.GetSpatialObject(spatial) : spatial;
@@ -35,10 +34,10 @@ export class PayloadCore {
 
     private static calculatePayloadProgress(): void {
         let traveledDistance = 0;
-        traveledDistance = PayloadCore.state.waypoints[PayloadCore.state.reachedWaypointIndex].distance;
-        traveledDistance += mod.DistanceBetween(PayloadCore.state.waypoints[PayloadCore.state.reachedWaypointIndex].position, PayloadCore.state.payloadPosition);
-        PayloadCore.state.progressInMeters = traveledDistance;
-        PayloadCore.state.progressInPercent = (traveledDistance / PayloadCore.state.totalDistanceInMeters) * 100;
+        traveledDistance = PayloadState.instance.waypoints[PayloadState.instance.reachedWaypointIndex].distance;
+        traveledDistance += mod.DistanceBetween(PayloadState.instance.waypoints[PayloadState.instance.reachedWaypointIndex].position, PayloadState.instance.payloadPosition);
+        PayloadState.instance.progressInMeters = traveledDistance;
+        PayloadState.instance.progressInPercent = (traveledDistance / PayloadState.instance.totalDistanceInMeters) * 100;
     }
 
     private static initPayloadTrack(): void {
@@ -50,13 +49,13 @@ export class PayloadCore {
                 let checkPointSpatialId = waypointSpatialId + 1000;
                 if (PayloadCore.isSpatialValid(checkPointSpatialId)) {
                     isCheckpoint = true;
-                    PayloadCore.state.maxCheckpoints++;
+                    PayloadState.instance.maxCheckpoints++;
                 }
                 const waypointPosition = mod.GetObjectPosition(mod.GetSpatialObject(waypointSpatialId));
                 if (waypointIndex > 0) {
-                    distance += mod.DistanceBetween(PayloadCore.state.waypoints[waypointIndex - 1].position, waypointPosition);
+                    distance += mod.DistanceBetween(PayloadState.instance.waypoints[waypointIndex - 1].position, waypointPosition);
                 }
-                PayloadCore.state.waypoints.push({
+                PayloadState.instance.waypoints.push({
                     position: waypointPosition,
                     isCheckpoint,
                     rotation: mod.CreateVector(0, 0, 0),
@@ -67,42 +66,42 @@ export class PayloadCore {
         }
 
         // Ensure first and last waypoints are checkpoints
-        const firstWaypoint = PayloadCore.state.waypoints[0];
+        const firstWaypoint = PayloadState.instance.waypoints[0];
         if (firstWaypoint && !firstWaypoint.isCheckpoint) {
             firstWaypoint.isCheckpoint = true;
-            PayloadCore.state.maxCheckpoints++;
+            PayloadState.instance.maxCheckpoints++;
         }
 
-        const lastWaypoint = PayloadCore.state.waypoints[PayloadCore.state.waypoints.length - 1];
+        const lastWaypoint = PayloadState.instance.waypoints[PayloadState.instance.waypoints.length - 1];
         if (lastWaypoint && !lastWaypoint.isCheckpoint) {
             lastWaypoint.isCheckpoint = true;
-            PayloadCore.state.maxCheckpoints++;
+            PayloadState.instance.maxCheckpoints++;
         }
 
-        PayloadCore.state.totalDistanceInMeters = distance;
-        PayloadCore.state.reachedWaypointIndex = 0;
-        PayloadCore.state.reachedCheckpointIndex = 0;
-        PayloadCore.state.checkpointIndexes = [];
-        for (let i = 0; i < PayloadCore.state.waypoints.length; i++) {
-            const waypoint = PayloadCore.state.waypoints[i];
+        PayloadState.instance.totalDistanceInMeters = distance;
+        PayloadState.instance.reachedWaypointIndex = 0;
+        PayloadState.instance.reachedCheckpointIndex = 0;
+        PayloadState.instance.checkpointIndexes = [];
+        for (let i = 0; i < PayloadState.instance.waypoints.length; i++) {
+            const waypoint = PayloadState.instance.waypoints[i];
             if (waypoint.isCheckpoint) {
-                PayloadCore.state.checkpointIndexes.push(i);
+                PayloadState.instance.checkpointIndexes.push(i);
             }
         }
-        PayloadCore.state.currentCheckpoint = 1;
-        PayloadCore.state.payloadPosition = PayloadCore.state.waypoints[0].position;
+        PayloadState.instance.currentCheckpoint = 1;
+        PayloadState.instance.payloadPosition = PayloadState.instance.waypoints[0].position;
     }
 
     private static applyCheckpointFx(): void {
-        for (let i = 0; i < PayloadCore.state.waypoints.length; i++) {
-            const waypoint = PayloadCore.state.waypoints[i];
+        for (let i = 0; i < PayloadState.instance.waypoints.length; i++) {
+            const waypoint = PayloadState.instance.waypoints[i];
             if (!waypoint.isCheckpoint) continue;
 
             for (let s = 0; s < PayloadConfig.checkpointSpatials.length; s++) {
                 const key = `${i}-${s}`;
-                if (PayloadCore.state.checkpointSpatials.has(key)) {
-                    mod.UnspawnObject(PayloadCore.state.checkpointSpatials.get(key)!);
-                    PayloadCore.state.checkpointSpatials.delete(key);
+                if (PayloadState.instance.checkpointSpatials.has(key)) {
+                    mod.UnspawnObject(PayloadState.instance.checkpointSpatials.get(key)!);
+                    PayloadState.instance.checkpointSpatials.delete(key);
                 }
                 const spatialConfig = PayloadConfig.checkpointSpatials[s];
                 const spawnPos = mod.Add(waypoint.position, spatialConfig.relativeOffset);
@@ -113,16 +112,16 @@ export class PayloadCore {
                     spawnRot,
                     spatialConfig.scale
                 );
-                PayloadCore.state.checkpointSpatials.set(key, obj);
+                PayloadState.instance.checkpointSpatials.set(key, obj);
             }
 
             for (let o = 0; o < PayloadConfig.checkpointObjectives.length; o++) {
                 const key = `${i}-${o}`;
-                if (PayloadCore.state.checkpointObjectives.has(key)) {
-                    mod.UnspawnObject(PayloadCore.state.checkpointObjectives.get(key)!);
-                    PayloadCore.state.checkpointObjectives.delete(key);
+                if (PayloadState.instance.checkpointObjectives.has(key)) {
+                    mod.UnspawnObject(PayloadState.instance.checkpointObjectives.get(key)!);
+                    PayloadState.instance.checkpointObjectives.delete(key);
                 }
-                if (PayloadCore.state.currentCheckpoint < PayloadCore.state.checkpointIndexes.length && PayloadCore.state.checkpointIndexes[PayloadCore.state.currentCheckpoint] === i) {
+                if (PayloadState.instance.currentCheckpoint < PayloadState.instance.checkpointIndexes.length && PayloadState.instance.checkpointIndexes[PayloadState.instance.currentCheckpoint] === i) {
                     const objectiveConfig = PayloadConfig.checkpointObjectives[o];
                     const spawnPos = mod.Add(waypoint.position, objectiveConfig.relativeOffset);
                     const spawnRot = mod.Add(waypoint.rotation, objectiveConfig.rotation);
@@ -132,18 +131,18 @@ export class PayloadCore {
                         spawnRot,
                         objectiveConfig.scale
                     );
-                    PayloadCore.state.checkpointObjectives.set(key, obj as mod.CapturePoint);
+                    PayloadState.instance.checkpointObjectives.set(key, obj as mod.CapturePoint);
                 }
             }
 
             for (let v = 0; v < PayloadConfig.checkpointVfx.length; v++) {
                 const key = `${i}-${v}`;
-                if (PayloadCore.state.checkpointVfx.has(key)) {
-                    mod.UnspawnObject(PayloadCore.state.checkpointVfx.get(key)!);
-                    PayloadCore.state.checkpointVfx.delete(key);
+                if (PayloadState.instance.checkpointVfx.has(key)) {
+                    mod.UnspawnObject(PayloadState.instance.checkpointVfx.get(key)!);
+                    PayloadState.instance.checkpointVfx.delete(key);
                 }
                 const vfxConfig = PayloadConfig.checkpointVfx[v];
-                const color = PayloadCore.state.reachedCheckpointIndex < i ? vfxConfig.color1 : vfxConfig.color2;
+                const color = PayloadState.instance.reachedCheckpointIndex < i ? vfxConfig.color1 : vfxConfig.color2;
                 const spawnPos = mod.Add(waypoint.position, vfxConfig.relativeOffset);
                 const spawnRot = mod.Add(waypoint.rotation, vfxConfig.rotation);
                 const vfx = mod.SpawnObject(
@@ -152,7 +151,7 @@ export class PayloadCore {
                     spawnRot,
                     mod.CreateVector(1, 1, 1)
                 ) as mod.VFX;
-                PayloadCore.state.checkpointVfx.set(key, vfx);
+                PayloadState.instance.checkpointVfx.set(key, vfx);
                 mod.EnableVFX(vfx, true);
                 mod.SetVFXScale(vfx, vfxConfig.scale);
                 mod.SetVFXColor(vfx, color);
@@ -163,12 +162,12 @@ export class PayloadCore {
 
     private static applyPayloadVfx(): void {
         PayloadConfig.payloadVfx.forEach((vfxConfig, i) => {
-            const wp = PayloadCore.state.waypoints[PayloadCore.state.reachedWaypointIndex];
+            const wp = PayloadState.instance.waypoints[PayloadState.instance.reachedWaypointIndex];
             const spawnPos = mod.Add(wp.position, vfxConfig.relativeOffset);
             const spawnRot = mod.Add(wp.rotation, vfxConfig.rotation);
-            if (PayloadCore.state.payloadVfx.has(i)) {
-                mod.UnspawnObject(PayloadCore.state.payloadVfx.get(i)!);
-                PayloadCore.state.payloadVfx.delete(i);
+            if (PayloadState.instance.payloadVfx.has(i)) {
+                mod.UnspawnObject(PayloadState.instance.payloadVfx.get(i)!);
+                PayloadState.instance.payloadVfx.delete(i);
             }
             const vfx = mod.SpawnObject(
                 vfxConfig.prefab,
@@ -176,7 +175,7 @@ export class PayloadCore {
                 spawnRot,
                 mod.CreateVector(1, 1, 1)
             ) as mod.VFX;
-            PayloadCore.state.payloadVfx.set(i, vfx);
+            PayloadState.instance.payloadVfx.set(i, vfx);
             mod.EnableVFX(vfx, true);
             mod.SetVFXColor(vfx, vfxConfig.color1);
             mod.SetVFXSpeed(vfx, vfxConfig.speed);
@@ -185,36 +184,36 @@ export class PayloadCore {
     }
 
     private static initPayloadRotation(): void {
-        const wpCount = PayloadCore.state.waypoints.length;
+        const wpCount = PayloadState.instance.waypoints.length;
         for (let i = 0; i < wpCount; i++) {
             const prevIndex = Math.max(i - 1, 0);
             const nextIndex = Math.min(i + 1, wpCount - 1);
             const nextNextIndex = Math.min(i + 2, wpCount - 1);
 
-            const p0 = PayloadCore.state.waypoints[prevIndex].position;
-            const p1 = PayloadCore.state.waypoints[i].position;
-            const p2 = PayloadCore.state.waypoints[nextIndex].position;
-            const p3 = PayloadCore.state.waypoints[nextNextIndex].position;
+            const p0 = PayloadState.instance.waypoints[prevIndex].position;
+            const p1 = PayloadState.instance.waypoints[i].position;
+            const p2 = PayloadState.instance.waypoints[nextIndex].position;
+            const p3 = PayloadState.instance.waypoints[nextNextIndex].position;
 
             const tangent = PayloadCore.getSplineTangent(p0, p1, p2, p3, 0);
             const rotation = PayloadCore.getRotationFromTangent(tangent, false);
 
-            PayloadCore.state.waypoints[i].rotation = rotation;
+            PayloadState.instance.waypoints[i].rotation = rotation;
 
             if (i === 0) {
-                PayloadCore.state.payloadRotation = rotation;
+                PayloadState.instance.payloadRotation = rotation;
             }
         }
     }
 
     private static initPayloadObjective(): void {
-        const start = PayloadCore.state.waypoints[PayloadCore.state.reachedWaypointIndex];
+        const start = PayloadState.instance.waypoints[PayloadState.instance.reachedWaypointIndex];
         PayloadCore.applyPayloadVfx();
 
-        PayloadCore.state.payloadSpatialsConfig = [];
+        PayloadState.instance.payloadSpatialsConfig = [];
         for (const payloadSpatialId of PayloadConfig.payloadSpatialIdentifiers) {
             if(PayloadCore.isSpatialValid(payloadSpatialId) && payloadSpatialId === 5000) {
-                PayloadCore.state.payloadSpatialsConfig.push(
+                PayloadState.instance.payloadSpatialsConfig.push(
                     {
                         prefab: mod.RuntimeSpawn_Abbasid.GM1083CargoTruck_01_Canopy,
                         relativeOffset: mod.CreateVector(0, -0.1, 0),
@@ -224,7 +223,7 @@ export class PayloadCore {
                 );
             }
             if (PayloadCore.isSpatialValid(payloadSpatialId) && payloadSpatialId === 5001) {
-                PayloadCore.state.payloadSpatialsConfig.push(
+                PayloadState.instance.payloadSpatialsConfig.push(
                     {
                         prefab: mod.RuntimeSpawn_Tungsten.GM1083CargoTruck_01_Canopy_Cargo01,
                         relativeOffset: mod.CreateVector(0, -0.1, 0),
@@ -235,8 +234,8 @@ export class PayloadCore {
             }
         }
 
-        for (let i = 0; i < PayloadCore.state.payloadSpatialsConfig.length; i++) {
-            const spatialConfig = PayloadCore.state.payloadSpatialsConfig[i];
+        for (let i = 0; i < PayloadState.instance.payloadSpatialsConfig.length; i++) {
+            const spatialConfig = PayloadState.instance.payloadSpatialsConfig[i];
             const spawnPos = mod.Add(start.position, spatialConfig.relativeOffset);
             const spawnRot = mod.Add(start.rotation, spatialConfig.rotation);
             const obj = mod.SpawnObject(
@@ -245,7 +244,7 @@ export class PayloadCore {
                 spawnRot,
                 spatialConfig.scale
             );
-            PayloadCore.state.payloadSpatials.set(i, obj);
+            PayloadState.instance.payloadSpatials.set(i, obj);
         }
 
         for (let i = 0; i < PayloadConfig.payloadObjectives.length; i++) {
@@ -258,7 +257,7 @@ export class PayloadCore {
                 spawnRot,
                 objectiveConfig.scale
             );
-            PayloadCore.state.payloadObjectives.set(i, obj);
+            PayloadState.instance.payloadObjectives.set(i, obj);
         }
     }
 
@@ -274,29 +273,24 @@ export class PayloadCore {
         }
     }
 
-    private static getAlivePlayersInProximity(position: mod.Vector, radius: number): { t1: mod.Player[]; t2: mod.Player[] } {
+    private static getAlivePlayersInProximity(): void {
+        PayloadState.instance.playersInPushProximity.clear();
         const players = mod.AllPlayers();
-        const t1: mod.Player[] = [];
-        const t2: mod.Player[] = [];
-        const team1 = mod.GetTeam(1);
-        const team2 = mod.GetTeam(2);
         const playerCount = mod.CountOf(players);
 
         for (let i = 0; i < playerCount; i++) {
             const player = mod.ValueInArray(players, i) as mod.Player;
             if (mod.GetSoldierState(player, mod.SoldierStateBool.IsAlive)) {
                 const playerPos = mod.GetSoldierState(player, mod.SoldierStateVector.GetPosition);
-                if (mod.DistanceBetween(position, playerPos) <= radius) {
-                    const team = mod.GetTeam(player);
-                    if (mod.Equals(team, team1)) {
-                        t1.push(player);
-                    } else if (mod.Equals(team, team2)) {
-                        t2.push(player);
+                if (mod.DistanceBetween(PayloadState.instance.payloadPosition, playerPos) <= PayloadConfig.pushProximityRadius) {
+                    const teamId = mod.GetObjId(mod.GetTeam(player));
+                    if(!PayloadState.instance.playersInPushProximity.has(teamId)) {
+                        PayloadState.instance.playersInPushProximity.set(teamId, []);
                     }
+                    PayloadState.instance.playersInPushProximity.get(teamId)!.push(player);
                 }
             }
         }
-        return { t1, t2 };
     }
 
     private static catmullRom(p0: mod.Vector, p1: mod.Vector, p2: mod.Vector, p3: mod.Vector, t: number): mod.Vector {
@@ -381,7 +375,7 @@ export class PayloadCore {
 
         const length = Math.sqrt(x * x + y * y + z * z);
         if (length < 0.0001) {
-            return PayloadCore.state.payloadRotation ?? mod.CreateVector(0, 0, 0);
+            return PayloadState.instance.payloadRotation ?? mod.CreateVector(0, 0, 0);
         }
 
         const nx = x / length;
@@ -392,9 +386,9 @@ export class PayloadCore {
         const pitch = -Math.asin(ny);
         const roll = 0;
 
-        if (useSmoothing && PayloadCore.state.payloadRotation) {
-            const prevPitch = mod.XComponentOf(PayloadCore.state.payloadRotation);
-            const prevYaw = mod.YComponentOf(PayloadCore.state.payloadRotation);
+        if (useSmoothing && PayloadState.instance.payloadRotation) {
+            const prevPitch = mod.XComponentOf(PayloadState.instance.payloadRotation);
+            const prevYaw = mod.YComponentOf(PayloadState.instance.payloadRotation);
 
             const smoothFactor = 0.1;
 
@@ -413,25 +407,25 @@ export class PayloadCore {
     }
 
     private static moveAlongSpline(forward: boolean, speed: number): void {
-        let wpIndex = PayloadCore.state.reachedWaypointIndex;
-        const wpCount = PayloadCore.state.waypoints.length;
+        let wpIndex = PayloadState.instance.reachedWaypointIndex;
+        const wpCount = PayloadState.instance.waypoints.length;
 
         if (wpIndex >= wpCount - 1 && forward) {
             return;
         }
 
-        PayloadCore.state.segmentDistance = PayloadCore.state.segmentDistance || 0;
-        PayloadCore.state.segmentDistance += forward ? speed : -speed;
+        PayloadState.instance.segmentDistance = PayloadState.instance.segmentDistance || 0;
+        PayloadState.instance.segmentDistance += forward ? speed : -speed;
 
         while (true) {
             const prevIndex = Math.max(wpIndex - 1, 0);
             const nextIndex = Math.min(wpIndex + 1, wpCount - 1);
             const nextNextIndex = Math.min(nextIndex + 1, wpCount - 1);
 
-            const prevWp = PayloadCore.state.waypoints[prevIndex];
-            const currWp = PayloadCore.state.waypoints[wpIndex];
-            const nextWp = PayloadCore.state.waypoints[nextIndex];
-            const nextNextWp = PayloadCore.state.waypoints[nextNextIndex];
+            const prevWp = PayloadState.instance.waypoints[prevIndex];
+            const currWp = PayloadState.instance.waypoints[wpIndex];
+            const nextWp = PayloadState.instance.waypoints[nextIndex];
+            const nextNextWp = PayloadState.instance.waypoints[nextNextIndex];
             if (!prevWp || !currWp || !nextWp || !nextNextWp) break;
 
             const p0 = prevWp.position;
@@ -442,131 +436,157 @@ export class PayloadCore {
             const segmentLength = mod.DistanceBetween(p1, p2);
 
             if (wpIndex >= wpCount - 1) {
-                PayloadCore.state.segmentDistance = 0;
-                PayloadCore.state.payloadPosition = p1;
+                PayloadState.instance.segmentDistance = 0;
+                PayloadState.instance.payloadPosition = p1;
                 break;
             }
 
-            if (PayloadCore.state.segmentDistance >= segmentLength && forward && wpIndex < wpCount - 1) {
-                PayloadCore.state.segmentDistance -= segmentLength;
+            if (PayloadState.instance.segmentDistance >= segmentLength && forward && wpIndex < wpCount - 1) {
+                PayloadState.instance.segmentDistance -= segmentLength;
                 wpIndex = nextIndex;
-                PayloadCore.state.reachedWaypointIndex = wpIndex;
+                PayloadState.instance.reachedWaypointIndex = wpIndex;
 
-                if (nextWp.isCheckpoint && PayloadCore.state.reachedCheckpointIndex < nextIndex) {
-                    PayloadCore.state.reachedCheckpointIndex = nextIndex;
-                    PayloadCore.state.currentCheckpoint++;
+                if (nextWp.isCheckpoint && PayloadState.instance.reachedCheckpointIndex < nextIndex) {
+                    PayloadState.instance.reachedCheckpointIndex = nextIndex;
+                    PayloadState.instance.currentCheckpoint++;
                     PayloadCore.onCheckpointReached();
                 }
                 continue;
             }
 
-            if (PayloadCore.state.segmentDistance <= 0 && !forward && wpIndex > 0) {
+            if (PayloadState.instance.segmentDistance <= 0 && !forward && wpIndex > 0) {
                 wpIndex = wpIndex - 1;
-                PayloadCore.state.reachedWaypointIndex = wpIndex;
+                PayloadState.instance.reachedWaypointIndex = wpIndex;
 
-                const prevWaypoint = PayloadCore.state.waypoints[wpIndex];
-                const currentWaypoint = PayloadCore.state.waypoints[wpIndex + 1];
+                const prevWaypoint = PayloadState.instance.waypoints[wpIndex];
+                const currentWaypoint = PayloadState.instance.waypoints[wpIndex + 1];
                 if (!prevWaypoint || !currentWaypoint) {
                     break;
                 }
                 const prevWpPos = prevWaypoint.position;
                 const currWpPos = currentWaypoint.position;
-                PayloadCore.state.segmentDistance += mod.DistanceBetween(prevWpPos, currWpPos);
+                PayloadState.instance.segmentDistance += mod.DistanceBetween(prevWpPos, currWpPos);
                 continue;
             }
 
-            const t = PayloadCore.getTForDistanceDynamic(p0, p1, p2, p3, PayloadCore.state.segmentDistance);
+            const t = PayloadCore.getTForDistanceDynamic(p0, p1, p2, p3, PayloadState.instance.segmentDistance);
 
-            PayloadCore.state.payloadPosition = PayloadCore.catmullRom(p0, p1, p2, p3, t);
+            PayloadState.instance.payloadPosition = PayloadCore.catmullRom(p0, p1, p2, p3, t);
             const tangent = PayloadCore.getSplineTangent(p0, p1, p2, p3, t);
-            PayloadCore.state.payloadRotation = PayloadCore.getRotationFromTangent(tangent);
+            PayloadState.instance.payloadRotation = PayloadCore.getRotationFromTangent(tangent);
             break;
         }
     }
 
     private static onCheckpointReached(): void {
-        if (PayloadCore.state.payloadState !== PayloadStateType.ADVANCING) return;
+        if (PayloadState.instance.payloadState !== PayloadMovementState.ADVANCING) return;
 
         PayloadSounds.playCheckpointReachedSound();
 
-        if (PayloadCore.state.reachedWaypointIndex == PayloadCore.state.waypoints.length - 1) {
+        if (PayloadState.instance.reachedWaypointIndex == PayloadState.instance.waypoints.length - 1) {
             void PayloadCore.onFinalCheckpointReached();
         } else {
-            mod.EnableHQ(mod.GetHQ((PayloadCore.state.currentCheckpoint - 1) + 300), false);
-            mod.EnableHQ(mod.GetHQ((PayloadCore.state.currentCheckpoint - 1) + 400), false);
+            mod.EnableHQ(mod.GetHQ((PayloadState.instance.currentCheckpoint - 1) + 300), false);
+            mod.EnableHQ(mod.GetHQ((PayloadState.instance.currentCheckpoint - 1) + 400), false);
 
             void PayloadUI.updateCheckpointUI();
             PayloadCore.applyCheckpointFx();
-            mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.checkpoint_reached, PayloadCore.state.currentCheckpoint - 1, PayloadCore.state.maxCheckpoints - 1));
-            PayloadCore.state.checkpointStartTime = mod.GetMatchTimeElapsed();
+            mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.state.checkpoint_reached, PayloadState.instance.currentCheckpoint - 1, PayloadState.instance.maxCheckpoints - 1));
+            PayloadState.instance.checkpointStartTime = mod.GetMatchTimeElapsed();
 
-            mod.EnableHQ(mod.GetHQ(PayloadCore.state.currentCheckpoint + 300), true);
-            mod.EnableHQ(mod.GetHQ(PayloadCore.state.currentCheckpoint + 400), true);
-            mod.EnableGameModeObjective(mod.GetSector(PayloadCore.state.currentCheckpoint + 101), true);
-            mod.EnableGameModeObjective(mod.GetSector(PayloadCore.state.currentCheckpoint + 98), false);
+            mod.EnableHQ(mod.GetHQ(PayloadState.instance.currentCheckpoint + 300), true);
+            mod.EnableHQ(mod.GetHQ(PayloadState.instance.currentCheckpoint + 400), true);
+            mod.EnableGameModeObjective(mod.GetSector(PayloadState.instance.currentCheckpoint + 101), true);
+            mod.EnableGameModeObjective(mod.GetSector(PayloadState.instance.currentCheckpoint + 98), false);
         }
     }
 
-    private static setPayloadState(state: PayloadStateType): void {
-        if (PayloadCore.state.payloadState !== state) {
-            PayloadCore.state.payloadState = state;
+    private static setPayloadState(state: PayloadMovementState): void {
+        if (PayloadState.instance.payloadState !== state) {
+            PayloadState.instance.payloadState = state;
             PayloadUI.updateStatusUI();
         }
     }
 
-    private static pushForward(counts: { t1: mod.Player[]; t2: mod.Player[] }): void {
-        if (PayloadCore.state.reachedWaypointIndex >= PayloadCore.state.waypoints.length - 1) {
-            PayloadCore.setPayloadState(PayloadStateType.LOCKED);
+    private static pushForward(): void {
+        if (PayloadState.instance.reachedWaypointIndex >= PayloadState.instance.waypoints.length - 1) {
+            PayloadCore.setPayloadState(PayloadMovementState.LOCKED);
             PayloadSounds.playPayloadIdleSound();
             return;
         }
-        const speedAddtion = PayloadConfig.payloadSpeedT1.meterPerSecondPerPlayer * (counts.t1.length - counts.t2.length);
-        const speed = (PayloadConfig.payloadSpeedT1.meterPerSecond + speedAddtion) / PayloadCore.state.tickrate;
-        PayloadCore.setPayloadState(PayloadStateType.ADVANCING);
+        const playersInAdvantage = (
+            PayloadState.instance.playersInPushProximity.get(1)!.length - 
+            PayloadState.instance.playersInPushProximity.get(2)!.length
+        );
+        const speedAddtion = (
+            PayloadConfig.payloadSpeed.get(1)!.meterPerSecondPerPlayer * 
+            playersInAdvantage
+        );
+        const speed = (
+            (
+                PayloadConfig.payloadSpeed.get(1)!.meterPerSecond + 
+                speedAddtion
+            ) / 
+            PayloadState.instance.tickrate
+        );
+        PayloadCore.setPayloadState(PayloadMovementState.ADVANCING);
         PayloadCore.moveAlongSpline(true, speed);
         PayloadSounds.VOPushing();
     }
 
-    private static pushBackward(counts: { t1: mod.Player[]; t2: mod.Player[] }): void {
-        if (PayloadCore.state.reachedWaypointIndex <= (PayloadCore.state.reachedCheckpointIndex - 1) || (PayloadCore.state.reachedWaypointIndex == 0 && (PayloadCore.state.segmentDistance || 0) <= 0)) {
-            if (PayloadCore.state.reachedWaypointIndex == 0 && (PayloadCore.state.segmentDistance || 0) < 0) {
-                PayloadCore.state.segmentDistance = 0;
+    private static pushBackward(): void {
+        if (PayloadState.instance.reachedWaypointIndex <= (PayloadState.instance.reachedCheckpointIndex - 1) || (PayloadState.instance.reachedWaypointIndex == 0 && (PayloadState.instance.segmentDistance || 0) <= 0)) {
+            if (PayloadState.instance.reachedWaypointIndex == 0 && (PayloadState.instance.segmentDistance || 0) < 0) {
+                PayloadState.instance.segmentDistance = 0;
             }
-            PayloadCore.setPayloadState(PayloadStateType.LOCKED);
+            PayloadCore.setPayloadState(PayloadMovementState.LOCKED);
             return;
         }
-        const speedAddtion = PayloadConfig.payloadSpeedT2.meterPerSecondPerPlayer * (counts.t2.length - counts.t1.length);
-        const speed = (PayloadConfig.payloadSpeedT2.meterPerSecond + speedAddtion) / PayloadCore.state.tickrate;
-        PayloadCore.setPayloadState(PayloadStateType.PUSHING_BACK);
+        const playersInAdvantage = (
+            PayloadState.instance.playersInPushProximity.get(2)!.length - 
+            PayloadState.instance.playersInPushProximity.get(1)!.length
+        );
+        const speedAddtion = (
+            PayloadConfig.payloadSpeed.get(2)!.meterPerSecondPerPlayer * 
+            playersInAdvantage
+        );
+        const speed = (
+            (
+                PayloadConfig.payloadSpeed.get(2)!.meterPerSecond + 
+                speedAddtion
+            ) / 
+            PayloadState.instance.tickrate
+        );
+        PayloadCore.setPayloadState(PayloadMovementState.PUSHING_BACK);
         PayloadCore.moveAlongSpline(false, speed);
         PayloadSounds.VOPushingBack();
     }
 
     private static getPayloadSpatialConfig(index: number): SpatialConfig | undefined {
-        return PayloadCore.state.payloadSpatialsConfig[index];
+        return PayloadState.instance.payloadSpatialsConfig[index];
     }
 
     private static updatePayloadObject(): void {
-        const rotation = PayloadCore.state.payloadRotation;
+        const rotation = PayloadState.instance.payloadRotation;
 
-        PayloadCore.state.payloadVfx.forEach((vfx, index) => {
+        PayloadState.instance.payloadVfx.forEach((vfx, index) => {
             const config = PayloadConfig.payloadVfx[index];
-            const worldPos = mod.Add(PayloadCore.state.payloadPosition, config.relativeOffset);
+            const worldPos = mod.Add(PayloadState.instance.payloadPosition, config.relativeOffset);
             const worldRot = mod.Add(rotation, config.rotation);
             mod.MoveVFX(vfx, worldPos, worldRot);
         });
 
-        PayloadCore.state.payloadSpatials.forEach((obj, index) => {
+        PayloadState.instance.payloadSpatials.forEach((obj, index) => {
             const config = PayloadCore.getPayloadSpatialConfig(index);
             if (!config) return;
-            const worldPos = mod.Add(PayloadCore.state.payloadPosition, config.relativeOffset);
+            const worldPos = mod.Add(PayloadState.instance.payloadPosition, config.relativeOffset);
             const worldRot = mod.Add(rotation, config.rotation);
             mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, worldRot));
         });
 
-        PayloadCore.state.payloadObjectives.forEach((obj, index) => {
+        PayloadState.instance.payloadObjectives.forEach((obj, index) => {
             const config = PayloadConfig.payloadObjectives[index];
-            const worldPos = mod.Add(PayloadCore.state.payloadPosition, config.relativeOffset);
+            const worldPos = mod.Add(PayloadState.instance.payloadPosition, config.relativeOffset);
             const worldRot = mod.Add(rotation, config.rotation);
             mod.SetObjectTransform(obj, mod.CreateTransform(worldPos, worldRot));
         });
@@ -576,30 +596,30 @@ export class PayloadCore {
         PayloadCore.calculatePayloadProgress();
         PayloadCore.updatePayloadObject();
         PayloadUI.updateProgressUI();
-        if (PayloadCore.state.progressInPercent > 90) {
+        if (PayloadState.instance.progressInPercent > 90) {
             PayloadSounds.playNearEndMusic();
             PayloadSounds.playNearEndVO();
         }
     }
 
     private static executeEverySecond(): void {
-        if (PayloadCore.state.lastElapsedSeconds >= PayloadConfig.gameModeTime && !PayloadCore.state.overtime) {
+        if (PayloadState.instance.lastElapsedSeconds >= PayloadConfig.maxGameModeTime && !PayloadState.instance.overtime) {
             PayloadCore.onRunningOutOfTime();
             return;
         }
 
-        if (PayloadCore.state.lastElapsedSeconds % PayloadConfig.spatialRespawnInterval === 0) {
-            if (PayloadCore.state.progressInPercent < 100) {
+        if (PayloadState.instance.lastElapsedSeconds % PayloadConfig.spatialRespawnInterval === 0) {
+            if (PayloadState.instance.progressInPercent < 100) {
                 PayloadCore.respawnPayloadSpatials();
             }
         }
 
-        const elapsedSinceCheckpoint = PayloadCore.state.lastElapsedSeconds - PayloadCore.state.checkpointStartTime;
+        const elapsedSinceCheckpoint = PayloadState.instance.lastElapsedSeconds - PayloadState.instance.checkpointStartTime;
         const remainingTime = PayloadConfig.defaultCheckpointTime - elapsedSinceCheckpoint;
-        if (PayloadCore.state.progressInPercent < 100) {
+        if (PayloadState.instance.progressInPercent < 100) {
             PayloadUI.updateCheckpointTimer(remainingTime);
         }
-        if (remainingTime <= 0 && !PayloadCore.state.overtime) {
+        if (remainingTime <= 0 && !PayloadState.instance.overtime) {
             PayloadCore.onRunningOutOfTime();
             return;
         }
@@ -611,14 +631,14 @@ export class PayloadCore {
     }
 
     private static respawnPayloadSpatials(): void {
-        const rotation = PayloadCore.state.payloadRotation;
+        const rotation = PayloadState.instance.payloadRotation;
 
-        PayloadCore.state.payloadSpatials.forEach((obj, index) => {
+        PayloadState.instance.payloadSpatials.forEach((obj, index) => {
             mod.UnspawnObject(obj);
 
             const config = PayloadCore.getPayloadSpatialConfig(index);
             if (!config) return;
-            const worldPos = mod.Add(PayloadCore.state.payloadPosition, config.relativeOffset);
+            const worldPos = mod.Add(PayloadState.instance.payloadPosition, config.relativeOffset);
             const worldRot = mod.Add(rotation, config.rotation);
 
             const newObj = mod.SpawnObject(
@@ -627,20 +647,20 @@ export class PayloadCore {
                 worldRot,
                 config.scale
             );
-            PayloadCore.state.payloadSpatials.set(index, newObj);
+            PayloadState.instance.payloadSpatials.set(index, newObj);
         });
     }
 
     private static async onFinalCheckpointReached(): Promise<void> {
-        if (!PayloadCore.state.gameOngoing) return;
-        PayloadCore.state.gameOngoing = false;
+        if (!PayloadState.instance.gameOngoing) return;
+        PayloadState.instance.gameOngoing = false;
         mod.PauseGameModeTime(true);
         PayloadSounds.playPayloadIdleSound();
         PayloadSounds.endGameMusic(1);
-        PayloadCore.state.payloadObjectives.forEach((obj) => {
+        PayloadState.instance.payloadObjectives.forEach((obj) => {
             mod.UnspawnObject(obj);
         });
-        PayloadCore.state.payloadVfx.forEach((vfx) => {
+        PayloadState.instance.payloadVfx.forEach((vfx) => {
             mod.UnspawnObject(vfx);
         });
         await PayloadUI.nukeUI();
@@ -648,16 +668,16 @@ export class PayloadCore {
     }
 
     private static onRunningOutOfTime(): void {
-        if (!PayloadCore.state.gameOngoing) return;
-        PayloadCore.state.gameOngoing = false;
+        if (!PayloadState.instance.gameOngoing) return;
+        PayloadState.instance.gameOngoing = false;
         PayloadSounds.endGameMusic(2);
         mod.PauseGameModeTime(true);
         mod.EndGameMode(mod.GetTeam(2));
     }
 
     public static OnGameModeStarted(): void {
-        mod.SetGameModeTimeLimit(3600);
-        mod.SetGameModeTargetScore(1000);
+        mod.SetGameModeTimeLimit(PayloadConfig.maxGameModeTime);
+        mod.SetGameModeTargetScore(PayloadConfig.gameModeTargetScore);
         mod.Wait(3);
         PayloadCore.initSectors();
         PayloadCore.initPayloadTrack();
@@ -667,7 +687,7 @@ export class PayloadCore {
         PayloadSounds.init();
         PayloadScoring.initScoreboard();
 
-        PayloadCore.state.checkpointStartTime = mod.GetMatchTimeElapsed();
+        PayloadState.instance.checkpointStartTime = mod.GetMatchTimeElapsed();
 
         PayloadUI.setup();
         PayloadWeather.init();
@@ -696,13 +716,13 @@ export class PayloadCore {
     public static OnPlayerEnterAreaTrigger(eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger): void {
         mod.SetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.PlayArea), mod.GetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.PlayArea)) + 1);
         if (mod.Equals(mod.GetTeam(eventPlayer), mod.GetTeam(1))) {
-            if (mod.GetObjId(eventAreaTrigger) > (PayloadCore.state.currentCheckpoint + 600)) {
+            if (mod.GetObjId(eventAreaTrigger) > (PayloadState.instance.currentCheckpoint + 600)) {
                 void PayloadUI.outOfBoundsUI(eventPlayer);
             } else {
                 mod.SetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.OutofBounds), false);
             }
         } else {
-            if (mod.GetObjId(eventAreaTrigger) < (PayloadCore.state.currentCheckpoint + 600)) {
+            if (mod.GetObjId(eventAreaTrigger) < (PayloadState.instance.currentCheckpoint + 600)) {
                 void PayloadUI.outOfBoundsUI(eventPlayer);
             } else {
                 mod.SetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.OutofBounds), false);
@@ -742,60 +762,62 @@ export class PayloadCore {
     }
 
     public static OngoingGlobal(): void {
-        if (!PayloadCore.state.gameOngoing) return;
+        if (!PayloadState.instance.gameOngoing) return;
         const elapsedSeconds = mod.GetMatchTimeElapsed();
-        const counts = PayloadCore.getAlivePlayersInProximity(PayloadCore.state.payloadPosition, PayloadConfig.pushProximityRadius);
+        PayloadCore.getAlivePlayersInProximity();
+        const playersTeam1 = PayloadState.instance.playersInPushProximity.get(1) || [];
+        const playersTeam2 = PayloadState.instance.playersInPushProximity.get(2) || [];
 
-        if (counts.t1.length > counts.t2.length) {
-            PayloadCore.pushForward(counts);
+        if (playersTeam1.length > playersTeam2.length) {
+            PayloadCore.pushForward();
             PayloadCore.onPayloadMoved();
-            PayloadCore.state.overtime = true;
-        } else if (counts.t2.length > counts.t1.length) {
-            PayloadCore.pushBackward(counts);
+            PayloadState.instance.overtime = true;
+        } else if (playersTeam2.length > playersTeam1.length) {
+            PayloadCore.pushBackward();
             PayloadCore.onPayloadMoved();
-            PayloadCore.state.overtime = false;
-        } else if (counts.t1.length > 0 && counts.t2.length > 0) {
-            PayloadCore.setPayloadState(PayloadStateType.CONTESTED);
+            PayloadState.instance.overtime = false;
+        } else if (playersTeam1.length > 0 && playersTeam2.length > 0) {
+            PayloadCore.setPayloadState(PayloadMovementState.CONTESTED);
             PayloadSounds.playPayloadIdleSound();
-            PayloadCore.state.overtime = true;
+            PayloadState.instance.overtime = true;
         } else {
-            PayloadCore.setPayloadState(PayloadStateType.IDLE);
+            PayloadCore.setPayloadState(PayloadMovementState.IDLE);
             PayloadSounds.playPayloadIdleSound();
-            PayloadCore.state.overtime = false;
+            PayloadState.instance.overtime = false;
         }
 
         PayloadSounds.updateSoundPositions();
-        PayloadUI.updatePlayerCountUI(counts.t1.length, counts.t2.length);
+        PayloadUI.updatePlayerCountUI();
 
-        if (PayloadCore.state.lastElapsedSeconds != Math.floor(elapsedSeconds)) {
-            PayloadCore.state.lastElapsedSeconds = Math.floor(elapsedSeconds);
-            for (const p of counts.t1) {
-                if (PayloadCore.state.payloadState == PayloadStateType.ADVANCING) {
+        if (PayloadState.instance.lastElapsedSeconds != Math.floor(elapsedSeconds)) {
+            PayloadState.instance.lastElapsedSeconds = Math.floor(elapsedSeconds);
+            for (const p of playersTeam1) {
+                if (PayloadState.instance.payloadState == PayloadMovementState.ADVANCING) {
                     PayloadSounds.playPayloadProgressingSound(p);
                     PayloadScoring.awardObjectivePoints(p, PayloadConfig.objectiveScorePerSecond);
-                } else if (PayloadCore.state.payloadState == PayloadStateType.PUSHING_BACK) {
+                } else if (PayloadState.instance.payloadState == PayloadMovementState.PUSHING_BACK) {
                     PayloadSounds.playPayloadReversingSound(p);
                 }
             }
-            for (const p of counts.t2) {
-                if (PayloadCore.state.payloadState == PayloadStateType.PUSHING_BACK) {
+            for (const p of playersTeam2) {
+                if (PayloadState.instance.payloadState == PayloadMovementState.PUSHING_BACK) {
                     PayloadSounds.playPayloadProgressingSound(p);
                     PayloadScoring.awardObjectivePoints(p, PayloadConfig.objectiveScorePerSecond);
-                } else if (PayloadCore.state.payloadState == PayloadStateType.ADVANCING) {
+                } else if (PayloadState.instance.payloadState == PayloadMovementState.ADVANCING) {
                     PayloadSounds.playPayloadReversingSound(p);
                 }
             }
 
-            PayloadCore.state.pastTickRates.shift();
-            PayloadCore.state.pastTickRates.push(PayloadCore.state.ticks);
-            const newTickrate = PayloadCore.state.pastTickRates.reduce((a, b) => a + b) / PayloadCore.state.pastTickRates.length;
-            if (newTickrate != PayloadCore.state.tickrate && Math.abs(newTickrate - PayloadCore.state.tickrate) > 5) {
-                PayloadCore.state.tickrate = newTickrate;
+            PayloadState.instance.pastTickRates.shift();
+            PayloadState.instance.pastTickRates.push(PayloadState.instance.ticks);
+            const newTickrate = PayloadState.instance.pastTickRates.reduce((a, b) => a + b) / PayloadState.instance.pastTickRates.length;
+            if (newTickrate != PayloadState.instance.tickrate && Math.abs(newTickrate - PayloadState.instance.tickrate) > 5) {
+                PayloadState.instance.tickrate = newTickrate;
             }
-            PayloadCore.state.ticks = 0;
+            PayloadState.instance.ticks = 0;
             PayloadCore.executeEverySecond();
         }
-        PayloadCore.state.ticks++;
+        PayloadState.instance.ticks++;
         if (PayloadConfig.enableDebug) {
             PayloadUI.updateDebugUI();
         }
@@ -823,7 +845,7 @@ export class PayloadCore {
      * @param eventPlayer - The player who should be made immortal
      */
     public static async playerEndState(eventPlayer: mod.Player): Promise<void> {
-        if (!PayloadCore.state.gameOngoing) {
+        if (!PayloadState.instance.gameOngoing) {
             if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) {
                 mod.SetPlayerMaxHealth(eventPlayer, 500);
                 mod.Heal(eventPlayer, 500);

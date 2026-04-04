@@ -1,5 +1,5 @@
 import { PayloadPlayerVars } from './PayloadConfig.ts';
-import { PayloadState, PayloadStateType } from './PayloadState.ts';
+import { PayloadState, PayloadMovementState } from './PayloadState.ts';
 import { PayloadSounds } from './PayloadSounds.ts';
 
 const MAX_POOL_SIZE = 128;
@@ -147,28 +147,28 @@ export class PayloadUI {
         mod.SetUITextSize(mod.FindUIWidgetWithName('payloadstatus2'), 38);
 
         switch (PayloadUI.state.payloadState) {
-            case PayloadStateType.ADVANCING:
+            case PayloadMovementState.ADVANCING:
                 stateLabel = mod.stringkeys.payload.state.advancing;
                 mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon1'), PayloadUI.friendlycolour);
                 mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon2'), PayloadUI.enemycolour);
                 mod.SetUITextColor(mod.FindUIWidgetWithName('payloadstatus1'), PayloadUI.friendlycolour);
                 mod.SetUITextColor(mod.FindUIWidgetWithName('payloadstatus2'), PayloadUI.enemycolour);
                 break;
-            case PayloadStateType.PUSHING_BACK:
+            case PayloadMovementState.PUSHING_BACK:
                 stateLabel = mod.stringkeys.payload.state.pushing_back;
                 mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon1'), PayloadUI.enemycolour);
                 mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon2'), PayloadUI.friendlycolour);
                 mod.SetUITextColor(mod.FindUIWidgetWithName('payloadstatus1'), PayloadUI.enemycolour);
                 mod.SetUITextColor(mod.FindUIWidgetWithName('payloadstatus2'), PayloadUI.friendlycolour);
                 break;
-            case PayloadStateType.CONTESTED:
+            case PayloadMovementState.CONTESTED:
                 stateLabel = mod.stringkeys.payload.state.contested;
                 mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon1'), PayloadUI.goldcolour);
                 mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon2'), PayloadUI.goldcolour);
                 mod.SetUITextColor(mod.FindUIWidgetWithName('payloadstatus1'), PayloadUI.goldcolour);
                 mod.SetUITextColor(mod.FindUIWidgetWithName('payloadstatus2'), PayloadUI.goldcolour);
                 break;
-            case PayloadStateType.LOCKED:
+            case PayloadMovementState.LOCKED:
                 stateLabel = mod.stringkeys.payload.state.locked;
                 mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon1'), PayloadUI.goldcolour);
                 mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon2'), PayloadUI.goldcolour);
@@ -201,7 +201,9 @@ export class PayloadUI {
         mod.DeleteUIWidget(mod.FindUIWidgetWithName('checkpointreached'));
     }
 
-    public static updatePlayerCountUI(team1: number, team2: number): void {
+    public static updatePlayerCountUI(): void {
+        const team1 = PayloadState.instance.playersInPushProximity.get(1)?.length || 0;
+        const team2 = PayloadState.instance.playersInPushProximity.get(2)?.length || 0;
         mod.SetUITextLabel(mod.FindUIWidgetWithName('left_player_count1'), mod.Message(mod.stringkeys.payload.counter, team1));
         mod.SetUITextLabel(mod.FindUIWidgetWithName('left_player_count2'), mod.Message(mod.stringkeys.payload.counter, team2));
         mod.SetUITextLabel(mod.FindUIWidgetWithName('right_player_count1'), mod.Message(mod.stringkeys.payload.counter, team2));
@@ -242,15 +244,15 @@ export class PayloadUI {
         if (!PayloadUI.uiReady) return;
         for (let i = 10; i > 0; i -= 1) {
             const alpha = i / 10;
-            if (PayloadUI.state.payloadState == PayloadStateType.ADVANCING) {
+            if (PayloadUI.state.payloadState == PayloadMovementState.ADVANCING) {
                 mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progressflash1'), alpha);
                 mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progressflash2'), alpha);
             }
-            if (PayloadUI.state.payloadState == PayloadStateType.PUSHING_BACK) {
+            if (PayloadUI.state.payloadState == PayloadMovementState.PUSHING_BACK) {
                 mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progress_backgroundflash1'), alpha);
                 mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progress_backgroundflash2'), alpha);
             }
-            if (PayloadUI.state.payloadState == PayloadStateType.IDLE || PayloadUI.state.payloadState == PayloadStateType.LOCKED) {
+            if (PayloadUI.state.payloadState == PayloadMovementState.IDLE || PayloadUI.state.payloadState == PayloadMovementState.LOCKED) {
                 mod.SetUITextAlpha(mod.FindUIWidgetWithName('payloadstatus1'), 1);
                 mod.SetUITextAlpha(mod.FindUIWidgetWithName('payloadstatus2'), 1);
             } else {
@@ -260,7 +262,7 @@ export class PayloadUI {
             await mod.Wait(0.066);
         }
 
-        if (PayloadUI.state.payloadState == PayloadStateType.IDLE || PayloadUI.state.payloadState == PayloadStateType.LOCKED) {
+        if (PayloadUI.state.payloadState == PayloadMovementState.IDLE || PayloadUI.state.payloadState == PayloadMovementState.LOCKED) {
             mod.SetUITextAlpha(mod.FindUIWidgetWithName('payloadstatus1'), 1);
             mod.SetUITextAlpha(mod.FindUIWidgetWithName('payloadstatus2'), 1);
         } else {

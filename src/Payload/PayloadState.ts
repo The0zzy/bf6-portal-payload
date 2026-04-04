@@ -1,6 +1,6 @@
 import type { SpatialConfig } from './PayloadConfig.ts';
 
-export enum PayloadStateType {
+export enum PayloadMovementState {
     IDLE,
     CONTESTED,
     ADVANCING,
@@ -29,8 +29,10 @@ export interface PlayerUIData {
     containerWidget: mod.UIWidget;
 }
 
+export interface PlayerData extends PlayerScoring, PlayerUIData {}
+
 export class PayloadState {
-    private static instance: PayloadState;
+    public static readonly instance: PayloadState = new PayloadState();
 
     public ticks = 0;
     public tickrate = 30;
@@ -39,7 +41,7 @@ export class PayloadState {
     public lastElapsedSeconds = 0;
     public progress = 0;
     public firstAttackerSpawned = false;
-    public payloadState = PayloadStateType.IDLE;
+    public payloadState = PayloadMovementState.IDLE;
     public payloadPosition = mod.CreateVector(0, 0, 0);
     public waypoints: PayloadWaypoint[] = [];
     public reachedWaypointIndex = 0;
@@ -54,7 +56,8 @@ export class PayloadState {
     public checkpointStartTime = 0;
     public progressInMeters = 0;
     public progressInPercent = 0;
-    public playerScores: Map<number, PlayerScoring> = new Map<number, PlayerScoring>();
+    public playerData: Map<number, PlayerData> = new Map<number, PlayerData>();
+    public playersInPushProximity: Map<number, mod.Player[]> = new Map<number, mod.Player[]>();
     public payloadRotation = mod.CreateVector(0, 0, 0);
     public segmentT = 0;
     public splineTable: { t: number; distance: number }[] | null = null;
@@ -70,15 +73,5 @@ export class PayloadState {
     // Runtime-populated payload spatial config moved from config to state.
     public payloadSpatialsConfig: SpatialConfig[] = [];
 
-    // Per-player UI references (replaces ObjectVariable/get-variable UI handle usage).
-    public playerUI: Map<number, PlayerUIData> = new Map<number, PlayerUIData>();
-
     private constructor() {}
-
-    public static getInstance(): PayloadState {
-        if (!PayloadState.instance) {
-            PayloadState.instance = new PayloadState();
-        }
-        return PayloadState.instance;
-    }
 }

@@ -154,3 +154,12 @@ without disrupting the existing codebase. The migration will be done as follows:
   keep it around for reference during the migration and testing phase.
 - Once the new architecture is fully implemented and tested, we can remove the old files.
 - update AGENTS.md documentation to reflect the new architecture and guidelines for contributing to the codebase.
+
+## Additional Refactoring Log
+
+- make waypoints an array instead of map since we don't actually need the key value pair and it simplifies the code. We can just find the waypoint by its index in the array.
+- remove the vehicle logic
+- add helper function isSpatialValid()
+- config for payload speed parameters per team instead of a single config, to allow for asymmetrical game mode design in the future
+- move the game mode time limit and target score config to the config file and use them in the core logic instead of hardcoding them
+- store players in proximity in state instead of passing to other functions as parameters, since they are needed in multiple places and it simplifies the function signatures

@@ -30,12 +30,20 @@ export interface PayloadSpeedConfig {
 export class PayloadConfig {
     public static readonly enableTeamSwitch = true;
     public static readonly payloadSpatialIdentifiers: number[] = [5000, 5001];
-    public static readonly gameModeTime = 60 * 60;
-    public static readonly defaultCheckpointTime = 450;
+    public static readonly maxGameModeTime = 60 * 60; // 60 minutes as a safety net, but the game should end when the payload reaches the end of the track
+    public static readonly gameModeTargetScore = 1000;
+    public static readonly defaultCheckpointTime = 450; // 7.5 minutes in seconds, can be adjusted based on the length of the track and desired pacing
+    public static readonly sectorTimePerMeter = 0.75; // time in seconds that it takes to travel 1 meter, used for dynamic checkpoint time calculation based on the distance between checkpoints
+    
     public static readonly enablePayloadSound = true;
     public static readonly pushProximityRadius = 7.5;
-    public static readonly payloadSpeedT1: PayloadSpeedConfig = { meterPerSecond: 6.05, meterPerSecondPerPlayer: 0.25 };
-    public static readonly payloadSpeedT2: PayloadSpeedConfig = { meterPerSecond: 0.45, meterPerSecondPerPlayer: 0.0 };
+    /**
+     * The speed of the payload mapped to the team ID 
+     */
+    public static readonly payloadSpeed: Map<number, PayloadSpeedConfig> = new Map([
+        [1, { meterPerSecond: 6.05, meterPerSecondPerPlayer: 0.25 }],
+        [2, { meterPerSecond: 0.45, meterPerSecondPerPlayer: 0.0 }]
+    ]);
     public static readonly objectiveScorePerSecond = 5;
     public static readonly overtimeDuration = 60;
     public static readonly enableOvertime = true;
