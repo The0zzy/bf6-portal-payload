@@ -51,8 +51,6 @@ export class PayloadState {
     public payloadVfx: Map<number, mod.VFX> = new Map<number, mod.VFX>();
     public totalDistanceInMeters = 0;
     public reachedCheckpointIndex = 0;
-    public maxCheckpoints = 0;
-    public currentCheckpoint = 0;
     public checkpointStartTime = 0;
     public progressInMeters = 0;
     public progressInPercent = 0;

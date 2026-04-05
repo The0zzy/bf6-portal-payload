@@ -163,3 +163,14 @@ without disrupting the existing codebase. The migration will be done as follows:
 - config for payload speed parameters per team instead of a single config, to allow for asymmetrical game mode design in the future
 - move the game mode time limit and target score config to the config file and use them in the core logic instead of hardcoding them
 - store players in proximity in state instead of passing to other functions as parameters, since they are needed in multiple places and it simplifies the function signatures
+- review PayloadCore
+  - re-order and rename functions
+  - remove maxCheckPoints, currentCheckpoint variables as they are redundant since we can just use the checkpointIndexes array and the reachedCheckpointIndex variable to get the same information
+  - fix spawning only one capture point for next cehckpoint
+  - remove void prefixes for functions as they don't add any benefit beside silencing some linter warnings that actually don't matter in our case since we don't care about return values for these functions in general and it just adds unnecessary noise to the code
+  - use global PayloadState.instance - might as well go for public static variables in the PayloadState class instead of using a singleton pattern with getInstance() since we don't actually need multiple instances of the state and it simplifies the code even further. This way we can just access PayloadState.progress instead of PayloadState.getInstance().progress which is unnecessarily verbose for no real benefit.
+
+## Additional Todos
+
+- make VO for progress dynamic and not based on hard checkpoints 
+- set gameOngoing to true after initialization and not immediately when loading the state class

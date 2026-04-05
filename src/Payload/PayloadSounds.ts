@@ -1,8 +1,6 @@
 import { PayloadState } from './PayloadState.ts';
 
 export class PayloadSounds {
-    private static readonly state = PayloadState.getInstance();
-
     private static VOModule1: mod.VO;
     private static VOModule2: mod.VO;
 
@@ -32,8 +30,8 @@ export class PayloadSounds {
         PayloadSounds.reverseSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_CapturingTickEnemy_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
         PayloadSounds.OOBSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_OutOfBounds_Countdown_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
 
-        PayloadSounds.payloadMoving = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_Gamemodes_Payload_Breacher_Exterior_Accel_SimpleLoop3D, PayloadSounds.state.payloadPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
-        PayloadSounds.payloadIdle = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_Gamemodes_Payload_Breacher_Idle_SimpleLoop3D, PayloadSounds.state.payloadPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
+        PayloadSounds.payloadMoving = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_Gamemodes_Payload_Breacher_Exterior_Accel_SimpleLoop3D, PayloadState.instance.payloadPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
+        PayloadSounds.payloadIdle = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_Gamemodes_Payload_Breacher_Idle_SimpleLoop3D, PayloadState.instance.payloadPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
 
         mod.LoadMusic(mod.MusicPackages.Core);
         mod.SetMusicParam(mod.MusicParams.Core_Amplitude, 1);
@@ -46,10 +44,10 @@ export class PayloadSounds {
         PayloadSounds.nearendVO = false;
         mod.PlaySound(PayloadSounds.soundCheckpoint, 0.7);
         mod.PlayMusic(mod.MusicEvents.Core_PhaseBegin);
-        if (PayloadSounds.state.currentCheckpoint == (PayloadSounds.state.maxCheckpoints - 1)) {
+        if (PayloadState.instance.reachedCheckpointIndex == (PayloadState.instance.checkpointIndexes.length - 2)) {
             mod.PlayVO(PayloadSounds.VOModule1, mod.VoiceOverEvents2D.CheckPointMovingToLastFriendly, mod.VoiceOverFlags.Alpha, mod.GetTeam(1));
             mod.PlayVO(PayloadSounds.VOModule2, mod.VoiceOverEvents2D.CheckPointMovingToLastEnemy, mod.VoiceOverFlags.Alpha, mod.GetTeam(2));
-        } else if (PayloadSounds.state.currentCheckpoint == 2) {
+        } else if (PayloadState.instance.reachedCheckpointIndex == 1) {
             mod.PlayVO(PayloadSounds.VOModule1, mod.VoiceOverEvents2D.CheckPointFriendly, mod.VoiceOverFlags.Alpha, mod.GetTeam(1));
             mod.PlayVO(PayloadSounds.VOModule2, mod.VoiceOverEvents2D.CheckPointEnemy, mod.VoiceOverFlags.Alpha, mod.GetTeam(2));
         } else {
@@ -101,15 +99,15 @@ export class PayloadSounds {
         if (!PayloadSounds.idle) {
             mod.StopSound(PayloadSounds.payloadMoving);
             PayloadSounds.idle = true;
-            PayloadSounds.lastSoundUpdatePos = PayloadSounds.state.payloadPosition;
-            mod.SetObjectTransform(PayloadSounds.payloadIdle, mod.CreateTransform(PayloadSounds.state.payloadPosition, mod.CreateVector(0, 0, 0)));
+            PayloadSounds.lastSoundUpdatePos = PayloadState.instance.payloadPosition;
+            mod.SetObjectTransform(PayloadSounds.payloadIdle, mod.CreateTransform(PayloadState.instance.payloadPosition, mod.CreateVector(0, 0, 0)));
         }
     }
 
     public static updateSoundPositions(): void {
-        if (mod.DistanceBetween(PayloadSounds.state.payloadPosition, PayloadSounds.lastSoundUpdatePos) > 1.5) {
-            PayloadSounds.lastSoundUpdatePos = PayloadSounds.state.payloadPosition;
-            mod.SetObjectTransform(PayloadSounds.payloadMoving, mod.CreateTransform(PayloadSounds.state.payloadPosition, mod.CreateVector(0, 0, 0)));
+        if (mod.DistanceBetween(PayloadState.instance.payloadPosition, PayloadSounds.lastSoundUpdatePos) > 1.5) {
+            PayloadSounds.lastSoundUpdatePos = PayloadState.instance.payloadPosition;
+            mod.SetObjectTransform(PayloadSounds.payloadMoving, mod.CreateTransform(PayloadState.instance.payloadPosition, mod.CreateVector(0, 0, 0)));
         }
     }
 
@@ -147,7 +145,7 @@ export class PayloadSounds {
     public static endGameMusic(team: number): void {
         if (PayloadSounds.musicPlayed) return;
         PayloadSounds.musicPlayed = true;
-        if (PayloadSounds.state.progressInPercent > 99) {
+        if (PayloadState.instance.progressInPercent > 99) {
             mod.SetMusicParam(mod.MusicParams.Core_IsWinning, team);
         }
         mod.PlayMusic(mod.MusicEvents.Core_EndOfRound_Loop);

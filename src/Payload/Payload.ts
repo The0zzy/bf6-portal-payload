@@ -9,11 +9,11 @@ export class Payload {
             return;
         }
 
-        PayloadCore.OnGameModeStarted();
+        PayloadCore.init();
 
         // SECTION: Tick-based events
         Events.OngoingGlobal.subscribe(() => {
-            PayloadCore.OngoingGlobal();
+            PayloadCore.executeEveryTick();
         });
 
         Events.OngoingPlayer.subscribe(async (eventPlayer: mod.Player) => {
