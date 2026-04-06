@@ -183,3 +183,4 @@ without disrupting the existing codebase. The migration will be done as follows:
 - why are sector/HQ ids such odd numbers? 103 instead of 100?
 - do we have an overview of spatial id ranges and their usage?
 - why is there a generic wait after player deploy before we do anything? 
+- are weapon and gadget restrictions correctly working (e.g. Spawn Beacon)?

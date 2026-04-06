@@ -1,4 +1,4 @@
-import { PayloadPlayerVars } from './PayloadConfig.ts';
+import { PayloadPlayerVars, PayloadConfig } from './PayloadConfig.ts';
 import { PayloadState, PayloadMovementState } from './PayloadState.ts';
 import { PayloadSounds } from './PayloadSounds.ts';
 
@@ -105,7 +105,7 @@ export class PayloadUI {
         PayloadUI.uiReady = true;
     }
 
-    public static updateProgressUI(): void {
+    public static async updateProgressUI(): Promise<void> {
         const leftProgress = mod.RoundToInteger(6 * PayloadState.instance.progressInPercent) - 2;
         const rightProgress = mod.RoundToInteger(600 - (6 * PayloadState.instance.progressInPercent));
         const progressIconPos = mod.RoundToInteger((146 + (6 * PayloadState.instance.progressInPercent)) * 100) / 100;
@@ -135,7 +135,7 @@ export class PayloadUI {
         if (wIcon) mod.SetUIWidgetPosition(wIcon, mod.CreateVector(progressIconPos, 0, 0));
     }
 
-    public static updateStatusUI(): void {
+    public static async updateStatusUI(): Promise<void> {
         let stateLabel = mod.stringkeys.payload.state.idle;
         mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon1'), mod.CreateVector(1, 1, 1));
         mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon2'), mod.CreateVector(1, 1, 1));
@@ -199,7 +199,7 @@ export class PayloadUI {
         mod.DeleteUIWidget(mod.FindUIWidgetWithName('checkpointreached'));
     }
 
-    public static updatePlayerCountUI(): void {
+    public static async updatePlayerCountUI(): Promise<void> {
         const team1 = PayloadState.instance.playersInPushProximity.get(1)?.length || 0;
         const team2 = PayloadState.instance.playersInPushProximity.get(2)?.length || 0;
         mod.SetUITextLabel(mod.FindUIWidgetWithName('left_player_count1'), mod.Message(mod.stringkeys.payload.counter, team1));
@@ -352,7 +352,8 @@ export class PayloadUI {
         mod.StopActiveMovementForObject(mod.GetFixedCamera(51));
     }
 
-    public static updateDebugUI(): void {
+    public static async updateDebugUI(): Promise<void> {
+        if (!PayloadConfig.enableDebug) return;
         let debugText = mod.FindUIWidgetWithName('debugText');
         if (!debugText) {
             mod.AddUIText('debugText', mod.CreateVector(0, 0, 0), mod.CreateVector(600, 30, 0), mod.UIAnchor.BottomCenter, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.debug.tickrate), 14, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center);
