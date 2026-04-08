@@ -1,5 +1,8 @@
 import { Events } from 'bf6-portal-utils/events';
 import { PayloadCore } from './PayloadCore.ts';
+import { PayloadUI } from './PayloadUI.ts';
+import { PayloadWeather } from './PayloadWeather.ts';
+import { PayloadState } from './PayloadState.ts';
 
 export class Payload {
     private static subscribed = false;
@@ -31,11 +34,15 @@ export class Payload {
         });
 
         Events.OnPlayerLeaveGame.subscribe((playerId: number) => {
-            PayloadCore.OnPlayerLeaveGame(playerId);
+            PayloadUI.clearPlayerUI(playerId);
+            PayloadState.instance.playerData.delete(playerId);
         });
 
         Events.OnPlayerJoinGame.subscribe((eventPlayer: mod.Player) => {
-            PayloadCore.OnPlayerJoinGame(eventPlayer);
+            PayloadState.getPlayerData(eventPlayer); // Ensure player data is initialized on join.
+            PayloadUI.onPlayerJoinGameGlobalUIRefresh();
+            PayloadWeather.resetWeatherVFX();
+            PayloadUI.onPlayerJoinGame(eventPlayer);
         });
 
         Events.OnPlayerEnterAreaTrigger.subscribe((eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger) => {

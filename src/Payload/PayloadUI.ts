@@ -1,4 +1,4 @@
-import { PayloadPlayerVars, PayloadConfig } from './PayloadConfig.ts';
+import { PayloadConfig } from './PayloadConfig.ts';
 import { PayloadState, PayloadMovementState } from './PayloadState.ts';
 import { PayloadSounds } from './PayloadSounds.ts';
 
@@ -362,100 +362,52 @@ export class PayloadUI {
         mod.SetUITextLabel(debugText, mod.Message(mod.stringkeys.payload.debug.tickrate, PayloadState.instance.ticks, PayloadState.instance.tickrate));
     }
 
-    private static refreshIdPool(): void {
-        PayloadUI.availableIds = [];
-        for (let i = 1; i <= MAX_POOL_SIZE; i++) {
-            PayloadUI.availableIds.push('PlayerUI' + i);
-        }
-
-        const allPlayers = mod.AllPlayers();
-        const count = mod.CountOf(allPlayers);
-
-        for (let i = 0; i < count; i++) {
-            const p = mod.ValueInArray(allPlayers, i) as mod.Player;
-            const playerId = mod.GetObjId(p);
-            const used = PayloadState.instance.playerUI.get(playerId);
-            if (used) {
-                const index = PayloadUI.availableIds.indexOf(used.containerName);
-                if (index > -1) {
-                    PayloadUI.availableIds.splice(index, 1);
-                }
-            }
-        }
-    }
-
     public static onPlayerJoinGame(eventPlayer: mod.Player): void {
-        if (!PayloadUI.poolInitialized) {
-            PayloadUI.refreshIdPool();
-            PayloadUI.poolInitialized = true;
-        }
+        const playerData = PayloadState.getPlayerData(eventPlayer);
+        const containerName = this.getPlayerUIContainerName(eventPlayer);
+        mod.AddUIContainer(containerName, mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.TopCenter, eventPlayer);
 
-        if (PayloadUI.availableIds.length === 0) {
-            PayloadUI.refreshIdPool();
-        }
+        const containerWidget = mod.FindUIWidgetWithName(containerName);
+        mod.SetUIWidgetBgFill(containerWidget, mod.UIBgFill.None);
+        mod.SetUIWidgetDepth(containerWidget, mod.UIDepth.AboveGameUI);
 
-        let assignedId = 'PlayerUI_Overflow';
-        if (PayloadUI.availableIds.length > 0) {
-            assignedId = PayloadUI.availableIds.shift() as string;
-        }
-
-        if (PayloadUI.usedIds.indexOf(assignedId) === -1) {
-            PayloadUI.usedIds.push(assignedId);
-        } else {
-            mod.DeleteUIWidget(mod.FindUIWidgetWithName(assignedId));
-        }
-
-        mod.SetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.UniquePlayerID), assignedId);
-        mod.AddUIContainer(assignedId, mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.TopCenter, eventPlayer);
-
-        const newWidget = mod.FindUIWidgetWithName(assignedId);
-        mod.SetUIWidgetBgFill(newWidget, mod.UIBgFill.None);
-        mod.SetUIWidgetDepth(newWidget, mod.UIDepth.AboveGameUI);
-
-        PayloadState.instance.playerUI.set(mod.GetObjId(eventPlayer), {
-            containerName: assignedId,
-            containerWidget: newWidget
-        });
-
-        mod.SetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.OutofBounds), false);
-        mod.SetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.PlayArea), 0);
-        mod.SetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.OOBTimer), false);
+        playerData.containerName = containerName;
+        playerData.containerWidget = containerWidget;
     }
 
     public static getPlayerUIContainerName(player: mod.Player): string {
-        return PayloadState.instance.playerUI.get(mod.GetObjId(player))?.containerName ?? '';
+        return 'playerUI_' + mod.GetObjId(player);
     }
 
     public static getPlayerUIWidget(player: mod.Player): mod.UIWidget {
-        const playerData = PayloadState.instance.playerUI.get(mod.GetObjId(player));
-        if (playerData) {
-            return playerData.containerWidget;
-        }
-        const fallback = mod.FindUIWidgetWithName(PayloadUI.getPlayerUIContainerName(player));
-        return fallback;
+        const playerData = PayloadState.getPlayerData(player);
+        return playerData.containerWidget ?
+            playerData.containerWidget :
+            mod.FindUIWidgetWithName(PayloadUI.getPlayerUIContainerName(player));
     }
 
     public static async outOfBoundsUI(player: mod.Player): Promise<void> {
-        if (mod.GetVariable(mod.ObjectVariable(player, PayloadPlayerVars.OutofBounds)) as boolean) return;
-        if (mod.GetVariable(mod.ObjectVariable(player, PayloadPlayerVars.OOBTimer)) as boolean) return;
+        const playerData = PayloadState.getPlayerData(player);
+        if (playerData.outOfBounds) return;
+        if (playerData.oobTimer > 0) return;
 
         const playerUI = PayloadUI.getPlayerUIWidget(player);
-        mod.SetVariable(mod.ObjectVariable(player, PayloadPlayerVars.OutofBounds), true);
-        mod.SetVariable(mod.ObjectVariable(player, PayloadPlayerVars.OOBTimer), true);
+        playerData.outOfBounds = true;
+        playerData.oobTimer = 5;
         mod.SkipManDown(player, true);
         mod.AddUIContainer('OOBBackground', mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.TopCenter, playerUI, true, 1, mod.CreateVector(0, 0, 0), 0.9, mod.UIBgFill.Blur, player);
         mod.AddUIText('OOBText', mod.CreateVector(0, 470, 0), mod.CreateVector(450, 150, 0), mod.UIAnchor.TopCenter, playerUI, true, 1, mod.CreateVector(0.6, 0.1, 0.1), 0.8, mod.UIBgFill.Blur, mod.Message(mod.stringkeys.payload.outofbounds), 56, mod.CreateVector(1, 0.2, 0.2), 1, mod.UIAnchor.TopCenter, player);
-        mod.AddUIText('Countdown', mod.CreateVector(0, 470, 0), mod.CreateVector(450, 150, 0), mod.UIAnchor.TopCenter, playerUI, true, 1, mod.CreateVector(0, 0, 0), 1, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 5), 72, mod.CreateVector(1, 0.2, 0.2), 1, mod.UIAnchor.BottomCenter, player);
+        mod.AddUIText('Countdown', mod.CreateVector(0, 470, 0), mod.CreateVector(450, 150, 0), mod.UIAnchor.TopCenter, playerUI, true, 1, mod.CreateVector(0, 0, 0), 1, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, playerData.oobTimer), 72, mod.CreateVector(1, 0.2, 0.2), 1, mod.UIAnchor.BottomCenter, player);
 
-        for (let i = 5; i > 0; i--) {
+        for (let i = playerData.oobTimer; i > 0; i--) {
             mod.SetUITextLabel(mod.FindUIWidgetWithName('Countdown', playerUI), mod.Message(mod.stringkeys.payload.counter, i));
             PayloadSounds.playOOBsound(player);
             await mod.Wait(1);
-            if (!(mod.GetVariable(mod.ObjectVariable(player, PayloadPlayerVars.OutofBounds)) as boolean)) break;
+            if (!playerData.outOfBounds) break;
         }
 
-        mod.SetVariable(mod.ObjectVariable(player, PayloadPlayerVars.OOBTimer), false);
-        if (mod.GetVariable(mod.ObjectVariable(player, PayloadPlayerVars.OutofBounds)) as boolean) {
+        playerData.oobTimer = 0;
+        if (playerData.outOfBounds) {
             mod.DealDamage(player, 10000);
         } else {
             mod.SkipManDown(player, false);
@@ -464,19 +416,13 @@ export class PayloadUI {
         mod.DeleteUIWidget(mod.FindUIWidgetWithName('OOBBackground', playerUI));
         mod.DeleteUIWidget(mod.FindUIWidgetWithName('OOBText', playerUI));
         mod.DeleteUIWidget(mod.FindUIWidgetWithName('Countdown', playerUI));
-        mod.SetVariable(mod.ObjectVariable(player, PayloadPlayerVars.OutofBounds), false);
+        playerData.outOfBounds = false;
     }
 
     public static clearPlayerUI(playerId: number): void {
-        const playerData = PayloadState.instance.playerUI.get(playerId);
-        if (!playerData) return;
-
-        mod.DeleteUIWidget(mod.FindUIWidgetWithName(playerData.containerName));
-        const index = PayloadUI.usedIds.indexOf(playerData.containerName);
-        if (index > -1) {
-            PayloadUI.usedIds.splice(index, 1);
-            PayloadUI.availableIds.push(playerData.containerName);
-        }
-        PayloadState.instance.playerUI.delete(playerId);
+        const playerData = PayloadState.getPlayerData(playerId);
+        if (!playerData.containerWidget) return;
+        mod.DeleteUIWidget(playerData.containerWidget);
+        playerData.containerWidget = null;
     }
 }

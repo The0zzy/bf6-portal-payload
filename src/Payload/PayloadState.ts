@@ -26,10 +26,29 @@ export interface PlayerScoring {
 
 export interface PlayerUIData {
     containerName: string;
-    containerWidget: mod.UIWidget;
+    containerWidget: mod.UIWidget | null;
+    playArea: number;
+    outOfBounds: boolean;
+    oobTimer: number;
 }
 
-export interface PlayerData extends PlayerScoring, PlayerUIData {}
+export interface PlayerData extends PlayerScoring, PlayerUIData { }
+
+export class PayloadPlayerData implements PlayerData {
+    public kills = 0;
+    public assists = 0;
+    public deaths = 0;
+    public objective = 0;
+    public revives = 0;
+    public hasDeployed = false;
+    public containerName = '';
+    public containerWidget: mod.UIWidget | null = null;
+    public playArea = 0;
+    public outOfBounds = false;
+    public oobTimer = 0;
+
+    constructor() { }
+}
 
 export class PayloadState {
     public static readonly instance: PayloadState = new PayloadState();
@@ -63,13 +82,18 @@ export class PayloadState {
     public checkpointSpatials: Map<string, mod.Object> = new Map<string, mod.Object>();
     public checkpointObjectives: Map<string, mod.CapturePoint> = new Map<string, mod.CapturePoint>();
     public checkpointVfx: Map<string, mod.VFX> = new Map<string, mod.VFX>();
-
-    // Runtime values moved from config to state.
     public overtime = false;
-    public gameOngoing = true;
-
-    // Runtime-populated payload spatial config moved from config to state.
+    public gameOngoing = false;
     public payloadSpatialsConfig: SpatialConfig[] = [];
 
-    private constructor() {}
+    private constructor() { }
+
+    public static getPlayerData(player: mod.Player | number): PlayerData {
+        const playerId = typeof player === 'number' ? player : mod.GetObjId(player);
+        if (!PayloadState.instance.playerData.has(playerId)) {
+            PayloadState.instance.playerData.set(playerId, new PayloadPlayerData());
+        }
+        return PayloadState.instance.playerData.get(playerId)!;
+    }
 }
+

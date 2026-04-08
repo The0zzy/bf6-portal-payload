@@ -1,4 +1,4 @@
-import { PayloadConfig, PayloadPlayerVars, type SpatialConfig } from './PayloadConfig.ts';
+import { PayloadConfig } from './PayloadConfig.ts';
 import { PayloadState, PayloadMovementState } from './PayloadState.ts';
 import { PayloadScoring } from './PayloadScoring.ts';
 import { PayloadSounds } from './PayloadSounds.ts';
@@ -32,11 +32,12 @@ export class PayloadCore {
         PayloadSounds.init();
         PayloadScoring.initScoreboard();
 
-        PayloadState.instance.checkpointStartTime = mod.GetMatchTimeElapsed();
-
         PayloadUI.setup();
         PayloadWeather.init();
         PayloadCore.applyCheckpointFx();
+
+        PayloadState.instance.checkpointStartTime = mod.GetMatchTimeElapsed();
+        PayloadState.instance.gameOngoing = true;
     }
 
     private static initSectors(): void {
@@ -60,7 +61,7 @@ export class PayloadCore {
             waypointSpatialId++
         ) {
             if (PayloadCore.isSpatialValid(waypointSpatialId)) {
-                let isCheckpoint = PayloadCore.isSpatialValid(waypointSpatialId + 1000);
+                const isCheckpoint = PayloadCore.isSpatialValid(waypointSpatialId + 1000);
                 const waypointPosition = mod.GetObjectPosition(
                     mod.GetSpatialObject(waypointSpatialId)
                 );
@@ -129,7 +130,7 @@ export class PayloadCore {
 
     private static initPayloadObjects(): void {
         PayloadCore.initPayloadSpatials();
-        
+        PayloadCore.updatePayloadObjects(true);
     }
 
     private static initPayloadSpatials(): void {
@@ -157,7 +158,7 @@ export class PayloadCore {
             }
         }
     }
-    
+
     private static async updatePayloadSpatials(respawn: boolean): Promise<void> {
         PayloadState.instance.payloadSpatialsConfig.forEach((config, i) => {
             const spawnPos = mod.Add(PayloadState.instance.payloadPosition, config.relativeOffset);
@@ -724,15 +725,15 @@ export class PayloadCore {
         PayloadSounds.VOPushingBack();
     }
 
-    private static async updatePayloadObjects(): Promise<void> {
-        PayloadCore.updatePayloadSpatials(false);
-        PayloadCore.updatePayloadVfx(false);
-        PayloadCore.updatePayloadObjectives(false);
+    private static async updatePayloadObjects(respawn: boolean): Promise<void> {
+        PayloadCore.updatePayloadSpatials(respawn);
+        PayloadCore.updatePayloadVfx(respawn);
+        PayloadCore.updatePayloadObjectives(respawn);
     }
 
     private static onPayloadMoved(): void {
         PayloadCore.calculatePayloadProgress();
-        PayloadCore.updatePayloadObjects();
+        PayloadCore.updatePayloadObjects(false);
         PayloadUI.updateProgressUI();
         PayloadSounds.updateSoundPositions();
         if (PayloadState.instance.progressInPercent > 90) {
@@ -773,60 +774,51 @@ export class PayloadCore {
         PayloadScoring.onPlayerEarnedAssist(player);
     }
 
-    public static OnPlayerLeaveGame(playerId: number): void {
-        PayloadScoring.onPlayerLeave(playerId);
-        PayloadUI.clearPlayerUI(playerId);
-    }
-
-    public static OnPlayerJoinGame(eventPlayer: mod.Player): void {
-        PayloadScoring.getOrCreatePlayerScore(eventPlayer);
-        PayloadUI.onPlayerJoinGameGlobalUIRefresh();
-        PayloadWeather.resetWeatherVFX();
-        PayloadUI.onPlayerJoinGame(eventPlayer);
-    }
-
     public static OnPlayerEnterAreaTrigger(eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger): void {
-        mod.SetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.PlayArea), mod.GetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.PlayArea)) + 1);
+        const playerData = PayloadState.getPlayerData(eventPlayer);
+        playerData.playArea += 1;
         const nextCheckpointAreaTriggerId = PayloadState.instance.reachedCheckpointIndex + 1 + 600;
         if (mod.Equals(mod.GetTeam(eventPlayer), mod.GetTeam(1))) {
             if (mod.GetObjId(eventAreaTrigger) > (nextCheckpointAreaTriggerId)) {
                 PayloadUI.outOfBoundsUI(eventPlayer);
             } else {
-                mod.SetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.OutofBounds), false);
+                playerData.outOfBounds = false;
             }
         } else {
             if (mod.GetObjId(eventAreaTrigger) < (nextCheckpointAreaTriggerId)) {
                 PayloadUI.outOfBoundsUI(eventPlayer);
             } else {
-                mod.SetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.OutofBounds), false);
+                playerData.outOfBounds = false;
             }
         }
     }
 
     public static async OnPlayerExitAreaTrigger(eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger): Promise<void> {
-        mod.SetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.PlayArea), mod.GetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.PlayArea)) - 1);
+        const playerData = PayloadState.getPlayerData(eventPlayer);
+        playerData.playArea -= 1;
         await mod.Wait(0.066);
         if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) {
-            if ((mod.GetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.PlayArea)) as number) <= 0) {
+            if (playerData.playArea <= 0) {
                 PayloadUI.outOfBoundsUI(eventPlayer);
             }
         }
     }
 
     public static OnPlayerDeployed(eventPlayer: mod.Player): void {
-        const score = PayloadScoring.getOrCreatePlayerScore(eventPlayer);
+        const data = PayloadState.getPlayerData(eventPlayer);
         mod.SkipManDown(eventPlayer, false);
-        if (!score.hasDeployed) {
-            score.hasDeployed = true;
+        if (!data.hasDeployed) {
+            data.hasDeployed = true;
             PayloadScoring.refreshScoreboard();
             PayloadCore.applyCheckpointFx();
             PayloadCore.updatePayloadVfx(true);
         }
         mod.Wait(0.1);
-        if (mod.GetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.OutofBounds)) as boolean) {
+        const playerData = PayloadState.getPlayerData(eventPlayer);
+        if (playerData.outOfBounds) {
             mod.Wait(0.6);
             mod.UndeployPlayer(eventPlayer);
-            mod.SetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.OutofBounds), false);
+            playerData.outOfBounds = false;
         }
     }
 
@@ -842,9 +834,9 @@ export class PayloadCore {
      * @param {mod.Player} eventPlayer - The player to check for team switch conditions
     */
     public static async checkTeamSwitchConditions(eventPlayer: mod.Player): Promise<void> {
+        if (!PayloadConfig.enableTeamSwitch) return;
         if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier)) return;
         if (!mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) return;
-        if (!PayloadConfig.enableTeamSwitch) return;
         if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsZooming)
             && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsCrouching)
             && mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsInteracting)
@@ -870,6 +862,7 @@ export class PayloadCore {
 
     public static OnPlayerUndeploy(eventPlayer: mod.Player): void {
         mod.SkipManDown(eventPlayer, false);
-        mod.SetVariable(mod.ObjectVariable(eventPlayer, PayloadPlayerVars.OutofBounds), false);
+        const playerData = PayloadState.getPlayerData(eventPlayer);
+        playerData.outOfBounds = false;
     }
 }

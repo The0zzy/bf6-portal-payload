@@ -1,8 +1,6 @@
 import { PayloadState, type PlayerScoring } from './PayloadState.ts';
 
 export class PayloadScoring {
-    private static readonly state = PayloadState.getInstance();
-
     public static initScoreboard(): void {
         mod.SetScoreboardType(mod.ScoreboardType.CustomTwoTeams);
         mod.SetScoreboardColumnWidths(1, 1, 1, 1, 1);
@@ -20,33 +18,18 @@ export class PayloadScoring {
         PayloadScoring.refreshScoreboard();
     }
 
-    public static getOrCreatePlayerScore(player: mod.Player): PlayerScoring {
-        const playerId = mod.GetObjId(player);
-        if (!PayloadScoring.state.playerScores.has(playerId)) {
-            PayloadScoring.state.playerScores.set(playerId, {
-                kills: 0,
-                assists: 0,
-                deaths: 0,
-                objective: 0,
-                revives: 0,
-                hasDeployed: false
-            });
-        }
-        return PayloadScoring.state.playerScores.get(playerId)!;
-    }
-
     public static refreshScoreboard(): void {
         const allPlayers = mod.AllPlayers();
         const playerCount = mod.CountOf(allPlayers);
         for (let i = 0; i < playerCount; i++) {
             const player = mod.ValueInArray(allPlayers, i) as mod.Player;
-            const score = PayloadScoring.getOrCreatePlayerScore(player);
+            const score = PayloadState.getPlayerData(player);
             mod.SetScoreboardPlayerValues(player, score.objective, score.kills, score.assists, score.deaths, score.revives);
         }
     }
 
     public static updatePlayerScore(player: mod.Player, type: keyof PlayerScoring, amount: number): void {
-        const score = PayloadScoring.getOrCreatePlayerScore(player);
+        const score = PayloadState.getPlayerData(player);
         switch (type) {
             case 'objective':
                 score.objective += amount;
@@ -85,11 +68,5 @@ export class PayloadScoring {
     public static awardObjectivePoints(player: mod.Player, amount: number): void {
         PayloadScoring.updatePlayerScore(player, 'objective', amount);
         mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.objective.score_message, amount), player);
-    }
-
-    public static onPlayerLeave(playerId: number): void {
-        if (PayloadScoring.state.playerScores.has(playerId)) {
-            PayloadScoring.state.playerScores.delete(playerId);
-        }
     }
 }
