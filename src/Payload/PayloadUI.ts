@@ -2,8 +2,6 @@ import { PayloadConfig } from './PayloadConfig.ts';
 import { PayloadState, PayloadMovementState } from './PayloadState.ts';
 import { PayloadSounds } from './PayloadSounds.ts';
 
-const MAX_POOL_SIZE = 128;
-
 export class PayloadUI {
     private static friendlycolour = mod.CreateVector(0, 0.7, 1);
     private static enemycolour = mod.CreateVector(1, 0.2, 0.2);
