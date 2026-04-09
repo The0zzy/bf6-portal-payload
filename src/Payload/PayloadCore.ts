@@ -676,9 +676,12 @@ export class PayloadCore {
             PayloadSounds.playPayloadIdleSound();
             return;
         }
+        const playersTeam1 = PayloadState.instance.playersInPushProximity.get(1) || [];
+        const playersTeam2 = PayloadState.instance.playersInPushProximity.get(2) || [];
+
         const playersInAdvantage = (
-            PayloadState.instance.playersInPushProximity.get(1)!.length -
-            PayloadState.instance.playersInPushProximity.get(2)!.length
+            playersTeam1.length -
+            playersTeam2.length
         );
         const speedAddtion = (
             PayloadConfig.payloadSpeed.get(1)!.meterPerSecondPerPlayer *
@@ -704,9 +707,12 @@ export class PayloadCore {
             PayloadCore.setPayloadState(PayloadMovementState.LOCKED);
             return;
         }
+        const playersTeam1 = PayloadState.instance.playersInPushProximity.get(1) || [];
+        const playersTeam2 = PayloadState.instance.playersInPushProximity.get(2) || [];
+
         const playersInAdvantage = (
-            PayloadState.instance.playersInPushProximity.get(2)!.length -
-            PayloadState.instance.playersInPushProximity.get(1)!.length
+            playersTeam2.length -
+            playersTeam1.length
         );
         const speedAddtion = (
             PayloadConfig.payloadSpeed.get(2)!.meterPerSecondPerPlayer *

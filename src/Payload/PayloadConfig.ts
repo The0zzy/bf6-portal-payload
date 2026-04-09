@@ -48,7 +48,7 @@ export class PayloadConfig {
     public static readonly objectiveScorePerSecond = 5;
     public static readonly overtimeDuration = 60;
     public static readonly enableOvertime = true;
-    public static readonly enableDebug = false;
+    public static readonly enableDebug = true;
     public static readonly spatialRespawnInterval = 5;
     /** Grace period for out-of-bounds players in seconds */
     public static readonly oobGracePeriod = 5;
