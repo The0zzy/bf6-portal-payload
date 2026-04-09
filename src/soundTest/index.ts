@@ -1,6 +1,6 @@
-let ZERO_VEC = mod.CreateVector(0, 0, 0);
-let MOVE_RIGHT = mod.CreateVector(-3, 0, 0);
-let MOVE_LEFT = mod.CreateVector(3, 0, 0);
+const ZERO_VEC = mod.CreateVector(0, 0, 0);
+const MOVE_RIGHT = mod.CreateVector(-3, 0, 0);
+const MOVE_LEFT = mod.CreateVector(3, 0, 0);
 let TO_MY_RIGHT = ZERO_VEC;
 let TO_MY_LEFT = ZERO_VEC;
 let SFX3D: mod.SFX;
@@ -9,7 +9,7 @@ let i = 0;
 
 export async function OnPlayerDeployed(eventPlayer: mod.Player): Promise<void> {
     await mod.Wait(1);
-    let playerPos = mod.GetObjectPosition(eventPlayer);
+    const playerPos = mod.GetObjectPosition(eventPlayer);
     TO_MY_RIGHT = mod.Add(playerPos, MOVE_RIGHT);
     TO_MY_LEFT = mod.Add(playerPos, MOVE_LEFT);
     SFX3D = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_GameModes_Rush_Alarm_SimpleLoop3D, TO_MY_RIGHT, ZERO_VEC);

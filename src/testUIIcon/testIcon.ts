@@ -1,15 +1,15 @@
 export function OnPlayerDeployed(player: mod.Player) {
-    let position1 = mod.GetSoldierState(
+    const position1 = mod.GetSoldierState(
         player,
         mod.SoldierStateVector.GetPosition
     );
-    let position2 = mod.Add(position1, mod.ForwardVector());
-    let object1 = mod.SpawnObject(
+    const position2 = mod.Add(position1, mod.ForwardVector());
+    const object1 = mod.SpawnObject(
         mod.RuntimeSpawn_Common.ChairPlastic_01_A,
         position1,
         mod.CreateVector(0, 0, 0)
     );
-    let object2 = mod.SpawnObject(
+    const object2 = mod.SpawnObject(
         mod.RuntimeSpawn_Common.ChairPlastic_01_B,
         position2,
         mod.CreateVector(0, 0, 0)

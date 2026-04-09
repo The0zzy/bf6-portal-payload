@@ -24,7 +24,6 @@ export class PayloadCore {
     public static init(): void {
         mod.SetGameModeTimeLimit(PayloadConfig.maxGameModeTime);
         mod.SetGameModeTargetScore(PayloadConfig.gameModeTargetScore);
-        mod.Wait(3);
         PayloadCore.initSectors();
         PayloadCore.initPayloadTrack();
         PayloadCore.initPayloadRotation();

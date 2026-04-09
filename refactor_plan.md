@@ -173,7 +173,9 @@ without disrupting the existing codebase. The migration will be done as follows:
 
 ## Additional Todos
 
-- make VO for progress dynamic and not based on hard checkpoints
+- make VO for progress dynamic and not based on hard coded checkpoints (currently fixed number 2)
+- remove unused string keys from strings.json and move the file to Payload folder to reflect that it's only used for this game mode
+- make checkpoint time limit dynamic based on distance
 
 ### Questions
 
@@ -184,4 +186,3 @@ without disrupting the existing codebase. The migration will be done as follows:
 - do we have an overview of spatial id ranges and their usage?
 - why is there a generic wait after player deploy before we do anything? 
 - are weapon and gadget restrictions correctly working (e.g. Spawn Beacon)?
-- review playArea attribute of a player as it doesn't seem to be relevant for the oob logic?
