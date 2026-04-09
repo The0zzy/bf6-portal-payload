@@ -28,6 +28,7 @@ export interface PayloadSpeedConfig {
 }
 
 export class PayloadConfig {
+    /** Whether team switching is enabled */
     public static readonly enableTeamSwitch = true;
     public static readonly payloadSpatialIdentifiers: number[] = [5000, 5001];
     public static readonly maxGameModeTime = 60 * 60; // 60 minutes as a safety net, but the game should end when the payload reaches the end of the track
@@ -49,6 +50,8 @@ export class PayloadConfig {
     public static readonly enableOvertime = true;
     public static readonly enableDebug = false;
     public static readonly spatialRespawnInterval = 5;
+    /** Grace period for out-of-bounds players in seconds */
+    public static readonly oobGracePeriod = 5;
 
     public static readonly payloadObjectives: ObjectiveConfig[] = [
         {

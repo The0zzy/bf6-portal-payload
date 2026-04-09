@@ -391,7 +391,7 @@ export class PayloadUI {
 
         const playerUI = PayloadUI.getPlayerUIWidget(player);
         playerData.outOfBounds = true;
-        playerData.oobTimer = 5;
+        playerData.oobTimer = PayloadConfig.oobGracePeriod;
         mod.SkipManDown(player, true);
         mod.AddUIContainer('OOBBackground', mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.TopCenter, playerUI, true, 1, mod.CreateVector(0, 0, 0), 0.9, mod.UIBgFill.Blur, player);
         mod.AddUIText('OOBText', mod.CreateVector(0, 470, 0), mod.CreateVector(450, 150, 0), mod.UIAnchor.TopCenter, playerUI, true, 1, mod.CreateVector(0.6, 0.1, 0.1), 0.8, mod.UIBgFill.Blur, mod.Message(mod.stringkeys.payload.outofbounds), 56, mod.CreateVector(1, 0.2, 0.2), 1, mod.UIAnchor.TopCenter, player);
