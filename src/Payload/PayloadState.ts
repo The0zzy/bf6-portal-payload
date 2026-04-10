@@ -56,10 +56,10 @@ export class PayloadState {
     public ticks = 0;
     public tickrate = 30;
     public pastTickRates: number[] = [30, 30, 30, 30, 30];
+    /** Array containing the indexes of waypoints that are checkpoints */
     public checkpointIndexes: number[] = [];
     public lastElapsedSeconds = 0;
     public progress = 0;
-    public firstAttackerSpawned = false;
     public payloadState = PayloadMovementState.IDLE;
     public payloadPosition = mod.CreateVector(0, 0, 0);
     public waypoints: PayloadWaypoint[] = [];
@@ -69,6 +69,7 @@ export class PayloadState {
     public payloadObjectives: Map<number, mod.Object> = new Map<number, mod.Object>();
     public payloadVfx: Map<number, mod.VFX> = new Map<number, mod.VFX>();
     public totalDistanceInMeters = 0;
+    /** Stores the current index for checkpointIndexes to identify the last reached waypoint that was a checkpoint */
     public reachedCheckpointIndex = 0;
     public checkpointStartTime = 0;
     public progressInMeters = 0;
@@ -76,8 +77,6 @@ export class PayloadState {
     public playerData: Map<number, PlayerData> = new Map<number, PlayerData>();
     public playersInPushProximity: Map<number, mod.Player[]> = new Map<number, mod.Player[]>();
     public payloadRotation = mod.CreateVector(0, 0, 0);
-    public segmentT = 0;
-    public splineTable: { t: number; distance: number }[] | null = null;
     public segmentDistance = 0;
     public checkpointSpatials: Map<string, mod.Object> = new Map<string, mod.Object>();
     public checkpointObjectives: Map<string, mod.CapturePoint> = new Map<string, mod.CapturePoint>();

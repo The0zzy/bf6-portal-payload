@@ -339,9 +339,9 @@ export class PayloadCore {
         if (!obj) return false;
         const pos = mod.GetObjectPosition(obj);
         return !(
-            mod.XComponentOf(pos) === 0 ||
-            mod.YComponentOf(pos) === 0 ||
-            mod.ZComponentOf(pos) === 0
+            Math.abs(mod.XComponentOf(pos)) < 1 &&
+            Math.abs(mod.YComponentOf(pos)) < 1 &&
+            Math.abs(mod.ZComponentOf(pos)) < 1
         );
     }
 
@@ -418,7 +418,7 @@ export class PayloadCore {
                     vfxConfig.prefab,
                     spawnPos,
                     spawnRot,
-                    mod.CreateVector(1, 1, 1)
+                    mod.CreateVector(vfxConfig.scale, vfxConfig.scale, vfxConfig.scale)
                 ) as mod.VFX;
                 PayloadState.instance.checkpointVfx.set(key, vfx);
                 mod.EnableVFX(vfx, true);
@@ -602,8 +602,10 @@ export class PayloadCore {
                 wpIndex = nextIndex;
                 PayloadState.instance.reachedWaypointIndex = wpIndex;
 
-                if (nextWp.isCheckpoint && PayloadState.instance.reachedCheckpointIndex < nextIndex) {
-                    PayloadState.instance.reachedCheckpointIndex = nextIndex;
+                if (nextWp.isCheckpoint &&
+                    PayloadState.instance.checkpointIndexes[PayloadState.instance.reachedCheckpointIndex] < nextIndex
+                ) {
+                    PayloadState.instance.reachedCheckpointIndex += 1;
                     PayloadCore.onCheckpointReached();
                 }
                 continue;

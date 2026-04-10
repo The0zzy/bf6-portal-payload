@@ -14,10 +14,6 @@ export class PayloadUI {
     private static secs = 30;
     private static timer = mod.stringkeys.payload.objective.checkpoint_timer;
 
-    private static availableIds: string[] = [];
-    private static usedIds: string[] = [];
-    private static poolInitialized = false;
-
     private static cachedWidgets: {
         progress1?: mod.UIWidget;
         progress2?: mod.UIWidget;
