@@ -354,12 +354,16 @@ export class PayloadCore {
     }
 
     private static async applyCheckpointFx(): Promise<void> {
-        for (let i = 0; i < PayloadState.instance.waypoints.length; i++) {
-            const waypoint = PayloadState.instance.waypoints[i];
-            if (!waypoint.isCheckpoint) continue;
-
+        const reachedCheckpointWpIndex = PayloadState.instance.checkpointIndexes[
+            PayloadState.instance.reachedCheckpointIndex
+        ];
+        const nextCheckpointWpIndex = PayloadState.instance.checkpointIndexes[
+            PayloadState.instance.reachedCheckpointIndex + 1
+        ];
+        for (const checkpointWpIndex of PayloadState.instance.checkpointIndexes) {
+            const waypoint = PayloadState.instance.waypoints[checkpointWpIndex];
             for (let s = 0; s < PayloadConfig.checkpointSpatials.length; s++) {
-                const key = `${i}-${s}`;
+                const key = `${checkpointWpIndex}-${s}`;
                 if (PayloadState.instance.checkpointSpatials.has(key)) {
                     mod.UnspawnObject(PayloadState.instance.checkpointSpatials.get(key)!);
                     PayloadState.instance.checkpointSpatials.delete(key);
@@ -377,19 +381,15 @@ export class PayloadCore {
             }
 
             for (let o = 0; o < PayloadConfig.checkpointObjectives.length; o++) {
-                const key = `${i}-${o}`;
+                const key = `${checkpointWpIndex}-${o}`;
                 if (PayloadState.instance.checkpointObjectives.has(key)) {
                     mod.UnspawnObject(PayloadState.instance.checkpointObjectives.get(key)!);
                     PayloadState.instance.checkpointObjectives.delete(key);
                 }
+
                 // only spawn checkpoint objectives for the next upcoming checkpoint
                 if (
-                    PayloadState.instance.checkpointIndexes[
-                    PayloadState.instance.reachedCheckpointIndex
-                    ] > i &&
-                    i < PayloadState.instance.checkpointIndexes[
-                    PayloadState.instance.reachedCheckpointIndex + 1
-                    ]
+                    checkpointWpIndex === nextCheckpointWpIndex
                 ) {
                     const objectiveConfig = PayloadConfig.checkpointObjectives[o];
                     const spawnPos = mod.Add(waypoint.position, objectiveConfig.relativeOffset);
@@ -405,13 +405,13 @@ export class PayloadCore {
             }
 
             for (let v = 0; v < PayloadConfig.checkpointVfx.length; v++) {
-                const key = `${i}-${v}`;
+                const key = `${checkpointWpIndex}-${v}`;
                 if (PayloadState.instance.checkpointVfx.has(key)) {
                     mod.UnspawnObject(PayloadState.instance.checkpointVfx.get(key)!);
                     PayloadState.instance.checkpointVfx.delete(key);
                 }
                 const vfxConfig = PayloadConfig.checkpointVfx[v];
-                const color = PayloadState.instance.reachedCheckpointIndex < i ? vfxConfig.color1 : vfxConfig.color2;
+                const color = checkpointWpIndex > reachedCheckpointWpIndex ? vfxConfig.color1 : vfxConfig.color2;
                 const spawnPos = mod.Add(waypoint.position, vfxConfig.relativeOffset);
                 const spawnRot = mod.Add(waypoint.rotation, vfxConfig.rotation);
                 const vfx = mod.SpawnObject(

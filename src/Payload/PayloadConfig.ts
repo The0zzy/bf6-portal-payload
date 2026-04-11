@@ -30,29 +30,55 @@ export interface PayloadSpeedConfig {
 export class PayloadConfig {
     /** Whether team switching is enabled */
     public static readonly enableTeamSwitch = true;
-    public static readonly payloadSpatialIdentifiers: number[] = [5000, 5001];
-    public static readonly maxGameModeTime = 60 * 60; // 60 minutes as a safety net, but the game should end when the payload reaches the end of the track
-    public static readonly gameModeTargetScore = 1000;
-    public static readonly defaultCheckpointTime = 450; // 7.5 minutes in seconds, can be adjusted based on the length of the track and desired pacing
-    public static readonly sectorTimePerMeter = 0.75; // time in seconds that it takes to travel 1 meter, used for dynamic checkpoint time calculation based on the distance between checkpoints
 
+    /** Identifiers for payload spatial objects (IDs determine the type of payload object spawned) */
+    public static readonly payloadSpatialIdentifiers: number[] = [5000, 5001];
+
+    /** Maximum duration of the game mode in seconds 
+     * Note: The game should end when the payload reaches the end of the track, 
+     * but this serves as a safety net to prevent excessively long games in case of issues
+    */
+    public static readonly maxGameModeTime = 60 * 60;
+
+    /** Random game score to prevent default game ending behavior */
+    public static readonly gameModeTargetScore = 1000;
+
+    /** Default time for each sector to reach next checkpoint in seconds 
+     * Default: 450 (7.5 minutes in seconds), can be adjusted based on the length of the track and desired pacing
+    */
+    public static readonly defaultCheckpointTime = 450;
+
+    /** Whether the payload should emit sound effects when moving or pushing */
     public static readonly enablePayloadSound = true;
+
+    /** Radius within which players can push the payload */
     public static readonly pushProximityRadius = 7.5;
-    /**
-     * The speed of the payload mapped to the team ID 
-     */
+
+    /** The speed of the payload mapped to the team ID */
     public static readonly payloadSpeed: Map<number, PayloadSpeedConfig> = new Map([
-        [1, { meterPerSecond: 6.05, meterPerSecondPerPlayer: 0.25 }],
+        [1, { meterPerSecond: 1.75, meterPerSecondPerPlayer: 0.25 }],
         [2, { meterPerSecond: 0.45, meterPerSecondPerPlayer: 0.0 }]
     ]);
+
+    /** Score awarded per second of pushing the payload */
     public static readonly objectiveScorePerSecond = 5;
+
+    /** Duration of overtime in seconds */
     public static readonly overtimeDuration = 60;
+
+    /** Whether overtime is enabled */
     public static readonly enableOvertime = true;
+
+    /** Whether debug mode is enabled */
     public static readonly enableDebug = true;
+
+    /** Interval for spatial respawn in seconds (to prevent destruction of objects) */
     public static readonly spatialRespawnInterval = 5;
+
     /** Grace period for out-of-bounds players in seconds */
     public static readonly oobGracePeriod = 5;
 
+    /** Configuration for objectives that should be spawned at around the payload position */
     public static readonly payloadObjectives: ObjectiveConfig[] = [
         {
             prefab: mod.RuntimeSpawn_Common.MCOM,
@@ -62,6 +88,7 @@ export class PayloadConfig {
         },
     ];
 
+    /** Configuration for VFX that should be spawned at around the payload position */
     public static readonly payloadVfx: VfxConfig[] = [
         {
             prefab: mod.RuntimeSpawn_Common.FX_Gadget_DeployableMortar_Target_Area,
@@ -74,8 +101,10 @@ export class PayloadConfig {
         },
     ];
 
+    /** Configuration for checkpoint spatials to be spawned at around the checkpoint position */
     public static readonly checkpointSpatials: SpatialConfig[] = [];
 
+    /** Configuration for checkpoint objectives to be spawned at around the checkpoint position */
     public static readonly checkpointObjectives: ObjectiveConfig[] = [
         {
             prefab: mod.RuntimeSpawn_Common.CapturePoint,
@@ -85,14 +114,15 @@ export class PayloadConfig {
         },
     ];
 
+    /** Configuration for checkpoint VFX to be spawned at around the checkpoint position */
     public static readonly checkpointVfx: VfxConfig[] = [
         {
             prefab: mod.RuntimeSpawn_Common.FX_Smoke_Marker_Custom,
             relativeOffset: mod.CreateVector(0, 0, 0),
             scale: 1,
             rotation: mod.CreateVector(0, 0, 0),
-            color1: mod.CreateVector(1, 1, 0),
-            color2: mod.CreateVector(0, 1, 0),
+            color1: mod.CreateVector(1, 1, 0), // yellow for upcoming checkpoints
+            color2: mod.CreateVector(0, 1, 0), // green for reached checkpoints
             speed: 1
         },
     ];
