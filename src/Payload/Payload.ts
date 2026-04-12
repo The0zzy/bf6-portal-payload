@@ -38,11 +38,19 @@ export class Payload {
             PayloadState.instance.playerData.delete(playerId);
         });
 
-        Events.OnPlayerJoinGame.subscribe((eventPlayer: mod.Player) => {
-            PayloadState.getPlayerData(eventPlayer); // Ensure player data is initialized on join.
+        Events.OnPlayerJoinGame.subscribe(async (eventPlayer: mod.Player) => {
+            if (
+                !PayloadState.instance.gameOngoing ||
+                mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier)
+            ) return;
+
+            // if refreshing UI/visual elements too early, they won't refresh correctly
+            // TODO: find a more elegant solution than using an arbitrary timeout
+            await mod.Wait(5);
             PayloadUI.onPlayerJoinGameGlobalUIRefresh();
             PayloadWeather.resetWeatherVFX();
             PayloadUI.onPlayerJoinGame(eventPlayer);
+
         });
 
         Events.OnPlayerEnterAreaTrigger.subscribe((eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger) => {

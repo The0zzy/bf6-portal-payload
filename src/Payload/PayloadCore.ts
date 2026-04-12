@@ -268,6 +268,16 @@ export class PayloadCore {
 
         PayloadUI.updatePlayerCountUI();
         PayloadUI.updateDebugUI();
+
+        // TODO: find a more elegant solution than using an arbitrary timer 
+        // for the progress flash effect
+        PayloadUI.progressFlash();
+        if (PayloadState.instance.progressBarFlashAlpha > 0) {
+            PayloadState.instance.progressBarFlashAlpha -= 0.5;
+        }
+        if (PayloadState.instance.progressBarFlashAlpha < 0) {
+            PayloadState.instance.progressBarFlashAlpha = 0;
+        }
     }
 
     private static async executeEverySecond(): Promise<void> {
@@ -321,7 +331,7 @@ export class PayloadCore {
             }
         }
 
-        PayloadUI.progressFlash();
+        PayloadState.instance.progressBarFlashAlpha = 10;
     }
 
     private static updateTickrate(): void {
@@ -819,13 +829,7 @@ export class PayloadCore {
             PayloadScoring.refreshScoreboard();
             PayloadCore.applyCheckpointFx();
             PayloadCore.updatePayloadVfx(true);
-        }
-        mod.Wait(0.1);
-        const playerData = PayloadState.getPlayerData(eventPlayer);
-        if (playerData.outOfBounds) {
-            mod.Wait(0.6);
-            mod.UndeployPlayer(eventPlayer);
-            playerData.outOfBounds = false;
+            PayloadUI.DeployBoundsCheck(eventPlayer);
         }
     }
 

@@ -56,7 +56,7 @@ export class PayloadConfig {
 
     /** The speed of the payload mapped to the team ID */
     public static readonly payloadSpeed: Map<number, PayloadSpeedConfig> = new Map([
-        [1, { meterPerSecond: 1.75, meterPerSecondPerPlayer: 0.25 }],
+        [1, { meterPerSecond: 1.05, meterPerSecondPerPlayer: 0.25 }],
         [2, { meterPerSecond: 0.45, meterPerSecondPerPlayer: 0.0 }]
     ]);
 

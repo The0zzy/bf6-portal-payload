@@ -382,7 +382,7 @@ export class PayloadUI {
 
     public static async outOfBoundsUI(player: mod.Player): Promise<void> {
         const playerData = PayloadState.getPlayerData(player);
-        if (playerData.outOfBounds) return;
+        playerData.outOfBounds = true;
         if (playerData.oobTimer > 0) return;
 
         const playerUI = PayloadUI.getPlayerUIWidget(player);
@@ -410,6 +410,15 @@ export class PayloadUI {
         mod.DeleteUIWidget(mod.FindUIWidgetWithName('OOBBackground', playerUI));
         mod.DeleteUIWidget(mod.FindUIWidgetWithName('OOBText', playerUI));
         mod.DeleteUIWidget(mod.FindUIWidgetWithName('Countdown', playerUI));
+        playerData.outOfBounds = false;
+    }
+
+    public static async DeployBoundsCheck(player: mod.Player): Promise<void> {
+        const playerData = PayloadState.getPlayerData(player);
+        if (!playerData.outOfBounds) return;
+        // TODO: clarify why the wait is needed.
+        await mod.Wait(0.6);
+        mod.UndeployPlayer(player);
         playerData.outOfBounds = false;
     }
 
