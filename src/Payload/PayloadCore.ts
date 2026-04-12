@@ -204,7 +204,7 @@ export class PayloadCore {
         });
     }
 
-    private static async updatePayloadVfx(respawn: boolean): Promise<void> {
+    public static async updatePayloadVfx(respawn: boolean): Promise<void> {
         PayloadConfig.payloadVfx.forEach((vfxConfig, i) => {
             const spawnPos = mod.Add(PayloadState.instance.payloadPosition, vfxConfig.relativeOffset);
             const spawnRot = mod.Add(PayloadState.instance.payloadRotation, vfxConfig.rotation);
@@ -363,7 +363,7 @@ export class PayloadCore {
         PayloadState.instance.progressInPercent = (traveledDistance / PayloadState.instance.totalDistanceInMeters) * 100;
     }
 
-    private static async applyCheckpointFx(): Promise<void> {
+    public static async applyCheckpointFx(): Promise<void> {
         const reachedCheckpointWpIndex = PayloadState.instance.checkpointIndexes[
             PayloadState.instance.reachedCheckpointIndex
         ];
@@ -783,62 +783,6 @@ export class PayloadCore {
         mod.EndGameMode(mod.GetTeam(2));
     }
 
-    public static OnPlayerDied(victim: mod.Player, killer: mod.Player): void {
-        PayloadScoring.onPlayerDied(victim, killer);
-    }
-
-    public static OnPlayerEarnedKillAssist(player: mod.Player, assistOn: mod.Player): void {
-        PayloadScoring.onPlayerEarnedAssist(player);
-    }
-
-    public static OnPlayerEnterAreaTrigger(eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger): void {
-        const playerData = PayloadState.getPlayerData(eventPlayer);
-        playerData.playArea += 1;
-        const nextCheckpointAreaTriggerId = PayloadState.instance.reachedCheckpointIndex + 1 + 600;
-        if (mod.Equals(mod.GetTeam(eventPlayer), mod.GetTeam(1))) {
-            if (mod.GetObjId(eventAreaTrigger) > (nextCheckpointAreaTriggerId)) {
-                PayloadUI.outOfBoundsUI(eventPlayer);
-            } else {
-                playerData.outOfBounds = false;
-            }
-        } else {
-            if (mod.GetObjId(eventAreaTrigger) < (nextCheckpointAreaTriggerId)) {
-                PayloadUI.outOfBoundsUI(eventPlayer);
-            } else {
-                playerData.outOfBounds = false;
-            }
-        }
-    }
-
-    public static async OnPlayerExitAreaTrigger(eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger): Promise<void> {
-        const playerData = PayloadState.getPlayerData(eventPlayer);
-        playerData.playArea -= 1;
-        await mod.Wait(0.066);
-        if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) {
-            if (playerData.playArea <= 0) {
-                PayloadUI.outOfBoundsUI(eventPlayer);
-            }
-        }
-    }
-
-    public static OnPlayerDeployed(eventPlayer: mod.Player): void {
-        const data = PayloadState.getPlayerData(eventPlayer);
-        mod.SkipManDown(eventPlayer, false);
-        if (!data.hasDeployed) {
-            data.hasDeployed = true;
-            PayloadScoring.refreshScoreboard();
-            PayloadCore.applyCheckpointFx();
-            PayloadCore.updatePayloadVfx(true);
-            PayloadUI.DeployBoundsCheck(eventPlayer);
-        }
-    }
-
-    public static OnRevived(victim: mod.Player, reviver: mod.Player): void {
-        PayloadScoring.onPlayerRevived(victim, reviver);
-    }
-
-
-
     /**
      * Checks for team switch conditions and switches the player's team if conditions are met.
      * @method checkTeamSwitchConditions
@@ -869,11 +813,5 @@ export class PayloadCore {
                 mod.ForceRevive(eventPlayer);
             }
         }
-    }
-
-    public static OnPlayerUndeploy(eventPlayer: mod.Player): void {
-        mod.SkipManDown(eventPlayer, false);
-        const playerData = PayloadState.getPlayerData(eventPlayer);
-        playerData.outOfBounds = false;
     }
 }
