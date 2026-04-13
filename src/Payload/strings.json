@@ -54,7 +54,7 @@
     "counter": "{}",
     "debug": {
       "tickrate": "Ticks: {} | Tickrate: {}",
-      "breakpoint": "Breakpoint reached: {}"
+      "breakpoint": "Breakpoint: {}"
     }
   }
 }

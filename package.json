@@ -11,7 +11,7 @@
         "init": "node scripts/init.js",
         "update": "node scripts/update.js",
         "refresh-ai": "node scripts/generate-ai-context.js",
-        "build": "node scripts/sync-version.js && bf6-portal-bundler --entrypoint ./src/index.ts --outDir ./dist",
+        "build": "bf6-portal-bundler --entrypoint ./src/index.ts --outDir ./dist",
         "export-thumbnail": "node scripts/export-thumbnail.js",
         "minify-spatials": "node scripts/minify-all-spatials.js",
         "lint": "eslint .",

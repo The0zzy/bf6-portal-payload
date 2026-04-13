@@ -1,10 +1,1 @@
-{
-  "payload": {
-    "meta": {
-      "version": "0.0.10",
-      "name": "payload",
-      "build": "2026-04-13T11:48:50.622Z",
-      "meta_text": "{} v{} build: {}"
-    }
-  }
-}
+{}
