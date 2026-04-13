@@ -25,15 +25,6 @@ export class Payload {
             PayloadCore.playerEndState(eventPlayer);
         });
 
-
-        Events.OnPlayerDied.subscribe((victim: mod.Player, killer: mod.Player) => {
-            PayloadScoring.onPlayerDied(victim, killer);
-        });
-
-        Events.OnPlayerEarnedKillAssist.subscribe((player: mod.Player, assistOn: mod.Player) => {
-            PayloadScoring.onPlayerEarnedAssist(player);
-        });
-
         Events.OnPlayerLeaveGame.subscribe((playerId: number) => {
             PayloadUI.clearPlayerUI(playerId);
             PayloadState.instance.playerData.delete(playerId);
@@ -87,7 +78,7 @@ export class Payload {
         Events.OnPlayerDeployed.subscribe((eventPlayer: mod.Player) => {
             const data = PayloadState.getPlayerData(eventPlayer);
             mod.SkipManDown(eventPlayer, false);
-            if (!data.hasDeployed) {
+            if (!data.hasDeployed && !mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier)) {
                 data.hasDeployed = true;
                 PayloadScoring.refreshScoreboard();
                 PayloadCore.applyCheckpointFx();
@@ -96,14 +87,22 @@ export class Payload {
             }
         });
 
-        Events.OnRevived.subscribe((victim: mod.Player, reviver: mod.Player) => {
-            PayloadScoring.onPlayerRevived(victim, reviver);
-        });
-
         Events.OnPlayerUndeploy.subscribe((eventPlayer: mod.Player) => {
             mod.SkipManDown(eventPlayer, false);
             const playerData = PayloadState.getPlayerData(eventPlayer);
             playerData.outOfBounds = false;
+        });
+
+        Events.OnPlayerDied.subscribe((victim: mod.Player, killer: mod.Player) => {
+            PayloadScoring.onPlayerDied(victim, killer);
+        });
+
+        Events.OnPlayerEarnedKillAssist.subscribe((player: mod.Player, assistOn: mod.Player) => {
+            PayloadScoring.onPlayerEarnedAssist(player);
+        });
+
+        Events.OnRevived.subscribe((victim: mod.Player, reviver: mod.Player) => {
+            PayloadScoring.onPlayerRevived(victim, reviver);
         });
 
         Payload.subscribed = true;
