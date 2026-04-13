@@ -1761,9 +1761,9 @@
                 "z": -1
             },
             "position": {
-                "x": -133.542,
-                "y": 323.0287,
-                "z": 10.3577
+                "x": -129.106,
+                "y": 322.9457,
+                "z": 12.9345
             },
             "id": "Track/Track_62"
         },
@@ -1787,9 +1787,9 @@
                 "z": -1
             },
             "position": {
-                "x": -137.415,
+                "x": -136.109,
                 "y": 322.959,
-                "z": 6.64592
+                "z": 7.66589
             },
             "id": "Track/Track_63"
         },
@@ -1943,8 +1943,8 @@
                 "z": -1
             },
             "position": {
-                "x": -130.691,
-                "y": 327.0677,
+                "x": -129.936,
+                "y": 327.0963,
                 "z": -52.7903
             },
             "id": "Track/Track_69"
@@ -1969,9 +1969,9 @@
                 "z": -1
             },
             "position": {
-                "x": -128.439,
+                "x": -127.704,
                 "y": 328.2062,
-                "z": -60.6289
+                "z": -60.2659
             },
             "id": "Track/Track_70"
         },
@@ -2203,7 +2203,7 @@
                 "z": -1
             },
             "position": {
-                "x": -114.252,
+                "x": -114.739,
                 "y": 331.5996,
                 "z": -113.323
             },
@@ -2229,9 +2229,9 @@
                 "z": -1
             },
             "position": {
-                "x": -111.056,
+                "x": -111.642,
                 "y": 331.5178,
-                "z": -123.415
+                "z": -124.101
             },
             "id": "Track/Track_80"
         },
@@ -12215,6 +12215,8 @@
             "name": "SurroundingCombatArea",
             "ExclusionAreaTeam1": "SurroundingCombatArea/PolygonVolume",
             "ExclusionAreaTeam2": "SurroundingCombatArea/PolygonVolume",
+            "ExclusionAreaTeam1_OBB": "SurroundingCombatArea/OBBVolume",
+            "ExclusionAreaTeam2_OBB": "SurroundingCombatArea/OBBVolume",
             "type": "SurroundingCombatArea",
             "right": {
                 "x": 1,
@@ -12239,7 +12241,9 @@
             "id": "SurroundingCombatArea",
             "linked": [
                 "ExclusionAreaTeam1",
-                "ExclusionAreaTeam2"
+                "ExclusionAreaTeam2",
+                "ExclusionAreaTeam1_OBB",
+                "ExclusionAreaTeam2_OBB"
             ]
         },
         {
@@ -12368,6 +12372,36 @@
                     "y": 321.4594,
                     "z": 91.8515
                 }
+            ]
+        },
+        {
+            "name": "OBBVolume",
+            "type": "OBBVolume",
+            "right": {
+                "x": 0.862249,
+                "y": 0,
+                "z": 0.506485
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.506485,
+                "y": 0,
+                "z": 0.862249
+            },
+            "position": {
+                "x": 150.0533,
+                "y": 346.1505,
+                "z": 106.7306
+            },
+            "id": "SurroundingCombatArea/OBBVolume",
+            "size": [
+                110,
+                50,
+                80
             ]
         }
     ],
