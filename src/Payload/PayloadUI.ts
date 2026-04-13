@@ -225,7 +225,6 @@ export class PayloadUI {
 
     public static async onPlayerJoinGameGlobalUIRefresh(): Promise<void> {
         if (PayloadUI.uiReady) {
-            await mod.Wait(5);
             PayloadUI.deleteUI();
             PayloadUI.setup();
             PayloadUI.updateStatusUI();
@@ -356,7 +355,7 @@ export class PayloadUI {
         mod.SetUITextLabel(debugText, mod.Message(mod.stringkeys.payload.debug.tickrate, PayloadState.instance.ticks, PayloadState.instance.tickrate));
     }
 
-    public static onPlayerJoinGame(eventPlayer: mod.Player): void {
+    public static initPlayerUIContainer(eventPlayer: mod.Player): void {
         const playerData = PayloadState.getPlayerData(eventPlayer);
         const containerName = this.getPlayerUIContainerName(eventPlayer);
         mod.AddUIContainer(containerName, mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.TopCenter, eventPlayer);
@@ -373,11 +372,12 @@ export class PayloadUI {
         return 'playerUI_' + mod.GetObjId(player);
     }
 
-    public static getPlayerUIWidget(player: mod.Player): mod.UIWidget {
+    public static getPlayerUIContainer(player: mod.Player): mod.UIWidget {
         const playerData = PayloadState.getPlayerData(player);
-        return playerData.containerWidget ?
-            playerData.containerWidget :
-            mod.FindUIWidgetWithName(PayloadUI.getPlayerUIContainerName(player));
+        if (!playerData.containerWidget) {
+            PayloadUI.initPlayerUIContainer(player);
+        }
+        return playerData.containerWidget!;
     }
 
     public static async outOfBoundsUI(player: mod.Player): Promise<void> {
@@ -385,7 +385,7 @@ export class PayloadUI {
         playerData.outOfBounds = true;
         if (playerData.oobTimer > 0) return;
 
-        const playerUI = PayloadUI.getPlayerUIWidget(player);
+        const playerUI = PayloadUI.getPlayerUIContainer(player);
         playerData.outOfBounds = true;
         playerData.oobTimer = PayloadConfig.oobGracePeriod;
         mod.SkipManDown(player, true);

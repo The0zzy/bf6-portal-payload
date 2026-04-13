@@ -157,32 +157,53 @@ without disrupting the existing codebase. The migration will be done as follows:
 
 ## Additional Refactoring Log
 
-- make waypoints an array instead of map since we don't actually need the key value pair and it simplifies the code. We can just find the waypoint by its index in the array.
+- make waypoints an array instead of map since we don't actually need the key value pair and it simplifies the code. We
+  can just find the waypoint by its index in the array.
 - remove the vehicle logic
 - add helper function isSpatialValid()
-- config for payload speed parameters per team instead of a single config, to allow for asymmetrical game mode design in the future
-- move the game mode time limit and target score config to the config file and use them in the core logic instead of hardcoding them
-- store players in proximity in state instead of passing to other functions as parameters, since they are needed in multiple places and it simplifies the function signatures
+- config for payload speed parameters per team instead of a single config, to allow for asymmetrical game mode design in
+  the future
+- move the game mode time limit and target score config to the config file and use them in the core logic instead of
+  hardcoding them
+- store players in proximity in state instead of passing to other functions as parameters, since they are needed in
+  multiple places and it simplifies the function signatures
 - review PayloadCore
-  - re-order and rename functions
-  - remove maxCheckPoints, currentCheckpoint variables as they are redundant since we can just use the checkpointIndexes array and the reachedCheckpointIndex variable to get the same information
-  - fix spawning only one capture point for next cehckpoint
-  - remove void prefixes for functions as they don't add any benefit beside silencing some linter warnings that actually don't matter in our case since we don't care about return values for these functions in general and it just adds unnecessary noise to the code
-  - use global PayloadState.instance - might as well go for public static variables in the PayloadState class instead of using a singleton pattern with getInstance() since we don't actually need multiple instances of the state and it simplifies the code even further. This way we can just access PayloadState.progress instead of PayloadState.getInstance().progress which is unnecessarily verbose for no real benefit
-- set gameOngoing to true after initialization and not immediately when loading the state class, to avoid potential issues with the state being loaded but the game mode not actually being initialized yet
+    - re-order and rename functions
+    - remove maxCheckPoints, currentCheckpoint variables as they are redundant since we can just use the
+      checkpointIndexes array and the reachedCheckpointIndex variable to get the same information
+    - fix spawning only one capture point for next cehckpoint
+    - remove void prefixes for functions as they don't add any benefit beside silencing some linter warnings that
+      actually don't matter in our case since we don't care about return values for these functions in general and it
+      just adds unnecessary noise to the code
+    - use global PayloadState.instance - might as well go for public static variables in the PayloadState class instead
+      of using a singleton pattern with getInstance() since we don't actually need multiple instances of the state and
+      it simplifies the code even further. This way we can just access PayloadState.progress instead of
+      PayloadState.getInstance().progress which is unnecessarily verbose for no real benefit
+- set gameOngoing to true after initialization and not immediately when loading the state class, to avoid potential
+  issues with the state being loaded but the game mode not actually being initialized yet
 
 ## Additional Todos
 
 - make VO for progress dynamic and not based on hard coded checkpoints (currently fixed number 2)
-- remove unused string keys from strings.json and move the file to Payload folder to reflect that it's only used for this game mode
-- make checkpoint time limit dynamic based on distance
+- remove unused string keys from strings.json and move the file to Payload folder to reflect that it's only used for
+  this game mode
+- make checkpoint time limit dynamic based on distance (add factor per advanced sector, so it gets harder to reach the
+  checkpoint in time the further you are in the track)
+- use typescript arithmetic functions instead of `mod.*` wherever possible for better performance and readability (e.g.,
+  for distance calculations, vector math, etc.)
+- reduce usage of FindUIWidget by storing references to important widgets in the state after we create them, since
+  FindUIWidget is a costly operation and we often need to access the same widgets multiple times (e.g., progress bar,
+  score text, etc.)
+- rather toggle visibility of widgets instead of creating and deleting them multiple times (unless necessary for new
+  joiners to see the correct UI state)
 
 ### Questions
 
 - why do we explicitly disable man down state onplayerundeployed?
 - why do we only force revive but not deploy a player in end screen?
-- why do we wait 3 seconds after the game mode starts to initialize sectors and payload track? Can we do it immediately or at least reduce the delay?
+- why do we wait 3 seconds after the game mode starts to initialize sectors and payload track? Can we do it immediately
+  or at least reduce the delay?
 - why are sector/HQ ids such odd numbers? 103 instead of 100?
 - do we have an overview of spatial id ranges and their usage?
-- why is there a generic wait after player deploy before we do anything? 
+- why is there a generic wait after player deploy before we do anything?
 - are weapon and gadget restrictions correctly working (e.g. Spawn Beacon)?

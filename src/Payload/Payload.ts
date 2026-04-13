@@ -41,8 +41,6 @@ export class Payload {
             await mod.Wait(5);
             PayloadUI.onPlayerJoinGameGlobalUIRefresh();
             PayloadWeather.resetWeatherVFX();
-            PayloadUI.onPlayerJoinGame(eventPlayer);
-
         });
 
         Events.OnPlayerEnterAreaTrigger.subscribe((eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger) => {
