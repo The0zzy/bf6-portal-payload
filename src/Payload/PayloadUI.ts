@@ -233,15 +233,25 @@ export class PayloadUI {
 
     public static async progressFlash(): Promise<void> {
         if (!PayloadUI.uiReady) return;
-        for (let i = 10; i > 0; i -= 1) {
-            const alpha = i / 10;
+        let alpha = 0.1;
+        if (PayloadState.instance.progressBarFlashAlpha > 0) {
+            alpha = PayloadState.instance.progressBarFlashAlpha / 10;
             if (PayloadState.instance.payloadState == PayloadMovementState.ADVANCING) {
                 mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progressflash1'), alpha);
                 mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progressflash2'), alpha);
+                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progress_backgroundflash1'), 0.01);
+                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progress_backgroundflash2'), 0.01);
             }
-            if (PayloadState.instance.payloadState == PayloadMovementState.PUSHING_BACK) {
+            else if (PayloadState.instance.payloadState == PayloadMovementState.PUSHING_BACK) {
                 mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progress_backgroundflash1'), alpha);
                 mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progress_backgroundflash2'), alpha);
+                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progressflash1'), 0.01);
+                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progressflash2'), 0.01);
+            } else {
+                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progressflash1'), 0.01);
+                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progressflash2'), 0.01);
+                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progress_backgroundflash1'), 0.01);
+                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progress_backgroundflash2'), 0.01);
             }
             if (PayloadState.instance.payloadState == PayloadMovementState.IDLE || PayloadState.instance.payloadState == PayloadMovementState.LOCKED) {
                 mod.SetUITextAlpha(mod.FindUIWidgetWithName('payloadstatus1'), 1);
@@ -250,21 +260,7 @@ export class PayloadUI {
                 mod.SetUITextAlpha(mod.FindUIWidgetWithName('payloadstatus1'), alpha);
                 mod.SetUITextAlpha(mod.FindUIWidgetWithName('payloadstatus2'), alpha);
             }
-            await mod.Wait(0.066);
         }
-
-        if (PayloadState.instance.payloadState == PayloadMovementState.IDLE || PayloadState.instance.payloadState == PayloadMovementState.LOCKED) {
-            mod.SetUITextAlpha(mod.FindUIWidgetWithName('payloadstatus1'), 1);
-            mod.SetUITextAlpha(mod.FindUIWidgetWithName('payloadstatus2'), 1);
-        } else {
-            mod.SetUITextAlpha(mod.FindUIWidgetWithName('payloadstatus1'), 0.1);
-            mod.SetUITextAlpha(mod.FindUIWidgetWithName('payloadstatus2'), 0.1);
-        }
-
-        mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progressflash1'), 0.01);
-        mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progressflash2'), 0.01);
-        mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progress_backgroundflash1'), 0.01);
-        mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progress_backgroundflash2'), 0.01);
     }
 
     public static async nukeUI(): Promise<void> {
