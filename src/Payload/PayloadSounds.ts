@@ -104,14 +104,14 @@ export class PayloadSounds {
         }
     }
 
-    public static async updateSoundPositions(): Promise<void> {
+    public static updateSoundPositions(): void {
         if (mod.DistanceBetween(PayloadState.instance.payloadPosition, PayloadSounds.lastSoundUpdatePos) > 1.5) {
             PayloadSounds.lastSoundUpdatePos = PayloadState.instance.payloadPosition;
             mod.SetObjectTransform(PayloadSounds.payloadMoving, mod.CreateTransform(PayloadState.instance.payloadPosition, mod.CreateVector(0, 0, 0)));
         }
     }
 
-    public static async playLowTimeVO(): Promise<void> {
+    public static playLowTimeVO(): void {
         if (!PayloadSounds.lowtime) {
             PayloadSounds.lowtime = true;
             mod.PlayVO(PayloadSounds.VOModule1, mod.VoiceOverEvents2D.TimeLow, mod.VoiceOverFlags.Alpha, mod.GetTeam(1));
@@ -119,7 +119,7 @@ export class PayloadSounds {
         }
     }
 
-    public static async playNearEndVO(): Promise<void> {
+    public static playNearEndVO(): void {
         if (!PayloadSounds.nearendVO) {
             PayloadSounds.nearendVO = true;
             mod.PlayVO(PayloadSounds.VOModule1, mod.VoiceOverEvents2D.ProgressLateWinning, mod.VoiceOverFlags.Alpha, mod.GetTeam(1));
@@ -127,7 +127,7 @@ export class PayloadSounds {
         }
     }
 
-    public static async playNearEndMusic(): Promise<void> {
+    public static playNearEndMusic(): void {
         if (!PayloadSounds.nearend) {
             PayloadSounds.nearend = true;
             mod.PlayMusic(mod.MusicEvents.Core_Overtime_Loop);

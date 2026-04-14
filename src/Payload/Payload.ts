@@ -20,7 +20,7 @@ export class Payload {
             PayloadCore.executeEveryTick();
         });
 
-        Events.OngoingPlayer.subscribe(async (eventPlayer: mod.Player) => {
+        Events.OngoingPlayer.subscribe((eventPlayer: mod.Player) => {
             PayloadCore.checkTeamSwitchConditions(eventPlayer);
             PayloadCore.playerEndState(eventPlayer);
         });

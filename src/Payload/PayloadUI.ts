@@ -99,7 +99,7 @@ export class PayloadUI {
         PayloadUI.uiReady = true;
     }
 
-    public static async updateProgressUI(): Promise<void> {
+    public static updateProgressUI(): void {
         const leftProgress = mod.RoundToInteger(6 * PayloadState.instance.progressInPercent) - 2;
         const rightProgress = mod.RoundToInteger(600 - (6 * PayloadState.instance.progressInPercent));
         const progressIconPos = mod.RoundToInteger((146 + (6 * PayloadState.instance.progressInPercent)) * 100) / 100;
@@ -129,7 +129,7 @@ export class PayloadUI {
         if (wIcon) mod.SetUIWidgetPosition(wIcon, mod.CreateVector(progressIconPos, 0, 0));
     }
 
-    public static async updateStatusUI(): Promise<void> {
+    public static updateStatusUI(): void {
         let stateLabel = mod.stringkeys.payload.state.idle;
         mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon1'), mod.CreateVector(1, 1, 1));
         mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon2'), mod.CreateVector(1, 1, 1));
@@ -193,9 +193,9 @@ export class PayloadUI {
         mod.DeleteUIWidget(mod.FindUIWidgetWithName('checkpointreached'));
     }
 
-    public static async updatePlayerCountUI(): Promise<void> {
-        const team1 = PayloadState.instance.playersInPushProximity.get(1)?.length || 0;
-        const team2 = PayloadState.instance.playersInPushProximity.get(2)?.length || 0;
+    public static updatePlayerCountUI(): void {
+        const team1 = PayloadState.instance.playersInPushProximity.get(1)!.length;
+        const team2 = PayloadState.instance.playersInPushProximity.get(2)!.length;
         mod.SetUITextLabel(mod.FindUIWidgetWithName('left_player_count1'), mod.Message(mod.stringkeys.payload.counter, team1));
         mod.SetUITextLabel(mod.FindUIWidgetWithName('left_player_count2'), mod.Message(mod.stringkeys.payload.counter, team2));
         mod.SetUITextLabel(mod.FindUIWidgetWithName('right_player_count1'), mod.Message(mod.stringkeys.payload.counter, team2));
@@ -223,7 +223,7 @@ export class PayloadUI {
         mod.DeleteUIWidget(mod.FindUIWidgetWithName('credits'));
     }
 
-    public static async onPlayerJoinGameGlobalUIRefresh(): Promise<void> {
+    public static onPlayerJoinGameGlobalUIRefresh(): void {
         if (PayloadUI.uiReady) {
             PayloadUI.deleteUI();
             PayloadUI.setup();
@@ -231,7 +231,7 @@ export class PayloadUI {
         }
     }
 
-    public static async progressFlash(): Promise<void> {
+    public static progressFlash(): void {
         if (!PayloadUI.uiReady) return;
         let alpha = 0.1;
         if (PayloadState.instance.progressBarFlashAlpha > 0) {
@@ -341,7 +341,7 @@ export class PayloadUI {
         mod.StopActiveMovementForObject(mod.GetFixedCamera(51));
     }
 
-    public static async updateDebugUI(): Promise<void> {
+    public static updateDebugUI(): void {
         if (!PayloadConfig.enableDebug) return;
         let debugText = mod.FindUIWidgetWithName('debugText');
         if (!debugText) {

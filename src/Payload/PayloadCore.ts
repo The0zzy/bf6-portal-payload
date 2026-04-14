@@ -158,7 +158,7 @@ export class PayloadCore {
         }
     }
 
-    private static async updatePayloadSpatials(respawn: boolean): Promise<void> {
+    private static updatePayloadSpatials(respawn: boolean): void {
         PayloadState.instance.payloadSpatialsConfig.forEach((config, i) => {
             const spawnPos = mod.Add(PayloadState.instance.payloadPosition, config.relativeOffset);
             const spawnRot = mod.Add(PayloadState.instance.payloadRotation, config.rotation);
@@ -181,7 +181,7 @@ export class PayloadCore {
         });
     }
 
-    private static async updatePayloadObjectives(respawn: boolean): Promise<void> {
+    private static updatePayloadObjectives(respawn: boolean): void {
         PayloadConfig.payloadObjectives.forEach((objectiveConfig, i) => {
             const spawnPos = mod.Add(PayloadState.instance.payloadPosition, objectiveConfig.relativeOffset);
             const spawnRot = mod.Add(PayloadState.instance.payloadRotation, objectiveConfig.rotation);
@@ -204,7 +204,7 @@ export class PayloadCore {
         });
     }
 
-    public static async updatePayloadVfx(respawn: boolean): Promise<void> {
+    public static updatePayloadVfx(respawn: boolean): void {
         PayloadConfig.payloadVfx.forEach((vfxConfig, i) => {
             const spawnPos = mod.Add(PayloadState.instance.payloadPosition, vfxConfig.relativeOffset);
             const spawnRot = mod.Add(PayloadState.instance.payloadRotation, vfxConfig.rotation);
@@ -219,13 +219,13 @@ export class PayloadCore {
                     spawnRot,
                     mod.CreateVector(vfxConfig.scale, vfxConfig.scale, vfxConfig.scale)
                 ) as mod.VFX;
-                PayloadState.instance.payloadVfx.set(i, vfx);
-            }
-            if (vfx) {
                 mod.EnableVFX(vfx, true);
                 mod.SetVFXColor(vfx, vfxConfig.color1);
                 mod.SetVFXSpeed(vfx, vfxConfig.speed);
                 mod.SetVFXScale(vfx, vfxConfig.scale);
+                PayloadState.instance.payloadVfx.set(i, vfx);
+            }
+            if (vfx) {
                 mod.MoveVFX(vfx, spawnPos, spawnRot);
             }
         });
@@ -238,8 +238,8 @@ export class PayloadCore {
 
         PayloadCore.getAlivePlayersInProximity();
 
-        const playersTeam1 = PayloadState.instance.playersInPushProximity.get(1) || [];
-        const playersTeam2 = PayloadState.instance.playersInPushProximity.get(2) || [];
+        const playersTeam1 = PayloadState.instance.playersInPushProximity.get(1)!;
+        const playersTeam2 = PayloadState.instance.playersInPushProximity.get(2)!;
 
         if (playersTeam1.length > playersTeam2.length) {
             PayloadCore.pushForward();
@@ -280,7 +280,7 @@ export class PayloadCore {
         }
     }
 
-    private static async executeEverySecond(): Promise<void> {
+    private static executeEverySecond(): void {
         if (PayloadState.instance.lastElapsedSeconds >= PayloadConfig.maxGameModeTime && !PayloadState.instance.overtime) {
             PayloadCore.onRunningOutOfTime();
             return;
@@ -311,8 +311,8 @@ export class PayloadCore {
             PayloadSounds.playLowTimeVO();
         }
 
-        const playersTeam1 = PayloadState.instance.playersInPushProximity.get(1) || [];
-        const playersTeam2 = PayloadState.instance.playersInPushProximity.get(2) || [];
+        const playersTeam1 = PayloadState.instance.playersInPushProximity.get(1)!;
+        const playersTeam2 = PayloadState.instance.playersInPushProximity.get(2)!;
 
         for (const p of playersTeam1) {
             if (PayloadState.instance.payloadState == PayloadMovementState.ADVANCING) {
@@ -363,7 +363,7 @@ export class PayloadCore {
         PayloadState.instance.progressInPercent = (traveledDistance / PayloadState.instance.totalDistanceInMeters) * 100;
     }
 
-    public static async applyCheckpointFx(): Promise<void> {
+    public static applyCheckpointFx(): void {
         const reachedCheckpointWpIndex = PayloadState.instance.checkpointIndexes[
             PayloadState.instance.reachedCheckpointIndex
         ];
@@ -441,6 +441,9 @@ export class PayloadCore {
 
     private static getAlivePlayersInProximity(): void {
         PayloadState.instance.playersInPushProximity.clear();
+        // reset proximity lists for both default teams
+        PayloadState.instance.playersInPushProximity.set(1, []);
+        PayloadState.instance.playersInPushProximity.set(2, []);
         const players = mod.AllPlayers();
         const playerCount = mod.CountOf(players);
 
@@ -450,6 +453,7 @@ export class PayloadCore {
                 const playerPos = mod.GetSoldierState(player, mod.SoldierStateVector.GetPosition);
                 if (mod.DistanceBetween(PayloadState.instance.payloadPosition, playerPos) <= PayloadConfig.pushProximityRadius) {
                     const teamId = mod.GetObjId(mod.GetTeam(player));
+                    // in case there are more than 2 teams, add them to the map as well
                     if (!PayloadState.instance.playersInPushProximity.has(teamId)) {
                         PayloadState.instance.playersInPushProximity.set(teamId, []);
                     }
@@ -688,8 +692,8 @@ export class PayloadCore {
             PayloadSounds.playPayloadIdleSound();
             return;
         }
-        const playersTeam1 = PayloadState.instance.playersInPushProximity.get(1) || [];
-        const playersTeam2 = PayloadState.instance.playersInPushProximity.get(2) || [];
+        const playersTeam1 = PayloadState.instance.playersInPushProximity.get(1)!;
+        const playersTeam2 = PayloadState.instance.playersInPushProximity.get(2)!;
 
         const playersInAdvantage = (
             playersTeam1.length -
@@ -719,8 +723,8 @@ export class PayloadCore {
             PayloadCore.setPayloadState(PayloadMovementState.LOCKED);
             return;
         }
-        const playersTeam1 = PayloadState.instance.playersInPushProximity.get(1) || [];
-        const playersTeam2 = PayloadState.instance.playersInPushProximity.get(2) || [];
+        const playersTeam1 = PayloadState.instance.playersInPushProximity.get(1)!;
+        const playersTeam2 = PayloadState.instance.playersInPushProximity.get(2)!;
 
         const playersInAdvantage = (
             playersTeam2.length -
@@ -742,7 +746,7 @@ export class PayloadCore {
         PayloadSounds.VOPushingBack();
     }
 
-    private static async updatePayloadObjects(respawn: boolean): Promise<void> {
+    private static updatePayloadObjects(respawn: boolean): void {
         PayloadCore.updatePayloadSpatials(respawn);
         PayloadCore.updatePayloadVfx(respawn);
         PayloadCore.updatePayloadObjectives(respawn);
@@ -788,7 +792,7 @@ export class PayloadCore {
      * @method checkTeamSwitchConditions
      * @param {mod.Player} eventPlayer - The player to check for team switch conditions
     */
-    public static async checkTeamSwitchConditions(eventPlayer: mod.Player): Promise<void> {
+    public static checkTeamSwitchConditions(eventPlayer: mod.Player): void {
         if (!PayloadConfig.enableTeamSwitch) return;
         if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier)) return;
         if (!mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) return;
@@ -804,7 +808,7 @@ export class PayloadCore {
      * Makes a player immortal during the end screen phase of the game.
      * @param eventPlayer - The player who should be made immortal
      */
-    public static async playerEndState(eventPlayer: mod.Player): Promise<void> {
+    public static playerEndState(eventPlayer: mod.Player): void {
         if (!PayloadState.instance.gameOngoing) {
             if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) {
                 mod.SetPlayerMaxHealth(eventPlayer, 500);
