@@ -242,11 +242,11 @@ export class PayloadCore {
         const playersTeam2 = PayloadState.instance.playersInPushProximity.get(2)!;
 
         if (playersTeam1.length > playersTeam2.length) {
-            PayloadCore.pushForward();
+            PayloadCore.pushPayload(1, 2, true);
             PayloadCore.onPayloadMoved();
             PayloadState.instance.overtime = true;
         } else if (playersTeam2.length > playersTeam1.length) {
-            PayloadCore.pushBackward();
+            PayloadCore.pushPayload(2, 1, false);
             PayloadCore.onPayloadMoved();
             PayloadState.instance.overtime = false;
         } else if (playersTeam1.length > 0 && playersTeam2.length > 0) {
@@ -686,64 +686,37 @@ export class PayloadCore {
         }
     }
 
-    private static pushForward(): void {
-        if (PayloadState.instance.reachedWaypointIndex >= PayloadState.instance.waypoints.length - 1) {
+    private static pushPayload(pushingTeamId: number, opposingTeamId: number, forward: boolean): void {
+        if (forward && PayloadState.instance.reachedWaypointIndex >= PayloadState.instance.waypoints.length - 1) {
             PayloadCore.setPayloadState(PayloadMovementState.LOCKED);
             PayloadSounds.playPayloadIdleSound();
             return;
         }
-        const playersTeam1 = PayloadState.instance.playersInPushProximity.get(1)!;
-        const playersTeam2 = PayloadState.instance.playersInPushProximity.get(2)!;
-
-        const playersInAdvantage = (
-            playersTeam1.length -
-            playersTeam2.length
-        );
-        const speedAddtion = (
-            PayloadConfig.payloadSpeed.get(1)!.meterPerSecondPerPlayer *
-            playersInAdvantage
-        );
-        const speed = (
-            (
-                PayloadConfig.payloadSpeed.get(1)!.meterPerSecond +
-                speedAddtion
-            ) /
-            PayloadState.instance.tickrate
-        );
-        PayloadCore.setPayloadState(PayloadMovementState.ADVANCING);
-        PayloadCore.moveAlongSpline(true, speed);
-        PayloadSounds.VOPushing();
-    }
-
-    private static pushBackward(): void {
-        if (PayloadState.instance.reachedWaypointIndex <= (PayloadState.instance.reachedCheckpointIndex - 1) || (PayloadState.instance.reachedWaypointIndex == 0 && (PayloadState.instance.segmentDistance || 0) <= 0)) {
-            if (PayloadState.instance.reachedWaypointIndex == 0 && (PayloadState.instance.segmentDistance || 0) < 0) {
-                PayloadState.instance.segmentDistance = 0;
+        if (!forward) {
+            if (PayloadState.instance.reachedWaypointIndex <= (PayloadState.instance.reachedCheckpointIndex - 1)
+                || (PayloadState.instance.reachedWaypointIndex == 0 && (PayloadState.instance.segmentDistance || 0) <= 0)) {
+                if (PayloadState.instance.reachedWaypointIndex == 0 && (PayloadState.instance.segmentDistance || 0) < 0) {
+                    PayloadState.instance.segmentDistance = 0;
+                }
+                PayloadCore.setPayloadState(PayloadMovementState.LOCKED);
+                return;
             }
-            PayloadCore.setPayloadState(PayloadMovementState.LOCKED);
-            return;
         }
-        const playersTeam1 = PayloadState.instance.playersInPushProximity.get(1)!;
-        const playersTeam2 = PayloadState.instance.playersInPushProximity.get(2)!;
 
-        const playersInAdvantage = (
-            playersTeam2.length -
-            playersTeam1.length
-        );
-        const speedAddtion = (
-            PayloadConfig.payloadSpeed.get(2)!.meterPerSecondPerPlayer *
-            playersInAdvantage
-        );
-        const speed = (
-            (
-                PayloadConfig.payloadSpeed.get(2)!.meterPerSecond +
-                speedAddtion
-            ) /
-            PayloadState.instance.tickrate
-        );
-        PayloadCore.setPayloadState(PayloadMovementState.PUSHING_BACK);
-        PayloadCore.moveAlongSpline(false, speed);
-        PayloadSounds.VOPushingBack();
+        const pushingPlayers = PayloadState.instance.playersInPushProximity.get(pushingTeamId)!;
+        const opposingPlayers = PayloadState.instance.playersInPushProximity.get(opposingTeamId)!;
+        const speedConfig = PayloadConfig.payloadSpeed.get(pushingTeamId)!;
+
+        const advantage = pushingPlayers.length - opposingPlayers.length;
+        const speed = (speedConfig.meterPerSecond + speedConfig.meterPerSecondPerPlayer * advantage) / PayloadState.instance.tickrate;
+
+        PayloadCore.setPayloadState(forward ? PayloadMovementState.ADVANCING : PayloadMovementState.PUSHING_BACK);
+        PayloadCore.moveAlongSpline(forward, speed);
+        if (forward) {
+            PayloadSounds.VOPushing();
+        } else {
+            PayloadSounds.VOPushingBack();
+        }
     }
 
     private static updatePayloadObjects(respawn: boolean): void {
