@@ -66,21 +66,43 @@ export class PayloadUI {
         const idleMsg = mod.Message(mod.stringkeys.payload.state.message, mod.stringkeys.payload.state.idle);
         const iconPos = mod.CreateVector(0, 20, 0);
         const iconSize = mod.CreateVector(50, 40, 0);
+        const padding = 0;
+        const statusBgAlpha = 0.4;
+        const iconBgAlpha = 0.7;
+        const textAlpha = 1;
 
         const payloadstatus1 = 'payloadstatus1';
-        mod.AddUIText(payloadstatus1, statusPos, statusSize, mod.UIAnchor.TopCenter, container, true, 0, statusBgColour, 0.4, mod.UIBgFill.None, idleMsg, uiConfig.statusFontSize, uiConfig.whiteColour, 1, mod.UIAnchor.Center, mod.GetTeam(1));
+        mod.AddUIText(
+            payloadstatus1, statusPos, statusSize, mod.UIAnchor.TopCenter, 
+            container, true, padding, statusBgColour, statusBgAlpha, mod.UIBgFill.None, 
+            idleMsg, uiConfig.statusFontSize, uiConfig.whiteColour, textAlpha,
+            mod.UIAnchor.Center, mod.GetTeam(1)
+        );
         PayloadUI.widgets.payloadstatus1 = mod.FindUIWidgetWithName(payloadstatus1);
 
         const payloadstatus2 = 'payloadstatus2';
-        mod.AddUIText(payloadstatus2, statusPos, statusSize, mod.UIAnchor.TopCenter, container, true, 0, statusBgColour, 0.4, mod.UIBgFill.None, idleMsg, uiConfig.statusFontSize, uiConfig.whiteColour, 1, mod.UIAnchor.Center, mod.GetTeam(2));
+        mod.AddUIText(
+            payloadstatus2, statusPos, statusSize, mod.UIAnchor.TopCenter, 
+            container, true, padding, statusBgColour, statusBgAlpha, mod.UIBgFill.None, 
+            idleMsg, uiConfig.statusFontSize, uiConfig.whiteColour, textAlpha,
+            mod.UIAnchor.Center, mod.GetTeam(2)
+        );
         PayloadUI.widgets.payloadstatus2 = mod.FindUIWidgetWithName(payloadstatus2);
 
         const payload_icon1 = 'payload_icon1';
-        mod.AddUIImage(payload_icon1, iconPos, iconSize, mod.UIAnchor.TopCenter, container, true, 0, uiConfig.whiteColour, 0.7, mod.UIBgFill.None, mod.UIImageType.CrownSolid, uiConfig.whiteColour, 1, mod.GetTeam(1));
+        mod.AddUIImage(
+            payload_icon1, iconPos, iconSize, mod.UIAnchor.TopCenter, 
+            container, true, padding, uiConfig.whiteColour, iconBgAlpha, mod.UIBgFill.None, 
+            mod.UIImageType.CrownSolid, uiConfig.whiteColour, textAlpha, mod.GetTeam(1)
+        );
         PayloadUI.widgets.payload_icon1 = mod.FindUIWidgetWithName(payload_icon1);
 
         const payload_icon2 = 'payload_icon2';
-        mod.AddUIImage(payload_icon2, iconPos, iconSize, mod.UIAnchor.TopCenter, container, true, 0, uiConfig.whiteColour, 0.7, mod.UIBgFill.None, mod.UIImageType.CrownSolid, uiConfig.whiteColour, 1, mod.GetTeam(2));
+        mod.AddUIImage(
+            payload_icon2, iconPos, iconSize, mod.UIAnchor.TopCenter, 
+            container, true, padding, uiConfig.whiteColour, iconBgAlpha, mod.UIBgFill.None, 
+            mod.UIImageType.CrownSolid, uiConfig.whiteColour, textAlpha, mod.GetTeam(2)
+        );
         PayloadUI.widgets.payload_icon2 = mod.FindUIWidgetWithName(payload_icon2);
     }
 
