@@ -27,6 +27,22 @@ export interface PayloadSpeedConfig {
     meterPerSecondPerPlayer: number;
 }
 
+export interface UIConfig {
+    readonly friendlyColour: mod.Vector;
+    readonly enemyColour: mod.Vector;
+    readonly friendlyBgColour: mod.Vector;
+    readonly enemyBgColour: mod.Vector;
+    readonly goldColour: mod.Vector;
+    readonly goldBgColour: mod.Vector;
+    readonly whiteColour: mod.Vector;
+    readonly progressBarWidth: number;
+    readonly progressBarMultiplier: number;
+    readonly progressBarLeftOffset: number;
+    readonly progressBarRightOffset: number;
+    readonly statusFontSize: number;
+    readonly lockedFontSize: number;
+}
+
 export class PayloadConfig {
     /** Whether team switching is enabled */
     public static readonly enableTeamSwitch = true;
@@ -126,4 +142,21 @@ export class PayloadConfig {
             speed: 1
         },
     ];
+
+    /** UI theme and layout constants */
+    public static readonly uiConfig: UIConfig = {
+        friendlyColour: mod.CreateVector(0, 0.7, 1),
+        enemyColour: mod.CreateVector(1, 0.2, 0.2),
+        friendlyBgColour: mod.CreateVector(0, 0.15, 0.3),
+        enemyBgColour: mod.CreateVector(0.4, 0, 0),
+        goldColour: mod.CreateVector(1, 0.8, 0),
+        goldBgColour: mod.CreateVector(0.5, 0.4, 0),
+        whiteColour: mod.CreateVector(1, 1, 1),
+        progressBarWidth: 600,
+        progressBarMultiplier: 6,
+        progressBarLeftOffset: 150,
+        progressBarRightOffset: 152,
+        statusFontSize: 38,
+        lockedFontSize: 28,
+    };
 }

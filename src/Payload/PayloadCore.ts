@@ -268,16 +268,7 @@ export class PayloadCore {
 
         PayloadUI.updatePlayerCountUI();
         PayloadUI.updateDebugUI();
-
-        // TODO: find a more elegant solution than using an arbitrary timer 
-        // for the progress flash effect
-        PayloadUI.progressFlash();
-        if (PayloadState.instance.progressBarFlashAlpha > 0) {
-            PayloadState.instance.progressBarFlashAlpha -= 0.5;
-        }
-        if (PayloadState.instance.progressBarFlashAlpha < 0) {
-            PayloadState.instance.progressBarFlashAlpha = 0;
-        }
+        PayloadUI.animateProgressFlash();
     }
 
     private static executeEverySecond(): void {
@@ -331,7 +322,7 @@ export class PayloadCore {
             }
         }
 
-        PayloadState.instance.progressBarFlashAlpha = 10;
+        PayloadUI.triggerProgressFlash();
     }
 
     private static updateTickrate(): void {

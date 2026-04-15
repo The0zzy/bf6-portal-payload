@@ -39,7 +39,7 @@ export class Payload {
             // if refreshing UI/visual elements too early, they won't refresh correctly
             // TODO: find a more elegant solution than using an arbitrary timeout
             await mod.Wait(5);
-            PayloadUI.onPlayerJoinGameGlobalUIRefresh();
+            PayloadUI.rebuildUI();
             PayloadWeather.resetWeatherVFX();
         });
 

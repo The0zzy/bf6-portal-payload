@@ -3,268 +3,478 @@ import { PayloadState, PayloadMovementState } from './PayloadState.ts';
 import { PayloadSounds } from './PayloadSounds.ts';
 
 export class PayloadUI {
-    private static friendlycolour = mod.CreateVector(0, 0.7, 1);
-    private static enemycolour = mod.CreateVector(1, 0.2, 0.2);
-    private static friendlybgcolour = mod.CreateVector(0, 0.15, 0.3);
-    private static enemybgcolour = mod.CreateVector(0.4, 0, 0);
-    private static goldcolour = mod.CreateVector(1, 0.8, 0);
-    private static goldbgcolour = mod.CreateVector(0.5, 0.4, 0);
-    private static uiReady = false;
-    private static mins = 7;
-    private static secs = 30;
-    private static timer = mod.stringkeys.payload.objective.checkpoint_timer;
+    private static readonly timerStringKey = mod.stringkeys.payload.objective.checkpoint_timer;
+    private static prevTeam1Count = -1;
+    private static prevTeam2Count = -1;
 
-    private static cachedWidgets: {
-        progress1?: mod.UIWidget;
-        progress2?: mod.UIWidget;
-        percentage1?: mod.UIWidget;
-        percentage2?: mod.UIWidget;
-        progress_background1?: mod.UIWidget;
-        progress_background2?: mod.UIWidget;
-        progressflash1?: mod.UIWidget;
-        progressflash2?: mod.UIWidget;
-        progress_backgroundflash1?: mod.UIWidget;
-        progress_backgroundflash2?: mod.UIWidget;
-        payload_progress_icon?: mod.UIWidget;
-    } = {};
+    private static widgets = {
+        container: null as mod.UIWidget | null,
+        payloadstatus1: null as mod.UIWidget | null,
+        payloadstatus2: null as mod.UIWidget | null,
+        payload_icon1: null as mod.UIWidget | null,
+        payload_icon2: null as mod.UIWidget | null,
+        progress1: null as mod.UIWidget | null,
+        progress2: null as mod.UIWidget | null,
+        progress_background1: null as mod.UIWidget | null,
+        progress_background2: null as mod.UIWidget | null,
+        progressflash1: null as mod.UIWidget | null,
+        progressflash2: null as mod.UIWidget | null,
+        progress_backgroundflash1: null as mod.UIWidget | null,
+        progress_backgroundflash2: null as mod.UIWidget | null,
+        remaining_time1: null as mod.UIWidget | null,
+        remaining_time2: null as mod.UIWidget | null,
+        percentage1: null as mod.UIWidget | null,
+        percentage2: null as mod.UIWidget | null,
+        payload_progress_icon: null as mod.UIWidget | null,
+        left_player_count1: null as mod.UIWidget | null,
+        left_player_count2: null as mod.UIWidget | null,
+        right_player_count1: null as mod.UIWidget | null,
+        right_player_count2: null as mod.UIWidget | null,
+        credits: null as mod.UIWidget | null,
+        debugText: null as mod.UIWidget | null,
+    };
 
-    private static getWidget(name: string): mod.UIWidget | undefined {
-        if (!PayloadUI.cachedWidgets[name as keyof typeof PayloadUI.cachedWidgets]) {
-            PayloadUI.cachedWidgets[name as keyof typeof PayloadUI.cachedWidgets] = mod.FindUIWidgetWithName(name);
-        }
-        return PayloadUI.cachedWidgets[name as keyof typeof PayloadUI.cachedWidgets];
-    }
-
-    public static updateCheckpointTimer(remainingTime: number): void {
-        PayloadUI.mins = mod.Floor(remainingTime / 60);
-        PayloadUI.secs = mod.Floor(mod.Modulo(remainingTime, 60));
-        if (PayloadState.instance.overtime && remainingTime <= 0) {
-            mod.SetUITextLabel(mod.FindUIWidgetWithName('remaining_time1'), mod.Message(mod.stringkeys.payload.state.overtime));
-            mod.SetUITextLabel(mod.FindUIWidgetWithName('remaining_time2'), mod.Message(mod.stringkeys.payload.state.overtime));
-            mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName('remaining_time1'), PayloadUI.goldbgcolour);
-            mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName('remaining_time2'), PayloadUI.goldbgcolour);
-        } else if (remainingTime > 0) {
-            mod.SetUITextLabel(mod.FindUIWidgetWithName('remaining_time1'), mod.Message(PayloadUI.timer, PayloadUI.mins, mod.Floor(PayloadUI.secs / 10), mod.Modulo(PayloadUI.secs, 10)));
-            mod.SetUITextLabel(mod.FindUIWidgetWithName('remaining_time2'), mod.Message(PayloadUI.timer, PayloadUI.mins, mod.Floor(PayloadUI.secs / 10), mod.Modulo(PayloadUI.secs, 10)));
-            mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName('remaining_time1'), PayloadUI.enemybgcolour);
-            mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName('remaining_time2'), PayloadUI.friendlybgcolour);
-        } else {
-            mod.SetUITextLabel(mod.FindUIWidgetWithName('remaining_time1'), mod.Message(PayloadUI.timer, 0, 0, 0));
-            mod.SetUITextLabel(mod.FindUIWidgetWithName('remaining_time2'), mod.Message(PayloadUI.timer, 0, 0, 0));
-            mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName('remaining_time1'), PayloadUI.enemybgcolour);
-            mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName('remaining_time2'), PayloadUI.friendlybgcolour);
-        }
-    }
+    //#region UI Setup
 
     public static setup(): void {
-        mod.AddUIContainer('container', mod.CreateVector(0, 50, 0), mod.CreateVector(900, 500, 0), mod.UIAnchor.TopCenter);
-        const containerWidget = mod.FindUIWidgetWithName('container');
-        mod.SetUIWidgetBgFill(containerWidget, mod.UIBgFill.None);
-        mod.SetUIWidgetDepth(containerWidget, mod.UIDepth.AboveGameUI);
-
-        mod.AddUIText('payloadstatus1', mod.CreateVector(0, 55, 0), mod.CreateVector(150, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, mod.CreateVector(0.5, 0.5, 0.5), 0.4, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.state.message, mod.stringkeys.payload.state.idle), 38, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center, mod.GetTeam(1));
-        mod.AddUIText('payloadstatus2', mod.CreateVector(0, 55, 0), mod.CreateVector(150, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, mod.CreateVector(0.5, 0.5, 0.5), 0.4, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.state.message, mod.stringkeys.payload.state.idle), 38, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center, mod.GetTeam(2));
-        mod.AddUIImage('payload_icon1', mod.CreateVector(0, 20, 0), mod.CreateVector(50, 40, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, mod.CreateVector(1, 1, 1), 0.7, mod.UIBgFill.None, mod.UIImageType.CrownSolid, mod.CreateVector(1, 1, 1), 1, mod.GetTeam(1));
-        mod.AddUIImage('payload_icon2', mod.CreateVector(0, 20, 0), mod.CreateVector(50, 40, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, mod.CreateVector(1, 1, 1), 0.7, mod.UIBgFill.None, mod.UIImageType.CrownSolid, mod.CreateVector(1, 1, 1), 1, mod.GetTeam(2));
-        mod.AddUIContainer('progress_background1', mod.CreateVector(152, 5, 0), mod.CreateVector(600 - (6 * PayloadState.instance.progressInPercent), 10, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, PayloadUI.enemybgcolour, 0.9, mod.UIBgFill.Solid, mod.GetTeam(1));
-        mod.AddUIContainer('progress1', mod.CreateVector(150, 0, 0), mod.CreateVector((6 * PayloadState.instance.progressInPercent) - 2, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, PayloadUI.friendlybgcolour, 0.9, mod.UIBgFill.Solid, mod.GetTeam(1));
-        mod.AddUIContainer('progress_background2', mod.CreateVector(152, 5, 0), mod.CreateVector(600 - (6 * PayloadState.instance.progressInPercent), 10, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, PayloadUI.friendlybgcolour, 0.9, mod.UIBgFill.Solid, mod.GetTeam(2));
-        mod.AddUIContainer('progress2', mod.CreateVector(150, 0, 0), mod.CreateVector((6 * PayloadState.instance.progressInPercent) - 2, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, PayloadUI.enemybgcolour, 0.9, mod.UIBgFill.Solid, mod.GetTeam(2));
-        mod.AddUIContainer('checkpoint0', mod.CreateVector(146, -5, 0), mod.CreateVector(4, 30, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(0.9, 0.9, 0.9), 1, mod.UIBgFill.Solid);
-        mod.AddUIText('remaining_time1', mod.CreateVector(0, -5, 0), mod.CreateVector(100, 30, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, PayloadUI.enemybgcolour, 0.9, mod.UIBgFill.Solid, mod.Message(PayloadUI.timer, PayloadUI.mins, mod.Floor(PayloadUI.secs / 10), mod.Modulo(PayloadUI.secs, 10)), 26, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center, mod.GetTeam(1));
-        mod.AddUIText('remaining_time2', mod.CreateVector(0, -5, 0), mod.CreateVector(100, 30, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, PayloadUI.friendlybgcolour, 0.9, mod.UIBgFill.Solid, mod.Message(PayloadUI.timer, PayloadUI.mins, mod.Floor(PayloadUI.secs / 10), mod.Modulo(PayloadUI.secs, 10)), 26, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center, mod.GetTeam(2));
-        mod.AddUIText('percentage1', mod.CreateVector(0, -5, 0), mod.CreateVector(100, 30, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, PayloadUI.friendlybgcolour, 0.9, mod.UIBgFill.Solid, mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(PayloadState.instance.progressInPercent)), 26, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center, mod.GetTeam(1));
-        mod.AddUIText('percentage2', mod.CreateVector(0, -5, 0), mod.CreateVector(100, 30, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, PayloadUI.enemybgcolour, 0.9, mod.UIBgFill.Solid, mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(PayloadState.instance.progressInPercent)), 26, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center, mod.GetTeam(2));
-        mod.AddUIContainer('progress_backgroundflash1', mod.CreateVector(152, 5, 0), mod.CreateVector(600 - (6 * PayloadState.instance.progressInPercent), 10, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, PayloadUI.enemycolour, 0.01, mod.UIBgFill.GradientLeft, mod.GetTeam(1));
-        mod.AddUIContainer('progress_backgroundflash2', mod.CreateVector(152, 5, 0), mod.CreateVector(600 - (6 * PayloadState.instance.progressInPercent), 10, 0), mod.UIAnchor.TopRight, containerWidget, true, 0, PayloadUI.friendlycolour, 0.01, mod.UIBgFill.GradientLeft, mod.GetTeam(2));
-        mod.AddUIContainer('progressflash1', mod.CreateVector(150, 0, 0), mod.CreateVector((6 * PayloadState.instance.progressInPercent) - 2, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, PayloadUI.friendlycolour, 0.01, mod.UIBgFill.GradientRight, mod.GetTeam(1));
-        mod.AddUIContainer('progressflash2', mod.CreateVector(150, 0, 0), mod.CreateVector((6 * PayloadState.instance.progressInPercent) - 2, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, PayloadUI.enemycolour, 0.01, mod.UIBgFill.GradientRight, mod.GetTeam(2));
-        mod.AddUIText('left_player_count1', mod.CreateVector(-35, 26, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, PayloadUI.friendlycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, PayloadUI.friendlycolour, 1, mod.UIAnchor.Center, mod.GetTeam(1));
-        mod.AddUIText('left_player_count2', mod.CreateVector(-35, 26, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, PayloadUI.friendlycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, PayloadUI.friendlycolour, 1, mod.UIAnchor.Center, mod.GetTeam(2));
-        mod.AddUIText('right_player_count1', mod.CreateVector(35, 26, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, PayloadUI.enemycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, PayloadUI.enemycolour, 1, mod.UIAnchor.Center, mod.GetTeam(1));
-        mod.AddUIText('right_player_count2', mod.CreateVector(35, 26, 0), mod.CreateVector(50, 30, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, PayloadUI.enemycolour, 0.9, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.counter, 0), 26, PayloadUI.enemycolour, 1, mod.UIAnchor.Center, mod.GetTeam(2));
-
-        for (let i = 1; i < PayloadState.instance.waypoints.length; i++) {
-            if (PayloadState.instance.waypoints[i].isCheckpoint) {
-                mod.AddUIContainer('checkpoint' + i,
-                    mod.CreateVector(146 + (6 * ((PayloadState.instance.waypoints[i].distance / PayloadState.instance.totalDistanceInMeters) * 100)), -5, 0),
-                    mod.CreateVector(4, 30, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(0.9, 0.9, 0.9), 1, mod.UIBgFill.Solid);
-            }
-        }
-
-        mod.AddUIContainer('payload_progress_icon', mod.CreateVector(mod.RoundToInteger((146 + (6 * PayloadState.instance.progressInPercent)) * 10) / 10, 0, 0), mod.CreateVector(4, 20, 0), mod.UIAnchor.TopLeft, containerWidget, true, 0, mod.CreateVector(1, 1, 0), 1, mod.UIBgFill.Solid);
-        mod.AddUIText('credits', mod.CreateVector(10, 2, 0), mod.CreateVector(300, 30, 0), mod.UIAnchor.BottomLeft, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0.8, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.credits), 14, mod.CreateVector(1, 1, 1), 0.6, mod.UIAnchor.Center, mod.UIDepth.AboveGameUI);
-
-        PayloadUI.cachedWidgets = {};
-        PayloadUI.uiReady = true;
+        PayloadUI.setupContainer();
+        PayloadUI.setupStatusBar();
+        PayloadUI.setupProgressBar();
+        PayloadUI.setupCheckpoints();
+        PayloadUI.setupTimerAndPercentage();
+        PayloadUI.setupFlashOverlays();
+        PayloadUI.setupPlayerCounts();
+        PayloadUI.setupProgressIcon();
+        PayloadUI.setupCredits();
+        PayloadUI.setupDebugText();
     }
 
-    public static updateProgressUI(): void {
-        const leftProgress = mod.RoundToInteger(6 * PayloadState.instance.progressInPercent) - 2;
-        const rightProgress = mod.RoundToInteger(600 - (6 * PayloadState.instance.progressInPercent));
-        const progressIconPos = mod.RoundToInteger((146 + (6 * PayloadState.instance.progressInPercent)) * 100) / 100;
-
-        const wProgress1 = PayloadUI.getWidget('progress1');
-        const wProgress2 = PayloadUI.getWidget('progress2');
-        const wPercentage1 = PayloadUI.getWidget('percentage1');
-        const wPercentage2 = PayloadUI.getWidget('percentage2');
-        const wBg1 = PayloadUI.getWidget('progress_background1');
-        const wBg2 = PayloadUI.getWidget('progress_background2');
-        const wFlash1 = PayloadUI.getWidget('progressflash1');
-        const wFlash2 = PayloadUI.getWidget('progressflash2');
-        const wBgFlash1 = PayloadUI.getWidget('progress_backgroundflash1');
-        const wBgFlash2 = PayloadUI.getWidget('progress_backgroundflash2');
-        const wIcon = PayloadUI.getWidget('payload_progress_icon');
-
-        if (wProgress1) mod.SetUIWidgetSize(wProgress1, mod.CreateVector(leftProgress, 20, 0));
-        if (wProgress2) mod.SetUIWidgetSize(wProgress2, mod.CreateVector(leftProgress, 20, 0));
-        if (wPercentage1) mod.SetUITextLabel(wPercentage1, mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(PayloadState.instance.progressInPercent)));
-        if (wPercentage2) mod.SetUITextLabel(wPercentage2, mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(PayloadState.instance.progressInPercent)));
-        if (wBg1) mod.SetUIWidgetSize(wBg1, mod.CreateVector(rightProgress, 10, 0));
-        if (wBg2) mod.SetUIWidgetSize(wBg2, mod.CreateVector(rightProgress, 10, 0));
-        if (wFlash1) mod.SetUIWidgetSize(wFlash1, mod.CreateVector(leftProgress, 20, 0));
-        if (wFlash2) mod.SetUIWidgetSize(wFlash2, mod.CreateVector(leftProgress, 20, 0));
-        if (wBgFlash1) mod.SetUIWidgetSize(wBgFlash1, mod.CreateVector(rightProgress, 10, 0));
-        if (wBgFlash2) mod.SetUIWidgetSize(wBgFlash2, mod.CreateVector(rightProgress, 10, 0));
-        if (wIcon) mod.SetUIWidgetPosition(wIcon, mod.CreateVector(progressIconPos, 0, 0));
+    private static setupContainer(): void {
+        const name = 'container';
+        mod.AddUIContainer(name, mod.CreateVector(0, 50, 0), mod.CreateVector(900, 500, 0), mod.UIAnchor.TopCenter);
+        PayloadUI.widgets.container = mod.FindUIWidgetWithName(name);
+        mod.SetUIWidgetBgFill(PayloadUI.widgets.container!, mod.UIBgFill.None);
+        mod.SetUIWidgetDepth(PayloadUI.widgets.container!, mod.UIDepth.AboveGameUI);
     }
 
-    public static updateStatusUI(): void {
-        let stateLabel = mod.stringkeys.payload.state.idle;
-        mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon1'), mod.CreateVector(1, 1, 1));
-        mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon2'), mod.CreateVector(1, 1, 1));
-        mod.SetUITextColor(mod.FindUIWidgetWithName('payloadstatus1'), mod.CreateVector(1, 1, 1));
-        mod.SetUITextColor(mod.FindUIWidgetWithName('payloadstatus2'), mod.CreateVector(1, 1, 1));
-        mod.SetUITextSize(mod.FindUIWidgetWithName('payloadstatus1'), 38);
-        mod.SetUITextSize(mod.FindUIWidgetWithName('payloadstatus2'), 38);
+    private static setupStatusBar(): void {
+        const uiConfig = PayloadConfig.uiConfig;
+        const container = PayloadUI.widgets.container!;
+        const statusPos = mod.CreateVector(0, 55, 0);
+        const statusSize = mod.CreateVector(150, 30, 0);
+        const statusBgColour = mod.CreateVector(0.5, 0.5, 0.5);
+        const idleMsg = mod.Message(mod.stringkeys.payload.state.message, mod.stringkeys.payload.state.idle);
+        const iconPos = mod.CreateVector(0, 20, 0);
+        const iconSize = mod.CreateVector(50, 40, 0);
 
-        switch (PayloadState.instance.payloadState) {
-            case PayloadMovementState.ADVANCING:
-                stateLabel = mod.stringkeys.payload.state.advancing;
-                mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon1'), PayloadUI.friendlycolour);
-                mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon2'), PayloadUI.enemycolour);
-                mod.SetUITextColor(mod.FindUIWidgetWithName('payloadstatus1'), PayloadUI.friendlycolour);
-                mod.SetUITextColor(mod.FindUIWidgetWithName('payloadstatus2'), PayloadUI.enemycolour);
-                break;
-            case PayloadMovementState.PUSHING_BACK:
-                stateLabel = mod.stringkeys.payload.state.pushing_back;
-                mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon1'), PayloadUI.enemycolour);
-                mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon2'), PayloadUI.friendlycolour);
-                mod.SetUITextColor(mod.FindUIWidgetWithName('payloadstatus1'), PayloadUI.enemycolour);
-                mod.SetUITextColor(mod.FindUIWidgetWithName('payloadstatus2'), PayloadUI.friendlycolour);
-                break;
-            case PayloadMovementState.CONTESTED:
-                stateLabel = mod.stringkeys.payload.state.contested;
-                mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon1'), PayloadUI.goldcolour);
-                mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon2'), PayloadUI.goldcolour);
-                mod.SetUITextColor(mod.FindUIWidgetWithName('payloadstatus1'), PayloadUI.goldcolour);
-                mod.SetUITextColor(mod.FindUIWidgetWithName('payloadstatus2'), PayloadUI.goldcolour);
-                break;
-            case PayloadMovementState.LOCKED:
-                stateLabel = mod.stringkeys.payload.state.locked;
-                mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon1'), PayloadUI.goldcolour);
-                mod.SetUIImageColor(mod.FindUIWidgetWithName('payload_icon2'), PayloadUI.goldcolour);
-                mod.SetUITextColor(mod.FindUIWidgetWithName('payloadstatus1'), PayloadUI.goldcolour);
-                mod.SetUITextColor(mod.FindUIWidgetWithName('payloadstatus2'), PayloadUI.goldcolour);
-                mod.SetUITextSize(mod.FindUIWidgetWithName('payloadstatus1'), 28);
-                mod.SetUITextSize(mod.FindUIWidgetWithName('payloadstatus2'), 28);
-                break;
-        }
+        const payloadstatus1 = 'payloadstatus1';
+        mod.AddUIText(payloadstatus1, statusPos, statusSize, mod.UIAnchor.TopCenter, container, true, 0, statusBgColour, 0.4, mod.UIBgFill.None, idleMsg, uiConfig.statusFontSize, uiConfig.whiteColour, 1, mod.UIAnchor.Center, mod.GetTeam(1));
+        PayloadUI.widgets.payloadstatus1 = mod.FindUIWidgetWithName(payloadstatus1);
 
-        mod.SetUITextLabel(mod.FindUIWidgetWithName('payloadstatus1'), mod.Message(mod.stringkeys.payload.state.message, stateLabel));
-        mod.SetUITextLabel(mod.FindUIWidgetWithName('payloadstatus2'), mod.Message(mod.stringkeys.payload.state.message, stateLabel));
+        const payloadstatus2 = 'payloadstatus2';
+        mod.AddUIText(payloadstatus2, statusPos, statusSize, mod.UIAnchor.TopCenter, container, true, 0, statusBgColour, 0.4, mod.UIBgFill.None, idleMsg, uiConfig.statusFontSize, uiConfig.whiteColour, 1, mod.UIAnchor.Center, mod.GetTeam(2));
+        PayloadUI.widgets.payloadstatus2 = mod.FindUIWidgetWithName(payloadstatus2);
+
+        const payload_icon1 = 'payload_icon1';
+        mod.AddUIImage(payload_icon1, iconPos, iconSize, mod.UIAnchor.TopCenter, container, true, 0, uiConfig.whiteColour, 0.7, mod.UIBgFill.None, mod.UIImageType.CrownSolid, uiConfig.whiteColour, 1, mod.GetTeam(1));
+        PayloadUI.widgets.payload_icon1 = mod.FindUIWidgetWithName(payload_icon1);
+
+        const payload_icon2 = 'payload_icon2';
+        mod.AddUIImage(payload_icon2, iconPos, iconSize, mod.UIAnchor.TopCenter, container, true, 0, uiConfig.whiteColour, 0.7, mod.UIBgFill.None, mod.UIImageType.CrownSolid, uiConfig.whiteColour, 1, mod.GetTeam(2));
+        PayloadUI.widgets.payload_icon2 = mod.FindUIWidgetWithName(payload_icon2);
     }
 
-    public static async updateCheckpointUI(): Promise<void> {
-        const containerWidget = mod.FindUIWidgetWithName('container');
-        mod.AddUIText('checkpointreached', mod.CreateVector(0, 100, 0), mod.CreateVector(500, 80, 0), mod.UIAnchor.TopCenter, containerWidget, true, 0, PayloadUI.goldbgcolour, 0.8, mod.UIBgFill.Blur, mod.Message(mod.stringkeys.payload.checkpoints.blankmessage), 52, PayloadUI.goldcolour, 1, mod.UIAnchor.Center);
-        for (let i = 0; i < 500; i += 25) {
-            mod.SetUIWidgetSize(mod.FindUIWidgetWithName('checkpointreached'), mod.CreateVector(i, 80, 0));
-            await mod.Wait(0.033);
-        }
-        mod.SetUIWidgetSize(mod.FindUIWidgetWithName('checkpointreached'), mod.CreateVector(500, 80, 0));
-        mod.SetUITextLabel(mod.FindUIWidgetWithName('checkpointreached'), mod.Message(mod.stringkeys.payload.checkpoints.message));
-        await mod.Wait(6);
-        mod.SetUITextLabel(mod.FindUIWidgetWithName('checkpointreached'), mod.Message(mod.stringkeys.payload.checkpoints.blankmessage));
-        for (let i = 500; i > 0; i -= 25) {
-            mod.SetUIWidgetSize(mod.FindUIWidgetWithName('checkpointreached'), mod.CreateVector(i, 80, 0));
-            await mod.Wait(0.033);
-        }
-        mod.DeleteUIWidget(mod.FindUIWidgetWithName('checkpointreached'));
+    private static setupProgressBar(): void {
+        const uiConfig = PayloadConfig.uiConfig;
+        const container = PayloadUI.widgets.container!;
+        const multiplier = uiConfig.progressBarMultiplier;
+        const progress = PayloadState.instance.progressInPercent;
+        const rightOffsetPos = mod.CreateVector(uiConfig.progressBarRightOffset, 5, 0);
+        const leftOffsetPos = mod.CreateVector(uiConfig.progressBarLeftOffset, 0, 0);
+        const rightSize = mod.CreateVector(uiConfig.progressBarWidth - (multiplier * progress), 10, 0);
+        const leftSize = mod.CreateVector((multiplier * progress) - 2, 20, 0);
+
+        const progress_background1 = 'progress_background1';
+        mod.AddUIContainer(progress_background1, rightOffsetPos, rightSize, mod.UIAnchor.TopRight, container, true, 0, uiConfig.enemyBgColour, 0.9, mod.UIBgFill.Solid, mod.GetTeam(1));
+        PayloadUI.widgets.progress_background1 = mod.FindUIWidgetWithName(progress_background1);
+
+        const progress1 = 'progress1';
+        mod.AddUIContainer(progress1, leftOffsetPos, leftSize, mod.UIAnchor.TopLeft, container, true, 0, uiConfig.friendlyBgColour, 0.9, mod.UIBgFill.Solid, mod.GetTeam(1));
+        PayloadUI.widgets.progress1 = mod.FindUIWidgetWithName(progress1);
+
+        const progress_background2 = 'progress_background2';
+        mod.AddUIContainer(progress_background2, rightOffsetPos, rightSize, mod.UIAnchor.TopRight, container, true, 0, uiConfig.friendlyBgColour, 0.9, mod.UIBgFill.Solid, mod.GetTeam(2));
+        PayloadUI.widgets.progress_background2 = mod.FindUIWidgetWithName(progress_background2);
+
+        const progress2 = 'progress2';
+        mod.AddUIContainer(progress2, leftOffsetPos, leftSize, mod.UIAnchor.TopLeft, container, true, 0, uiConfig.enemyBgColour, 0.9, mod.UIBgFill.Solid, mod.GetTeam(2));
+        PayloadUI.widgets.progress2 = mod.FindUIWidgetWithName(progress2);
     }
 
-    public static updatePlayerCountUI(): void {
-        const team1 = PayloadState.instance.playersInPushProximity.get(1)!.length;
-        const team2 = PayloadState.instance.playersInPushProximity.get(2)!.length;
-        mod.SetUITextLabel(mod.FindUIWidgetWithName('left_player_count1'), mod.Message(mod.stringkeys.payload.counter, team1));
-        mod.SetUITextLabel(mod.FindUIWidgetWithName('left_player_count2'), mod.Message(mod.stringkeys.payload.counter, team2));
-        mod.SetUITextLabel(mod.FindUIWidgetWithName('right_player_count1'), mod.Message(mod.stringkeys.payload.counter, team2));
-        mod.SetUITextLabel(mod.FindUIWidgetWithName('right_player_count2'), mod.Message(mod.stringkeys.payload.counter, team1));
+    private static setupCheckpoints(): void {
+        const container = PayloadUI.widgets.container!;
+        const state = PayloadState.instance;
+        const multiplier = PayloadConfig.uiConfig.progressBarMultiplier;
+        const markerOffset = PayloadConfig.uiConfig.progressBarLeftOffset - 4;
+        const markerSize = mod.CreateVector(4, 30, 0);
+        const markerColour = mod.CreateVector(0.9, 0.9, 0.9);
 
-        if (team1 == 0) {
-            mod.SetUITextColor(mod.FindUIWidgetWithName('left_player_count1'), mod.CreateVector(1, 1, 1));
-            mod.SetUITextColor(mod.FindUIWidgetWithName('right_player_count2'), mod.CreateVector(1, 1, 1));
-        } else {
-            mod.SetUITextColor(mod.FindUIWidgetWithName('left_player_count1'), PayloadUI.friendlycolour);
-            mod.SetUITextColor(mod.FindUIWidgetWithName('right_player_count2'), PayloadUI.enemycolour);
+        // Start marker
+        mod.AddUIContainer('checkpoint0', mod.CreateVector(markerOffset, -5, 0), markerSize, mod.UIAnchor.TopLeft, container, true, 0, markerColour, 1, mod.UIBgFill.Solid);
+
+        // Checkpoint dividers (fire-and-forget — never referenced again)
+        for (const cpIndex of state.checkpointIndexes) {
+            mod.AddUIContainer('checkpoint' + cpIndex,
+                mod.CreateVector(markerOffset + (multiplier * ((state.waypoints[cpIndex].distance / state.totalDistanceInMeters) * 100)), -5, 0),
+                markerSize, mod.UIAnchor.TopLeft, container, true, 0, markerColour, 1, mod.UIBgFill.Solid);
         }
+    }
 
-        if (team2 == 0) {
-            mod.SetUITextColor(mod.FindUIWidgetWithName('left_player_count2'), mod.CreateVector(1, 1, 1));
-            mod.SetUITextColor(mod.FindUIWidgetWithName('right_player_count1'), mod.CreateVector(1, 1, 1));
-        } else {
-            mod.SetUITextColor(mod.FindUIWidgetWithName('left_player_count2'), PayloadUI.friendlycolour);
-            mod.SetUITextColor(mod.FindUIWidgetWithName('right_player_count1'), PayloadUI.enemycolour);
+    private static setupTimerAndPercentage(): void {
+        const uiConfig = PayloadConfig.uiConfig;
+        const container = PayloadUI.widgets.container!;
+        const progress = PayloadState.instance.progressInPercent;
+        const remainingTime = PayloadConfig.defaultCheckpointTime - (PayloadState.instance.lastElapsedSeconds - PayloadState.instance.checkpointStartTime);
+        const mins = mod.Floor(remainingTime / 60);
+        const secs = mod.Floor(mod.Modulo(remainingTime, 60));
+        const timerMsg = mod.Message(PayloadUI.timerStringKey, mins, mod.Floor(secs / 10), mod.Modulo(secs, 10));
+        const percentMsg = mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(progress));
+        const position = mod.CreateVector(0, -5, 0);
+        const size = mod.CreateVector(100, 30, 0);
+
+        const remaining_time1 = 'remaining_time1';
+        mod.AddUIText(remaining_time1, position, size, mod.UIAnchor.TopRight, container, true, 0, uiConfig.enemyBgColour, 0.9, mod.UIBgFill.Solid, timerMsg, 26, uiConfig.whiteColour, 1, mod.UIAnchor.Center, mod.GetTeam(1));
+        PayloadUI.widgets.remaining_time1 = mod.FindUIWidgetWithName(remaining_time1);
+
+        const remaining_time2 = 'remaining_time2';
+        mod.AddUIText(remaining_time2, position, size, mod.UIAnchor.TopRight, container, true, 0, uiConfig.friendlyBgColour, 0.9, mod.UIBgFill.Solid, timerMsg, 26, uiConfig.whiteColour, 1, mod.UIAnchor.Center, mod.GetTeam(2));
+        PayloadUI.widgets.remaining_time2 = mod.FindUIWidgetWithName(remaining_time2);
+
+        const percentage1 = 'percentage1';
+        mod.AddUIText(percentage1, position, size, mod.UIAnchor.TopLeft, container, true, 0, uiConfig.friendlyBgColour, 0.9, mod.UIBgFill.Solid, percentMsg, 26, uiConfig.whiteColour, 1, mod.UIAnchor.Center, mod.GetTeam(1));
+        PayloadUI.widgets.percentage1 = mod.FindUIWidgetWithName(percentage1);
+
+        const percentage2 = 'percentage2';
+        mod.AddUIText(percentage2, position, size, mod.UIAnchor.TopLeft, container, true, 0, uiConfig.enemyBgColour, 0.9, mod.UIBgFill.Solid, percentMsg, 26, uiConfig.whiteColour, 1, mod.UIAnchor.Center, mod.GetTeam(2));
+        PayloadUI.widgets.percentage2 = mod.FindUIWidgetWithName(percentage2);
+    }
+
+    private static setupFlashOverlays(): void {
+        const uiConfig = PayloadConfig.uiConfig;
+        const container = PayloadUI.widgets.container!;
+        const multiplier = uiConfig.progressBarMultiplier;
+        const progress = PayloadState.instance.progressInPercent;
+        const rightOffsetPos = mod.CreateVector(uiConfig.progressBarRightOffset, 5, 0);
+        const leftOffsetPos = mod.CreateVector(uiConfig.progressBarLeftOffset, 0, 0);
+        const rightSize = mod.CreateVector(uiConfig.progressBarWidth - (multiplier * progress), 10, 0);
+        const leftSize = mod.CreateVector((multiplier * progress) - 2, 20, 0);
+
+        const progress_backgroundflash1 = 'progress_backgroundflash1';
+        mod.AddUIContainer(progress_backgroundflash1, rightOffsetPos, rightSize, mod.UIAnchor.TopRight, container, true, 0, uiConfig.enemyColour, 0.01, mod.UIBgFill.GradientLeft, mod.GetTeam(1));
+        PayloadUI.widgets.progress_backgroundflash1 = mod.FindUIWidgetWithName(progress_backgroundflash1);
+
+        const progress_backgroundflash2 = 'progress_backgroundflash2';
+        mod.AddUIContainer(progress_backgroundflash2, rightOffsetPos, rightSize, mod.UIAnchor.TopRight, container, true, 0, uiConfig.friendlyColour, 0.01, mod.UIBgFill.GradientLeft, mod.GetTeam(2));
+        PayloadUI.widgets.progress_backgroundflash2 = mod.FindUIWidgetWithName(progress_backgroundflash2);
+
+        const progressflash1 = 'progressflash1';
+        mod.AddUIContainer(progressflash1, leftOffsetPos, leftSize, mod.UIAnchor.TopLeft, container, true, 0, uiConfig.friendlyColour, 0.01, mod.UIBgFill.GradientRight, mod.GetTeam(1));
+        PayloadUI.widgets.progressflash1 = mod.FindUIWidgetWithName(progressflash1);
+
+        const progressflash2 = 'progressflash2';
+        mod.AddUIContainer(progressflash2, leftOffsetPos, leftSize, mod.UIAnchor.TopLeft, container, true, 0, uiConfig.enemyColour, 0.01, mod.UIBgFill.GradientRight, mod.GetTeam(2));
+        PayloadUI.widgets.progressflash2 = mod.FindUIWidgetWithName(progressflash2);
+    }
+
+    private static setupPlayerCounts(): void {
+        const uiConfig = PayloadConfig.uiConfig;
+        const container = PayloadUI.widgets.container!;
+        const leftPos = mod.CreateVector(-35, 26, 0);
+        const rightPos = mod.CreateVector(35, 26, 0);
+        const countSize = mod.CreateVector(50, 30, 0);
+        const zeroMsg = mod.Message(mod.stringkeys.payload.counter, 0);
+
+        const left_player_count1 = 'left_player_count1';
+        mod.AddUIText(left_player_count1, leftPos, countSize, mod.UIAnchor.TopCenter, container, true, 0, uiConfig.friendlyColour, 0.9, mod.UIBgFill.None, zeroMsg, 26, uiConfig.friendlyColour, 1, mod.UIAnchor.Center, mod.GetTeam(1));
+        PayloadUI.widgets.left_player_count1 = mod.FindUIWidgetWithName(left_player_count1);
+
+        const left_player_count2 = 'left_player_count2';
+        mod.AddUIText(left_player_count2, leftPos, countSize, mod.UIAnchor.TopCenter, container, true, 0, uiConfig.friendlyColour, 0.9, mod.UIBgFill.None, zeroMsg, 26, uiConfig.friendlyColour, 1, mod.UIAnchor.Center, mod.GetTeam(2));
+        PayloadUI.widgets.left_player_count2 = mod.FindUIWidgetWithName(left_player_count2);
+
+        const right_player_count1 = 'right_player_count1';
+        mod.AddUIText(right_player_count1, rightPos, countSize, mod.UIAnchor.TopCenter, container, true, 0, uiConfig.enemyColour, 0.9, mod.UIBgFill.None, zeroMsg, 26, uiConfig.enemyColour, 1, mod.UIAnchor.Center, mod.GetTeam(1));
+        PayloadUI.widgets.right_player_count1 = mod.FindUIWidgetWithName(right_player_count1);
+
+        const right_player_count2 = 'right_player_count2';
+        mod.AddUIText(right_player_count2, rightPos, countSize, mod.UIAnchor.TopCenter, container, true, 0, uiConfig.enemyColour, 0.9, mod.UIBgFill.None, zeroMsg, 26, uiConfig.enemyColour, 1, mod.UIAnchor.Center, mod.GetTeam(2));
+        PayloadUI.widgets.right_player_count2 = mod.FindUIWidgetWithName(right_player_count2);
+    }
+
+    private static setupProgressIcon(): void {
+        const uiConfig = PayloadConfig.uiConfig;
+        const container = PayloadUI.widgets.container!;
+        const multiplier = uiConfig.progressBarMultiplier;
+        const progress = PayloadState.instance.progressInPercent;
+        const markerOffset = uiConfig.progressBarLeftOffset - 4;
+        const name = 'payload_progress_icon';
+        mod.AddUIContainer(name, mod.CreateVector(mod.RoundToInteger((markerOffset + (multiplier * progress)) * 10) / 10, 0, 0), mod.CreateVector(4, 20, 0), mod.UIAnchor.TopLeft, container, true, 0, mod.CreateVector(1, 1, 0), 1, mod.UIBgFill.Solid);
+        PayloadUI.widgets.payload_progress_icon = mod.FindUIWidgetWithName(name);
+    }
+
+    private static setupCredits(): void {
+        const uiConfig = PayloadConfig.uiConfig;
+        const name = 'credits';
+        mod.AddUIText(name, mod.CreateVector(10, 2, 0), mod.CreateVector(300, 30, 0), mod.UIAnchor.BottomLeft, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0.8, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.credits), 14, uiConfig.whiteColour, 0.6, mod.UIAnchor.Center, mod.UIDepth.AboveGameUI);
+        PayloadUI.widgets.credits = mod.FindUIWidgetWithName(name);
+    }
+
+    private static setupDebugText(): void {
+        const uiConfig = PayloadConfig.uiConfig;
+        const name = 'debugText';
+        mod.AddUIText(name, mod.CreateVector(0, 0, 0), mod.CreateVector(600, 30, 0), mod.UIAnchor.BottomCenter, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.debug.emptyMessage), 14, uiConfig.whiteColour, 1, mod.UIAnchor.Center);
+        PayloadUI.widgets.debugText = mod.FindUIWidgetWithName(name);
+    }
+
+    private static resetWidgetCache(): void {
+        const keys = Object.keys(PayloadUI.widgets) as (keyof typeof PayloadUI.widgets)[];
+        for (const key of keys) {
+            PayloadUI.widgets[key] = null;
         }
     }
 
     private static deleteUI(): void {
-        mod.DeleteUIWidget(mod.FindUIWidgetWithName('container'));
-        mod.DeleteUIWidget(mod.FindUIWidgetWithName('credits'));
+        if (PayloadUI.widgets.container) mod.DeleteUIWidget(PayloadUI.widgets.container);
+        if (PayloadUI.widgets.credits) mod.DeleteUIWidget(PayloadUI.widgets.credits);
+        if (PayloadUI.widgets.debugText) mod.DeleteUIWidget(PayloadUI.widgets.debugText);
+        PayloadUI.resetWidgetCache();
     }
 
-    public static onPlayerJoinGameGlobalUIRefresh(): void {
-        if (PayloadUI.uiReady) {
-            PayloadUI.deleteUI();
-            PayloadUI.setup();
-            PayloadUI.updateStatusUI();
+    public static rebuildUI(): void {
+        PayloadUI.deleteUI();
+        PayloadUI.setup();
+        PayloadUI.updateStatusUI();
+    }
+
+    //#endregion
+
+    //#region Every-Tick Updates
+
+    public static updatePlayerCountUI(): void {
+        const team1 = PayloadState.instance.playersInPushProximity.get(1)!.length;
+        const team2 = PayloadState.instance.playersInPushProximity.get(2)!.length;
+        if (team1 === PayloadUI.prevTeam1Count && team2 === PayloadUI.prevTeam2Count) return;
+        PayloadUI.prevTeam1Count = team1;
+        PayloadUI.prevTeam2Count = team2;
+
+        const uiConfig = PayloadConfig.uiConfig;
+        mod.SetUITextLabel(PayloadUI.widgets.left_player_count1!, mod.Message(mod.stringkeys.payload.counter, team1));
+        mod.SetUITextLabel(PayloadUI.widgets.left_player_count2!, mod.Message(mod.stringkeys.payload.counter, team2));
+        mod.SetUITextLabel(PayloadUI.widgets.right_player_count1!, mod.Message(mod.stringkeys.payload.counter, team2));
+        mod.SetUITextLabel(PayloadUI.widgets.right_player_count2!, mod.Message(mod.stringkeys.payload.counter, team1));
+
+        if (team1 == 0) {
+            mod.SetUITextColor(PayloadUI.widgets.left_player_count1!, uiConfig.whiteColour);
+            mod.SetUITextColor(PayloadUI.widgets.right_player_count2!, uiConfig.whiteColour);
+        } else {
+            mod.SetUITextColor(PayloadUI.widgets.left_player_count1!, uiConfig.friendlyColour);
+            mod.SetUITextColor(PayloadUI.widgets.right_player_count2!, uiConfig.enemyColour);
+        }
+
+        if (team2 == 0) {
+            mod.SetUITextColor(PayloadUI.widgets.left_player_count2!, uiConfig.whiteColour);
+            mod.SetUITextColor(PayloadUI.widgets.right_player_count1!, uiConfig.whiteColour);
+        } else {
+            mod.SetUITextColor(PayloadUI.widgets.left_player_count2!, uiConfig.friendlyColour);
+            mod.SetUITextColor(PayloadUI.widgets.right_player_count1!, uiConfig.enemyColour);
         }
     }
 
-    public static progressFlash(): void {
-        if (!PayloadUI.uiReady) return;
-        let alpha = 0.1;
-        if (PayloadState.instance.progressBarFlashAlpha > 0) {
-            alpha = PayloadState.instance.progressBarFlashAlpha / 10;
-            if (PayloadState.instance.payloadState == PayloadMovementState.ADVANCING) {
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progressflash1'), alpha);
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progressflash2'), alpha);
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progress_backgroundflash1'), 0.01);
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progress_backgroundflash2'), 0.01);
-            }
-            else if (PayloadState.instance.payloadState == PayloadMovementState.PUSHING_BACK) {
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progress_backgroundflash1'), alpha);
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progress_backgroundflash2'), alpha);
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progressflash1'), 0.01);
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progressflash2'), 0.01);
-            } else {
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progressflash1'), 0.01);
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progressflash2'), 0.01);
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progress_backgroundflash1'), 0.01);
-                mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('progress_backgroundflash2'), 0.01);
-            }
-            if (PayloadState.instance.payloadState == PayloadMovementState.IDLE || PayloadState.instance.payloadState == PayloadMovementState.LOCKED) {
-                mod.SetUITextAlpha(mod.FindUIWidgetWithName('payloadstatus1'), 1);
-                mod.SetUITextAlpha(mod.FindUIWidgetWithName('payloadstatus2'), 1);
-            } else {
-                mod.SetUITextAlpha(mod.FindUIWidgetWithName('payloadstatus1'), alpha);
-                mod.SetUITextAlpha(mod.FindUIWidgetWithName('payloadstatus2'), alpha);
-            }
+    public static animateProgressFlash(): void {
+        if (PayloadState.instance.progressBarFlashAlpha <= 0) return;
+
+        const state = PayloadState.instance;
+        const alpha = state.progressBarFlashAlpha / 10;
+
+        if (state.payloadState == PayloadMovementState.ADVANCING) {
+            mod.SetUIWidgetBgAlpha(PayloadUI.widgets.progressflash1!, alpha);
+            mod.SetUIWidgetBgAlpha(PayloadUI.widgets.progressflash2!, alpha);
+            mod.SetUIWidgetBgAlpha(PayloadUI.widgets.progress_backgroundflash1!, 0.01);
+            mod.SetUIWidgetBgAlpha(PayloadUI.widgets.progress_backgroundflash2!, 0.01);
+        } else if (state.payloadState == PayloadMovementState.PUSHING_BACK) {
+            mod.SetUIWidgetBgAlpha(PayloadUI.widgets.progress_backgroundflash1!, alpha);
+            mod.SetUIWidgetBgAlpha(PayloadUI.widgets.progress_backgroundflash2!, alpha);
+            mod.SetUIWidgetBgAlpha(PayloadUI.widgets.progressflash1!, 0.01);
+            mod.SetUIWidgetBgAlpha(PayloadUI.widgets.progressflash2!, 0.01);
+        } else {
+            mod.SetUIWidgetBgAlpha(PayloadUI.widgets.progressflash1!, 0.01);
+            mod.SetUIWidgetBgAlpha(PayloadUI.widgets.progressflash2!, 0.01);
+            mod.SetUIWidgetBgAlpha(PayloadUI.widgets.progress_backgroundflash1!, 0.01);
+            mod.SetUIWidgetBgAlpha(PayloadUI.widgets.progress_backgroundflash2!, 0.01);
         }
+
+        if (state.payloadState == PayloadMovementState.IDLE || state.payloadState == PayloadMovementState.LOCKED) {
+            mod.SetUITextAlpha(PayloadUI.widgets.payloadstatus1!, 1);
+            mod.SetUITextAlpha(PayloadUI.widgets.payloadstatus2!, 1);
+        } else {
+            mod.SetUITextAlpha(PayloadUI.widgets.payloadstatus1!, alpha);
+            mod.SetUITextAlpha(PayloadUI.widgets.payloadstatus2!, alpha);
+        }
+
+        // Decay alpha
+        state.progressBarFlashAlpha -= 0.5;
+        if (state.progressBarFlashAlpha < 0) {
+            state.progressBarFlashAlpha = 0;
+        }
+    }
+
+    public static updateDebugUI(): void {
+        if (!PayloadConfig.enableDebug) return;
+        if (!PayloadUI.widgets.debugText) return;
+        mod.SetUITextLabel(PayloadUI.widgets.debugText, mod.Message(mod.stringkeys.payload.debug.tickrate, PayloadState.instance.ticks, PayloadState.instance.tickrate));
+    }
+
+    //#endregion
+
+    //#region Every-Second Updates
+
+    public static updateCheckpointTimer(remainingTime: number): void {
+        const mins = mod.Floor(remainingTime / 60);
+        const secs = mod.Floor(mod.Modulo(remainingTime, 60));
+        const uiConfig = PayloadConfig.uiConfig;
+
+        if (PayloadState.instance.overtime && remainingTime <= 0) {
+            const overtimeMsg = mod.Message(mod.stringkeys.payload.state.overtime);
+            mod.SetUITextLabel(PayloadUI.widgets.remaining_time1!, overtimeMsg);
+            mod.SetUITextLabel(PayloadUI.widgets.remaining_time2!, overtimeMsg);
+            mod.SetUIWidgetBgColor(PayloadUI.widgets.remaining_time1!, uiConfig.goldBgColour);
+            mod.SetUIWidgetBgColor(PayloadUI.widgets.remaining_time2!, uiConfig.goldBgColour);
+        } else if (remainingTime > 0) {
+            const timerMsg = mod.Message(PayloadUI.timerStringKey, mins, mod.Floor(secs / 10), mod.Modulo(secs, 10));
+            mod.SetUITextLabel(PayloadUI.widgets.remaining_time1!, timerMsg);
+            mod.SetUITextLabel(PayloadUI.widgets.remaining_time2!, timerMsg);
+            mod.SetUIWidgetBgColor(PayloadUI.widgets.remaining_time1!, uiConfig.enemyBgColour);
+            mod.SetUIWidgetBgColor(PayloadUI.widgets.remaining_time2!, uiConfig.friendlyBgColour);
+        } else {
+            const zeroMsg = mod.Message(PayloadUI.timerStringKey, 0, 0, 0);
+            mod.SetUITextLabel(PayloadUI.widgets.remaining_time1!, zeroMsg);
+            mod.SetUITextLabel(PayloadUI.widgets.remaining_time2!, zeroMsg);
+            mod.SetUIWidgetBgColor(PayloadUI.widgets.remaining_time1!, uiConfig.enemyBgColour);
+            mod.SetUIWidgetBgColor(PayloadUI.widgets.remaining_time2!, uiConfig.friendlyBgColour);
+        }
+    }
+
+    //#endregion
+
+    //#region State-Change Updates
+
+    public static updateStatusUI(): void {
+        const uiConfig = PayloadConfig.uiConfig;
+        let stateLabel = mod.stringkeys.payload.state.idle;
+        mod.SetUIImageColor(PayloadUI.widgets.payload_icon1!, uiConfig.whiteColour);
+        mod.SetUIImageColor(PayloadUI.widgets.payload_icon2!, uiConfig.whiteColour);
+        mod.SetUITextColor(PayloadUI.widgets.payloadstatus1!, uiConfig.whiteColour);
+        mod.SetUITextColor(PayloadUI.widgets.payloadstatus2!, uiConfig.whiteColour);
+        mod.SetUITextSize(PayloadUI.widgets.payloadstatus1!, uiConfig.statusFontSize);
+        mod.SetUITextSize(PayloadUI.widgets.payloadstatus2!, uiConfig.statusFontSize);
+
+        switch (PayloadState.instance.payloadState) {
+            case PayloadMovementState.ADVANCING:
+                stateLabel = mod.stringkeys.payload.state.advancing;
+                mod.SetUIImageColor(PayloadUI.widgets.payload_icon1!, uiConfig.friendlyColour);
+                mod.SetUIImageColor(PayloadUI.widgets.payload_icon2!, uiConfig.enemyColour);
+                mod.SetUITextColor(PayloadUI.widgets.payloadstatus1!, uiConfig.friendlyColour);
+                mod.SetUITextColor(PayloadUI.widgets.payloadstatus2!, uiConfig.enemyColour);
+                break;
+            case PayloadMovementState.PUSHING_BACK:
+                stateLabel = mod.stringkeys.payload.state.pushing_back;
+                mod.SetUIImageColor(PayloadUI.widgets.payload_icon1!, uiConfig.enemyColour);
+                mod.SetUIImageColor(PayloadUI.widgets.payload_icon2!, uiConfig.friendlyColour);
+                mod.SetUITextColor(PayloadUI.widgets.payloadstatus1!, uiConfig.enemyColour);
+                mod.SetUITextColor(PayloadUI.widgets.payloadstatus2!, uiConfig.friendlyColour);
+                break;
+            case PayloadMovementState.CONTESTED:
+                stateLabel = mod.stringkeys.payload.state.contested;
+                mod.SetUIImageColor(PayloadUI.widgets.payload_icon1!, uiConfig.goldColour);
+                mod.SetUIImageColor(PayloadUI.widgets.payload_icon2!, uiConfig.goldColour);
+                mod.SetUITextColor(PayloadUI.widgets.payloadstatus1!, uiConfig.goldColour);
+                mod.SetUITextColor(PayloadUI.widgets.payloadstatus2!, uiConfig.goldColour);
+                break;
+            case PayloadMovementState.LOCKED:
+                stateLabel = mod.stringkeys.payload.state.locked;
+                mod.SetUIImageColor(PayloadUI.widgets.payload_icon1!, uiConfig.goldColour);
+                mod.SetUIImageColor(PayloadUI.widgets.payload_icon2!, uiConfig.goldColour);
+                mod.SetUITextColor(PayloadUI.widgets.payloadstatus1!, uiConfig.goldColour);
+                mod.SetUITextColor(PayloadUI.widgets.payloadstatus2!, uiConfig.goldColour);
+                mod.SetUITextSize(PayloadUI.widgets.payloadstatus1!, uiConfig.lockedFontSize);
+                mod.SetUITextSize(PayloadUI.widgets.payloadstatus2!, uiConfig.lockedFontSize);
+                break;
+        }
+
+        const statusMsg = mod.Message(mod.stringkeys.payload.state.message, stateLabel);
+        mod.SetUITextLabel(PayloadUI.widgets.payloadstatus1!, statusMsg);
+        mod.SetUITextLabel(PayloadUI.widgets.payloadstatus2!, statusMsg);
+    }
+
+    public static updateProgressUI(): void {
+        const uiConfig = PayloadConfig.uiConfig;
+        const multiplier = uiConfig.progressBarMultiplier;
+        const progress = PayloadState.instance.progressInPercent;
+
+        const leftProgress = mod.RoundToInteger(multiplier * progress) - 2;
+        const rightProgress = mod.RoundToInteger(uiConfig.progressBarWidth - (multiplier * progress));
+        const progressIconPos = mod.RoundToInteger(((uiConfig.progressBarLeftOffset - 4) + (multiplier * progress)) * 100) / 100;
+
+        const leftSize = mod.CreateVector(leftProgress, 20, 0);
+        const rightSize = mod.CreateVector(rightProgress, 10, 0);
+        const percentMsg = mod.Message(mod.stringkeys.payload.state.percentage, mod.Floor(progress));
+
+        mod.SetUIWidgetSize(PayloadUI.widgets.progress1!, leftSize);
+        mod.SetUIWidgetSize(PayloadUI.widgets.progress2!, leftSize);
+        mod.SetUITextLabel(PayloadUI.widgets.percentage1!, percentMsg);
+        mod.SetUITextLabel(PayloadUI.widgets.percentage2!, percentMsg);
+        mod.SetUIWidgetSize(PayloadUI.widgets.progress_background1!, rightSize);
+        mod.SetUIWidgetSize(PayloadUI.widgets.progress_background2!, rightSize);
+        mod.SetUIWidgetSize(PayloadUI.widgets.progressflash1!, leftSize);
+        mod.SetUIWidgetSize(PayloadUI.widgets.progressflash2!, leftSize);
+        mod.SetUIWidgetSize(PayloadUI.widgets.progress_backgroundflash1!, rightSize);
+        mod.SetUIWidgetSize(PayloadUI.widgets.progress_backgroundflash2!, rightSize);
+        mod.SetUIWidgetPosition(PayloadUI.widgets.payload_progress_icon!, mod.CreateVector(progressIconPos, 0, 0));
+    }
+
+    //#endregion
+
+    //#region Triggers
+
+    public static triggerProgressFlash(): void {
+        PayloadState.instance.progressBarFlashAlpha = 10;
+    }
+
+    //#endregion
+
+    //#region One-Time Events
+
+    public static async updateCheckpointUI(): Promise<void> {
+        const uiConfig = PayloadConfig.uiConfig;
+        mod.AddUIText('checkpointreached', mod.CreateVector(0, 100, 0), mod.CreateVector(500, 80, 0), mod.UIAnchor.TopCenter, PayloadUI.widgets.container!, true, 0, uiConfig.goldBgColour, 0.8, mod.UIBgFill.Blur, mod.Message(mod.stringkeys.payload.checkpoints.blankmessage), 52, uiConfig.goldColour, 1, mod.UIAnchor.Center);
+        const checkpointWidget = mod.FindUIWidgetWithName('checkpointreached');
+        for (let i = 0; i < 500; i += 25) {
+            mod.SetUIWidgetSize(checkpointWidget, mod.CreateVector(i, 80, 0));
+            await mod.Wait(0.033);
+        }
+        mod.SetUIWidgetSize(checkpointWidget, mod.CreateVector(500, 80, 0));
+        mod.SetUITextLabel(checkpointWidget, mod.Message(mod.stringkeys.payload.checkpoints.message));
+        await mod.Wait(6);
+        mod.SetUITextLabel(checkpointWidget, mod.Message(mod.stringkeys.payload.checkpoints.blankmessage));
+        for (let i = 500; i > 0; i -= 25) {
+            mod.SetUIWidgetSize(checkpointWidget, mod.CreateVector(i, 80, 0));
+            await mod.Wait(0.033);
+        }
+        mod.DeleteUIWidget(checkpointWidget);
     }
 
     public static async nukeUI(): Promise<void> {
-        PayloadUI.uiReady = false;
+        const uiConfig = PayloadConfig.uiConfig;
         mod.DeployAllPlayers();
         mod.SetCameraTypeForAll(mod.Cameras.Fixed, 50);
         mod.MoveObjectOverTime(mod.GetFixedCamera(50), mod.CreateVector(0, 2, 0), mod.CreateVector(0, 0, 0), 3, false, false);
@@ -292,8 +502,9 @@ export class PayloadUI {
         mod.SetVFXScale(nukeFire, 20);
 
         mod.StopSound(siren);
-        mod.AddUIContainer('nuke', mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName('container'), true, 0, mod.CreateVector(1, 1, 1), 1, mod.UIBgFill.Solid);
-        mod.AddUIContainer('nukeScreenEffect', mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName('container'), true, 0, PayloadUI.goldcolour, 0.5, mod.UIBgFill.Blur);
+        mod.AddUIContainer('nuke', mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center, PayloadUI.widgets.container!, true, 0, uiConfig.whiteColour, 1, mod.UIBgFill.Solid);
+        mod.AddUIContainer('nukeScreenEffect', mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center, PayloadUI.widgets.container!, true, 0, uiConfig.goldColour, 0.5, mod.UIBgFill.Blur);
+        const nukeWidget = mod.FindUIWidgetWithName('nuke');
         const vehicleSpawner = mod.SpawnObject(mod.RuntimeSpawn_Common.VehicleSpawner, PayloadState.instance.payloadPosition, PayloadState.instance.payloadRotation);
         mod.SetVehicleSpawnerVehicleType(vehicleSpawner, mod.VehicleList.M2Bradley);
         mod.ForceVehicleSpawnerSpawn(vehicleSpawner);
@@ -311,11 +522,11 @@ export class PayloadUI {
         await mod.Wait(1.5);
 
         for (let i = 10; i > 0; i -= 0.25) {
-            mod.SetUIWidgetBgAlpha(mod.FindUIWidgetWithName('nuke'), i / 10);
+            mod.SetUIWidgetBgAlpha(nukeWidget, i / 10);
             await mod.Wait(0.066);
         }
 
-        mod.DeleteUIWidget(mod.FindUIWidgetWithName('nuke'));
+        mod.DeleteUIWidget(nukeWidget);
 
         const nukeMid = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Carrier_Explosion_Dist, PayloadState.instance.payloadPosition, mod.CreateVector(0, 0, 0));
         mod.EnableVFX(nukeMid, true);
@@ -341,15 +552,9 @@ export class PayloadUI {
         mod.StopActiveMovementForObject(mod.GetFixedCamera(51));
     }
 
-    public static updateDebugUI(): void {
-        if (!PayloadConfig.enableDebug) return;
-        let debugText = mod.FindUIWidgetWithName('debugText');
-        if (!debugText) {
-            mod.AddUIText('debugText', mod.CreateVector(0, 0, 0), mod.CreateVector(600, 30, 0), mod.UIAnchor.BottomCenter, mod.GetUIRoot(), true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None, mod.Message(mod.stringkeys.payload.debug.tickrate), 14, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.Center);
-            debugText = mod.FindUIWidgetWithName('debugText');
-        }
-        mod.SetUITextLabel(debugText, mod.Message(mod.stringkeys.payload.debug.tickrate, PayloadState.instance.ticks, PayloadState.instance.tickrate));
-    }
+    //#endregion
+
+    //#region Per-Player UI
 
     public static initPlayerUIContainer(eventPlayer: mod.Player): void {
         const playerData = PayloadState.getPlayerData(eventPlayer);
@@ -424,4 +629,6 @@ export class PayloadUI {
         mod.DeleteUIWidget(playerData.containerWidget);
         playerData.containerWidget = null;
     }
+
+    //#endregion
 }
