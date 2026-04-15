@@ -122,7 +122,7 @@ export class PayloadUI {
         // Start marker
         mod.AddUIContainer('checkpoint0', mod.CreateVector(markerOffset, -5, 0), markerSize, mod.UIAnchor.TopLeft, container, true, 0, markerColour, 1, mod.UIBgFill.Solid);
 
-        // Checkpoint dividers (fire-and-forget — never referenced again)
+        // Checkpoint dividers (fire-and-forget - never referenced again)
         for (const cpIndex of state.checkpointIndexes) {
             mod.AddUIContainer('checkpoint' + cpIndex,
                 mod.CreateVector(markerOffset + (multiplier * ((state.waypoints[cpIndex].distance / state.totalDistanceInMeters) * 100)), -5, 0),
