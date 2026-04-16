@@ -1,0 +1,61 @@
+{
+  "payload": {
+    "track": {
+      "size": "Track Size: {}"
+    },
+    "checkpoints": {
+      "count": "No of Checkpoints: {}",
+      "message": "CHECKPOINT REACHED",
+      "blankmessage": ""
+    },
+    "status": "TrackCurrent: {} | Track: {} | Checkpoints: {}",
+    "state": {
+      "idle": "---",
+      "contested": ">>||<<",
+      "advancing": ">>>",
+      "locked": "LOCKED",
+      "pushing_back": "<<<",
+      "message": "{}",
+      "speed": "Base Speed: {} | Speed Addition: {} | Overall Speed: {}",
+      "checkpoint_reached": "Checkpoint {}/{} reached!",
+      "percentage": "{}%",
+      "overtime": "OVERTIME"
+    },
+    "scoreboard": {
+      "team1": "ATTACKERS",
+      "team2": "DEFENDERS",
+      "kills": "Kills",
+      "assists": "Assists",
+      "deaths": "Deaths",
+      "objective": "Objective",
+      "revives": "Revives",
+      "message": "{} scored {} points for {}!"
+    },
+    "objective": {
+      "title": "PAYLOAD",
+      "position": "Payload Position: ({}, {}, {})",
+      "checkpoint_timer": "{}:{}{}",
+      "assigned_payload_vehicle": "Assigned payload vehicle!",
+      "moved_vehicle": "Moved payload vehicle!",
+      "healed_vehicle": "Healed payload vehicle!",
+      "not_assigned_payload_vehicle": "Not assigned payload vehicle!",
+      "vehicle_spawned": "Vehicle spawned!",
+      "exit_message": "GET OUT AND PUSH!",
+      "score_message": "+ {}"
+    },
+    "meta": {
+      "version": "0.0.10",
+      "name": "payload",
+      "build": "2026-04-13T11:48:50.622Z",
+      "meta_text": "{} v{} build: {}"
+    },
+    "credits": "TheOzzy | andy6170 | Payload V1.0",
+    "outofbounds": "OUT OF BOUNDS",
+    "counter": "{}",
+    "debug": {
+      "tickrate": "Ticks: {} | Tickrate: {}",
+      "breakpoint": "Breakpoint: {}",
+      "emptyMessage": ""
+    }
+  }
+}

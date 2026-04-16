@@ -84,6 +84,8 @@ export class PayloadState {
     public overtime = false;
     public gameOngoing = false;
     public payloadSpatialsConfig: SpatialConfig[] = [];
+    public progressBarFlashAlpha = 1;
+    public weatherReset: boolean = false;
 
     private constructor() { }
 
