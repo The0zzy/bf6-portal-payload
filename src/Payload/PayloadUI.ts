@@ -37,8 +37,15 @@ export class PayloadUI {
     //#region UI Setup
 
     public static setup(): void {
+        // Clean up existing widgets if this is a re-setup
+        if (PayloadUI.widgets.container) mod.DeleteUIWidget(PayloadUI.widgets.container);
+        if (PayloadUI.widgets.credits) mod.DeleteUIWidget(PayloadUI.widgets.credits);
+        if (PayloadUI.widgets.debugText) mod.DeleteUIWidget(PayloadUI.widgets.debugText);
+        PayloadUI.resetWidgetCache();
+
+        // Setup all widgets (order matters for references and layering)
         PayloadUI.setupContainer();
-        PayloadUI.setupStatusBar();
+        PayloadUI.setupStatusIndicator();
         PayloadUI.setupProgressBar();
         PayloadUI.setupCheckpoints();
         PayloadUI.setupTimerAndPercentage();
@@ -57,7 +64,14 @@ export class PayloadUI {
         mod.SetUIWidgetDepth(PayloadUI.widgets.container!, mod.UIDepth.AboveGameUI);
     }
 
-    private static setupStatusBar(): void {
+    /**
+     * Sets up the status indicator of the payload at the top-center of the screen, 
+     * which is using symbols for the movement along with an colored crown icon 
+     * indicating the current team in control. 
+     * The status text and icon is doubled for each team in order to reflect
+     * the friendly and enemy perspectives according to the player's team (e.g. red vs blue).
+     */
+    private static setupStatusIndicator(): void {
         const uiConfig = PayloadConfig.uiConfig;
         const container = PayloadUI.widgets.container!;
         const statusPos = mod.CreateVector(0, 55, 0);
@@ -73,8 +87,8 @@ export class PayloadUI {
 
         const payloadstatus1 = 'payloadstatus1';
         mod.AddUIText(
-            payloadstatus1, statusPos, statusSize, mod.UIAnchor.TopCenter, 
-            container, true, padding, statusBgColour, statusBgAlpha, mod.UIBgFill.None, 
+            payloadstatus1, statusPos, statusSize, mod.UIAnchor.TopCenter,
+            container, true, padding, statusBgColour, statusBgAlpha, mod.UIBgFill.None,
             idleMsg, uiConfig.statusFontSize, uiConfig.whiteColour, textAlpha,
             mod.UIAnchor.Center, mod.GetTeam(1)
         );
@@ -82,8 +96,8 @@ export class PayloadUI {
 
         const payloadstatus2 = 'payloadstatus2';
         mod.AddUIText(
-            payloadstatus2, statusPos, statusSize, mod.UIAnchor.TopCenter, 
-            container, true, padding, statusBgColour, statusBgAlpha, mod.UIBgFill.None, 
+            payloadstatus2, statusPos, statusSize, mod.UIAnchor.TopCenter,
+            container, true, padding, statusBgColour, statusBgAlpha, mod.UIBgFill.None,
             idleMsg, uiConfig.statusFontSize, uiConfig.whiteColour, textAlpha,
             mod.UIAnchor.Center, mod.GetTeam(2)
         );
@@ -91,45 +105,69 @@ export class PayloadUI {
 
         const payload_icon1 = 'payload_icon1';
         mod.AddUIImage(
-            payload_icon1, iconPos, iconSize, mod.UIAnchor.TopCenter, 
-            container, true, padding, uiConfig.whiteColour, iconBgAlpha, mod.UIBgFill.None, 
+            payload_icon1, iconPos, iconSize, mod.UIAnchor.TopCenter,
+            container, true, padding, uiConfig.whiteColour, iconBgAlpha, mod.UIBgFill.None,
             mod.UIImageType.CrownSolid, uiConfig.whiteColour, textAlpha, mod.GetTeam(1)
         );
         PayloadUI.widgets.payload_icon1 = mod.FindUIWidgetWithName(payload_icon1);
 
         const payload_icon2 = 'payload_icon2';
         mod.AddUIImage(
-            payload_icon2, iconPos, iconSize, mod.UIAnchor.TopCenter, 
-            container, true, padding, uiConfig.whiteColour, iconBgAlpha, mod.UIBgFill.None, 
+            payload_icon2, iconPos, iconSize, mod.UIAnchor.TopCenter,
+            container, true, padding, uiConfig.whiteColour, iconBgAlpha, mod.UIBgFill.None,
             mod.UIImageType.CrownSolid, uiConfig.whiteColour, textAlpha, mod.GetTeam(2)
         );
         PayloadUI.widgets.payload_icon2 = mod.FindUIWidgetWithName(payload_icon2);
     }
 
+    /**
+     * Sets up the progress bar at the top of the screen, 
+     * which is using two containers with different colours 
+     * filling up from the center to the left and right according 
+     * to the current progress of the payload.   
+     */
     private static setupProgressBar(): void {
         const uiConfig = PayloadConfig.uiConfig;
         const container = PayloadUI.widgets.container!;
-        const multiplier = uiConfig.progressBarMultiplier;
+        const multiplier = uiConfig.progressBarMultiplier; // progressBarWidth / 100
         const progress = PayloadState.instance.progressInPercent;
         const rightOffsetPos = mod.CreateVector(uiConfig.progressBarRightOffset, 5, 0);
         const leftOffsetPos = mod.CreateVector(uiConfig.progressBarLeftOffset, 0, 0);
         const rightSize = mod.CreateVector(uiConfig.progressBarWidth - (multiplier * progress), 10, 0);
         const leftSize = mod.CreateVector((multiplier * progress) - 2, 20, 0);
+        const progressBarBgAlpha = 0.9;
+        const padding = 0;
 
         const progress_background1 = 'progress_background1';
-        mod.AddUIContainer(progress_background1, rightOffsetPos, rightSize, mod.UIAnchor.TopRight, container, true, 0, uiConfig.enemyBgColour, 0.9, mod.UIBgFill.Solid, mod.GetTeam(1));
+        mod.AddUIContainer(
+            progress_background1, rightOffsetPos, rightSize, mod.UIAnchor.TopRight,
+            container, true, padding, uiConfig.enemyBgColour, progressBarBgAlpha,
+            mod.UIBgFill.Solid, mod.GetTeam(1)
+        );
         PayloadUI.widgets.progress_background1 = mod.FindUIWidgetWithName(progress_background1);
 
         const progress1 = 'progress1';
-        mod.AddUIContainer(progress1, leftOffsetPos, leftSize, mod.UIAnchor.TopLeft, container, true, 0, uiConfig.friendlyBgColour, 0.9, mod.UIBgFill.Solid, mod.GetTeam(1));
+        mod.AddUIContainer(
+            progress1, leftOffsetPos, leftSize, mod.UIAnchor.TopLeft,
+            container, true, padding, uiConfig.friendlyBgColour, progressBarBgAlpha,
+            mod.UIBgFill.Solid, mod.GetTeam(1)
+        );
         PayloadUI.widgets.progress1 = mod.FindUIWidgetWithName(progress1);
 
         const progress_background2 = 'progress_background2';
-        mod.AddUIContainer(progress_background2, rightOffsetPos, rightSize, mod.UIAnchor.TopRight, container, true, 0, uiConfig.friendlyBgColour, 0.9, mod.UIBgFill.Solid, mod.GetTeam(2));
+        mod.AddUIContainer(
+            progress_background2, rightOffsetPos, rightSize, mod.UIAnchor.TopRight,
+            container, true, padding, uiConfig.friendlyBgColour, progressBarBgAlpha,
+            mod.UIBgFill.Solid, mod.GetTeam(2)
+        );
         PayloadUI.widgets.progress_background2 = mod.FindUIWidgetWithName(progress_background2);
 
         const progress2 = 'progress2';
-        mod.AddUIContainer(progress2, leftOffsetPos, leftSize, mod.UIAnchor.TopLeft, container, true, 0, uiConfig.enemyBgColour, 0.9, mod.UIBgFill.Solid, mod.GetTeam(2));
+        mod.AddUIContainer(
+            progress2, leftOffsetPos, leftSize, mod.UIAnchor.TopLeft,
+            container, true, padding, uiConfig.enemyBgColour, progressBarBgAlpha,
+            mod.UIBgFill.Solid, mod.GetTeam(2)
+        );
         PayloadUI.widgets.progress2 = mod.FindUIWidgetWithName(progress2);
     }
 
@@ -142,13 +180,19 @@ export class PayloadUI {
         const markerColour = mod.CreateVector(0.9, 0.9, 0.9);
 
         // Start marker
-        mod.AddUIContainer('checkpoint0', mod.CreateVector(markerOffset, -5, 0), markerSize, mod.UIAnchor.TopLeft, container, true, 0, markerColour, 1, mod.UIBgFill.Solid);
+        mod.AddUIContainer(
+            'checkpoint0', mod.CreateVector(markerOffset, -5, 0), markerSize,
+            mod.UIAnchor.TopLeft, container, true, 0, markerColour, 1, mod.UIBgFill.Solid
+        );
 
         // Checkpoint dividers (fire-and-forget - never referenced again)
         for (const cpIndex of state.checkpointIndexes) {
-            mod.AddUIContainer('checkpoint' + cpIndex,
-                mod.CreateVector(markerOffset + (multiplier * ((state.waypoints[cpIndex].distance / state.totalDistanceInMeters) * 100)), -5, 0),
-                markerSize, mod.UIAnchor.TopLeft, container, true, 0, markerColour, 1, mod.UIBgFill.Solid);
+            const progressAtCheckpoint = (state.waypoints[cpIndex].distance / state.totalDistanceInMeters) * 100;
+            const leftOffset = markerOffset + (multiplier * progressAtCheckpoint);
+            mod.AddUIContainer(
+                'checkpoint' + cpIndex, mod.CreateVector(leftOffset, -5, 0), markerSize,
+                mod.UIAnchor.TopLeft, container, true, 0, markerColour, 1, mod.UIBgFill.Solid
+            );
         }
     }
 
@@ -265,19 +309,6 @@ export class PayloadUI {
         }
     }
 
-    private static deleteUI(): void {
-        if (PayloadUI.widgets.container) mod.DeleteUIWidget(PayloadUI.widgets.container);
-        if (PayloadUI.widgets.credits) mod.DeleteUIWidget(PayloadUI.widgets.credits);
-        if (PayloadUI.widgets.debugText) mod.DeleteUIWidget(PayloadUI.widgets.debugText);
-        PayloadUI.resetWidgetCache();
-    }
-
-    public static rebuildUI(): void {
-        PayloadUI.deleteUI();
-        PayloadUI.setup();
-        PayloadUI.updateStatusUI();
-    }
-
     //#endregion
 
     //#region Every-Tick Updates
@@ -286,6 +317,7 @@ export class PayloadUI {
         const team1 = PayloadState.instance.playersInPushProximity.get(1)!.length;
         const team2 = PayloadState.instance.playersInPushProximity.get(2)!.length;
         if (team1 === PayloadUI.prevTeam1Count && team2 === PayloadUI.prevTeam2Count) return;
+
         PayloadUI.prevTeam1Count = team1;
         PayloadUI.prevTeam2Count = team2;
 

@@ -15,7 +15,6 @@ export class Payload {
 
         PayloadCore.init();
 
-        // SECTION: Tick-based events
         Events.OngoingGlobal.subscribe(() => {
             PayloadCore.executeEveryTick();
         });
@@ -39,7 +38,6 @@ export class Payload {
             // if refreshing UI/visual elements too early, they won't refresh correctly
             // TODO: find a more elegant solution than using an arbitrary timeout
             await mod.Wait(5);
-            PayloadUI.rebuildUI();
             PayloadWeather.resetWeatherVFX();
         });
 
@@ -81,8 +79,8 @@ export class Payload {
                 PayloadScoring.refreshScoreboard();
                 PayloadCore.applyCheckpointFx();
                 PayloadCore.updatePayloadVfx(true);
-                PayloadUI.DeployBoundsCheck(eventPlayer);
             }
+            PayloadUI.DeployBoundsCheck(eventPlayer);
         });
 
         Events.OnPlayerUndeploy.subscribe((eventPlayer: mod.Player) => {
