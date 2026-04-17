@@ -182,7 +182,7 @@ export class PayloadCore {
     }
 
     private static updatePayloadObjectives(respawn: boolean): void {
-        PayloadConfig.payloadObjectives.forEach((objectiveConfig, i) => {
+        PayloadConfig.payloadObjectives.forEach(async (objectiveConfig, i) => {
             const spawnPos = mod.Add(PayloadState.instance.payloadPosition, objectiveConfig.relativeOffset);
             const spawnRot = mod.Add(PayloadState.instance.payloadRotation, objectiveConfig.rotation);
             let obj = PayloadState.instance.payloadObjectives.get(i);
@@ -196,8 +196,10 @@ export class PayloadCore {
                     spawnRot,
                     objectiveConfig.scale
                 );
-                mod.SetMCOMOwner(obj as mod.MCOM, mod.GetTeam(1));
                 PayloadState.instance.payloadObjectives.set(i, obj as mod.Object);
+                // changing the owner of an mcom only seems to be possible after a short delay
+                await mod.Wait(0.1);
+                mod.SetMCOMOwner(obj as mod.MCOM, mod.GetTeam(1));
             }
             if (obj) {
                 mod.SetObjectTransform(obj, mod.CreateTransform(spawnPos, spawnRot));
