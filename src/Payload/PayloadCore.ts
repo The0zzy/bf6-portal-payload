@@ -330,7 +330,7 @@ export class PayloadCore {
         PayloadState.instance.pastTickRates.shift();
         PayloadState.instance.pastTickRates.push(PayloadState.instance.ticks);
         const newTickrate = PayloadState.instance.pastTickRates.reduce((a, b) => a + b) / PayloadState.instance.pastTickRates.length;
-        if (newTickrate != PayloadState.instance.tickrate && Math.abs(newTickrate - PayloadState.instance.tickrate) > 5) {
+        if (newTickrate != PayloadState.instance.tickrate && Math.abs(newTickrate - PayloadState.instance.tickrate) > 1) {
             PayloadState.instance.tickrate = newTickrate;
         }
         PayloadState.instance.ticks = 0;
