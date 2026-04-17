@@ -198,7 +198,8 @@ export class PayloadCore {
                 );
                 PayloadState.instance.payloadObjectives.set(i, obj as mod.Object);
                 // changing the owner of an mcom only seems to be possible after a short delay
-                await mod.Wait(0.1);
+                // wait(0) delays by one tick, which seems to be enough
+                await mod.Wait(0);
                 mod.SetMCOMOwner(obj as mod.MCOM, mod.GetTeam(1));
             }
             if (obj) {

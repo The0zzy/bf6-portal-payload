@@ -8,14 +8,10 @@ import { PayloadScoring } from './PayloadScoring.ts';
 export class Payload {
     private static subscribed = false;
 
-    public static async init(): Promise<void> {
+    public static init(): void {
         if (Payload.subscribed) {
             return;
         }
-
-        // delay to ensure all spatials and objects are loaded
-        // not waiting caused the game to randomly crash in the beginning
-        await mod.Wait(3);
 
         PayloadCore.init();
 
@@ -41,7 +37,7 @@ export class Payload {
 
             // if refreshing UI/visual elements too early, they won't refresh correctly
             // TODO: find a more elegant solution than using an arbitrary timeout
-            await mod.Wait(5);
+            await mod.Wait(1);
             PayloadWeather.resetWeatherVFX();
         });
 
@@ -97,8 +93,8 @@ export class Payload {
             PayloadScoring.onPlayerDied(victim, killer);
 
             //clear world log messages
-            for (let i = 0; i < 3; i++) {
-                mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.debug.emptyMessage), victim);
+            for (let i = 0; i < 4; i++) {
+                mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.payload.debug.emptyMessage), victim);
             }
         });
 
