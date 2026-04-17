@@ -8,10 +8,14 @@ import { PayloadScoring } from './PayloadScoring.ts';
 export class Payload {
     private static subscribed = false;
 
-    public static init(): void {
+    public static async init(): Promise<void> {
         if (Payload.subscribed) {
             return;
         }
+
+        // delay to ensure all spatials and objects are loaded
+        // not waiting caused the game to randomly crash in the beginning
+        await mod.Wait(3);
 
         PayloadCore.init();
 
