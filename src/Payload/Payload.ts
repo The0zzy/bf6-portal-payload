@@ -95,6 +95,11 @@ export class Payload {
 
         Events.OnPlayerDied.subscribe((victim: mod.Player, killer: mod.Player) => {
             PayloadScoring.onPlayerDied(victim, killer);
+
+            //clear world log messages
+            for (let i = 0; i < 3; i++) {
+                mod.DisplayHighlightedWorldLogMessage(mod.Message(mod.stringkeys.debug.emptyMessage), victim);
+            }
         });
 
         Events.OnPlayerEarnedKillAssist.subscribe((player: mod.Player, assistOn: mod.Player) => {
