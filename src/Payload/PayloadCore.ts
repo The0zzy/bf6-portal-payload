@@ -195,8 +195,9 @@ export class PayloadCore {
                     spawnPos,
                     spawnRot,
                     objectiveConfig.scale
-                ) as mod.Object;
-                PayloadState.instance.payloadObjectives.set(i, obj);
+                );
+                mod.SetMCOMOwner(obj as mod.MCOM, mod.GetTeam(1));
+                PayloadState.instance.payloadObjectives.set(i, obj as mod.Object);
             }
             if (obj) {
                 mod.SetObjectTransform(obj, mod.CreateTransform(spawnPos, spawnRot));
