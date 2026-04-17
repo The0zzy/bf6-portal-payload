@@ -358,9 +358,6 @@ export class PayloadCore {
         const reachedCheckpointWpIndex = PayloadState.instance.checkpointIndexes[
             PayloadState.instance.reachedCheckpointIndex
         ];
-        const nextCheckpointWpIndex = PayloadState.instance.checkpointIndexes[
-            PayloadState.instance.reachedCheckpointIndex + 1
-        ];
         for (const checkpointWpIndex of PayloadState.instance.checkpointIndexes) {
             const waypoint = PayloadState.instance.waypoints[checkpointWpIndex];
             for (let s = 0; s < PayloadConfig.checkpointSpatials.length; s++) {
@@ -388,21 +385,18 @@ export class PayloadCore {
                     PayloadState.instance.checkpointObjectives.delete(key);
                 }
 
-                // only spawn checkpoint objectives for the next upcoming checkpoint
-                if (
-                    checkpointWpIndex === nextCheckpointWpIndex
-                ) {
-                    const objectiveConfig = PayloadConfig.checkpointObjectives[o];
-                    const spawnPos = mod.Add(waypoint.position, objectiveConfig.relativeOffset);
-                    const spawnRot = mod.Add(waypoint.rotation, objectiveConfig.rotation);
-                    const obj = mod.SpawnObject(
-                        objectiveConfig.prefab,
-                        spawnPos,
-                        spawnRot,
-                        objectiveConfig.scale
-                    );
-                    PayloadState.instance.checkpointObjectives.set(key, obj as mod.CapturePoint);
-                }
+                const objectiveConfig = PayloadConfig.checkpointObjectives[o];
+                const spawnPos = mod.Add(waypoint.position, objectiveConfig.relativeOffset);
+                const spawnRot = mod.Add(waypoint.rotation, objectiveConfig.rotation);
+                const obj = mod.SpawnObject(
+                    objectiveConfig.prefab,
+                    spawnPos,
+                    spawnRot,
+                    objectiveConfig.scale
+                ) as mod.CapturePoint;
+                const owner: mod.Team = checkpointWpIndex <= reachedCheckpointWpIndex ? mod.GetTeam(1) : mod.GetTeam(2);
+                mod.SetCapturePointOwner(obj, owner);
+                PayloadState.instance.checkpointObjectives.set(key, obj);
             }
 
             for (let v = 0; v < PayloadConfig.checkpointVfx.length; v++) {
