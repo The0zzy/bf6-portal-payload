@@ -3,7 +3,10 @@ import { PayloadState, type PlayerScoring } from './PayloadState.ts';
 export class PayloadScoring {
     public static initScoreboard(): void {
         mod.SetScoreboardType(mod.ScoreboardType.CustomTwoTeams);
-        mod.SetScoreboardColumnWidths(1, 1, 1, 1, 1);
+        // adapting column widths due to temporary removal of 
+        // assists and revives from the scoreboard (due to bugs)
+        // mod.SetScoreboardColumnWidths(1, 1, 1, 1, 1);
+        mod.SetScoreboardColumnWidths(1, 1, 1, 0, 0);
         mod.SetScoreboardHeader(
             mod.Message(mod.stringkeys.payload.scoreboard.team1),
             mod.Message(mod.stringkeys.payload.scoreboard.team2)
@@ -11,8 +14,10 @@ export class PayloadScoring {
         mod.SetScoreboardColumnNames(
             mod.Message(mod.stringkeys.payload.scoreboard.objective),
             mod.Message(mod.stringkeys.payload.scoreboard.kills),
-            mod.Message(mod.stringkeys.payload.scoreboard.assists),
             mod.Message(mod.stringkeys.payload.scoreboard.deaths),
+            // assists are currently not working (bug raised)
+            mod.Message(mod.stringkeys.payload.scoreboard.assists),
+            //revives are currently not working (bug raised)
             mod.Message(mod.stringkeys.payload.scoreboard.revives)
         );
         PayloadScoring.refreshScoreboard();
@@ -24,7 +29,7 @@ export class PayloadScoring {
         for (let i = 0; i < playerCount; i++) {
             const player = mod.ValueInArray(allPlayers, i) as mod.Player;
             const score = PayloadState.getPlayerData(player);
-            mod.SetScoreboardPlayerValues(player, score.objective, score.kills, score.assists, score.deaths, score.revives);
+            mod.SetScoreboardPlayerValues(player, score.objective, score.kills, score.deaths, score.assists, score.revives);
         }
     }
 
@@ -47,7 +52,7 @@ export class PayloadScoring {
                 score.revives += amount;
                 break;
         }
-        mod.SetScoreboardPlayerValues(player, score.objective, score.kills, score.assists, score.deaths, score.revives);
+        mod.SetScoreboardPlayerValues(player, score.objective, score.kills, score.deaths, score.assists, score.revives);
     }
 
     public static onPlayerDied(victim: mod.Player, killer: mod.Player): void {
