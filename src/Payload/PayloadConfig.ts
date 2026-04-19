@@ -1,5 +1,5 @@
 export interface SpatialConfig {
-    prefab: mod.RuntimeSpawn_Common | mod.RuntimeSpawn_Abbasid | mod.RuntimeSpawn_Tungsten;
+    prefab: mod.RuntimeSpawn_Common | mod.RuntimeSpawn_Abbasid | mod.RuntimeSpawn_Tungsten | mod.RuntimeSpawn_Subsurface;
     relativeOffset: mod.Vector;
     scale: mod.Vector;
     rotation: mod.Vector;
@@ -48,7 +48,7 @@ export class PayloadConfig {
     public static readonly enableTeamSwitch = true;
 
     /** Identifiers for payload spatial objects (IDs determine the type of payload object spawned) */
-    public static readonly payloadSpatialIdentifiers: number[] = [5000, 5001];
+    public static readonly payloadSpatialIdentifiers: number[] = [5000, 5001, 5002];
 
     /** Maximum duration of the game mode in seconds 
      * Note: The game should end when the payload reaches the end of the track, 

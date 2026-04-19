@@ -155,6 +155,16 @@ export class PayloadCore {
                     }
                 );
             }
+            if (PayloadCore.isSpatialValid(payloadSpatialId) && payloadSpatialId === 5002) {
+                PayloadState.instance.payloadSpatialsConfig.push(
+                    {
+                        prefab: mod.RuntimeSpawn_Subsurface.GM1083CargoTruck_01_Fuel,
+                        relativeOffset: mod.CreateVector(0, -0.1, 0),
+                        scale: mod.CreateVector(1, 1, 1),
+                        rotation: mod.CreateVector(0, 0, 0)
+                    }
+                );
+            }
         }
     }
 

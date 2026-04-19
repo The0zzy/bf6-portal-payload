@@ -47,9 +47,9 @@ export class PayloadUI {
         PayloadUI.setupContainer();
         PayloadUI.setupStatusIndicator();
         PayloadUI.setupProgressBar();
-        PayloadUI.setupCheckpoints();
         PayloadUI.setupTimerAndPercentage();
         PayloadUI.setupFlashOverlays();
+        PayloadUI.setupCheckpoints();
         PayloadUI.setupPlayerCounts();
         PayloadUI.setupProgressIcon();
         PayloadUI.setupCredits();
