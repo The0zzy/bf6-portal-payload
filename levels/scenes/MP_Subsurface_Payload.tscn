@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://djgnxj3g6xbkr"]
+[gd_scene load_steps=14 format=3 uid="uid://djgnxj3g6xbkr"]
 
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/HQ_PlayerSpawner.tscn" id="1_ivyph"]
 [ext_resource type="PackedScene" uid="uid://jv31so3xcr7p" path="res://addons/bf_portal/portal_tools/types/PolygonVolume/PolygonVolume.tscn" id="2_d26xr"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/Sector.tscn" id="6_hyed2"]
 [ext_resource type="PackedScene" path="res://static/MP_Subsurface_Terrain.tscn" id="7_6hj25"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/AreaTrigger.tscn" id="8_0fy1f"]
+[ext_resource type="PackedScene" path="res://objects/gameplay/common/AreaTrigger.tscn" id="8_hyed2"]
 [ext_resource type="PackedScene" path="res://objects/gameplay/common/FixedCamera.tscn" id="11_5y0my"]
 [ext_resource type="PackedScene" path="res://objects/uncategorized/GM1083CargoTruck_01_Fuel.tscn" id="12_p3mil"]
 
@@ -419,14 +420,13 @@ ObjId = 100
 SectorArea = NodePath("SectorArea0")
 
 [node name="SectorArea0" parent="Sectors/Sector0" instance=ExtResource("2_d26xr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.21477, -0.797188, -10.3386)
-points = PackedVector2Array(-19.8776, -42.7482, -15.9307, -38.6429, -46.2093, -13.0542, -23.3979, 13.0306, -37.3382, 25.5458, -45.6403, 27.9002, -45.765, 55.4475, -32.6302, 54.2703, -22.7791, 49.4996, -3.75848, 31.5323, 10.5535, 44.791, -11.2994, 68.0743, 7.99104, 85.8378, 51.0896, 40.8762, 35.5384, 23.9678, 59.0762, 0.669846, 51.5764, -5.49562, 56.1441, -10.3119, 40.6454, -23.8152, 45.2749, -27.6431, 34.4263, -37.7238, 27.1141, -31.2103, -1.37692, -60.3351)
-height = 20.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.21477, -12.1051, -10.3386)
+points = PackedVector2Array(-19.8776, -42.7482, -15.9307, -38.6429, -46.2093, -13.0542, -23.3979, 13.0306, -37.3382, 25.5458, -45.6403, 27.9002, -45.765, 55.4475, -32.6302, 54.2703, -22.7791, 49.4996, -3.75848, 31.5323, 10.5535, 44.791, -11.2994, 68.0743, 7.99104, 85.8378, 51.0959, 40.8621, 35.5747, 23.9645, 59.0939, 0.670425, 51.6013, -5.50012, 56.1652, -10.3193, 40.696, -23.818, 45.3214, -27.6306, 34.4252, -37.7702, 27.1403, -31.2688, -1.36328, -60.3404)
+height = 40.0
 
-[node name="AreaTrigger0" parent="Sectors/Sector0/SectorArea0" node_paths=PackedStringArray("Area") instance=ExtResource("8_0fy1f")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.294952, 23.9373, 13.5897)
+[node name="AreaTrigger" parent="Sectors/Sector0" node_paths=PackedStringArray("Area") instance=ExtResource("8_hyed2")]
 ObjId = 600
-Area = NodePath("..")
+Area = NodePath("../SectorArea0")
 
 [node name="Sector1" parent="Sectors" node_paths=PackedStringArray("SectorArea", "MCOMs") instance=ExtResource("6_hyed2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -111.422, -1.70049, 522.518)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://foq00g1a2xnb"]
+[gd_scene load_steps=16 format=3 uid="uid://foq00g1a2xnb"]
 
 [ext_resource type="Texture2D" uid="uid://b3nimnwwy2h4i" path="res://images/Mirak Valley HQ.png" id="1_b3qp6"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/HQ_PlayerSpawner.tscn" id="1_g02yh"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://objects/props/FiringRange_MatDecal_01.tscn" id="7_b3qp6"]
 [ext_resource type="PackedScene" path="res://static/MP_Tungsten_Assets.tscn" id="7_sa0le"]
 [ext_resource type="PackedScene" path="res://objects/props/FireAlarmButton_01.tscn" id="8_eh7ot"]
+[ext_resource type="PackedScene" path="res://objects/gameplay/common/AreaTrigger.tscn" id="9_7cykl"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/Sector.tscn" id="9_yjseg"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/AreaTrigger.tscn" id="10_7cykl"]
 [ext_resource type="PackedScene" path="res://objects/uncategorized/GM1083CargoTruck_01_Canopy_Cargo01.tscn" id="13_b3qp6"]
@@ -568,10 +569,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.21477, -0.797188, -10.3386)
 points = PackedVector2Array(31.4499, -35.2143, 7.7558, -36.6472, -35.8709, -55.1811, -68.9917, -63.2609, -99.1727, -40.6477, -122.097, 57.9242, -89.2311, 111.57, -25.1041, 137.226, 41.8712, 126.999, 27.1644, 71.3163, 18.2271, 33.4684, 19.9024, -1.56165)
 height = 100.0
 
-[node name="AreaTrigger0" parent="Sectors/Sector0/SectorArea0" node_paths=PackedStringArray("Area") instance=ExtResource("10_7cykl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.294952, 23.9373, 13.5897)
+[node name="AreaTrigger" parent="Sectors/Sector0" node_paths=PackedStringArray("Area") instance=ExtResource("9_7cykl")]
 ObjId = 600
-Area = NodePath("..")
+Area = NodePath("../SectorArea0")
 
 [node name="Sector1" parent="Sectors" node_paths=PackedStringArray("SectorArea", "MCOMs") instance=ExtResource("9_yjseg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -239.094, -1.70052, 228.425)

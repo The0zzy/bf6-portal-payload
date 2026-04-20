@@ -2901,9 +2901,9 @@
             ]
         },
         {
-            "name": "AreaTrigger0",
+            "name": "AreaTrigger",
             "ObjId": 600,
-            "Area": null,
+            "Area": "Sectors/Sector0/SectorArea0",
             "type": "AreaTrigger",
             "right": {
                 "x": 1,
@@ -2921,11 +2921,11 @@
                 "z": 1
             },
             "position": {
-                "x": -378.347182,
-                "y": 86.611692,
-                "z": -269.5929
+                "x": -379.267,
+                "y": 63.47158,
+                "z": -272.844
             },
-            "id": "Sectors/Sector0/SectorArea0/AreaTrigger0",
+            "id": "Sectors/Sector0/AreaTrigger",
             "linked": [
                 "Area"
             ]
