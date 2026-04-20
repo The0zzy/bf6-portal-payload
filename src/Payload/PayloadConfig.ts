@@ -86,7 +86,7 @@ export class PayloadConfig {
     public static readonly enableOvertime = true;
 
     /** Whether debug mode is enabled */
-    public static readonly enableDebug = true;
+    public static readonly enableDebug = false;
 
     /** Interval for spatial respawn in seconds (to prevent destruction of objects) */
     public static readonly spatialRespawnInterval = 5;

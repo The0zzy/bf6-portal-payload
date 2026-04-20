@@ -21,7 +21,7 @@ import { PayloadWeather } from './PayloadWeather.ts';
  */
 export class PayloadCore {
 
-    public static init(): void {
+    public static async init(): Promise<void> {
         mod.SetGameModeTimeLimit(PayloadConfig.maxGameModeTime);
         mod.SetGameModeTargetScore(PayloadConfig.gameModeTargetScore);
         PayloadCore.initSectors();
@@ -30,13 +30,12 @@ export class PayloadCore {
         PayloadCore.initPayloadObjects();
         PayloadSounds.init();
         PayloadScoring.initScoreboard();
-
         PayloadUI.setup();
-        PayloadWeather.init();
         PayloadCore.applyCheckpointFx();
 
         PayloadState.instance.checkpointStartTime = mod.GetMatchTimeElapsed();
         PayloadState.instance.gameOngoing = true;
+        PayloadWeather.init();
     }
 
     private static initSectors(): void {
@@ -54,12 +53,14 @@ export class PayloadCore {
     private static initPayloadTrack(): void {
         let waypointIndex = 0;
         let distance = 0;
+        let invalidCount = 0;
         for (
             let waypointSpatialId = 1000;
             waypointSpatialId < 1999;
             waypointSpatialId++
         ) {
             if (PayloadCore.isSpatialValid(waypointSpatialId)) {
+                invalidCount = 0;
                 const isCheckpoint = PayloadCore.isSpatialValid(waypointSpatialId + 1000);
                 const waypointPosition = mod.GetObjectPosition(
                     mod.GetSpatialObject(waypointSpatialId)
@@ -77,7 +78,19 @@ export class PayloadCore {
                     distance
                 });
                 waypointIndex++;
+            } else {
+                invalidCount++;
+                if (invalidCount >= 10) {
+                    break;
+                }
             }
+        }
+
+        if (PayloadConfig.enableDebug) {
+            mod.SendErrorReport(mod.Message(mod.stringkeys.payload.counter, waypointIndex));
+            mod.SendErrorReport(mod.Message(mod.stringkeys.payload.counter, mod.XComponentOf(mod.GetObjectPosition(mod.GetSpatialObject(waypointIndex + 1000)))));
+            mod.SendErrorReport(mod.Message(mod.stringkeys.payload.counter, mod.YComponentOf(mod.GetObjectPosition(mod.GetSpatialObject(waypointIndex + 1000)))));
+            mod.SendErrorReport(mod.Message(mod.stringkeys.payload.counter, mod.ZComponentOf(mod.GetObjectPosition(mod.GetSpatialObject(waypointIndex + 1000)))));
         }
 
         // Ensure first and last waypoints are checkpoints
@@ -354,8 +367,8 @@ export class PayloadCore {
         if (!obj) return false;
         const pos = mod.GetObjectPosition(obj);
         return !(
-            Math.abs(mod.XComponentOf(pos)) < 1 &&
-            Math.abs(mod.YComponentOf(pos)) < 1 &&
+            Math.abs(mod.XComponentOf(pos)) < 1 ||
+            Math.abs(mod.YComponentOf(pos)) < 1 ||
             Math.abs(mod.ZComponentOf(pos)) < 1
         );
     }
