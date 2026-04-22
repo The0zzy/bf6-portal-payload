@@ -636,6 +636,7 @@ export class PayloadUI {
     }
 
     public static async outOfBoundsUI(player: mod.Player): Promise<void> {
+        if (!PayloadState.instance.gameOngoing) return;
         const playerData = PayloadState.getPlayerData(player);
         playerData.outOfBounds = true;
         if (playerData.oobTimer > 0) return;
@@ -652,7 +653,11 @@ export class PayloadUI {
             mod.SetUITextLabel(mod.FindUIWidgetWithName('Countdown', playerUI), mod.Message(mod.stringkeys.payload.counter, i));
             PayloadSounds.playOOBsound(player);
             await mod.Wait(1);
-            if (!playerData.outOfBounds) break;
+            if (!PayloadState.instance.gameOngoing) {
+                playerData.outOfBounds = false;
+                break;
+            }
+            if (!playerData.outOfBounds || !mod.GetSoldierState(player, mod.SoldierStateBool.IsAlive)) break;
         }
 
         playerData.oobTimer = 0;
