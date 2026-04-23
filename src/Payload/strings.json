@@ -55,7 +55,8 @@
     "debug": {
       "tickrate": "Ticks: {} | Tickrate: {}",
       "breakpoint": "Breakpoint: {}",
-      "emptyMessage": ""
+      "emptyMessage": "",
+      "enterTrigger": "Entered Trigger {}"
     }
   }
 }

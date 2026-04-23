@@ -4,6 +4,7 @@ import { PayloadUI } from './PayloadUI.ts';
 import { PayloadWeather } from './PayloadWeather.ts';
 import { PayloadState } from './PayloadState.ts';
 import { PayloadScoring } from './PayloadScoring.ts';
+import { PayloadConfig } from './PayloadConfig.ts';
 
 export class Payload {
     private static subscribed = false;
@@ -42,27 +43,29 @@ export class Payload {
         });
 
         Events.OnPlayerEnterAreaTrigger.subscribe((eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger) => {
+            if (PayloadConfig.enableDebug) {
+                mod.DisplayNotificationMessage(mod.Message(mod.stringkeys.payload.debug.enterTrigger, mod.GetObjId(eventAreaTrigger)), eventPlayer);
+            }
             const playerData = PayloadState.getPlayerData(eventPlayer);
             playerData.playArea += 1;
             const nextCheckpointAreaTriggerId = PayloadState.instance.reachedCheckpointIndex + 1 + 600;
-            if (mod.Equals(mod.GetTeam(eventPlayer), mod.GetTeam(1))) {
-                if (mod.GetObjId(eventAreaTrigger) > (nextCheckpointAreaTriggerId)) {
-                    PayloadUI.outOfBoundsUI(eventPlayer);
-                } else {
-                    playerData.outOfBounds = false;
-                }
+            if (mod.Equals(mod.GetTeam(eventPlayer), mod.GetTeam(1)) && mod.GetObjId(eventAreaTrigger) > (nextCheckpointAreaTriggerId)) {
+                PayloadUI.outOfBoundsUI(eventPlayer);
+            } else if (mod.Equals(mod.GetTeam(eventPlayer), mod.GetTeam(2)) && mod.GetObjId(eventAreaTrigger) < (nextCheckpointAreaTriggerId)) {
+                PayloadUI.outOfBoundsUI(eventPlayer);
+            } else if (mod.GetObjId(eventAreaTrigger) >= 700 && mod.GetObjId(eventAreaTrigger) <= 800) {
+                PayloadUI.outOfBoundsUI(eventPlayer);
             } else {
-                if (mod.GetObjId(eventAreaTrigger) < (nextCheckpointAreaTriggerId)) {
-                    PayloadUI.outOfBoundsUI(eventPlayer);
-                } else {
-                    playerData.outOfBounds = false;
-                }
+                playerData.outOfBounds = false;
             }
         });
 
         Events.OnPlayerExitAreaTrigger.subscribe(async (eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger) => {
             const playerData = PayloadState.getPlayerData(eventPlayer);
             playerData.playArea -= 1;
+            if (playerData.playArea > 0 && mod.GetObjId(eventAreaTrigger) >= 700 && mod.GetObjId(eventAreaTrigger) <= 800) {
+                playerData.outOfBounds = false;
+            }
             await mod.Wait(0.066);
             if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) {
                 if (playerData.playArea <= 0) {
