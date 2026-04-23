@@ -21,7 +21,7 @@ import { PayloadWeather } from './PayloadWeather.ts';
  */
 export class PayloadCore {
 
-    public static async init(): Promise<void> {
+    public static init(): void {
         mod.SetGameModeTimeLimit(PayloadConfig.maxGameModeTime);
         mod.SetGameModeTargetScore(PayloadConfig.gameModeTargetScore);
         PayloadCore.initSectors();
@@ -60,7 +60,11 @@ export class PayloadCore {
             waypointSpatialId++
         ) {
             if (PayloadCore.isSpatialValid(waypointSpatialId)) {
+                // reset invalid count when a valid waypoint is found, 
+                // so that a series of invalid waypoints in the middle 
+                // of the track doesn't prevent loading the rest of the track
                 invalidCount = 0;
+
                 const isCheckpoint = PayloadCore.isSpatialValid(waypointSpatialId + 1000);
                 const waypointPosition = mod.GetObjectPosition(
                     mod.GetSpatialObject(waypointSpatialId)
@@ -71,26 +75,40 @@ export class PayloadCore {
                         waypointPosition
                     );
                 }
-                PayloadState.instance.waypoints.push({
+                const wp = {
                     position: waypointPosition,
                     isCheckpoint,
                     rotation: mod.CreateVector(0, 0, 0),
                     distance
-                });
+                };
+                PayloadState.instance.waypoints.push(wp);
+                if (PayloadConfig.enableDebug) {
+                    mod.SendErrorReport(
+                        mod.Message(
+                            mod.stringkeys.payload.debug.wpIndex,
+                            waypointIndex,
+                            wp.isCheckpoint ? mod.stringkeys.payload.debug.true : mod.stringkeys.payload.debug.false,
+                            distance
+                        )
+                    );
+                    mod.SendErrorReport(
+                        mod.Message(
+                            mod.stringkeys.payload.debug.wpPosition,
+                            mod.XComponentOf(wp.position),
+                            mod.YComponentOf(wp.position),
+                            mod.ZComponentOf(wp.position)
+                        )
+                    );
+                }
                 waypointIndex++;
             } else {
                 invalidCount++;
+                // in case there are more than 10 invalid waypoints in a row, 
+                // assume the track has ended and avoid further loops
                 if (invalidCount >= 10) {
                     break;
                 }
             }
-        }
-
-        if (PayloadConfig.enableDebug) {
-            mod.SendErrorReport(mod.Message(mod.stringkeys.payload.counter, waypointIndex));
-            mod.SendErrorReport(mod.Message(mod.stringkeys.payload.counter, mod.XComponentOf(mod.GetObjectPosition(mod.GetSpatialObject(waypointIndex + 1000)))));
-            mod.SendErrorReport(mod.Message(mod.stringkeys.payload.counter, mod.YComponentOf(mod.GetObjectPosition(mod.GetSpatialObject(waypointIndex + 1000)))));
-            mod.SendErrorReport(mod.Message(mod.stringkeys.payload.counter, mod.ZComponentOf(mod.GetObjectPosition(mod.GetSpatialObject(waypointIndex + 1000)))));
         }
 
         // Ensure first and last waypoints are checkpoints

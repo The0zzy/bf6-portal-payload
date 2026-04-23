@@ -55,7 +55,11 @@
     "debug": {
       "tickrate": "Ticks: {} | Tickrate: {}",
       "breakpoint": "Breakpoint: {}",
-      "emptyMessage": ""
+      "emptyMessage": "",
+      "true": "true",
+      "false": "false",
+      "wpIndex": "WP Index: {}, CP: {}, Distance: {}",
+      "wpPosition": "WP Position: ({}, {}, {})"
     }
   }
 }
