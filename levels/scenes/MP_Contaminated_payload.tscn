@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dxqyrl8btc6x2"]
+[gd_scene load_steps=23 format=3 uid="uid://dxqyrl8btc6x2"]
 
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/HQ_PlayerSpawner.tscn" id="1_jkriq"]
 [ext_resource type="Texture2D" uid="uid://8wxvupeh7a6i" path="res://images/Contamination HQ.png" id="1_tl4ko"]
@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" path="res://objects/nature/RockpileLarge_03.tscn" id="17_4pwv0"]
 [ext_resource type="PackedScene" path="res://objects/fx/FX_Snow_BlowingSnow_L_01_TerrainSnap.tscn" id="19_q7yoa"]
 [ext_resource type="PackedScene" path="res://objects/props/FiringRangeCrateWeapon_01.tscn" id="19_tl4ko"]
+[ext_resource type="PackedScene" path="res://objects/gameplay/common/AreaTrigger.tscn" id="20_4pwv0"]
 [ext_resource type="PackedScene" path="res://objects/gameplay/common/FixedCamera.tscn" id="20_tl4ko"]
 
 [sub_resource type="Gradient" id="Gradient_4pwv0"]
@@ -38,12 +39,13 @@ normal_fade = 0.821
 
 [node name="Decal" type="Decal" parent="."]
 transform = Transform3D(0.973932, 0, -0.226838, 0, 1, 0, 0.226838, 0, 0.973932, 153.257, 311.597, 29.0494)
+visible = false
 size = Vector3(1753.15, 300, 994.467)
 texture_albedo = ExtResource("13_7sxqi")
 texture_normal = SubResource("GradientTexture1D_ti4nl")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-0.809386, -0.587277, 3.72529e-09, 0.0593478, -0.0817933, 0.994881, -0.58427, 0.805243, 0.101056, 22.219, 921.564, 86.9254)
+transform = Transform3D(-0.809386, -0.587277, 2.99786e-08, 0.0593478, -0.0817934, 0.994881, -0.58427, 0.805243, 0.101056, 22.219, 921.564, 86.9254)
 
 [node name="DeployCam" parent="Camera3D" instance=ExtResource("5_3iemw")]
 
@@ -533,18 +535,13 @@ Area = NodePath("../SectorArea0")
 [node name="Sector1" parent="Sectors" node_paths=PackedStringArray("SectorArea", "MCOMs") instance=ExtResource("7_bjasm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 379.515, 57, 191.653)
 ObjId = 101
-SectorArea = NodePath("SectorArea1")
+SectorArea = NodePath("../Sector2/SectorArea1")
 MCOMs = [null, null]
-
-[node name="SectorArea1" parent="Sectors/Sector1" instance=ExtResource("2_s8ce8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 166.771, -0.565224, -10.3386)
-points = PackedVector2Array(-339.852, -31.4796, -346.826, -14.8249, -351.98, 33.9263, -349.156, 48.3625, -356.528, 58.4509, -348.654, 73.3721, -322.486, 99.2093, -297.027, 104.601, -267.545, 98.1894, -248.35, 90.0522, -248.545, 66.0098, -213.596, 24.7112, -216.081, 16.992, -210.541, 9.96437, -202.622, 8.90187, -193.509, -14.5304, -235.885, -33.4721, -265.924, -46.3633, -269.649, -81.7795)
-height = 100.0
 
 [node name="AreaTrigger1" parent="Sectors/Sector1" node_paths=PackedStringArray("Area") instance=ExtResource("9_2cgwf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.9584, 23.1401, 7.62132)
 ObjId = 601
-Area = NodePath("../SectorArea1")
+Area = NodePath("../../Sector2/SectorArea1")
 
 [node name="TEAM_1_HQ" parent="Sectors/Sector1" node_paths=PackedStringArray("InfantrySpawns") instance=ExtResource("1_jkriq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.4813, 20.6796, -3.4787)
@@ -590,8 +587,8 @@ SectorArea = NodePath("SectorArea2")
 MCOMs = [null, null]
 
 [node name="SectorArea2" parent="Sectors/Sector2" instance=ExtResource("2_s8ce8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 165.781, -4.41736, -12.9133)
-points = PackedVector2Array(-240.901, -30.0357, -246.122, -6.4706, -256.815, 18.8424, -254.958, 58.4301, -197.44, 92.9484, -137.21, 154.631, -129.841, 144.541, -132.643, 130.097, -127.482, 81.3676, -120.518, 64.7092, -50.3395, 14.4239, -66.2867, -22.908, -140.613, -52.8251, -208.542, -78.4602, -240.432, -45.2997)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.22855, -4.41736, 22.0195)
+points = PackedVector2Array(-70.8914, -64.9685, -76.1124, -41.4034, -86.8054, -16.0904, -84.9484, 23.4973, -27.4304, 58.0156, 32.7881, 119.69, 40.1686, 109.608, 37.3493, 95.1634, 42.4965, 46.4151, 49.4916, 29.7764, 119.667, -20.5373, 103.723, -57.8408, 29.3966, -87.7579, -38.5324, -113.393, -70.4224, -80.2325)
 height = 100.0
 
 [node name="AreaTrigger2" parent="Sectors/Sector2" node_paths=PackedStringArray("Area") instance=ExtResource("9_2cgwf")]
@@ -636,6 +633,11 @@ transform = Transform3D(-0.0118153, 0, 0.99993, 0, 1, 0, -0.99993, 0, -0.0118153
 [node name="SpawnPoint_2_4" parent="Sectors/Sector2/TEAM_2_HQ2" instance=ExtResource("3_snrvj")]
 transform = Transform3D(-0.0313224, 0, 0.999509, 0, 1, 0, -0.999509, 0, -0.0313224, 23.2498, -5.32315, 83.1083)
 
+[node name="SectorArea1" parent="Sectors/Sector2" instance=ExtResource("2_s8ce8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 385.086, -0.565216, 83.2573)
+points = PackedVector2Array(-339.852, -31.4796, -346.826, -14.8249, -351.98, 33.9263, -349.156, 48.3625, -356.528, 58.4509, -348.654, 73.3721, -322.486, 99.2093, -297.027, 104.601, -267.545, 98.1894, -248.376, 90.0566, -248.564, 65.9973, -213.62, 24.7026, -216.087, 16.9892, -210.563, 9.93047, -202.639, 8.88385, -193.528, -14.5381, -235.885, -33.4721, -265.924, -46.3633, -269.649, -81.7795)
+height = 100.0
+
 [node name="Sector3" parent="Sectors" node_paths=PackedStringArray("SectorArea", "MCOMs") instance=ExtResource("7_bjasm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.157, 57, 62.0864)
 ObjId = 103
@@ -644,7 +646,7 @@ MCOMs = [null, null]
 
 [node name="SectorArea3" parent="Sectors/Sector3" instance=ExtResource("2_s8ce8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.04131, -6.28848, -10.3386)
-points = PackedVector2Array(-3.62266, -77.7915, -26.0443, -50.6193, -45.1672, -17.6626, -79.1824, 42.4891, -49.1927, 41.8463, -0.597788, 74.1927, 26.7928, 90.1708, 52.1445, 97.7649, 92.185, 91.819, 90.3349, 52.2516, 101.044, 26.9722, 106.254, 3.43142, 106.682, -11.8954, 138.574, -45.0492, 94.7047, -64.9607, 55.9305, -64.9361)
+points = PackedVector2Array(-3.62266, -77.7915, -26.0443, -50.6193, -45.1672, -17.6626, -79.1824, 42.4891, -49.1927, 41.8463, -0.597788, 74.1927, 26.7928, 90.1708, 52.1445, 97.7649, 92.1419, 91.825, 90.2888, 52.2411, 100.981, 26.9295, 106.201, 3.35974, 106.667, -11.9021, 138.559, -45.0631, 94.7047, -64.9607, 55.9305, -64.9361)
 height = 100.0
 
 [node name="AreaTrigger3" parent="Sectors/Sector3" node_paths=PackedStringArray("Area") instance=ExtResource("9_2cgwf")]
@@ -698,7 +700,7 @@ MCOMs = [null, null]
 
 [node name="SectorArea4" parent="Sectors/Sector4" instance=ExtResource("2_s8ce8")]
 transform = Transform3D(1, 0, 6.98132e-05, 0, 1, 0, -6.98132e-05, 0, 1, 5.04131, -6.19255, -10.3386)
-points = PackedVector2Array(-56.0107, 62.2792, -62.2679, 101.451, -56.1018, 121.311, -42.7696, 135.609, 50.741, 142.611, 103.88, 49.5395, 126.283, 22.3641, 84.3065, -1.22151, 43.1607, -18.7158, 19.2263, -26.6462, -10.6441, -35.257, -41.6881, 13.2327)
+points = PackedVector2Array(-56.0107, 62.2792, -62.2679, 101.451, -56.1018, 121.311, -42.7696, 135.609, 50.7165, 142.624, 103.848, 49.5218, 126.273, 22.3497, 84.3065, -1.22151, 43.1607, -18.7158, 19.2263, -26.6462, -10.6441, -35.257, -41.6881, 13.2327)
 height = 100.0
 
 [node name="AreaTrigger4" parent="Sectors/Sector4" node_paths=PackedStringArray("Area") instance=ExtResource("9_2cgwf")]
@@ -751,7 +753,7 @@ MCOMs = [null, null]
 
 [node name="SectorArea5" parent="Sectors/Sector5" instance=ExtResource("2_s8ce8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.04131, -6.19255, -10.3386)
-points = PackedVector2Array(-25.1849, -130.461, -104.229, -72.8612, -96.9874, -41.1647, -79.7146, -13.3825, -63.8808, 0.779022, -36.7501, 11.3514, -45.5784, 48.6261, -58.7362, 93.0524, -28.8519, 101.655, -4.97205, 109.596, 36.2225, 127.096, 78.1855, 150.649, 98.9423, 75.1143, 92.0599, 18.9622, 54.9096, -0.997726, 37.3917, -36.1333, -22.1474, -90.2039, -4.31104, -106.318)
+points = PackedVector2Array(-25.1849, -130.461, -104.229, -72.8612, -96.9874, -41.1647, -79.7146, -13.3825, -63.8808, 0.779022, -36.7501, 11.3514, -45.5784, 48.6261, -58.7304, 93.0327, -28.8593, 101.643, -4.92279, 109.578, 36.2177, 127.064, 78.1912, 150.63, 98.9423, 75.1143, 92.0599, 18.9622, 54.9096, -0.997726, 37.3917, -36.1333, -22.1474, -90.2039, -4.31104, -106.318)
 height = 100.0
 
 [node name="AreaTrigger5" parent="Sectors/Sector5" node_paths=PackedStringArray("Area") instance=ExtResource("9_2cgwf")]
@@ -803,8 +805,8 @@ SectorArea = NodePath("SectorArea6")
 MCOMs = [null, null]
 
 [node name="SectorArea6" parent="Sectors/Sector6" instance=ExtResource("2_s8ce8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.04131, -6.19255, -10.3386)
-points = PackedVector2Array(41.3276, -27.2676, 16.3228, -22.3882, 2.7924, -12.3537, -4.52309, 1.69464, -8.1465, 25.6191, -4.46289, 38.8006, 21.296, 49.4639, 24.0935, 69.8152, 44.0392, 90.1342, 116.584, 37.2618, 104.244, 35.9388, 94.1552, 23.3395, 95.204, 11.4931, 58.6128, -25.0017)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.0057, -6.19254, 10.8414)
+points = PackedVector2Array(-1.63683, -48.4476, -26.6416, -43.5682, -40.172, -33.5337, -47.4875, -19.4854, -51.1109, 4.43911, -47.4273, 17.6206, -21.6684, 28.2839, -18.8709, 48.6352, 1.06467, 68.9305, 73.5926, 16.0758, 61.2796, 14.7588, 51.1908, 2.15951, 52.2396, -9.68689, 15.6484, -46.1817)
 height = 100.0
 
 [node name="AreaTrigger6" parent="Sectors/Sector6" node_paths=PackedStringArray("Area") instance=ExtResource("9_2cgwf")]
@@ -2011,6 +2013,16 @@ ObjId = 51
 [node name="ExplosionSound" parent="FixedCamera2" instance=ExtResource("6_2uuea")]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 20, 0)
 ObjId = 52
+
+[node name="AreaTrigger-OOB" parent="." node_paths=PackedStringArray("Area") instance=ExtResource("20_4pwv0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 157.341, 357.833, 90.7655)
+ObjId = 700
+Area = NodePath("PolygonVolume-OOB")
+
+[node name="PolygonVolume-OOB" parent="AreaTrigger-OOB" instance=ExtResource("2_s8ce8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -33.5243, 0)
+points = PackedVector2Array(70.6445, -8.2873, 66.0121, -16.2556, 61.9247, -19.0607, 56.9178, -19.5322, 45.2755, -2.30816, 35.5815, -8.56375, 39.3673, -14.6643, 26.9957, -21.8176, 10.732, -29.3391, 0.276932, -35.7034, -9.02646, -40.8788, -13.5754, -34.4005, -22.8826, -40.7431, -17.6265, -51.2718, -19.3919, -56.4475, -29.816, -62.244, -39.5765, -59.5914, -35.3428, -45.0374, -34.6259, -32.2076, -39.2539, -18.04, -49.5041, -4.78015, -58.9573, 3.82708, -58.1749, 12.5091, -55.3448, 22.7455, -46.477, 32.8954, -37.0366, 32.6616, -26.2457, 41.1554, -14.4488, 47.2992, -3.91585, 45.6897, 4.90184, 41.426, 14.9868, 37.4896, 24.2325, 24.787, 30.9025, 21.2329, 43.0797, 20.8455, 50.6225, 19.7591, 69.4069, 3.54062)
+height = 30.0
 
 [editable path="Static/MP_Contaminated_Terrain"]
 [editable path="Static/MP_Contaminated_Terrain/Mesh"]

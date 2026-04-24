@@ -59,7 +59,8 @@
       "true": "true",
       "false": "false",
       "wpIndex": "WP Index: {}, CP: {}, Distance: {}",
-      "wpPosition": "WP Position: ({}, {}, {})"
+      "wpPosition": "WP Position: ({}, {}, {})",
+      "enterTrigger": "Entered Trigger {}"
     }
   }
 }
