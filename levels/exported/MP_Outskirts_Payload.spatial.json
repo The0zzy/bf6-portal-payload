@@ -3163,7 +3163,6 @@
                 "Sectors/Sector1/TEAM_1_HQ/SpawnPoint_1_3",
                 "Sectors/Sector1/TEAM_1_HQ/SpawnPoint_1_4"
             ],
-            "HQArea": "Sectors/Sector1/TEAM_1_HQ/HQ_Team1",
             "type": "HQ_PlayerSpawner",
             "right": {
                 "x": 1,
@@ -3187,36 +3186,7 @@
             },
             "id": "Sectors/Sector1/TEAM_1_HQ",
             "linked": [
-                "HQArea",
                 "InfantrySpawns"
-            ]
-        },
-        {
-            "name": "HQ_Team1",
-            "type": "PolygonVolume",
-            "id": "Sectors/Sector1/TEAM_1_HQ/HQ_Team1",
-            "height": 0,
-            "points": [
-                {
-                    "x": -344.659463,
-                    "y": 97.7912,
-                    "z": -159.097688
-                },
-                {
-                    "x": -344.659463,
-                    "y": 97.7912,
-                    "z": -169.097688
-                },
-                {
-                    "x": -354.659463,
-                    "y": 97.7912,
-                    "z": -169.097688
-                },
-                {
-                    "x": -354.659463,
-                    "y": 97.7912,
-                    "z": -159.097688
-                }
             ]
         },
         {
@@ -3330,7 +3300,6 @@
                 "Sectors/Sector1/TEAM_2_HQ/SpawnPoint_2_3",
                 "Sectors/Sector1/TEAM_2_HQ/SpawnPoint_2_4"
             ],
-            "HQArea": "Sectors/Sector1/TEAM_2_HQ/HQ_Team2",
             "type": "HQ_PlayerSpawner",
             "right": {
                 "x": 1,
@@ -3354,36 +3323,7 @@
             },
             "id": "Sectors/Sector1/TEAM_2_HQ",
             "linked": [
-                "HQArea",
                 "InfantrySpawns"
-            ]
-        },
-        {
-            "name": "HQ_Team2",
-            "type": "PolygonVolume",
-            "id": "Sectors/Sector1/TEAM_2_HQ/HQ_Team2",
-            "height": 0,
-            "points": [
-                {
-                    "x": -57.46074,
-                    "y": 108.3172,
-                    "z": -163.5451
-                },
-                {
-                    "x": -57.46074,
-                    "y": 108.3172,
-                    "z": -173.5451
-                },
-                {
-                    "x": -67.46074,
-                    "y": 108.3172,
-                    "z": -173.5451
-                },
-                {
-                    "x": -67.46074,
-                    "y": 108.3172,
-                    "z": -163.5451
-                }
             ]
         },
         {
@@ -3493,19 +3433,19 @@
             "height": 100,
             "points": [
                 {
-                    "x": -270.83874,
+                    "x": -270.80374,
                     "y": 73.017376,
-                    "z": -242.6293
+                    "z": -242.6418
                 },
                 {
-                    "x": -285.67674,
+                    "x": -285.63674,
                     "y": 73.017376,
-                    "z": -186.7808
+                    "z": -186.7629
                 },
                 {
-                    "x": -287.34774,
+                    "x": -287.31274,
                     "y": 73.017376,
-                    "z": -151.73514
+                    "z": -151.73079
                 },
                 {
                     "x": -276.69574,
@@ -3513,9 +3453,9 @@
                     "z": -125.0351
                 },
                 {
-                    "x": -249.49074,
+                    "x": -249.40274,
                     "y": 73.017376,
-                    "z": -61.129
+                    "z": -61.1366
                 },
                 {
                     "x": -194.58474,
@@ -3608,24 +3548,24 @@
                     "z": -254.7597
                 },
                 {
-                    "x": -160.35754,
+                    "x": -160.32554,
                     "y": 69.16525,
-                    "z": -256.7787
+                    "z": -256.7767
                 },
                 {
-                    "x": -157.92054,
+                    "x": -157.87954,
                     "y": 69.16525,
-                    "z": -150.3643
+                    "z": -150.338
                 },
                 {
-                    "x": -181.11654,
+                    "x": -181.08454,
                     "y": 69.16525,
-                    "z": -135.3048
+                    "z": -135.2759
                 },
                 {
-                    "x": -194.66554,
+                    "x": -194.58654,
                     "y": 69.16525,
-                    "z": -79.27905
+                    "z": -79.2977
                 },
                 {
                     "x": -141.22354,
@@ -3689,7 +3629,6 @@
                 "Sectors/Sector2/TEAM_1_HQ2/SpawnPoint_1_3",
                 "Sectors/Sector2/TEAM_1_HQ2/SpawnPoint_1_4"
             ],
-            "HQArea": "Sectors/Sector2/TEAM_1_HQ2/HQ_Team1",
             "type": "HQ_PlayerSpawner",
             "right": {
                 "x": 1,
@@ -3713,36 +3652,7 @@
             },
             "id": "Sectors/Sector2/TEAM_1_HQ2",
             "linked": [
-                "HQArea",
                 "InfantrySpawns"
-            ]
-        },
-        {
-            "name": "HQ_Team1",
-            "type": "PolygonVolume",
-            "id": "Sectors/Sector2/TEAM_1_HQ2/HQ_Team1",
-            "height": 0,
-            "points": [
-                {
-                    "x": -203.9973419,
-                    "y": 96.5912,
-                    "z": -168.67242505
-                },
-                {
-                    "x": -203.9973419,
-                    "y": 96.5912,
-                    "z": -178.67242505
-                },
-                {
-                    "x": -213.9973419,
-                    "y": 96.5912,
-                    "z": -178.67242505
-                },
-                {
-                    "x": -213.9973419,
-                    "y": 96.5912,
-                    "z": -168.67242505
-                }
             ]
         },
         {
@@ -3856,7 +3766,6 @@
                 "Sectors/Sector2/TEAM_2_HQ2/SpawnPoint_2_3",
                 "Sectors/Sector2/TEAM_2_HQ2/SpawnPoint_2_4"
             ],
-            "HQArea": "Sectors/Sector2/TEAM_2_HQ2/HQ_Team2",
             "type": "HQ_PlayerSpawner",
             "right": {
                 "x": 1,
@@ -3880,36 +3789,7 @@
             },
             "id": "Sectors/Sector2/TEAM_2_HQ2",
             "linked": [
-                "HQArea",
                 "InfantrySpawns"
-            ]
-        },
-        {
-            "name": "HQ_Team2",
-            "type": "PolygonVolume",
-            "id": "Sectors/Sector2/TEAM_2_HQ2/HQ_Team2",
-            "height": 0,
-            "points": [
-                {
-                    "x": -21.23474,
-                    "y": 101.9544,
-                    "z": -68.9532
-                },
-                {
-                    "x": -21.23474,
-                    "y": 101.9544,
-                    "z": -78.9532
-                },
-                {
-                    "x": -31.23474,
-                    "y": 101.9544,
-                    "z": -78.9532
-                },
-                {
-                    "x": -31.23474,
-                    "y": 101.9544,
-                    "z": -68.9532
-                }
             ]
         },
         {
@@ -4051,24 +3931,24 @@
             "height": 100,
             "points": [
                 {
-                    "x": -77.44254,
+                    "x": -77.39054,
                     "y": 69.16525,
-                    "z": -111.1654
+                    "z": -111.1058
                 },
                 {
-                    "x": -76.80154,
+                    "x": -76.74854,
                     "y": 69.16525,
-                    "z": -67.397
+                    "z": -67.3434
                 },
                 {
-                    "x": -110.25254,
+                    "x": -110.26054,
                     "y": 69.16525,
-                    "z": -66.9627
+                    "z": -66.9281
                 },
                 {
                     "x": -141.22254,
                     "y": 69.16525,
-                    "z": -68.6057
+                    "z": -68.5693
                 },
                 {
                     "x": -139.11954,
@@ -4111,9 +3991,9 @@
                     "z": -76.30551
                 },
                 {
-                    "x": 24.28126,
+                    "x": 24.26096,
                     "y": 69.16525,
-                    "z": -104.9738
+                    "z": -104.9289
                 }
             ]
         },
@@ -4157,7 +4037,6 @@
                 "Sectors/Sector3/TEAM_1_HQ2/SpawnPoint_1_3",
                 "Sectors/Sector3/TEAM_1_HQ2/SpawnPoint_1_4"
             ],
-            "HQArea": "Sectors/Sector3/TEAM_1_HQ2/HQ_Team1",
             "type": "HQ_PlayerSpawner",
             "right": {
                 "x": 1,
@@ -4181,36 +4060,7 @@
             },
             "id": "Sectors/Sector3/TEAM_1_HQ2",
             "linked": [
-                "HQArea",
                 "InfantrySpawns"
-            ]
-        },
-        {
-            "name": "HQ_Team1",
-            "type": "PolygonVolume",
-            "id": "Sectors/Sector3/TEAM_1_HQ2/HQ_Team1",
-            "height": 0,
-            "points": [
-                {
-                    "x": -99.8143419,
-                    "y": 96.5912,
-                    "z": -145.29332505
-                },
-                {
-                    "x": -99.8143419,
-                    "y": 96.5912,
-                    "z": -155.29332505
-                },
-                {
-                    "x": -109.8143419,
-                    "y": 96.5912,
-                    "z": -155.29332505
-                },
-                {
-                    "x": -109.8143419,
-                    "y": 96.5912,
-                    "z": -145.29332505
-                }
             ]
         },
         {
@@ -4324,7 +4174,6 @@
                 "Sectors/Sector3/TEAM_2_HQ2/SpawnPoint_2_3",
                 "Sectors/Sector3/TEAM_2_HQ2/SpawnPoint_2_4"
             ],
-            "HQArea": "Sectors/Sector3/TEAM_2_HQ2/HQ_Team2",
             "type": "HQ_PlayerSpawner",
             "right": {
                 "x": 1,
@@ -4348,36 +4197,7 @@
             },
             "id": "Sectors/Sector3/TEAM_2_HQ2",
             "linked": [
-                "HQArea",
                 "InfantrySpawns"
-            ]
-        },
-        {
-            "name": "HQ_Team2",
-            "type": "PolygonVolume",
-            "id": "Sectors/Sector3/TEAM_2_HQ2/HQ_Team2",
-            "height": 0,
-            "points": [
-                {
-                    "x": 76.25646,
-                    "y": 101.9544,
-                    "z": -37.5091
-                },
-                {
-                    "x": 76.25646,
-                    "y": 101.9544,
-                    "z": -47.5091
-                },
-                {
-                    "x": 66.25646,
-                    "y": 101.9544,
-                    "z": -47.5091
-                },
-                {
-                    "x": 66.25646,
-                    "y": 101.9544,
-                    "z": -37.5091
-                }
             ]
         },
         {
@@ -4519,29 +4339,29 @@
             "height": 100,
             "points": [
                 {
-                    "x": 24.2115,
+                    "x": 24.2594,
                     "y": 67.29412,
-                    "z": -104.97597
+                    "z": -104.92827
                 },
                 {
-                    "x": 27.0952,
+                    "x": 27.1657,
                     "y": 67.29412,
-                    "z": -76.32997
+                    "z": -76.30857
                 },
                 {
-                    "x": 12.8118,
+                    "x": 12.9306,
                     "y": 67.29412,
-                    "z": -64.29847
+                    "z": -64.28647
                 },
                 {
-                    "x": -3.1714,
+                    "x": -3.1156,
                     "y": 67.29412,
-                    "z": -43.02674
+                    "z": -42.95156
                 },
                 {
-                    "x": -10.59113,
+                    "x": -10.54183,
                     "y": 67.29412,
-                    "z": -22.46227
+                    "z": -22.43337
                 },
                 {
                     "x": 6.9863,
@@ -4619,9 +4439,9 @@
                     "z": -113.59347
                 },
                 {
-                    "x": 34.0455,
+                    "x": 34.0906,
                     "y": 67.29412,
-                    "z": -130.76077
+                    "z": -130.73067
                 }
             ]
         },
@@ -4665,7 +4485,6 @@
                 "Sectors/Sector4/TEAM_1_HQ3/SpawnPoint_1_3",
                 "Sectors/Sector4/TEAM_1_HQ3/SpawnPoint_1_4"
             ],
-            "HQArea": "Sectors/Sector4/TEAM_1_HQ3/HQ_Team1",
             "type": "HQ_PlayerSpawner",
             "right": {
                 "x": 1,
@@ -4689,36 +4508,7 @@
             },
             "id": "Sectors/Sector4/TEAM_1_HQ3",
             "linked": [
-                "HQArea",
                 "InfantrySpawns"
-            ]
-        },
-        {
-            "name": "HQ_Team1",
-            "type": "PolygonVolume",
-            "id": "Sectors/Sector4/TEAM_1_HQ3/HQ_Team1",
-            "height": 0,
-            "points": [
-                {
-                    "x": -21.248211,
-                    "y": 104.2,
-                    "z": -69.88933268
-                },
-                {
-                    "x": -21.248211,
-                    "y": 104.2,
-                    "z": -79.88933268
-                },
-                {
-                    "x": -31.248211,
-                    "y": 104.2,
-                    "z": -79.88933268
-                },
-                {
-                    "x": -31.248211,
-                    "y": 104.2,
-                    "z": -69.88933268
-                }
             ]
         },
         {
@@ -4833,7 +4623,6 @@
                 "Sectors/Sector4/TEAM_2_HQ3/SpawnPoint_2_3",
                 "Sectors/Sector4/TEAM_2_HQ3/SpawnPoint_2_4"
             ],
-            "HQArea": "Sectors/Sector4/TEAM_2_HQ3/HQ_Team2",
             "type": "HQ_PlayerSpawner",
             "right": {
                 "x": 1,
@@ -4857,36 +4646,7 @@
             },
             "id": "Sectors/Sector4/TEAM_2_HQ3",
             "linked": [
-                "HQArea",
                 "InfantrySpawns"
-            ]
-        },
-        {
-            "name": "HQ_Team2",
-            "type": "PolygonVolume",
-            "id": "Sectors/Sector4/TEAM_2_HQ3/HQ_Team2",
-            "height": 0,
-            "points": [
-                {
-                    "x": 165.84666,
-                    "y": 96.4001,
-                    "z": -111.514
-                },
-                {
-                    "x": 165.84666,
-                    "y": 96.4001,
-                    "z": -121.514
-                },
-                {
-                    "x": 155.84666,
-                    "y": 96.4001,
-                    "z": -121.514
-                },
-                {
-                    "x": 155.84666,
-                    "y": 96.4001,
-                    "z": -111.514
-                }
             ]
         },
         {
@@ -5048,54 +4808,54 @@
                     "z": -155.4868
                 },
                 {
-                    "x": 44.62917,
+                    "x": 44.64437,
                     "y": 67.39005,
-                    "z": -122.5599
+                    "z": -122.607
                 },
                 {
-                    "x": 56.28687,
+                    "x": 56.33747,
                     "y": 67.39005,
-                    "z": -113.5627
+                    "z": -113.5973
                 },
                 {
-                    "x": 77.03697,
+                    "x": 77.10147,
                     "y": 67.39005,
-                    "z": -110.1745
+                    "z": -110.2285
                 },
                 {
-                    "x": 83.71957,
+                    "x": 83.76897,
                     "y": 67.39005,
-                    "z": -78.0224
+                    "z": -78.0522
                 },
                 {
-                    "x": 122.41397,
+                    "x": 122.49167,
                     "y": 67.39005,
-                    "z": -69.5908
+                    "z": -69.6368
                 },
                 {
-                    "x": 148.31587,
+                    "x": 148.33457,
                     "y": 67.39005,
-                    "z": -65.5328
+                    "z": -65.601
                 },
                 {
-                    "x": 164.28177,
+                    "x": 164.36787,
                     "y": 67.39005,
-                    "z": -54.661
+                    "z": -54.7043
                 },
                 {
-                    "x": 167.80487,
+                    "x": 167.87477,
                     "y": 67.39005,
-                    "z": -42.9416
+                    "z": -42.9216
                 },
                 {
-                    "x": 140.20502,
+                    "x": 140.22007,
                     "y": 67.39005,
-                    "z": 0.8814
+                    "z": 1.0234
                 },
                 {
-                    "x": 123.16267,
+                    "x": 123.18597,
                     "y": 67.39005,
-                    "z": 24.6384
+                    "z": 24.6974
                 },
                 {
                     "x": 146.53677,
@@ -5174,7 +4934,6 @@
                 "Sectors/Sector5/TEAM_1_HQ4/SpawnPoint_1_3",
                 "Sectors/Sector5/TEAM_1_HQ4/SpawnPoint_1_4"
             ],
-            "HQArea": "Sectors/Sector5/TEAM_1_HQ4/HQ_Team1",
             "type": "HQ_PlayerSpawner",
             "right": {
                 "x": 1,
@@ -5198,36 +4957,7 @@
             },
             "id": "Sectors/Sector5/TEAM_1_HQ4",
             "linked": [
-                "HQArea",
                 "InfantrySpawns"
-            ]
-        },
-        {
-            "name": "HQ_Team1",
-            "type": "PolygonVolume",
-            "id": "Sectors/Sector5/TEAM_1_HQ4/HQ_Team1",
-            "height": 0,
-            "points": [
-                {
-                    "x": 73.32934528,
-                    "y": 102.4883,
-                    "z": -35.7169429
-                },
-                {
-                    "x": 73.32934528,
-                    "y": 102.4883,
-                    "z": -45.7169429
-                },
-                {
-                    "x": 63.32934528,
-                    "y": 102.4883,
-                    "z": -45.7169429
-                },
-                {
-                    "x": 63.32934528,
-                    "y": 102.4883,
-                    "z": -35.7169429
-                }
             ]
         },
         {
@@ -5341,7 +5071,6 @@
                 "Sectors/Sector5/TEAM_2_HQ4/SpawnPoint_2_3",
                 "Sectors/Sector5/TEAM_2_HQ4/SpawnPoint_2_4"
             ],
-            "HQArea": "Sectors/Sector5/TEAM_2_HQ4/HQ_Team2",
             "type": "HQ_PlayerSpawner",
             "right": {
                 "x": 1,
@@ -5365,36 +5094,7 @@
             },
             "id": "Sectors/Sector5/TEAM_2_HQ4",
             "linked": [
-                "HQArea",
                 "InfantrySpawns"
-            ]
-        },
-        {
-            "name": "HQ_Team2",
-            "type": "PolygonVolume",
-            "id": "Sectors/Sector5/TEAM_2_HQ4/HQ_Team2",
-            "height": 0,
-            "points": [
-                {
-                    "x": 94.38306,
-                    "y": 94.8499,
-                    "z": -238.71
-                },
-                {
-                    "x": 94.38306,
-                    "y": 94.8499,
-                    "z": -248.71
-                },
-                {
-                    "x": 84.38306,
-                    "y": 94.8499,
-                    "z": -248.71
-                },
-                {
-                    "x": 84.38306,
-                    "y": 94.8499,
-                    "z": -238.71
-                }
             ]
         },
         {
@@ -5586,24 +5286,24 @@
                     "z": -216.1136
                 },
                 {
-                    "x": 59.57847,
+                    "x": 59.77277,
                     "y": 67.39016,
-                    "z": -197.1967
+                    "z": -197.3567
                 },
                 {
-                    "x": 118.33137,
+                    "x": 118.15117,
                     "y": 67.39016,
-                    "z": -194.1215
+                    "z": -194.283
                 },
                 {
-                    "x": 206.24637,
+                    "x": 206.26347,
                     "y": 67.39016,
-                    "z": -191.1902
+                    "z": -191.2775
                 },
                 {
-                    "x": 256.42107,
+                    "x": 256.37207,
                     "y": 67.39016,
-                    "z": -180.346
+                    "z": -180.4095
                 },
                 {
                     "x": 250.07057,
@@ -5760,67 +5460,6 @@
                 "z": -50.97772
             },
             "id": "FixedCamera2/ExplosionSound"
-        },
-        {
-            "name": "SurroundingCombatArea",
-            "ExclusionAreaTeam1_OBB": "SurroundingCombatArea/OBBVolume",
-            "ExclusionAreaTeam2_OBB": "SurroundingCombatArea/OBBVolume",
-            "type": "SurroundingCombatArea",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 1
-            },
-            "position": {
-                "x": -156.382,
-                "y": 120.932,
-                "z": -159.614
-            },
-            "id": "SurroundingCombatArea",
-            "linked": [
-                "ExclusionAreaTeam1_OBB",
-                "ExclusionAreaTeam2_OBB"
-            ]
-        },
-        {
-            "name": "OBBVolume",
-            "type": "OBBVolume",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 1
-            },
-            "position": {
-                "x": -52.466,
-                "y": 115.40099,
-                "z": -162.75083
-            },
-            "id": "SurroundingCombatArea/OBBVolume",
-            "size": [
-                200,
-                25,
-                70
-            ]
         },
         {
             "name": "MetroBus_01_Wreck",

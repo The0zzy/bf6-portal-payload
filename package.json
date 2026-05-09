@@ -1,7 +1,7 @@
 {
     "name": "payload",
     "experienceName": "Payload",
-    "version": "0.0.10",
+    "version": "0.0.12",
     "type": "module",
     "description": "One team needs to deliver the Payload to the target while the other team must stop it or even push it back.",
     "engines": {
@@ -11,7 +11,7 @@
         "init": "node scripts/init.js",
         "update": "node scripts/update.js",
         "refresh-ai": "node scripts/generate-ai-context.js",
-        "build": "node scripts/sync-version.js && bf6-portal-bundler --entrypoint ./src/index.ts --outDir ./dist",
+        "build": "bf6-portal-bundler --entrypoint ./src/index.ts --outDir ./dist",
         "export-thumbnail": "node scripts/export-thumbnail.js",
         "minify-spatials": "node scripts/minify-all-spatials.js",
         "lint": "eslint .",
@@ -41,22 +41,22 @@
     "homepage": "https://github.com/The0zzy/bf6-portal-payload#readme",
     "devDependencies": {
         "@bf6mods/portal": "^1.1.0",
-        "@clack/prompts": "^1.1.0",
-        "@typescript-eslint/eslint-plugin": "^8.57.2",
-        "@typescript-eslint/parser": "^8.57.2",
-        "bf6-portal-bundler": "^1.3.0",
-        "bf6-portal-mod-types": "^2.2.0",
-        "bf6-portal-utils": "^8.1.0",
-        "dotenv": "^17.3.1",
-        "eslint": "^10.1.0",
+        "@clack/prompts": "^1.3.0",
+        "@typescript-eslint/eslint-plugin": "^8.59.2",
+        "@typescript-eslint/parser": "^8.59.2",
+        "bf6-portal-bundler": "^1.4.1",
+        "bf6-portal-mod-types": "^2.3.1",
+        "bf6-portal-utils": "^9.2.0",
+        "dotenv": "^17.4.2",
+        "eslint": "^10.3.0",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.5",
-        "prettier": "^3.8.1",
+        "prettier": "^3.8.3",
         "quickjs-types": "^1.2.0",
         "sharp": "^0.34.5",
         "ts-node": "^10.9.2",
         "typescript": "^5.9.3",
-        "typescript-eslint": "^8.57.2"
+        "typescript-eslint": "^8.59.2"
     },
-    "templateVersion": "1.5.0"
+    "templateVersion": "1.7.0"
 }
