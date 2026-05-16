@@ -45,7 +45,7 @@ export interface UIConfig {
 
 export class PayloadConfig {
     /** Whether team switching is enabled */
-    public static readonly enableTeamSwitch = true;
+    public static readonly enableTeamSwitch = false;
 
     /** Identifiers for payload spatial objects (IDs determine the type of payload object spawned) */
     public static readonly payloadSpatialIdentifiers: number[] = [5000, 5001, 5002];
@@ -62,7 +62,7 @@ export class PayloadConfig {
     /** Default time for each sector to reach next checkpoint in seconds 
      * Default: 450 (7.5 minutes in seconds), can be adjusted based on the length of the track and desired pacing
     */
-    public static readonly defaultCheckpointTime = 450;
+    public static readonly defaultCheckpointTime = 450; //450
 
     /** Whether the payload should emit sound effects when moving or pushing */
     public static readonly enablePayloadSound = true;

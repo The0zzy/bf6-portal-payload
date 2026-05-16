@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://foq00g1a2xnb"]
+[gd_scene load_steps=17 format=3 uid="uid://foq00g1a2xnb"]
 
 [ext_resource type="Texture2D" uid="uid://b3nimnwwy2h4i" path="res://images/Mirak Valley HQ.png" id="1_b3qp6"]
 [ext_resource type="PackedScene" path="res://objects/Gameplay/Common/HQ_PlayerSpawner.tscn" id="1_g02yh"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" path="res://objects/uncategorized/GM1083CargoTruck_01_Canopy_Cargo01.tscn" id="13_b3qp6"]
 [ext_resource type="PackedScene" path="res://objects/fx/FX_Snow_BlowingSnow_L_01_TerrainSnap.tscn" id="14_eh7ot"]
 [ext_resource type="PackedScene" path="res://objects/gameplay/common/FixedCamera.tscn" id="15_yjseg"]
+[ext_resource type="PackedScene" path="res://objects/gameplay/common/CombatArea.tscn" id="16_7cykl"]
 
 [node name="MP_Tungsten" type="Node3D"]
 
@@ -565,8 +566,8 @@ ObjId = 100
 SectorArea = NodePath("SectorArea0")
 
 [node name="SectorArea0" parent="Sectors/Sector0" instance=ExtResource("2_1gqvr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.21477, -0.797188, -10.3386)
-points = PackedVector2Array(31.4499, -35.2143, 7.7558, -36.6472, -35.8709, -55.1811, -68.9917, -63.2609, -99.1727, -40.6477, -122.097, 57.9242, -89.2311, 111.57, -25.1041, 137.226, 41.8712, 126.999, 27.1644, 71.3163, 18.2271, 33.4684, 19.9024, -1.56165)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.21478, -0.797188, -10.3386)
+points = PackedVector2Array(43.1237, 13.1841, 49.2754, -44.3481, 31.4499, -35.2143, 7.7558, -36.6472, -35.8709, -55.1811, -68.9917, -63.2609, -99.1727, -40.6477, -122.097, 57.9242, -89.2311, 111.57, -25.1041, 137.226, 71.4403, 126.133, 58.6305, 57.0142, 56.5347, 43.7411, 47.1012, 25.8515)
 height = 100.0
 
 [node name="AreaTrigger" parent="Sectors/Sector0" node_paths=PackedStringArray("Area") instance=ExtResource("9_7cykl")]
@@ -579,16 +580,22 @@ ObjId = 101
 SectorArea = NodePath("SectorArea1")
 MCOMs = [null, null]
 
+[node name="SectorArea1" parent="Sectors/Sector1" instance=ExtResource("2_1gqvr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 166.771, -0.565224, -10.3386)
+points = PackedVector2Array(-256.456, -86.1406, -262.607, -28.6092, -258.63, -15.9416, -249.197, 1.9483, -247.101, 15.2195, -234.294, 84.3337, -184.359, 82.9057, -144.97, 51.8545, -105.718, 37.8083, -113.414, -58.5911, -97.2474, -126.903, -127.75, -126.636, -185.866, -122.733)
+height = 100.0
+
 [node name="AreaTrigger1" parent="Sectors/Sector1" node_paths=PackedStringArray("Area") instance=ExtResource("10_7cykl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.9584, 23.1401, 7.62132)
 ObjId = 601
 Area = NodePath("../SectorArea1")
 
-[node name="TEAM_1_HQ" parent="Sectors/Sector1" node_paths=PackedStringArray("InfantrySpawns") instance=ExtResource("1_g02yh")]
+[node name="TEAM_1_HQ" parent="Sectors/Sector1" node_paths=PackedStringArray("HQArea", "InfantrySpawns") instance=ExtResource("1_g02yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -175.45, 17.7629, -2.39861)
 AltTeam = 0
 ObjId = 301
-InfantrySpawns = [NodePath("SpawnPoint_1_1"), NodePath("SpawnPoint_1_2"), NodePath("SpawnPoint_1_3"), NodePath("SpawnPoint_1_4")]
+HQArea = NodePath("../../Sector0/SectorArea0")
+InfantrySpawns = [NodePath("SpawnPoint_1_1"), NodePath("SpawnPoint_1_2"), NodePath("SpawnPoint_1_3"), NodePath("SpawnPoint_1_4"), NodePath("SpawnPoint_1_5"), NodePath("SpawnPoint_1_6")]
 
 [node name="SpawnPoint_1_1" parent="Sectors/Sector1/TEAM_1_HQ" instance=ExtResource("3_cii4s")]
 transform = Transform3D(0.00303686, 0, 0.999995, 0, 1, 0, -0.999995, 0, 0.00303686, -12.2434, 2.1832, -12.0994)
@@ -602,12 +609,19 @@ transform = Transform3D(0.595048, 0, 0.803691, 0, 1, 0, -0.803691, 0, 0.595048, 
 [node name="SpawnPoint_1_4" parent="Sectors/Sector1/TEAM_1_HQ" instance=ExtResource("3_cii4s")]
 transform = Transform3D(-0.350959, 0, 0.93639, 0, 1, 0, -0.93639, 0, -0.350959, 27.8205, 3.11165, 19.448)
 
-[node name="TEAM_2_HQ" parent="Sectors/Sector1" node_paths=PackedStringArray("InfantrySpawns") instance=ExtResource("1_g02yh")]
+[node name="SpawnPoint_1_5" parent="Sectors/Sector1/TEAM_1_HQ" instance=ExtResource("3_cii4s")]
+transform = Transform3D(-0.350959, 0, 0.93639, 0, 1, 0, -0.93639, 0, -0.350959, -7.95612, 1.7782, 32.967)
+
+[node name="SpawnPoint_1_6" parent="Sectors/Sector1/TEAM_1_HQ" instance=ExtResource("3_cii4s")]
+transform = Transform3D(0.270667, 0, 0.962672, 0, 1, 0, -0.962672, 0, 0.270667, 8.54507, 3.20274, -31.1497)
+
+[node name="TEAM_2_HQ" parent="Sectors/Sector1" node_paths=PackedStringArray("HQArea", "InfantrySpawns") instance=ExtResource("1_g02yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110.885, 29.7346, -57.0518)
 Team = 2
 AltTeam = 0
 ObjId = 401
-InfantrySpawns = [NodePath("SpawnPoint_2_1"), NodePath("SpawnPoint_2_2"), NodePath("SpawnPoint_2_3"), NodePath("SpawnPoint_2_4")]
+HQArea = NodePath("../../Sector2/SectorArea2")
+InfantrySpawns = [NodePath("SpawnPoint_2_1"), NodePath("SpawnPoint_2_2"), NodePath("SpawnPoint_2_3"), NodePath("SpawnPoint_2_4"), NodePath("SpawnPoint_2_5")]
 
 [node name="SpawnPoint_2_1" parent="Sectors/Sector1/TEAM_2_HQ" instance=ExtResource("3_cii4s")]
 transform = Transform3D(0.349063, 0, -0.9371, 0, 1, 0, 0.9371, 0, 0.349063, 36.9806, -4.24538, 25.1481)
@@ -621,10 +635,8 @@ transform = Transform3D(0.43925, 0, -0.898365, 0, 1, 0, 0.898365, 0, 0.43925, 17
 [node name="SpawnPoint_2_4" parent="Sectors/Sector1/TEAM_2_HQ" instance=ExtResource("3_cii4s")]
 transform = Transform3D(-0.034481, 0, -0.999406, 0, 1, 0, 0.999406, 0, -0.034481, -10.7449, -2.24297, -32.7199)
 
-[node name="SectorArea1" parent="Sectors/Sector1" instance=ExtResource("2_1gqvr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 166.771, -0.565224, -10.3386)
-points = PackedVector2Array(-274.284, -77.0073, -285.841, -43.3509, -287.508, -8.32387, -278.566, 29.5281, -263.859, 85.2042, -184.359, 82.9057, -144.97, 51.8545, -105.718, 37.8083, -113.414, -58.5911, -97.2474, -126.903, -127.75, -126.636, -185.866, -122.733)
-height = 100.0
+[node name="SpawnPoint_2_5" parent="Sectors/Sector1/TEAM_2_HQ" instance=ExtResource("3_cii4s")]
+transform = Transform3D(0.658453, 0, -0.752622, 0, 1, 0, 0.752622, 0, 0.658453, 40.281, -4.77303, -45.9)
 
 [node name="Sector2" parent="Sectors" node_paths=PackedStringArray("SectorArea", "MCOMs") instance=ExtResource("9_yjseg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -151.152, -1.70052, 194.767)
@@ -642,11 +654,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.69048, 23.1401, 4.1679)
 ObjId = 602
 Area = NodePath("../SectorArea2")
 
-[node name="TEAM_1_HQ2" parent="Sectors/Sector2" node_paths=PackedStringArray("InfantrySpawns") instance=ExtResource("1_g02yh")]
+[node name="TEAM_1_HQ2" parent="Sectors/Sector2" node_paths=PackedStringArray("HQArea", "InfantrySpawns") instance=ExtResource("1_g02yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -97.8764, 20.8389, 0.867737)
 AltTeam = 0
 ObjId = 302
-InfantrySpawns = [NodePath("SpawnPoint_1_1"), NodePath("SpawnPoint_1_2"), NodePath("SpawnPoint_1_3"), NodePath("SpawnPoint_1_4")]
+HQArea = NodePath("../../Sector1/SectorArea1")
+InfantrySpawns = [NodePath("SpawnPoint_1_1"), NodePath("SpawnPoint_1_2"), NodePath("SpawnPoint_1_3"), NodePath("SpawnPoint_1_4"), NodePath("SpawnPoint_1_5")]
 
 [node name="SpawnPoint_1_1" parent="Sectors/Sector2/TEAM_1_HQ2" instance=ExtResource("3_cii4s")]
 transform = Transform3D(0.417281, 0, 0.908778, 0, 1, 0, -0.908778, 0, 0.417281, -10.8474, 0.729019, -34.039)
@@ -655,29 +668,36 @@ transform = Transform3D(0.417281, 0, 0.908778, 0, 1, 0, -0.908778, 0, 0.417281, 
 transform = Transform3D(-0.85159, 0, 0.524209, 0, 1, 0, -0.524209, 0, -0.85159, 23.5933, 0.368019, 20.1754)
 
 [node name="SpawnPoint_1_3" parent="Sectors/Sector2/TEAM_1_HQ2" instance=ExtResource("3_cii4s")]
-transform = Transform3D(0.710553, 0, 0.703643, 0, 1, 0, -0.703643, 0, 0.710553, 25.8692, 0.113785, -41.8146)
+transform = Transform3D(0.710553, 0, 0.703643, 0, 1, 0, -0.703643, 0, 0.710553, 9.36191, 0.113785, -18.3824)
 
 [node name="SpawnPoint_1_4" parent="Sectors/Sector2/TEAM_1_HQ2" instance=ExtResource("3_cii4s")]
-transform = Transform3D(0.544127, 0, 0.839002, 0, 1, 0, -0.839002, 0, 0.544127, 32.2838, 0.306274, -84.4368)
+transform = Transform3D(0.544127, 0, 0.839002, 0, 1, 0, -0.839002, 0, 0.544127, 34.271, 0.306274, -84.4006)
 
-[node name="TEAM_2_HQ2" parent="Sectors/Sector2" node_paths=PackedStringArray("InfantrySpawns") instance=ExtResource("1_g02yh")]
+[node name="SpawnPoint_1_5" parent="Sectors/Sector2/TEAM_1_HQ2" instance=ExtResource("3_cii4s")]
+transform = Transform3D(-0.971717, 0, 0.236144, 0, 1, 0, -0.236144, 0, -0.971717, 18.5871, -0.474342, 48.5812)
+
+[node name="TEAM_2_HQ2" parent="Sectors/Sector2" node_paths=PackedStringArray("HQArea", "InfantrySpawns") instance=ExtResource("1_g02yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 178.379, 23.0001, -85.3827)
 Team = 2
 AltTeam = 0
 ObjId = 402
-InfantrySpawns = [NodePath("SpawnPoint_2_1"), NodePath("SpawnPoint_2_2"), NodePath("SpawnPoint_2_3"), NodePath("SpawnPoint_2_4")]
+HQArea = NodePath("../../Sector3/SectorArea3")
+InfantrySpawns = [NodePath("SpawnPoint_2_1"), NodePath("SpawnPoint_2_2"), NodePath("SpawnPoint_2_3"), NodePath("SpawnPoint_2_4"), NodePath("SpawnPoint_2_5")]
 
 [node name="SpawnPoint_2_1" parent="Sectors/Sector2/TEAM_2_HQ2" instance=ExtResource("3_cii4s")]
 transform = Transform3D(0.593124, 0, -0.805112, 0, 1, 0, 0.805112, 0, 0.593124, 19.072, 0.989487, 26.2253)
 
 [node name="SpawnPoint_2_2" parent="Sectors/Sector2/TEAM_2_HQ2" instance=ExtResource("3_cii4s")]
-transform = Transform3D(0.698353, 0, -0.715754, 0, 1, 0, 0.715754, 0, 0.698353, 19.4664, 0.106789, -44.4248)
+transform = Transform3D(0.307905, 0, -0.951417, 0, 1, 0, 0.951417, 0, 0.307905, 32.2834, 0.106789, -48.1856)
 
 [node name="SpawnPoint_2_3" parent="Sectors/Sector2/TEAM_2_HQ2" instance=ExtResource("3_cii4s")]
-transform = Transform3D(-0.489748, 0, -0.871864, 0, 1, 0, 0.871864, 0, -0.489748, 9.1887, 4.60609, 83.608)
+transform = Transform3D(-0.489748, 0, -0.871864, 0, 1, 0, 0.871864, 0, -0.489748, 10.4951, 4.60609, 85.9784)
 
 [node name="SpawnPoint_2_4" parent="Sectors/Sector2/TEAM_2_HQ2" instance=ExtResource("3_cii4s")]
 transform = Transform3D(-0.586515, 0, -0.809939, 0, 1, 0, 0.809939, 0, -0.586515, 9.77546, -0.45137, 20.2708)
+
+[node name="SpawnPoint_2_5" parent="Sectors/Sector2/TEAM_2_HQ2" instance=ExtResource("3_cii4s")]
+transform = Transform3D(0.476775, 0, -0.879026, 0, 1, 0, 0.879026, 0, 0.476775, 22.7354, -0.0901794, 3.85767)
 
 [node name="Sector3" parent="Sectors" node_paths=PackedStringArray("SectorArea", "MCOMs") instance=ExtResource("9_yjseg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53.5358, -1.70052, 131.077)
@@ -695,11 +715,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.69048, 23.1401, 4.1679)
 ObjId = 603
 Area = NodePath("../SectorArea3")
 
-[node name="TEAM_1_HQ3" parent="Sectors/Sector3" node_paths=PackedStringArray("InfantrySpawns") instance=ExtResource("1_g02yh")]
+[node name="TEAM_1_HQ3" parent="Sectors/Sector3" node_paths=PackedStringArray("HQArea", "InfantrySpawns") instance=ExtResource("1_g02yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.5948, 25.6174, 14.6541)
 AltTeam = 0
 ObjId = 303
-InfantrySpawns = [NodePath("SpawnPoint_1_1"), NodePath("SpawnPoint_1_2"), NodePath("SpawnPoint_1_3"), NodePath("SpawnPoint_1_4")]
+HQArea = NodePath("../../Sector2/SectorArea2")
+InfantrySpawns = [NodePath("SpawnPoint_1_1"), NodePath("SpawnPoint_1_2"), NodePath("SpawnPoint_1_3"), NodePath("SpawnPoint_1_4"), NodePath("SpawnPoint_1_5")]
 
 [node name="SpawnPoint_1_1" parent="Sectors/Sector3/TEAM_1_HQ3" instance=ExtResource("3_cii4s")]
 transform = Transform3D(-0.987422, 0, 0.158106, 0, 1, 0, -0.158106, 0, -0.987422, 13.8159, -2.39509, -12.1107)
@@ -712,14 +733,18 @@ transform = Transform3D(0.167302, 0, 0.985906, 0, 1, 0, -0.985906, 0, 0.167302, 
 transform = Transform3D(0.311208, 0, 0.950342, 0, 1, 0, -0.950342, 0, 0.311208, 16.2099, -1.86521, 0.815338)
 
 [node name="SpawnPoint_1_4" parent="Sectors/Sector3/TEAM_1_HQ3" instance=ExtResource("3_cii4s")]
-transform = Transform3D(0.089416, 0, 0.995993, 0, 1, 0, -0.995993, 0, 0.089416, 19.699, -2.37695, 11.4332)
+transform = Transform3D(0.100499, 0.0117112, 0.994867, -0.0118011, 0.999874, -0.010578, -0.994866, -0.0106775, 0.100624, 19.699, -2.37695, 11.4332)
 
-[node name="TEAM_2_HQ3" parent="Sectors/Sector3" node_paths=PackedStringArray("InfantrySpawns") instance=ExtResource("1_g02yh")]
+[node name="SpawnPoint_1_5" parent="Sectors/Sector3/TEAM_1_HQ3" instance=ExtResource("3_cii4s")]
+transform = Transform3D(-0.237359, 0.00747522, 0.971392, -0.0118011, 0.999874, -0.010578, -0.971349, -0.0139743, -0.237241, 36.1054, -2.37695, -16.898)
+
+[node name="TEAM_2_HQ3" parent="Sectors/Sector3" node_paths=PackedStringArray("HQArea", "InfantrySpawns") instance=ExtResource("1_g02yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 244.144, 30.9728, -68.2017)
 Team = 2
 AltTeam = 0
 ObjId = 403
-InfantrySpawns = [NodePath("SpawnPoint_2_1"), NodePath("SpawnPoint_2_2"), NodePath("SpawnPoint_2_3"), NodePath("SpawnPoint_2_4")]
+HQArea = NodePath("../../Sector4/SectorArea4")
+InfantrySpawns = [NodePath("SpawnPoint_2_1"), NodePath("SpawnPoint_2_2"), NodePath("SpawnPoint_2_3"), NodePath("SpawnPoint_2_4"), NodePath("SpawnPoint_2_5")]
 
 [node name="SpawnPoint_2_1" parent="Sectors/Sector3/TEAM_2_HQ3" instance=ExtResource("3_cii4s")]
 transform = Transform3D(0.110047, 0, -0.993928, 0, 1, 0, 0.993928, 0, 0.110047, 13.5344, 2.03106, 25.7207)
@@ -728,10 +753,13 @@ transform = Transform3D(0.110047, 0, -0.993928, 0, 1, 0, 0.993928, 0, 0.110047, 
 transform = Transform3D(0.533791, 0, -0.845616, 0, 1, 0, 0.845616, 0, 0.533791, -9.99557, -1.19296, -37.7871)
 
 [node name="SpawnPoint_2_3" parent="Sectors/Sector3/TEAM_2_HQ3" instance=ExtResource("3_cii4s")]
-transform = Transform3D(-0.0295088, 0, -0.999565, 0, 1, 0, 0.999565, 0, -0.0295088, 3.23499, 3.43056, 53.1462)
+transform = Transform3D(0.290051, 0, -0.957012, 0, 1, 0, 0.957012, 0, 0.290051, -19.6635, -1.87591, -46.0081)
 
 [node name="SpawnPoint_2_4" parent="Sectors/Sector3/TEAM_2_HQ3" instance=ExtResource("3_cii4s")]
 transform = Transform3D(0.17186, 0, -0.985121, 0, 1, 0, 0.985121, 0, 0.17186, 29.6357, 0.208641, 29.5253)
+
+[node name="SpawnPoint_2_5" parent="Sectors/Sector3/TEAM_2_HQ3" instance=ExtResource("3_cii4s")]
+transform = Transform3D(0.17186, 0, -0.985121, 0, 1, 0, 0.985121, 0, 0.17186, 45.6705, -6.27555, 3.94974)
 
 [node name="Sector4" parent="Sectors" node_paths=PackedStringArray("SectorArea", "MCOMs") instance=ExtResource("9_yjseg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 145.379, -1.70052, 60.0374)
@@ -749,30 +777,35 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.69048, 15.0514, 4.1679)
 ObjId = 604
 Area = NodePath("../SectorArea4")
 
-[node name="TEAM_1_HQ4" parent="Sectors/Sector4" node_paths=PackedStringArray("InfantrySpawns") instance=ExtResource("1_g02yh")]
+[node name="TEAM_1_HQ4" parent="Sectors/Sector4" node_paths=PackedStringArray("HQArea", "InfantrySpawns") instance=ExtResource("1_g02yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -117.351, 22.6384, 48.8361)
 AltTeam = 0
 ObjId = 304
-InfantrySpawns = [NodePath("SpawnPoint_1_1"), NodePath("SpawnPoint_1_2"), NodePath("SpawnPoint_1_3"), NodePath("SpawnPoint_1_4")]
+HQArea = NodePath("../../Sector3/SectorArea3")
+InfantrySpawns = [NodePath("SpawnPoint_1_1"), NodePath("SpawnPoint_1_2"), NodePath("SpawnPoint_1_3"), NodePath("SpawnPoint_1_4"), NodePath("SpawnPoint_1_5")]
 
 [node name="SpawnPoint_1_1" parent="Sectors/Sector4/TEAM_1_HQ4" instance=ExtResource("3_cii4s")]
 transform = Transform3D(-0.654121, 0, 0.75639, 0, 1, 0, -0.75639, 0, -0.654121, 31.1206, 0.0351868, 25.8331)
 
 [node name="SpawnPoint_1_2" parent="Sectors/Sector4/TEAM_1_HQ4" instance=ExtResource("3_cii4s")]
-transform = Transform3D(0.610367, 0, 0.792119, 0, 1, 0, -0.792119, 0, 0.610367, 18.6189, -0.0358429, -70.2163)
+transform = Transform3D(-0.0562565, 0, 0.998416, 0, 1, 0, -0.998416, 0, -0.0562565, 9.65152, -0.0358429, -55.6023)
 
 [node name="SpawnPoint_1_3" parent="Sectors/Sector4/TEAM_1_HQ4" instance=ExtResource("3_cii4s")]
 transform = Transform3D(-0.297892, 0, 0.954601, 0, 1, 0, -0.954601, 0, -0.297892, 30.2714, 0.677628, -5.25192)
 
 [node name="SpawnPoint_1_4" parent="Sectors/Sector4/TEAM_1_HQ4" instance=ExtResource("3_cii4s")]
-transform = Transform3D(0.680759, 0, 0.732507, 0, 1, 0, -0.732507, 0, 0.680759, 43.2381, 0.163002, -32.7475)
+transform = Transform3D(0.680759, 0, 0.732507, 0, 1, 0, -0.732507, 0, 0.680759, 41.3508, 0.163002, -37.6498)
 
-[node name="TEAM_2_HQ4" parent="Sectors/Sector4" node_paths=PackedStringArray("InfantrySpawns") instance=ExtResource("1_g02yh")]
+[node name="SpawnPoint_1_5" parent="Sectors/Sector4/TEAM_1_HQ4" instance=ExtResource("3_cii4s")]
+transform = Transform3D(-0.39094, 0, 0.920416, 0, 1, 0, -0.920416, 0, -0.39094, 21.8226, 0.163002, -27.8637)
+
+[node name="TEAM_2_HQ4" parent="Sectors/Sector4" node_paths=PackedStringArray("HQArea", "InfantrySpawns") instance=ExtResource("1_g02yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 281.007, 25.454, -100.369)
 Team = 2
 AltTeam = 0
 ObjId = 404
-InfantrySpawns = [NodePath("SpawnPoint_2_1"), NodePath("SpawnPoint_2_2"), NodePath("SpawnPoint_2_3"), NodePath("SpawnPoint_2_4")]
+HQArea = NodePath("../../Sector5/SectorArea5")
+InfantrySpawns = [NodePath("SpawnPoint_2_1"), NodePath("SpawnPoint_2_2"), NodePath("SpawnPoint_2_3"), NodePath("SpawnPoint_2_4"), NodePath("SpawnPoint_2_5")]
 
 [node name="SpawnPoint_2_1" parent="Sectors/Sector4/TEAM_2_HQ4" instance=ExtResource("3_cii4s")]
 transform = Transform3D(0.690883, 0, -0.722968, 0, 1, 0, 0.722968, 0, 0.690883, 12.6246, -1.46733, 52.633)
@@ -785,6 +818,9 @@ transform = Transform3D(0.526274, 0, -0.850316, 0, 1, 0, 0.850316, 0, 0.526274, 
 
 [node name="SpawnPoint_2_4" parent="Sectors/Sector4/TEAM_2_HQ4" instance=ExtResource("3_cii4s")]
 transform = Transform3D(0.997576, 0, 0.0695822, 0, 1, 0, -0.0695822, 0, 0.997576, -40.6385, 0.0777893, -69.5856)
+
+[node name="SpawnPoint_2_5" parent="Sectors/Sector4/TEAM_2_HQ4" instance=ExtResource("3_cii4s")]
+transform = Transform3D(0.00596885, 0, -0.999982, 0, 1, 0, 0.999982, 0, 0.00596885, 36.2927, -1.09769, 21.7701)
 
 [node name="Sector5" parent="Sectors" node_paths=PackedStringArray("SectorArea", "MCOMs") instance=ExtResource("9_yjseg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 436.384, -1.70042, -2.58133)
@@ -1193,6 +1229,14 @@ ObjId = 51
 [node name="ExplosionSound" parent="FixedCamera2" instance=ExtResource("8_eh7ot")]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 20, 0)
 ObjId = 52
+
+[node name="CombatArea" parent="." node_paths=PackedStringArray("CombatVolume") instance=ExtResource("16_7cykl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.0492, 200.272, -337.411)
+CombatVolume = NodePath("PolygonVolume")
+
+[node name="PolygonVolume" parent="CombatArea" instance=ExtResource("2_1gqvr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.34192, -15.6497, -6.58496)
+points = PackedVector2Array(382.4, -250.265, 365.58, -244.132, 338.862, -237.44, 322.442, -225.595, 311.044, -209.982, 287.522, -189.494, 267.536, -181.487, 210.268, -202.435, 151.768, -200.688, 58.1045, -133.793, 35.6848, -125.451, -86.4105, -87.9194, -127.843, -70.7169, -157.563, -51.9999, -178.626, -36.6213, -198.671, -24.9232, -229.517, -24.7507, -287.238, -20.825, -375.633, 25.062, -399.05, 23.2571, -442.268, 4.73892, -475.921, -3.17029, -506.462, 19.7834, -529.483, 118.867, -496.569, 172.912, -432.115, 198.972, -335.218, 187.391, -285.331, 186.215, -245.737, 155.006, -206.558, 141.197, -126.113, 120.285, -84.1052, 89.8452, -45.6685, 72.3177, -20.2984, 81.1854, 1.46885, 84.7282, 24.8177, 80.5109, 38.2864, 75.5787, 58.2527, 65.2404, 81.6046, 48.7203, 96.8622, 29.4589, 186.213, 41.9243, 263.783, 26.9309, 340.718, -29.3847, 389.83, -56.72, 405.006, -53.5583, 443.311, -77.2493, 467.365, -91.4408, 497.415, -121.589, 502.996, -146.167, 487.279, -185.879, 462.762, -225.869, 437.169, -247.552, 410.69, -254.77)
 
 [editable path="Static/MP_Tungsten_Terrain"]
 [editable path="Static/MP_Tungsten_Terrain/Mesh"]

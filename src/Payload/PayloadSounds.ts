@@ -1,3 +1,4 @@
+import { OnGameModeStarted } from 'bf6-portal-utils/events/index.ts';
 import { PayloadState } from './PayloadState.ts';
 
 export class PayloadSounds {
@@ -20,8 +21,9 @@ export class PayloadSounds {
     private static payloadenabled = true;
     private static lastSoundUpdatePos: mod.Vector = mod.CreateVector(0, 0, 0);
     private static musicPlayed = false;
+    private static overtimePlayed = false;
 
-    public static init(): void {
+    public static async init(): Promise<void> {
         PayloadSounds.VOModule1 = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_VOModule_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
         PayloadSounds.VOModule2 = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_VOModule_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
 
@@ -36,6 +38,14 @@ export class PayloadSounds {
         mod.LoadMusic(mod.MusicPackages.Core);
         mod.SetMusicParam(mod.MusicParams.Core_Amplitude, 1);
         mod.PlayMusic(mod.MusicEvents.Core_LastPhaseBegin);
+
+        mod.LoadMusic(mod.MusicPackages.Radio)
+        await mod.Wait(1)
+        mod.SetMusicParam(mod.MusicParams.Radio_Channel, 2);
+        mod.SetMusicParam(mod.MusicParams.Radio_ContinueQueueOnTrackEnd, 1);
+        mod.SetMusicParam(mod.MusicParams.Radio_Amplitude, 3);
+        mod.SetMusicParam(mod.MusicParams.Radio_QueueTrackNumber, 7);
+        mod.SetMusicParam(mod.MusicParams.Radio_LoopQueuedTracks, 1);
     }
 
     public static playCheckpointReachedSound(): void {
@@ -91,6 +101,7 @@ export class PayloadSounds {
     }
 
     public static playPayloadMovingSound(): void {
+        mod.PlaySound(PayloadSounds.payloadMoving, 0.9);
         mod.StopSound(PayloadSounds.payloadIdle);
     }
 
@@ -98,16 +109,17 @@ export class PayloadSounds {
         if (!PayloadSounds.payloadenabled) return;
         if (!PayloadSounds.idle) {
             mod.StopSound(PayloadSounds.payloadMoving);
+            mod.PlaySound(PayloadSounds.payloadIdle, 0.9);
             PayloadSounds.idle = true;
             PayloadSounds.lastSoundUpdatePos = PayloadState.instance.payloadPosition;
-            mod.SetObjectTransform(PayloadSounds.payloadIdle, mod.CreateTransform(PayloadState.instance.payloadPosition, mod.CreateVector(0, 0, 0)));
+            mod.SetObjectTransform(PayloadSounds.payloadIdle, mod.CreateTransform(mod.Add(PayloadState.instance.payloadPosition, mod.CreateVector(0, 1, 0)), mod.CreateVector(0, 0, 0)));
         }
     }
 
     public static updateSoundPositions(): void {
         if (mod.DistanceBetween(PayloadState.instance.payloadPosition, PayloadSounds.lastSoundUpdatePos) > 1.5) {
             PayloadSounds.lastSoundUpdatePos = PayloadState.instance.payloadPosition;
-            mod.SetObjectTransform(PayloadSounds.payloadMoving, mod.CreateTransform(PayloadState.instance.payloadPosition, mod.CreateVector(0, 0, 0)));
+            mod.SetObjectTransform(PayloadSounds.payloadMoving, mod.CreateTransform(mod.Add(PayloadState.instance.payloadPosition, mod.CreateVector(0, 1, 0)), mod.CreateVector(0, 0, 0)));
         }
     }
 
@@ -128,30 +140,52 @@ export class PayloadSounds {
     }
 
     public static playNearEndMusic(): void {
-        if (!PayloadSounds.nearend) {
+        if (!PayloadSounds.nearend && PayloadState.instance.gameOngoing) {
             PayloadSounds.nearend = true;
             mod.PlayMusic(mod.MusicEvents.Core_Overtime_Loop);
         }
     }
 
     public static playPayloadReversingSound(player: mod.Player): void {
-        mod.PlaySound(PayloadSounds.reverseSound, 0.3, player);
+        mod.PlaySound(PayloadSounds.reverseSound, 0.2, player);
     }
 
     public static playPayloadProgressingSound(player: mod.Player): void {
-        mod.PlaySound(PayloadSounds.progressSound, 0.3, player);
+        mod.PlaySound(PayloadSounds.progressSound, 0.2, player);
     }
 
     public static endGameMusic(team: number): void {
         if (PayloadSounds.musicPlayed) return;
         PayloadSounds.musicPlayed = true;
+        mod.PlayMusic(mod.MusicEvents.Radio_Stop);
         if (PayloadState.instance.progressInPercent > 99) {
-            mod.SetMusicParam(mod.MusicParams.Core_IsWinning, team);
+            mod.SetMusicParam(mod.MusicParams.Core_IsWinning, 1);
         }
         mod.PlayMusic(mod.MusicEvents.Core_EndOfRound_Loop);
     }
 
     public static playOOBsound(player: mod.Player): void {
         mod.PlaySound(PayloadSounds.OOBSound, 0.6, player);
+    }
+
+    public static playOvertime(): void {
+        if (PayloadSounds.overtimePlayed && PayloadState.instance.gameOngoing) return;
+        mod.PlayMusic(mod.MusicEvents.Core_Stop);
+        mod.PlayMusic(mod.MusicEvents.Radio_Play);
+        PayloadSounds.overtimePlayed = true;
+    }
+
+    public static async stopOvertime(): Promise<void> {
+        if (!PayloadSounds.overtimePlayed) return;
+
+        let i = 3;
+        while (i >= 0) {
+            mod.SetMusicParam(mod.MusicParams.Radio_Amplitude, i);
+            i -= 0.5;
+            await mod.Wait(0.1);
+        }
+        mod.PlayMusic(mod.MusicEvents.Radio_Stop);
+        mod.SetMusicParam(mod.MusicParams.Radio_Amplitude, 3);
+        PayloadSounds.overtimePlayed = false;
     }
 }

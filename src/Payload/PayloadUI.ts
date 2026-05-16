@@ -309,6 +309,67 @@ export class PayloadUI {
         }
     }
 
+    public static async setupEndScreen(): Promise<void> {
+        const uiConfig = PayloadConfig.uiConfig;
+        mod.DeleteAllUIWidgets();
+        mod.AddUIContainer("endscreen", mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10080, 0), mod.UIAnchor.Center);
+        mod.SetUIWidgetDepth(mod.FindUIWidgetWithName("endscreen"), mod.UIDepth.AboveGameUI);
+        mod.SetUIWidgetBgFill(mod.FindUIWidgetWithName("endscreen"), mod.UIBgFill.None);
+        mod.AddUIText("endProgress1", mod.CreateVector(-300, 50, 0), mod.CreateVector(400, 60, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("endscreen"), true, 0, mod.CreateVector(0, 0, 0), 0.6, mod.UIBgFill.GradientRight, mod.Message(mod.stringkeys.payload.endScreen.distance, 0), 56, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.CenterRight, mod.GetTeam(1));
+        mod.AddUIText("endProgress2", mod.CreateVector(-300, 50, 0), mod.CreateVector(400, 60, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("endscreen"), true, 0, mod.CreateVector(0, 0, 0), 0.6, mod.UIBgFill.GradientRight, mod.Message(mod.stringkeys.payload.endScreen.distance, 0), 56, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.CenterRight, mod.GetTeam(2));
+        mod.AddUIText("endTime1", mod.CreateVector(300, 50, 0), mod.CreateVector(400, 60, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("endscreen"), true, 0, mod.CreateVector(0, 0, 0), 0.6, mod.UIBgFill.GradientLeft, mod.Message(mod.stringkeys.payload.endScreen.time, 0, 0, 0), 56, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.CenterLeft, mod.GetTeam(1));
+        mod.AddUIText("endTime2", mod.CreateVector(300, 50, 0), mod.CreateVector(400, 60, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("endscreen"), true, 0, mod.CreateVector(0, 0, 0), 0.6, mod.UIBgFill.GradientLeft, mod.Message(mod.stringkeys.payload.endScreen.time, 0, 0, 0), 56, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.CenterLeft, mod.GetTeam(2));
+
+        if (PayloadState.instance.progressInPercent > 99) {
+            mod.SetUITextColor(mod.FindUIWidgetWithName("endProgress1"), uiConfig.friendlyColour);
+            mod.SetUITextColor(mod.FindUIWidgetWithName("endProgress2"), uiConfig.enemyColour);
+            mod.SetUITextColor(mod.FindUIWidgetWithName("endTime1"), uiConfig.friendlyColour);
+            mod.SetUITextColor(mod.FindUIWidgetWithName("endTime2"), uiConfig.enemyColour);
+            mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName("endProgress1"), uiConfig.friendlyBgColour);
+            mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName("endProgress2"), uiConfig.enemyBgColour);
+            mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName("endTime1"), uiConfig.friendlyBgColour);
+            mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName("endTime2"), uiConfig.enemyBgColour);
+        } else {
+            mod.SetUITextColor(mod.FindUIWidgetWithName("endProgress1"), uiConfig.enemyColour);
+            mod.SetUITextColor(mod.FindUIWidgetWithName("endProgress2"), uiConfig.friendlyColour);
+            mod.SetUITextColor(mod.FindUIWidgetWithName("endTime1"), uiConfig.enemyColour);
+            mod.SetUITextColor(mod.FindUIWidgetWithName("endTime2"), uiConfig.friendlyColour);
+            mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName("endProgress1"), uiConfig.enemyBgColour);
+            mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName("endProgress2"), uiConfig.friendlyBgColour);
+            mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName("endTime1"), uiConfig.enemyBgColour);
+            mod.SetUIWidgetBgColor(mod.FindUIWidgetWithName("endTime2"), uiConfig.friendlyBgColour);
+        }
+
+        const targetTime = mod.GetMatchTimeElapsed();
+        const targetProgress = mod.RoundToInteger(PayloadState.instance.progressInPercent);
+
+        const duration = 0.66;
+        const steps = 20;
+        const waitTime = duration / steps;
+        let sound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gauntlet_EOM_Qualified_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1), mod.CreateVector(1, 1, 1));
+
+        mod.PlaySound(sound, 0.5);
+
+        for (let i = 1; i <= steps; i++) {
+            const currentTime = mod.Floor((targetTime / steps) * i);
+            const currentProgress = mod.Floor((targetProgress / steps) * i);
+
+            const minutes = mod.Floor(currentTime / 60);
+            const tensOfSeconds = mod.Floor((mod.Modulo(currentTime, 60)) / 10);
+            const seconds = mod.Modulo(currentTime, 10);
+
+            const msgProgress = mod.Message(mod.stringkeys.payload.endScreen.distance, currentProgress);
+            const msgTime = mod.Message(mod.stringkeys.payload.endScreen.time, minutes, tensOfSeconds, seconds);
+
+            mod.SetUITextLabel(mod.FindUIWidgetWithName("endProgress1"), msgProgress);
+            mod.SetUITextLabel(mod.FindUIWidgetWithName("endProgress2"), msgProgress);
+            mod.SetUITextLabel(mod.FindUIWidgetWithName("endTime1"), msgTime);
+            mod.SetUITextLabel(mod.FindUIWidgetWithName("endTime2"), msgTime);
+
+            await mod.Wait(waitTime);
+        }
+    }
+
     //#endregion
 
     //#region Every-Tick Updates
@@ -403,6 +464,7 @@ export class PayloadUI {
             mod.SetUITextLabel(PayloadUI.widgets.remaining_time2!, overtimeMsg);
             mod.SetUIWidgetBgColor(PayloadUI.widgets.remaining_time1!, uiConfig.goldBgColour);
             mod.SetUIWidgetBgColor(PayloadUI.widgets.remaining_time2!, uiConfig.goldBgColour);
+            PayloadSounds.playOvertime();
         } else if (remainingTime > 0) {
             const timerMsg = mod.Message(PayloadUI.timerStringKey, mins, mod.Floor(secs / 10), mod.Modulo(secs, 10));
             mod.SetUITextLabel(PayloadUI.widgets.remaining_time1!, timerMsg);
@@ -579,6 +641,7 @@ export class PayloadUI {
             mod.SetUIWidgetBgAlpha(nukeWidget, i / 10);
             await mod.Wait(0.066);
         }
+        PayloadUI.setupEndScreen();
 
         mod.DeleteUIWidget(nukeWidget);
 

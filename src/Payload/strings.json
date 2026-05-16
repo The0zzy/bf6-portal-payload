@@ -52,6 +52,10 @@
     "credits": "TheOzzy | andy6170 | Payload V1.0",
     "outofbounds": "OUT OF BOUNDS",
     "counter": "{}",
+    "endScreen": {
+      "distance": "DISTANCE: {}%",
+      "time": "TOTAL TIME: {}:{}{}"
+    },
     "debug": {
       "tickrate": "Ticks: {} | Tickrate: {}",
       "breakpoint": "Breakpoint: {}",
@@ -60,7 +64,9 @@
       "false": "false",
       "wpIndex": "WP Index: {}, CP: {}, Distance: {}",
       "wpPosition": "WP Position: ({}, {}, {})",
-      "enterTrigger": "Entered Trigger {}"
+      "enterTrigger": "Entered Trigger {}",
+      "movingSound": "Moving Sound",
+      "idleSound": "Idle Sound"
     }
   }
 }

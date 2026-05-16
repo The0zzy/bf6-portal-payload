@@ -2457,6 +2457,7 @@
                 "Sectors/Sector1/TEAM_1_HQ/SpawnPoint_1_3",
                 "Sectors/Sector1/TEAM_1_HQ/SpawnPoint_1_4"
             ],
+            "HQArea": "Sectors/Sector0/SectorArea0",
             "type": "HQ_PlayerSpawner",
             "right": {
                 "x": 1,
@@ -2480,6 +2481,7 @@
             },
             "id": "Sectors/Sector1/TEAM_1_HQ",
             "linked": [
+                "HQArea",
                 "InfantrySpawns"
             ]
         },
@@ -2594,6 +2596,7 @@
                 "Sectors/Sector1/TEAM_2_HQ/SpawnPoint_2_3",
                 "Sectors/Sector1/TEAM_2_HQ/SpawnPoint_2_4"
             ],
+            "HQArea": "Sectors/Sector1/SectorArea1",
             "type": "HQ_PlayerSpawner",
             "right": {
                 "x": 1,
@@ -2617,6 +2620,7 @@
             },
             "id": "Sectors/Sector1/TEAM_2_HQ",
             "linked": [
+                "HQArea",
                 "InfantrySpawns"
             ]
         },
@@ -2666,7 +2670,7 @@
             "position": {
                 "x": 4.429,
                 "y": 64.379992,
-                "z": -30.0091
+                "z": -66.0582
             },
             "id": "Sectors/Sector1/TEAM_2_HQ/SpawnPoint_2_2"
         },
@@ -2691,7 +2695,7 @@
             "position": {
                 "x": 7.50342,
                 "y": 64.197833,
-                "z": -37.091
+                "z": -73.1401
             },
             "id": "Sectors/Sector1/TEAM_2_HQ/SpawnPoint_2_3"
         },
@@ -2925,6 +2929,7 @@
                 "Sectors/Sector2/TEAM_1_HQ2/SpawnPoint_1_3",
                 "Sectors/Sector2/TEAM_1_HQ2/SpawnPoint_1_4"
             ],
+            "HQArea": "Sectors/Sector1/SectorArea1",
             "type": "HQ_PlayerSpawner",
             "right": {
                 "x": 1,
@@ -2948,6 +2953,7 @@
             },
             "id": "Sectors/Sector2/TEAM_1_HQ2",
             "linked": [
+                "HQArea",
                 "InfantrySpawns"
             ]
         },
@@ -2995,9 +3001,9 @@
                 "z": 0.0188135
             },
             "position": {
-                "x": -96.85528,
-                "y": 67.60739,
-                "z": 43.9402
+                "x": -91.841968,
+                "y": 66.34919,
+                "z": 27.80728
             },
             "id": "Sectors/Sector2/TEAM_1_HQ2/SpawnPoint_1_2"
         },
@@ -3062,6 +3068,7 @@
                 "Sectors/Sector2/TEAM_2_HQ2/SpawnPoint_2_3",
                 "Sectors/Sector2/TEAM_2_HQ2/SpawnPoint_2_4"
             ],
+            "HQArea": "Sectors/Sector3/SectorArea3",
             "type": "HQ_PlayerSpawner",
             "right": {
                 "x": 1,
@@ -3085,6 +3092,7 @@
             },
             "id": "Sectors/Sector2/TEAM_2_HQ2",
             "linked": [
+                "HQArea",
                 "InfantrySpawns"
             ]
         },
@@ -3183,8 +3191,8 @@
             },
             "position": {
                 "x": 114.4192,
-                "y": 67.94644,
-                "z": -58.1497
+                "y": 66.182566,
+                "z": -42.40911
             },
             "id": "Sectors/Sector2/TEAM_2_HQ2/SpawnPoint_2_4"
         },
@@ -3378,6 +3386,7 @@
                 "Sectors/Sector3/TEAM_1_HQ3/SpawnPoint_1_3",
                 "Sectors/Sector3/TEAM_1_HQ3/SpawnPoint_1_4"
             ],
+            "HQArea": "Sectors/Sector2/SectorArea2",
             "type": "HQ_PlayerSpawner",
             "right": {
                 "x": 1,
@@ -3401,6 +3410,7 @@
             },
             "id": "Sectors/Sector3/TEAM_1_HQ3",
             "linked": [
+                "HQArea",
                 "InfantrySpawns"
             ]
         },
@@ -3516,6 +3526,7 @@
                 "Sectors/Sector3/TEAM_2_HQ3/SpawnPoint_2_3",
                 "Sectors/Sector3/TEAM_2_HQ3/SpawnPoint_2_4"
             ],
+            "HQArea": "Sectors/Sector4/SectorArea4",
             "type": "HQ_PlayerSpawner",
             "right": {
                 "x": 1,
@@ -3539,6 +3550,7 @@
             },
             "id": "Sectors/Sector3/TEAM_2_HQ3",
             "linked": [
+                "HQArea",
                 "InfantrySpawns"
             ]
         },
@@ -3681,64 +3693,64 @@
             "height": 20,
             "points": [
                 {
-                    "x": 256.26618,
+                    "x": 256.2638769812144,
                     "y": 61.562,
-                    "z": -133.990779
+                    "z": -133.99153484657245
                 },
                 {
-                    "x": 248.49904,
+                    "x": 248.49619523776377,
                     "y": 61.562,
-                    "z": -141.750679
+                    "z": -141.75089259767418
                 },
                 {
-                    "x": 197.12638,
+                    "x": 197.12699180728006,
                     "y": 61.562,
-                    "z": -92.238989
+                    "z": -92.23561610788708
                 },
                 {
-                    "x": 207.71478,
+                    "x": 207.7162176003957,
                     "y": 61.562,
-                    "z": -80.410379
+                    "z": -80.40774531797396
                 },
                 {
-                    "x": 217.93868,
+                    "x": 217.9393881781195,
                     "y": 61.562,
-                    "z": -90.858579
+                    "z": -90.85665908114945
                 },
                 {
-                    "x": 226.08778,
+                    "x": 226.0890580004392,
                     "y": 61.562,
-                    "z": -82.696479
+                    "z": -82.69512799589756
                 },
                 {
-                    "x": 218.25588,
+                    "x": 218.2576849504728,
                     "y": 61.562,
-                    "z": -75.148479
+                    "z": -75.14658122589648
                 },
                 {
-                    "x": 247.53872,
+                    "x": 247.542569499848,
                     "y": 61.562,
-                    "z": -45.862479
+                    "z": -45.86262555466197
                 },
                 {
-                    "x": 288.46308,
+                    "x": 288.46388188837784,
                     "y": 61.562,
-                    "z": -89.516279
+                    "z": -89.51928261519151
                 },
                 {
-                    "x": 272.39388,
+                    "x": 272.3936311201308,
                     "y": 61.562,
-                    "z": -104.567419
+                    "z": -104.56930077291808
                 },
                 {
-                    "x": 294.04998,
+                    "x": 294.0481700299581,
                     "y": 61.562,
-                    "z": -126.928379
+                    "z": -126.9317726545586
                 },
                 {
-                    "x": 271.06208,
+                    "x": 271.05879268490764,
                     "y": 61.562,
-                    "z": -148.089779
+                    "z": -148.09156779569832
                 }
             ]
         },

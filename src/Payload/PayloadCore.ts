@@ -40,10 +40,11 @@ export class PayloadCore {
 
     private static initSectors(): void {
         for (let i = 103; i < 199; i++) {
-            mod.EnableGameModeObjective(mod.GetSector(i), false);
+            //mod.EnableGameModeObjective(mod.GetSector(i), false);
         }
         for (let i = 302; i < 399; i++) {
             mod.EnableHQ(mod.GetHQ(i), false);
+            mod.SetHQTeam(mod.GetHQ(i), mod.GetTeam(2))
         }
         for (let i = 402; i < 499; i++) {
             mod.EnableHQ(mod.GetHQ(i), false);
@@ -657,6 +658,7 @@ export class PayloadCore {
                 ) {
                     PayloadState.instance.reachedCheckpointIndex += 1;
                     PayloadCore.onCheckpointReached();
+                    PayloadSounds.stopOvertime();
                 }
                 continue;
             }
@@ -685,7 +687,7 @@ export class PayloadCore {
         }
     }
 
-    private static onCheckpointReached(): void {
+    private static async onCheckpointReached(): Promise<void> {
         if (PayloadState.instance.payloadState !== PayloadMovementState.ADVANCING) return;
 
         PayloadSounds.playCheckpointReachedSound();
@@ -708,10 +710,14 @@ export class PayloadCore {
             PayloadState.instance.checkpointStartTime = mod.GetMatchTimeElapsed();
 
             const nextCheckpointIndex = PayloadState.instance.reachedCheckpointIndex + 1;
+            mod.EnableGameModeObjective(mod.GetSector(nextCheckpointIndex + 100), false); // This is to set priority on the map
+            await mod.Wait(0.1)
+            mod.EnableGameModeObjective(mod.GetSector(nextCheckpointIndex + 100), true);
+            mod.EnableGameModeObjective(mod.GetSector(nextCheckpointIndex + 99), false);
             mod.EnableHQ(mod.GetHQ(nextCheckpointIndex + 300), true);
             mod.EnableHQ(mod.GetHQ(nextCheckpointIndex + 400), true);
-            mod.EnableGameModeObjective(mod.GetSector(nextCheckpointIndex + 101), true);
-            mod.EnableGameModeObjective(mod.GetSector(nextCheckpointIndex + 98), false);
+            mod.SetHQTeam(mod.GetHQ(nextCheckpointIndex + 300), mod.GetTeam(1));
+            mod.SetHQTeam(mod.GetHQ(nextCheckpointIndex + 398), mod.GetTeam(1));
         }
     }
 
@@ -776,6 +782,7 @@ export class PayloadCore {
         if (!PayloadState.instance.gameOngoing) return;
         PayloadState.instance.gameOngoing = false;
         mod.PauseGameModeTime(true);
+        PayloadSounds.stopOvertime();
         PayloadSounds.playPayloadIdleSound();
         PayloadSounds.endGameMusic(1);
         PayloadState.instance.payloadObjectives.forEach((obj) => {
@@ -785,14 +792,30 @@ export class PayloadCore {
             mod.UnspawnObject(vfx);
         });
         await PayloadUI.nukeUI();
+        await mod.Wait(2);
         mod.EndGameMode(mod.GetTeam(1));
     }
 
-    private static onRunningOutOfTime(): void {
+    private static async onRunningOutOfTime(): Promise<void> {
         if (!PayloadState.instance.gameOngoing) return;
         PayloadState.instance.gameOngoing = false;
+        PayloadSounds.stopOvertime();
         PayloadSounds.endGameMusic(2);
+        PayloadUI.setupEndScreen();
         mod.PauseGameModeTime(true);
+        const explosion = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Detonation, PayloadState.instance.payloadPosition, mod.CreateVector(0, 0, 0));
+        mod.EnableVFX(explosion, true);
+        await mod.Wait(0.1);
+        PayloadState.instance.payloadObjectives.forEach((obj) => {
+            mod.UnspawnObject(obj);
+        });
+        PayloadState.instance.payloadVfx.forEach((vfx) => {
+            mod.UnspawnObject(vfx);
+        });
+        PayloadState.instance.payloadSpatials.forEach((spatial) => {
+            mod.UnspawnObject(spatial);
+        });
+        await mod.Wait(4)
         mod.EndGameMode(mod.GetTeam(2));
     }
 
