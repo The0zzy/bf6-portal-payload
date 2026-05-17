@@ -315,10 +315,10 @@ export class PayloadUI {
         mod.AddUIContainer("endscreen", mod.CreateVector(0, 0, 0), mod.CreateVector(10000, 10080, 0), mod.UIAnchor.Center);
         mod.SetUIWidgetDepth(mod.FindUIWidgetWithName("endscreen"), mod.UIDepth.AboveGameUI);
         mod.SetUIWidgetBgFill(mod.FindUIWidgetWithName("endscreen"), mod.UIBgFill.None);
-        mod.AddUIText("endProgress1", mod.CreateVector(-300, 50, 0), mod.CreateVector(400, 60, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("endscreen"), true, 0, mod.CreateVector(0, 0, 0), 0.6, mod.UIBgFill.GradientRight, mod.Message(mod.stringkeys.payload.endScreen.distance, 0), 56, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.CenterRight, mod.GetTeam(1));
-        mod.AddUIText("endProgress2", mod.CreateVector(-300, 50, 0), mod.CreateVector(400, 60, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("endscreen"), true, 0, mod.CreateVector(0, 0, 0), 0.6, mod.UIBgFill.GradientRight, mod.Message(mod.stringkeys.payload.endScreen.distance, 0), 56, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.CenterRight, mod.GetTeam(2));
-        mod.AddUIText("endTime1", mod.CreateVector(300, 50, 0), mod.CreateVector(400, 60, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("endscreen"), true, 0, mod.CreateVector(0, 0, 0), 0.6, mod.UIBgFill.GradientLeft, mod.Message(mod.stringkeys.payload.endScreen.time, 0, 0, 0), 56, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.CenterLeft, mod.GetTeam(1));
-        mod.AddUIText("endTime2", mod.CreateVector(300, 50, 0), mod.CreateVector(400, 60, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("endscreen"), true, 0, mod.CreateVector(0, 0, 0), 0.6, mod.UIBgFill.GradientLeft, mod.Message(mod.stringkeys.payload.endScreen.time, 0, 0, 0), 56, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.CenterLeft, mod.GetTeam(2));
+        mod.AddUIText("endProgress1", mod.CreateVector(-300, 100, 0), mod.CreateVector(400, 60, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("endscreen"), true, 0, mod.CreateVector(0, 0, 0), 0.8, mod.UIBgFill.GradientRight, mod.Message(mod.stringkeys.payload.endScreen.distance, 0), 56, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.CenterRight, mod.GetTeam(1));
+        mod.AddUIText("endProgress2", mod.CreateVector(-300, 100, 0), mod.CreateVector(400, 60, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("endscreen"), true, 0, mod.CreateVector(0, 0, 0), 0.8, mod.UIBgFill.GradientRight, mod.Message(mod.stringkeys.payload.endScreen.distance, 0), 56, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.CenterRight, mod.GetTeam(2));
+        mod.AddUIText("endTime1", mod.CreateVector(300, 100, 0), mod.CreateVector(400, 60, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("endscreen"), true, 0, mod.CreateVector(0, 0, 0), 0.8, mod.UIBgFill.GradientLeft, mod.Message(mod.stringkeys.payload.endScreen.time, 0, 0, 0), 56, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.CenterLeft, mod.GetTeam(1));
+        mod.AddUIText("endTime2", mod.CreateVector(300, 100, 0), mod.CreateVector(400, 60, 0), mod.UIAnchor.Center, mod.FindUIWidgetWithName("endscreen"), true, 0, mod.CreateVector(0, 0, 0), 0.8, mod.UIBgFill.GradientLeft, mod.Message(mod.stringkeys.payload.endScreen.time, 0, 0, 0), 56, mod.CreateVector(1, 1, 1), 1, mod.UIAnchor.CenterLeft, mod.GetTeam(2));
 
         if (PayloadState.instance.progressInPercent > 99) {
             mod.SetUITextColor(mod.FindUIWidgetWithName("endProgress1"), uiConfig.friendlyColour);
@@ -341,7 +341,7 @@ export class PayloadUI {
         }
 
         const targetTime = mod.GetMatchTimeElapsed();
-        const targetProgress = mod.RoundToInteger(PayloadState.instance.progressInPercent);
+        const targetProgress = PayloadState.instance.progressInPercent;
 
         const duration = 0.66;
         const steps = 20;
@@ -352,7 +352,7 @@ export class PayloadUI {
 
         for (let i = 1; i <= steps; i++) {
             const currentTime = mod.Floor((targetTime / steps) * i);
-            const currentProgress = mod.Floor((targetProgress / steps) * i);
+            const currentProgress = mod.Divide(mod.Floor(mod.Multiply(((targetProgress / steps) * i), 100)), 100);
 
             const minutes = mod.Floor(currentTime / 60);
             const tensOfSeconds = mod.Floor((mod.Modulo(currentTime, 60)) / 10);

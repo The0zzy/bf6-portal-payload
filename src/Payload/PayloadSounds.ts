@@ -36,6 +36,7 @@ export class PayloadSounds {
         PayloadSounds.payloadIdle = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_Gamemodes_Payload_Breacher_Idle_SimpleLoop3D, PayloadState.instance.payloadPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
 
         mod.LoadMusic(mod.MusicPackages.Core);
+        await mod.Wait(1);
         mod.SetMusicParam(mod.MusicParams.Core_Amplitude, 1);
         mod.PlayMusic(mod.MusicEvents.Core_LastPhaseBegin);
 

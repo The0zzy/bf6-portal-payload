@@ -806,6 +806,7 @@ export class PayloadCore {
         const explosion = mod.SpawnObject(mod.RuntimeSpawn_Common.FX_Bomb_Mk82_AIR_Detonation, PayloadState.instance.payloadPosition, mod.CreateVector(0, 0, 0));
         mod.EnableVFX(explosion, true);
         await mod.Wait(0.1);
+        PayloadSounds.stopPayloadSound();
         PayloadState.instance.payloadObjectives.forEach((obj) => {
             mod.UnspawnObject(obj);
         });
