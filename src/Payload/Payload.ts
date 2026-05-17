@@ -20,6 +20,10 @@ export class Payload {
             PayloadCore.executeEveryTick();
         });
 
+        Events.OnPlayerUIButtonEvent.subscribe((player: mod.Player, widget: mod.UIWidget, event: mod.UIButtonEvent) => {
+            PayloadCore.handleUIButtonEvent(player, widget, event);
+        });
+
         Events.OngoingPlayer.subscribe((eventPlayer: mod.Player) => {
             PayloadCore.checkTeamSwitchConditions(eventPlayer);
             PayloadCore.playerEndState(eventPlayer);
@@ -28,6 +32,10 @@ export class Payload {
         Events.OnPlayerLeaveGame.subscribe((playerId: number) => {
             PayloadUI.clearPlayerUI(playerId);
             PayloadState.instance.playerData.delete(playerId);
+            if (PayloadState.instance.isPreRound) {
+                PayloadUI.updatePreRoundUI();
+                PayloadCore.checkPreRoundStartCondition();
+            }
         });
 
         Events.OnPlayerJoinGame.subscribe(async (eventPlayer: mod.Player) => {
@@ -43,6 +51,7 @@ export class Payload {
         });
 
         Events.OnPlayerEnterAreaTrigger.subscribe((eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger) => {
+            if (!PayloadState.instance.gameOngoing) return;
             if (PayloadConfig.enableDebug) {
                 mod.DisplayNotificationMessage(mod.Message(mod.stringkeys.payload.debug.enterTrigger, mod.GetObjId(eventAreaTrigger)), eventPlayer);
             }
@@ -61,6 +70,7 @@ export class Payload {
         });
 
         Events.OnPlayerExitAreaTrigger.subscribe(async (eventPlayer: mod.Player, eventAreaTrigger: mod.AreaTrigger) => {
+            if (!PayloadState.instance.gameOngoing) return;
             const playerData = PayloadState.getPlayerData(eventPlayer);
             playerData.playArea -= 1;
             if (playerData.playArea > 0 && mod.GetObjId(eventAreaTrigger) >= 700 && mod.GetObjId(eventAreaTrigger) <= 800) {
@@ -75,6 +85,10 @@ export class Payload {
         });
 
         Events.OnPlayerDeployed.subscribe((eventPlayer: mod.Player) => {
+            if (PayloadState.instance.isPreRound) {
+                PayloadUI.setupPreRoundUI(eventPlayer);
+                return;
+            }
             const data = PayloadState.getPlayerData(eventPlayer);
             mod.SkipManDown(eventPlayer, false);
             if (!data.hasDeployed && !mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier)) {

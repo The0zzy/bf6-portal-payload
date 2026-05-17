@@ -30,11 +30,13 @@ export class PayloadCore {
         PayloadCore.initPayloadObjects();
         PayloadSounds.init();
         PayloadScoring.initScoreboard();
-        PayloadUI.setup();
         PayloadCore.applyCheckpointFx();
 
+        PayloadState.instance.isPreRound = true;
+        PayloadState.instance.gameOngoing = false;
+        mod.PauseGameModeTime(true);
+
         PayloadState.instance.checkpointStartTime = mod.GetMatchTimeElapsed();
-        PayloadState.instance.gameOngoing = true;
         PayloadWeather.init();
     }
 
@@ -792,7 +794,7 @@ export class PayloadCore {
             mod.UnspawnObject(vfx);
         });
         await PayloadUI.nukeUI();
-        await mod.Wait(2);
+        await mod.Wait(10);
         mod.EndGameMode(mod.GetTeam(1));
     }
 
@@ -816,7 +818,7 @@ export class PayloadCore {
         PayloadState.instance.payloadSpatials.forEach((spatial) => {
             mod.UnspawnObject(spatial);
         });
-        await mod.Wait(4)
+        await mod.Wait(10)
         mod.EndGameMode(mod.GetTeam(2));
     }
 
@@ -842,6 +844,7 @@ export class PayloadCore {
      * @param eventPlayer - The player who should be made immortal
      */
     public static playerEndState(eventPlayer: mod.Player): void {
+        if (PayloadState.instance.isPreRound) return;
         if (!PayloadState.instance.gameOngoing) {
             if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAlive)) {
                 mod.SetPlayerMaxHealth(eventPlayer, 500);
@@ -850,5 +853,122 @@ export class PayloadCore {
                 mod.ForceRevive(eventPlayer);
             }
         }
+    }
+
+    public static handleUIButtonEvent(player: mod.Player, widget: mod.UIWidget, event: mod.UIButtonEvent): void {
+        if (!PayloadState.instance.isPreRound) return;
+
+        const name = mod.GetUIWidgetName(widget);
+        const playerId = mod.GetObjId(player);
+
+        if (name === `pr_ready_btn_${playerId}`) {
+            if (mod.Equals(event, mod.UIButtonEvent.ButtonUp)) {
+                const pData = PayloadState.getPlayerData(playerId);
+                pData.isReady = !pData.isReady;
+                PayloadUI.updatePreRoundUI();
+                PayloadCore.checkPreRoundStartCondition();
+            }
+        } else if (name === `pr_switch_btn_${playerId}`) {
+            if (mod.Equals(event, mod.UIButtonEvent.ButtonUp)) {
+                const currentTeam = mod.GetTeam(player);
+                const otherTeam = mod.Equals(currentTeam, mod.GetTeam(1)) ? mod.GetTeam(2) : mod.GetTeam(1);
+                mod.SetTeam(player, otherTeam);
+
+                const pData = PayloadState.getPlayerData(playerId);
+                pData.isReady = false;
+
+                PayloadUI.updatePreRoundUI();
+                PayloadCore.checkPreRoundStartCondition();
+            }
+        }
+    }
+
+    public static checkPreRoundStartCondition(): void {
+        if (!PayloadState.instance.isPreRound) return;
+
+        const allPlayers = mod.AllPlayers();
+        const playerCount = mod.CountOf(allPlayers);
+
+        let activeHumanCount = 0;
+        let readyCount = 0;
+
+        for (let i = 0; i < playerCount; i++) {
+            const p = mod.ValueInArray(allPlayers, i);
+            if (mod.GetSoldierState(p, mod.SoldierStateBool.IsAISoldier)) continue;
+
+            activeHumanCount++;
+            const pId = mod.GetObjId(p);
+            const pData = PayloadState.getPlayerData(pId);
+            if (pData.isReady) {
+                readyCount++;
+            }
+        }
+
+        if (activeHumanCount > 0 && readyCount === activeHumanCount) {
+            PayloadCore.startGame();
+        }
+    }
+
+    public static async startGame(): Promise<void> {
+        if (!PayloadState.instance.isPreRound) return;
+
+        // 1. Undeploy all players, remove pre-round UI menus, disable UI input modes
+        const allPlayers = mod.AllPlayers();
+        const playerCount = mod.CountOf(allPlayers);
+        for (let i = 0; i < playerCount; i++) {
+            const p = mod.ValueInArray(allPlayers, i);
+            if (mod.GetSoldierState(p, mod.SoldierStateBool.IsAISoldier)) continue;
+
+            PayloadUI.removePreRoundUI(p);
+        }
+        mod.UndeployAllPlayers();
+        mod.EnableAllPlayerDeploy(false);
+
+        // 2. Spawn global countdown widget
+        const countdownName = "pr_countdown";
+        // Clean up any old widget just in case
+        const oldWidget = mod.FindUIWidgetWithName(countdownName);
+        if (oldWidget) {
+            mod.DeleteUIWidget(oldWidget);
+        }
+
+        mod.PlayMusic(mod.MusicEvents.Core_LastPhaseBegin);
+
+
+        mod.AddUIText(
+            countdownName, mod.CreateVector(0, -50, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center,
+            mod.Message(mod.stringkeys.payload.preRound.countdown, 10)
+        );
+        const widget = mod.FindUIWidgetWithName(countdownName)!;
+        mod.SetUIWidgetBgFill(widget, mod.UIBgFill.Solid);
+        mod.SetUIWidgetBgAlpha(widget, 1);
+        mod.SetUIWidgetBgColor(widget, mod.CreateVector(0, 0, 0));
+        mod.SetUITextSize(widget, 256);
+        mod.SetUITextColor(widget, PayloadConfig.uiConfig.goldColour);
+        mod.SetUIWidgetDepth(widget, mod.UIDepth.AboveGameUI);
+        mod.SetUITextAnchor(widget, mod.UIAnchor.Center);
+
+        // 3. 10-second countdown loop
+        for (let secondsLeft = 10; secondsLeft >= 1; secondsLeft--) {
+            mod.SetUITextLabel(widget, mod.Message(mod.stringkeys.payload.preRound.countdown, secondsLeft));
+
+            // Wait 1 second
+            await mod.Wait(1);
+        }
+
+        // Clean up countdown UI
+        mod.DeleteUIWidget(widget);
+
+        // 4. Set states to start the game
+        PayloadState.instance.isPreRound = false;
+        PayloadState.instance.gameOngoing = true;
+
+        // 5. Resume timer
+        mod.PauseGameModeTime(false);
+        PayloadState.instance.checkpointStartTime = mod.GetMatchTimeElapsed();
+
+        // 6. Initialize the standard payload HUD
+        PayloadUI.setup();
+        mod.EnableAllPlayerDeploy(true);
     }
 }

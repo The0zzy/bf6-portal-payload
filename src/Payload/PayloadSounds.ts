@@ -38,7 +38,7 @@ export class PayloadSounds {
         mod.LoadMusic(mod.MusicPackages.Core);
         await mod.Wait(1);
         mod.SetMusicParam(mod.MusicParams.Core_Amplitude, 1);
-        mod.PlayMusic(mod.MusicEvents.Core_LastPhaseBegin);
+        //mod.PlayMusic(mod.MusicEvents.Core_LastPhaseBegin);
 
         mod.LoadMusic(mod.MusicPackages.Radio)
         await mod.Wait(1)

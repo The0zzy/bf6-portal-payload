@@ -370,6 +370,196 @@ export class PayloadUI {
         }
     }
 
+    public static setupPreRoundUI(player: mod.Player): void {
+        const playerId = mod.GetObjId(player);
+        if (mod.GetSoldierState(player, mod.SoldierStateBool.IsAISoldier)) return;
+
+        mod.EnableUIInputMode(true, player);
+
+        const containerName = `pr_container_${playerId}`;
+        // Clean up if already exists
+        const oldContainer = mod.FindUIWidgetWithName(containerName);
+        if (oldContainer) {
+            mod.DeleteUIWidget(oldContainer);
+        }
+
+        // Base container in center of screen
+        mod.AddUIContainer(containerName, mod.CreateVector(0, 0, 0), mod.CreateVector(800, 500, 0), mod.UIAnchor.Center, player);
+        const container = mod.FindUIWidgetWithName(containerName)!;
+        mod.SetUIWidgetBgFill(container, mod.UIBgFill.Blur);
+        mod.SetUIWidgetBgColor(container, mod.CreateVector(0.2, 0.2, 0.2));
+        mod.SetUIWidgetBgAlpha(container, 0.9);
+        mod.SetUIWidgetDepth(container, mod.UIDepth.AboveGameUI);
+
+        // Title text: "PRE-ROUND SETUP"
+        const titleName = `pr_title_${playerId}`;
+        mod.AddUIText(
+            titleName, mod.CreateVector(0, -200, 0), mod.CreateVector(600, 50, 0), mod.UIAnchor.Center,
+            container, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
+            mod.Message(mod.stringkeys.payload.preRound.title), 36, mod.CreateVector(1, 1, 1), 1,
+            mod.UIAnchor.Center, player
+        );
+
+        // Ready Button
+        const readyBtnName = `pr_ready_btn_${playerId}`;
+        mod.AddUIButton(
+            readyBtnName, mod.CreateVector(-150, 180, 0), mod.CreateVector(200, 50, 0), mod.UIAnchor.Center,
+            container, true, 0, mod.CreateVector(0.2, 0.2, 0.2), 0.9, mod.UIBgFill.Solid,
+            true, mod.CreateVector(0.2, 0.2, 0.2), 0.8, mod.CreateVector(0.1, 0.1, 0.1), 0.5,
+            mod.CreateVector(0.1, 0.8, 0.2), 1, mod.CreateVector(0.1, 0.8, 0.2), 1,
+            mod.CreateVector(0.1, 0.8, 0.2), 1, player
+        );
+        const readyBtn = mod.FindUIWidgetWithName(readyBtnName)!;
+        mod.EnableUIButtonEvent(readyBtn, mod.UIButtonEvent.ButtonUp, true);
+
+        // Ready Button Text
+        const readyBtnTxtName = `pr_ready_txt_${playerId}`;
+        mod.AddUIText(
+            readyBtnTxtName, mod.CreateVector(-150, 180, 0), mod.CreateVector(200, 50, 0), mod.UIAnchor.Center,
+            container, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
+            mod.Message(mod.stringkeys.payload.preRound.ready), 20, mod.CreateVector(1, 1, 1), 1,
+            mod.UIAnchor.Center, player
+        );
+
+        // Switch Team Button
+        const switchBtnName = `pr_switch_btn_${playerId}`;
+        mod.AddUIButton(
+            switchBtnName, mod.CreateVector(150, 180, 0), mod.CreateVector(200, 50, 0), mod.UIAnchor.Center,
+            container, true, 0, mod.CreateVector(0.2, 0.2, 0.2), 0.9, mod.UIBgFill.Solid,
+            true, mod.CreateVector(0.2, 0.2, 0.2), 0.8, mod.CreateVector(0.1, 0.1, 0.1), 0.5,
+            mod.CreateVector(0.1, 0.5, 0.8), 1, mod.CreateVector(0.1, 0.5, 0.8), 1,
+            mod.CreateVector(0.1, 0.5, 0.8), 1, player
+        );
+        const switchBtn = mod.FindUIWidgetWithName(switchBtnName)!;
+        mod.EnableUIButtonEvent(switchBtn, mod.UIButtonEvent.ButtonUp, true);
+
+        // Switch Team Button Text
+        const switchBtnTxtName = `pr_switch_txt_${playerId}`;
+        mod.AddUIText(
+            switchBtnTxtName, mod.CreateVector(150, 180, 0), mod.CreateVector(200, 50, 0), mod.UIAnchor.Center,
+            container, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
+            mod.Message(mod.stringkeys.payload.preRound.switchTeam), 20, mod.CreateVector(1, 1, 1), 1,
+            mod.UIAnchor.Center, player
+        );
+
+        // Team 1 column title
+        const t1TitleName = `pr_t1_title_${playerId}`;
+        mod.AddUIText(
+            t1TitleName, mod.CreateVector(-200, -130, 0), mod.CreateVector(300, 40, 0), mod.UIAnchor.Center,
+            container, true, 0, mod.CreateVector(0.1, 0.15, 0.3), 0.5, mod.UIBgFill.Solid,
+            mod.Message(mod.stringkeys.payload.preRound.team1), 22, mod.CreateVector(0.5, 0.8, 1), 1,
+            mod.UIAnchor.Center, player
+        );
+
+        // Team 2 column title
+        const t2TitleName = `pr_t2_title_${playerId}`;
+        mod.AddUIText(
+            t2TitleName, mod.CreateVector(200, -130, 0), mod.CreateVector(300, 40, 0), mod.UIAnchor.Center,
+            container, true, 0, mod.CreateVector(0.4, 0.1, 0.1), 0.5, mod.UIBgFill.Solid,
+            mod.Message(mod.stringkeys.payload.preRound.team2), 22, mod.CreateVector(1, 0.4, 0.4), 1,
+            mod.UIAnchor.Center, player
+        );
+
+        // Call updatePreRoundUI to draw player lists immediately for this player
+        PayloadUI.updatePreRoundUI();
+    }
+
+    public static updatePreRoundUI(): void {
+        if (!PayloadState.instance.isPreRound) return;
+
+        const allPlayers = mod.AllPlayers();
+        const playerCount = mod.CountOf(allPlayers);
+
+        // Split all players into Team 1 and Team 2 lists
+        const team1Players: mod.Player[] = [];
+        const team2Players: mod.Player[] = [];
+
+        for (let i = 0; i < playerCount; i++) {
+            const p = mod.ValueInArray(allPlayers, i);
+            if (mod.GetSoldierState(p, mod.SoldierStateBool.IsAISoldier)) continue;
+
+            const teamId = mod.GetObjId(mod.GetTeam(p));
+            if (teamId === 1) {
+                team1Players.push(p);
+            } else if (teamId === 2) {
+                team2Players.push(p);
+            }
+        }
+
+        // Update the UI lists for EVERY player who has their pre-round container active
+        for (let j = 0; j < playerCount; j++) {
+            const viewer = mod.ValueInArray(allPlayers, j);
+            if (mod.GetSoldierState(viewer, mod.SoldierStateBool.IsAISoldier)) continue;
+
+            const viewerId = mod.GetObjId(viewer);
+            const containerName = `pr_container_${viewerId}`;
+            const container = mod.FindUIWidgetWithName(containerName);
+            if (!container) continue;
+
+            // First, delete any existing player list item widgets for this viewer (up to 16)
+            for (let i = 0; i < 16; i++) {
+                const w1 = mod.FindUIWidgetWithName(`pr_t1_p_${i}_${viewerId}`);
+                if (w1) mod.DeleteUIWidget(w1);
+                const w2 = mod.FindUIWidgetWithName(`pr_t2_p_${i}_${viewerId}`);
+                if (w2) mod.DeleteUIWidget(w2);
+            }
+
+            // Draw Team 1 Players
+            for (let i = 0; i < Math.min(team1Players.length, 16); i++) {
+                const p = team1Players[i];
+                const pId = mod.GetObjId(p);
+                const pData = PayloadState.getPlayerData(pId);
+                const color = pData.isReady ? mod.CreateVector(0.1, 0.8, 0.2) : mod.CreateVector(0.8, 0.2, 0.2);
+                const textName = `pr_t1_p_${i}_${viewerId}`;
+
+                mod.AddUIText(
+                    textName, mod.CreateVector(-200, -90 + i * 30, 0), mod.CreateVector(300, 30, 0), mod.UIAnchor.Center,
+                    container, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
+                    mod.Message(mod.stringkeys.payload.preRound.playerName, p), 20, color, 1,
+                    mod.UIAnchor.Center, viewer
+                );
+            }
+
+            // Draw Team 2 Players
+            for (let i = 0; i < Math.min(team2Players.length, 16); i++) {
+                const p = team2Players[i];
+                const pId = mod.GetObjId(p);
+                const pData = PayloadState.getPlayerData(pId);
+                const color = pData.isReady ? mod.CreateVector(0.1, 0.8, 0.2) : mod.CreateVector(0.8, 0.2, 0.2);
+                const textName = `pr_t2_p_${i}_${viewerId}`;
+
+                mod.AddUIText(
+                    textName, mod.CreateVector(200, -90 + i * 30, 0), mod.CreateVector(300, 30, 0), mod.UIAnchor.Center,
+                    container, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
+                    mod.Message(mod.stringkeys.payload.preRound.playerName, p), 20, color, 1,
+                    mod.UIAnchor.Center, viewer
+                );
+            }
+
+            // Update the ready button label text for the viewer themselves
+            const readyBtnTxt = mod.FindUIWidgetWithName(`pr_ready_txt_${viewerId}`);
+            if (readyBtnTxt) {
+                const viewerData = PayloadState.getPlayerData(viewerId);
+                const btnMsg = viewerData.isReady
+                    ? mod.Message(mod.stringkeys.payload.preRound.unready)
+                    : mod.Message(mod.stringkeys.payload.preRound.ready);
+                mod.SetUITextLabel(readyBtnTxt, btnMsg);
+            }
+        }
+    }
+
+    public static removePreRoundUI(player: mod.Player): void {
+        const playerId = mod.GetObjId(player);
+        if (mod.GetSoldierState(player, mod.SoldierStateBool.IsAISoldier)) return;
+
+        mod.EnableUIInputMode(false, player);
+
+        const containerName = `pr_container_${playerId}`;
+        const container = mod.FindUIWidgetWithName(containerName);
+        if (container) {
+            mod.DeleteUIWidget(container);
+        }
+    }
     //#endregion
 
     //#region Every-Tick Updates

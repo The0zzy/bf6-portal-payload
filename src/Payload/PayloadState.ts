@@ -32,7 +32,9 @@ export interface PlayerUIData {
     oobTimer: number;
 }
 
-export interface PlayerData extends PlayerScoring, PlayerUIData { }
+export interface PlayerData extends PlayerScoring, PlayerUIData {
+    isReady: boolean;
+}
 
 export class PayloadPlayerData implements PlayerData {
     public kills = 0;
@@ -46,6 +48,7 @@ export class PayloadPlayerData implements PlayerData {
     public playArea = 0;
     public outOfBounds = false;
     public oobTimer = 0;
+    public isReady = false;
 
     constructor() { }
 }
@@ -83,6 +86,7 @@ export class PayloadState {
     public checkpointVfx: Map<string, mod.VFX> = new Map<string, mod.VFX>();
     public overtime = false;
     public gameOngoing = false;
+    public isPreRound = true;
     public payloadSpatialsConfig: SpatialConfig[] = [];
     public progressBarFlashAlpha = 1;
     public weatherReset: boolean = false;

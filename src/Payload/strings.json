@@ -56,6 +56,16 @@
       "distance": "DISTANCE: {}%",
       "time": "TOTAL TIME: {}:{}{}"
     },
+    "preRound": {
+      "title": "PRE-ROUND: READY UP",
+      "ready": "READY UP",
+      "unready": "NOT READY",
+      "switchTeam": "SWITCH TEAMS",
+      "team1": "ATTACKERS",
+      "team2": "DEFENDERS",
+      "playerName": "{}",
+      "countdown": "{}"
+    },
     "debug": {
       "tickrate": "Ticks: {} | Tickrate: {}",
       "breakpoint": "Breakpoint: {}",
