@@ -926,17 +926,21 @@ export class PayloadCore {
 
         // 2. Spawn global countdown widget
         const countdownName = "pr_countdown";
-        // Clean up any old widget just in case
+        const titleName = "pr_countdown_title";
+        // Clean up any old widgets just in case
         const oldWidget = mod.FindUIWidgetWithName(countdownName);
         if (oldWidget) {
             mod.DeleteUIWidget(oldWidget);
         }
+        const oldTitle = mod.FindUIWidgetWithName(titleName);
+        if (oldTitle) {
+            mod.DeleteUIWidget(oldTitle);
+        }
 
         mod.PlayMusic(mod.MusicEvents.Core_LastPhaseBegin);
 
-
         mod.AddUIText(
-            countdownName, mod.CreateVector(0, -50, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center,
+            countdownName, mod.CreateVector(0, 150, 0), mod.CreateVector(10000, 10000, 0), mod.UIAnchor.Center,
             mod.Message(mod.stringkeys.payload.preRound.countdown, 10)
         );
         const widget = mod.FindUIWidgetWithName(countdownName)!;
@@ -948,6 +952,19 @@ export class PayloadCore {
         mod.SetUIWidgetDepth(widget, mod.UIDepth.AboveGameUI);
         mod.SetUITextAnchor(widget, mod.UIAnchor.Center);
 
+        mod.AddUIText(
+            titleName, mod.CreateVector(0, -150, 0), mod.CreateVector(10000, 150, 0), mod.UIAnchor.Center,
+            mod.Message(mod.stringkeys.payload.objective.title)
+        );
+        const titleWidget = mod.FindUIWidgetWithName(titleName)!;
+        mod.SetUIWidgetBgFill(titleWidget, mod.UIBgFill.Solid);
+        mod.SetUIWidgetBgAlpha(titleWidget, 0.1);
+        mod.SetUIWidgetBgColor(titleWidget, PayloadConfig.uiConfig.goldBgColour);
+        mod.SetUITextSize(titleWidget, 156);
+        mod.SetUITextColor(titleWidget, PayloadConfig.uiConfig.goldColour);
+        mod.SetUIWidgetDepth(titleWidget, mod.UIDepth.AboveGameUI);
+        mod.SetUITextAnchor(titleWidget, mod.UIAnchor.Center);
+
         // 3. 10-second countdown loop
         for (let secondsLeft = 10; secondsLeft >= 1; secondsLeft--) {
             mod.SetUITextLabel(widget, mod.Message(mod.stringkeys.payload.preRound.countdown, secondsLeft));
@@ -958,6 +975,7 @@ export class PayloadCore {
 
         // Clean up countdown UI
         mod.DeleteUIWidget(widget);
+        mod.DeleteUIWidget(titleWidget);
 
         // 4. Set states to start the game
         PayloadState.instance.isPreRound = false;

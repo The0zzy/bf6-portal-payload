@@ -376,38 +376,107 @@ export class PayloadUI {
 
         mod.EnableUIInputMode(true, player);
 
-        const containerName = `pr_container_${playerId}`;
+        const borderContainerName = `pr_bg_border_${playerId}`;
         // Clean up if already exists
-        const oldContainer = mod.FindUIWidgetWithName(containerName);
-        if (oldContainer) {
-            mod.DeleteUIWidget(oldContainer);
+        const oldBorder = mod.FindUIWidgetWithName(borderContainerName);
+        if (oldBorder) {
+            mod.DeleteUIWidget(oldBorder);
         }
 
-        // Base container in center of screen
-        mod.AddUIContainer(containerName, mod.CreateVector(0, 0, 0), mod.CreateVector(800, 500, 0), mod.UIAnchor.Center, player);
-        const container = mod.FindUIWidgetWithName(containerName)!;
-        mod.SetUIWidgetBgFill(container, mod.UIBgFill.Blur);
-        mod.SetUIWidgetBgColor(container, mod.CreateVector(0.2, 0.2, 0.2));
-        mod.SetUIWidgetBgAlpha(container, 0.9);
-        mod.SetUIWidgetDepth(container, mod.UIDepth.AboveGameUI);
+        // 1. Root border container (Slightly larger than inner container to form a border)
+        mod.AddUIContainer(borderContainerName, mod.CreateVector(0, 0, 0), mod.CreateVector(800, 500, 0), mod.UIAnchor.Center, player);
+        const borderContainer = mod.FindUIWidgetWithName(borderContainerName)!;
+        mod.SetUIWidgetBgFill(borderContainer, mod.UIBgFill.Solid);
+        mod.SetUIWidgetBgColor(borderContainer, mod.CreateVector(0, 0, 0)); // Gold Border
+        mod.SetUIWidgetBgAlpha(borderContainer, 0.9);
+        mod.SetUIWidgetDepth(borderContainer, mod.UIDepth.BelowGameUI);
 
-        // Title text: "PRE-ROUND SETUP"
+        // 2. Main Container (Glassmorphic dark blur)
+        const containerName = `pr_container_${playerId}`;
+        mod.AddUIContainer(containerName, mod.CreateVector(0, 0, 0), mod.CreateVector(800, 500, 0), mod.UIAnchor.Center, borderContainer, true, 0, mod.CreateVector(1, 0.8, 0), 0.4, mod.UIBgFill.OutlineThin, player);
+        const container = mod.FindUIWidgetWithName(containerName)!;
+
+        // 3. Header Panel (with its own outline/border)
+        const hdrBorderName = `pr_hdr_border_${playerId}`;
+        mod.AddUIContainer(hdrBorderName, mod.CreateVector(0, -195, 0), mod.CreateVector(704, 64, 0), mod.UIAnchor.Center, container, true, 0, mod.CreateVector(1, 0.8, 0), 0.35, mod.UIBgFill.Solid, player);
+        const hdrBorder = mod.FindUIWidgetWithName(hdrBorderName)!;
+
+        const hdrInnerName = `pr_hdr_inner_${playerId}`;
+        mod.AddUIContainer(hdrInnerName, mod.CreateVector(0, 0, 0), mod.CreateVector(700, 60, 0), mod.UIAnchor.Center, hdrBorder, true, 0, mod.CreateVector(0.06, 0.06, 0.06), 0.95, mod.UIBgFill.Solid, player);
+        const hdrInner = mod.FindUIWidgetWithName(hdrInnerName)!;
+
+        // Title text inside header
         const titleName = `pr_title_${playerId}`;
         mod.AddUIText(
-            titleName, mod.CreateVector(0, -200, 0), mod.CreateVector(600, 50, 0), mod.UIAnchor.Center,
-            container, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
-            mod.Message(mod.stringkeys.payload.preRound.title), 36, mod.CreateVector(1, 1, 1), 1,
+            titleName, mod.CreateVector(0, 0, 0), mod.CreateVector(700, 60, 0), mod.UIAnchor.Center,
+            hdrInner, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
+            mod.Message(mod.stringkeys.payload.preRound.title), 30, mod.CreateVector(1, 0.8, 0), 1,
             mod.UIAnchor.Center, player
         );
+
+        // 4. Team 1 Column Panel (Attackers)
+        const t1BorderName = `pr_t1_border_${playerId}`;
+        mod.AddUIContainer(t1BorderName, mod.CreateVector(-180, -10, 0), mod.CreateVector(344, 254, 0), mod.UIAnchor.Center, container, true, 0, mod.CreateVector(0.5, 0.8, 1), 0.4, mod.UIBgFill.Solid, player);
+        const t1Border = mod.FindUIWidgetWithName(t1BorderName)!;
+
+        const t1InnerName = `pr_t1_inner_${playerId}`;
+        mod.AddUIContainer(t1InnerName, mod.CreateVector(0, 0, 0), mod.CreateVector(340, 250, 0), mod.UIAnchor.Center, t1Border, true, 0, mod.CreateVector(0, 0, 0), 0.9, mod.UIBgFill.Solid, player);
+        const t1Inner = mod.FindUIWidgetWithName(t1InnerName)!;
+
+        // Team 1 Header Panel
+        const t1HdrName = `pr_t1_hdr_${playerId}`;
+        mod.AddUIContainer(t1HdrName, mod.CreateVector(0, -105, 0), mod.CreateVector(340, 40, 0), mod.UIAnchor.Center, t1Inner, true, 0, mod.CreateVector(0.5, 0.8, 1), 0.25, mod.UIBgFill.Solid, player);
+        const t1Hdr = mod.FindUIWidgetWithName(t1HdrName)!;
+
+        // Team 1 Header Text
+        const t1TitleName = `pr_t1_title_${playerId}`;
+        mod.AddUIText(
+            t1TitleName, mod.CreateVector(0, 0, 0), mod.CreateVector(340, 40, 0), mod.UIAnchor.Center,
+            t1Hdr, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
+            mod.Message(mod.stringkeys.payload.preRound.team1), 20, mod.CreateVector(0.5, 0.8, 1), 1,
+            mod.UIAnchor.Center, player
+        );
+
+        // 5. Team 2 Column Panel (Defenders)
+        const t2BorderName = `pr_t2_border_${playerId}`;
+        mod.AddUIContainer(t2BorderName, mod.CreateVector(180, -10, 0), mod.CreateVector(344, 254, 0), mod.UIAnchor.Center, container, true, 0, mod.CreateVector(1, 0.4, 0.4), 0.4, mod.UIBgFill.Solid, player);
+        const t2Border = mod.FindUIWidgetWithName(t2BorderName)!;
+
+        const t2InnerName = `pr_t2_inner_${playerId}`;
+        mod.AddUIContainer(t2InnerName, mod.CreateVector(0, 0, 0), mod.CreateVector(340, 250, 0), mod.UIAnchor.Center, t2Border, true, 0, mod.CreateVector(0.1, 0.04, 0.04), 0.9, mod.UIBgFill.Solid, player);
+        const t2Inner = mod.FindUIWidgetWithName(t2InnerName)!;
+
+        // Team 2 Header Panel
+        const t2HdrName = `pr_t2_hdr_${playerId}`;
+        mod.AddUIContainer(t2HdrName, mod.CreateVector(0, -105, 0), mod.CreateVector(340, 40, 0), mod.UIAnchor.Center, t2Inner, true, 0, mod.CreateVector(1, 0.4, 0.4), 0.25, mod.UIBgFill.Solid, player);
+        const t2Hdr = mod.FindUIWidgetWithName(t2HdrName)!;
+
+        // Team 2 Header Text
+        const t2TitleName = `pr_t2_title_${playerId}`;
+        mod.AddUIText(
+            t2TitleName, mod.CreateVector(0, 0, 0), mod.CreateVector(340, 40, 0), mod.UIAnchor.Center,
+            t2Hdr, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
+            mod.Message(mod.stringkeys.payload.preRound.team2), 20, mod.CreateVector(1, 0.4, 0.4), 1,
+            mod.UIAnchor.Center, player
+        );
+
+        // 6. Action Panel (at the bottom)
+        const actBorderName = `pr_action_border_${playerId}`;
+        mod.AddUIContainer(actBorderName, mod.CreateVector(0, 180, 0), mod.CreateVector(704, 74, 0), mod.UIAnchor.Center, container, true, 0, mod.CreateVector(0.2, 0.2, 0.2), 0.35, mod.UIBgFill.None, player);
+        const actBorder = mod.FindUIWidgetWithName(actBorderName)!;
+
+        const actInnerName = `pr_action_inner_${playerId}`;
+        mod.AddUIContainer(actInnerName, mod.CreateVector(0, 0, 0), mod.CreateVector(700, 70, 0), mod.UIAnchor.Center, actBorder, true, 0, mod.CreateVector(0.06, 0.06, 0.06), 0.95, mod.UIBgFill.None, player);
+        const actInner = mod.FindUIWidgetWithName(actInnerName)!;
 
         // Ready Button
         const readyBtnName = `pr_ready_btn_${playerId}`;
         mod.AddUIButton(
-            readyBtnName, mod.CreateVector(-150, 180, 0), mod.CreateVector(200, 50, 0), mod.UIAnchor.Center,
-            container, true, 0, mod.CreateVector(0.2, 0.2, 0.2), 0.9, mod.UIBgFill.Solid,
-            true, mod.CreateVector(0.2, 0.2, 0.2), 0.8, mod.CreateVector(0.1, 0.1, 0.1), 0.5,
-            mod.CreateVector(0.1, 0.8, 0.2), 1, mod.CreateVector(0.1, 0.8, 0.2), 1,
-            mod.CreateVector(0.1, 0.8, 0.2), 1, player
+            readyBtnName, mod.CreateVector(-160, 0, 0), mod.CreateVector(240, 44, 0), mod.UIAnchor.Center,
+            actInner, true, 0, mod.CreateVector(0.2, 0.2, 0.2), 0.9, mod.UIBgFill.Solid,
+            true, mod.CreateVector(0.2, 0.2, 0.2), 0.9, mod.CreateVector(0.1, 0.1, 0.1), 0.5,
+            mod.CreateVector(0.1, 1, 0.2), 1, mod.CreateVector(0.1, 1, 0.2), 1,
+            mod.CreateVector(0.1, 1, 0.2), 1, player
         );
         const readyBtn = mod.FindUIWidgetWithName(readyBtnName)!;
         mod.EnableUIButtonEvent(readyBtn, mod.UIButtonEvent.ButtonUp, true);
@@ -415,20 +484,20 @@ export class PayloadUI {
         // Ready Button Text
         const readyBtnTxtName = `pr_ready_txt_${playerId}`;
         mod.AddUIText(
-            readyBtnTxtName, mod.CreateVector(-150, 180, 0), mod.CreateVector(200, 50, 0), mod.UIAnchor.Center,
-            container, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
-            mod.Message(mod.stringkeys.payload.preRound.ready), 20, mod.CreateVector(1, 1, 1), 1,
+            readyBtnTxtName, mod.CreateVector(-160, 0, 0), mod.CreateVector(240, 44, 0), mod.UIAnchor.Center,
+            actInner, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
+            mod.Message(mod.stringkeys.payload.preRound.ready), 18, mod.CreateVector(1, 1, 1), 1,
             mod.UIAnchor.Center, player
         );
 
         // Switch Team Button
         const switchBtnName = `pr_switch_btn_${playerId}`;
         mod.AddUIButton(
-            switchBtnName, mod.CreateVector(150, 180, 0), mod.CreateVector(200, 50, 0), mod.UIAnchor.Center,
-            container, true, 0, mod.CreateVector(0.2, 0.2, 0.2), 0.9, mod.UIBgFill.Solid,
-            true, mod.CreateVector(0.2, 0.2, 0.2), 0.8, mod.CreateVector(0.1, 0.1, 0.1), 0.5,
-            mod.CreateVector(0.1, 0.5, 0.8), 1, mod.CreateVector(0.1, 0.5, 0.8), 1,
-            mod.CreateVector(0.1, 0.5, 0.8), 1, player
+            switchBtnName, mod.CreateVector(160, 0, 0), mod.CreateVector(240, 44, 0), mod.UIAnchor.Center,
+            actInner, true, 0, mod.CreateVector(0.2, 0.2, 0.2), 0.9, mod.UIBgFill.Solid,
+            true, mod.CreateVector(0.2, 0.2, 0.2), 0.9, mod.CreateVector(0.1, 0.1, 0.1), 0.5,
+            mod.CreateVector(0.1, 0.6, 1), 1, mod.CreateVector(0.1, 0.6, 1), 1,
+            mod.CreateVector(0.1, 0.6, 1), 1, player
         );
         const switchBtn = mod.FindUIWidgetWithName(switchBtnName)!;
         mod.EnableUIButtonEvent(switchBtn, mod.UIButtonEvent.ButtonUp, true);
@@ -436,27 +505,9 @@ export class PayloadUI {
         // Switch Team Button Text
         const switchBtnTxtName = `pr_switch_txt_${playerId}`;
         mod.AddUIText(
-            switchBtnTxtName, mod.CreateVector(150, 180, 0), mod.CreateVector(200, 50, 0), mod.UIAnchor.Center,
-            container, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
-            mod.Message(mod.stringkeys.payload.preRound.switchTeam), 20, mod.CreateVector(1, 1, 1), 1,
-            mod.UIAnchor.Center, player
-        );
-
-        // Team 1 column title
-        const t1TitleName = `pr_t1_title_${playerId}`;
-        mod.AddUIText(
-            t1TitleName, mod.CreateVector(-200, -130, 0), mod.CreateVector(300, 40, 0), mod.UIAnchor.Center,
-            container, true, 0, mod.CreateVector(0.1, 0.15, 0.3), 0.5, mod.UIBgFill.Solid,
-            mod.Message(mod.stringkeys.payload.preRound.team1), 22, mod.CreateVector(0.5, 0.8, 1), 1,
-            mod.UIAnchor.Center, player
-        );
-
-        // Team 2 column title
-        const t2TitleName = `pr_t2_title_${playerId}`;
-        mod.AddUIText(
-            t2TitleName, mod.CreateVector(200, -130, 0), mod.CreateVector(300, 40, 0), mod.UIAnchor.Center,
-            container, true, 0, mod.CreateVector(0.4, 0.1, 0.1), 0.5, mod.UIBgFill.Solid,
-            mod.Message(mod.stringkeys.payload.preRound.team2), 22, mod.CreateVector(1, 0.4, 0.4), 1,
+            switchBtnTxtName, mod.CreateVector(160, 0, 0), mod.CreateVector(240, 44, 0), mod.UIAnchor.Center,
+            actInner, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
+            mod.Message(mod.stringkeys.payload.preRound.switchTeam), 18, mod.CreateVector(1, 1, 1), 1,
             mod.UIAnchor.Center, player
         );
 
@@ -492,9 +543,11 @@ export class PayloadUI {
             if (mod.GetSoldierState(viewer, mod.SoldierStateBool.IsAISoldier)) continue;
 
             const viewerId = mod.GetObjId(viewer);
-            const containerName = `pr_container_${viewerId}`;
-            const container = mod.FindUIWidgetWithName(containerName);
-            if (!container) continue;
+            const t1InnerName = `pr_t1_inner_${viewerId}`;
+            const t2InnerName = `pr_t2_inner_${viewerId}`;
+            const t1Inner = mod.FindUIWidgetWithName(t1InnerName);
+            const t2Inner = mod.FindUIWidgetWithName(t2InnerName);
+            if (!t1Inner || !t2Inner) continue;
 
             // First, delete any existing player list item widgets for this viewer (up to 16)
             for (let i = 0; i < 16; i++) {
@@ -504,7 +557,7 @@ export class PayloadUI {
                 if (w2) mod.DeleteUIWidget(w2);
             }
 
-            // Draw Team 1 Players
+            // Draw Team 1 Players (Attackers)
             for (let i = 0; i < Math.min(team1Players.length, 16); i++) {
                 const p = team1Players[i];
                 const pId = mod.GetObjId(p);
@@ -513,14 +566,14 @@ export class PayloadUI {
                 const textName = `pr_t1_p_${i}_${viewerId}`;
 
                 mod.AddUIText(
-                    textName, mod.CreateVector(-200, -90 + i * 30, 0), mod.CreateVector(300, 30, 0), mod.UIAnchor.Center,
-                    container, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
-                    mod.Message(mod.stringkeys.payload.preRound.playerName, p), 20, color, 1,
+                    textName, mod.CreateVector(0, -65 + i * 25, 0), mod.CreateVector(320, 25, 0), mod.UIAnchor.Center,
+                    t1Inner, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
+                    mod.Message(mod.stringkeys.payload.preRound.playerName, p), 18, color, 1,
                     mod.UIAnchor.Center, viewer
                 );
             }
 
-            // Draw Team 2 Players
+            // Draw Team 2 Players (Defenders)
             for (let i = 0; i < Math.min(team2Players.length, 16); i++) {
                 const p = team2Players[i];
                 const pId = mod.GetObjId(p);
@@ -529,9 +582,9 @@ export class PayloadUI {
                 const textName = `pr_t2_p_${i}_${viewerId}`;
 
                 mod.AddUIText(
-                    textName, mod.CreateVector(200, -90 + i * 30, 0), mod.CreateVector(300, 30, 0), mod.UIAnchor.Center,
-                    container, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
-                    mod.Message(mod.stringkeys.payload.preRound.playerName, p), 20, color, 1,
+                    textName, mod.CreateVector(0, -65 + i * 25, 0), mod.CreateVector(320, 25, 0), mod.UIAnchor.Center,
+                    t2Inner, true, 0, mod.CreateVector(0, 0, 0), 0, mod.UIBgFill.None,
+                    mod.Message(mod.stringkeys.payload.preRound.playerName, p), 18, color, 1,
                     mod.UIAnchor.Center, viewer
                 );
             }
@@ -554,10 +607,10 @@ export class PayloadUI {
 
         mod.EnableUIInputMode(false, player);
 
-        const containerName = `pr_container_${playerId}`;
-        const container = mod.FindUIWidgetWithName(containerName);
-        if (container) {
-            mod.DeleteUIWidget(container);
+        const borderContainerName = `pr_bg_border_${playerId}`;
+        const borderContainer = mod.FindUIWidgetWithName(borderContainerName);
+        if (borderContainer) {
+            mod.DeleteUIWidget(borderContainer);
         }
     }
     //#endregion
