@@ -47,6 +47,9 @@ export class PayloadConfig {
     /** Whether team switching is enabled */
     public static readonly enableTeamSwitch = false;
 
+    /** Whether competitive rules are enabled */
+    public static readonly enableCompetitiveMode = true;
+
     /** Identifiers for payload spatial objects (IDs determine the type of payload object spawned) */
     public static readonly payloadSpatialIdentifiers: number[] = [5000, 5001, 5002];
 

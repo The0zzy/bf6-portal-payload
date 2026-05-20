@@ -32,9 +32,14 @@ export class PayloadCore {
         PayloadScoring.initScoreboard();
         PayloadCore.applyCheckpointFx();
 
-        PayloadState.instance.isPreRound = true;
-        PayloadState.instance.gameOngoing = false;
-        mod.PauseGameModeTime(true);
+        if (PayloadConfig.enableCompetitiveMode) {
+            PayloadState.instance.isPreRound = true;
+            PayloadState.instance.gameOngoing = false;
+            mod.PauseGameModeTime(true);
+        } else {
+            PayloadUI.setup();
+            PayloadState.instance.gameOngoing = true;
+        }
 
         PayloadState.instance.checkpointStartTime = mod.GetMatchTimeElapsed();
         PayloadWeather.init();

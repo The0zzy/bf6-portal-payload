@@ -1,3 +1,4 @@
+import { PayloadConfig } from "./PayloadConfig.ts";
 import { PayloadCore } from "./PayloadCore.ts";
 
 export class PayloadWeather {
@@ -6,6 +7,7 @@ export class PayloadWeather {
     private static weatherResetInQueue = false;
 
     public static init(): void {
+        if (PayloadConfig.enableCompetitiveMode) return;
         const weatherIndicatorObj = mod.GetSpatialObject(4000);
         if (PayloadCore.isSpatialValid(weatherIndicatorObj)) {
             const objPos = mod.GetObjectPosition(weatherIndicatorObj);

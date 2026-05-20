@@ -86,7 +86,7 @@ export class PayloadState {
     public checkpointVfx: Map<string, mod.VFX> = new Map<string, mod.VFX>();
     public overtime = false;
     public gameOngoing = false;
-    public isPreRound = true;
+    public isPreRound = false;
     public payloadSpatialsConfig: SpatialConfig[] = [];
     public progressBarFlashAlpha = 1;
     public weatherReset: boolean = false;
