@@ -346,7 +346,7 @@ export class PayloadUI {
         const duration = 0.66;
         const steps = 20;
         const waitTime = duration / steps;
-        let sound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gauntlet_EOM_Qualified_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1), mod.CreateVector(1, 1, 1));
+        const sound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gauntlet_EOM_Qualified_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1), mod.CreateVector(1, 1, 1));
 
         mod.PlaySound(sound, 0.5);
 
@@ -548,6 +548,30 @@ export class PayloadUI {
             const t1Inner = mod.FindUIWidgetWithName(t1InnerName);
             const t2Inner = mod.FindUIWidgetWithName(t2InnerName);
             if (!t1Inner || !t2Inner) continue;
+
+            const headerBorder = mod.FindUIWidgetWithName(`pr_hdr_border_${viewerId}`);
+            const headerInner = mod.FindUIWidgetWithName(`pr_hdr_inner_${viewerId}`);
+            const headerTitle = mod.FindUIWidgetWithName(`pr_title_${viewerId}`);
+            const isStarting = PayloadState.instance.preRoundCountdownActive;
+            if (headerBorder && headerInner && headerTitle) {
+                if (isStarting) {
+                    mod.SetUIWidgetBgColor(headerBorder, mod.CreateVector(0.1, 0.7, 0.2));
+                    mod.SetUIWidgetBgColor(headerInner, mod.CreateVector(0.04, 0.12, 0.04));
+                    mod.SetUITextColor(headerTitle, mod.CreateVector(0.2, 1, 0.3));
+                    mod.SetUITextLabel(
+                        headerTitle,
+                        mod.Message(
+                            mod.stringkeys.payload.preRound.startingIn,
+                            PayloadState.instance.preRoundCountdownRemaining
+                        )
+                    );
+                } else {
+                    mod.SetUIWidgetBgColor(headerBorder, mod.CreateVector(1, 0.8, 0));
+                    mod.SetUIWidgetBgColor(headerInner, mod.CreateVector(0.06, 0.06, 0.06));
+                    mod.SetUITextColor(headerTitle, mod.CreateVector(1, 0.8, 0));
+                    mod.SetUITextLabel(headerTitle, mod.Message(mod.stringkeys.payload.preRound.title));
+                }
+            }
 
             // First, delete any existing player list item widgets for this viewer (up to 16)
             for (let i = 0; i < 16; i++) {

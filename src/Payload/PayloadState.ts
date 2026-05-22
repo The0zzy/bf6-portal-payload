@@ -87,6 +87,9 @@ export class PayloadState {
     public overtime = false;
     public gameOngoing = false;
     public isPreRound = false;
+    public preRoundCountdownActive = false;
+    public preRoundCountdownRemaining = 0;
+    public preRoundCountdownToken = 0;
     public payloadSpatialsConfig: SpatialConfig[] = [];
     public progressBarFlashAlpha = 1;
     public weatherReset: boolean = false;

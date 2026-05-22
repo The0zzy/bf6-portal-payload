@@ -20,7 +20,6 @@ import { PayloadWeather } from './PayloadWeather.ts';
  * @static
  */
 export class PayloadCore {
-
     public static init(): void {
         mod.SetGameModeTimeLimit(PayloadConfig.maxGameModeTime);
         mod.SetGameModeTargetScore(PayloadConfig.gameModeTargetScore);
@@ -891,6 +890,26 @@ export class PayloadCore {
     public static checkPreRoundStartCondition(): void {
         if (!PayloadState.instance.isPreRound) return;
 
+        const { allReady } = PayloadCore.getPreRoundReadiness();
+        if (allReady) {
+            if (PayloadState.instance.preRoundCountdownActive) {
+                return;
+            }
+
+            PayloadState.instance.preRoundCountdownActive = true;
+            PayloadState.instance.preRoundCountdownRemaining = PayloadConfig.preRoundCountdownDurationSeconds;
+            PayloadState.instance.preRoundCountdownToken += 1;
+            const token = PayloadState.instance.preRoundCountdownToken;
+
+            PayloadUI.updatePreRoundUI();
+            PayloadCore.startPreRoundCountdown(token);
+        } else if (PayloadState.instance.preRoundCountdownActive) {
+            PayloadCore.cancelPreRoundCountdown();
+            PayloadUI.updatePreRoundUI();
+        }
+    }
+
+    private static getPreRoundReadiness(): { activeHumanCount: number; readyCount: number; allReady: boolean } {
         const allPlayers = mod.AllPlayers();
         const playerCount = mod.CountOf(allPlayers);
 
@@ -903,19 +922,68 @@ export class PayloadCore {
 
             activeHumanCount++;
             const pId = mod.GetObjId(p);
-            const pData = PayloadState.getPlayerData(pId);
-            if (pData.isReady) {
+            if (PayloadState.getPlayerData(pId).isReady) {
                 readyCount++;
             }
         }
 
-        if (activeHumanCount > 0 && readyCount === activeHumanCount) {
-            PayloadCore.startGame();
+        return {
+            activeHumanCount,
+            readyCount,
+            allReady: activeHumanCount > 0 && readyCount === activeHumanCount,
+        };
+    }
+
+    private static cancelPreRoundCountdown(): void {
+        PayloadState.instance.preRoundCountdownActive = false;
+        PayloadState.instance.preRoundCountdownRemaining = 0;
+        PayloadState.instance.preRoundCountdownToken += 1;
+    }
+
+    private static async startPreRoundCountdown(token: number): Promise<void> {
+        for (let secondsLeft = PayloadConfig.preRoundCountdownDurationSeconds; secondsLeft >= 1; secondsLeft--) {
+            if (!PayloadState.instance.isPreRound) {
+                return;
+            }
+            if (!PayloadState.instance.preRoundCountdownActive || PayloadState.instance.preRoundCountdownToken !== token) {
+                return;
+            }
+
+            const { allReady } = PayloadCore.getPreRoundReadiness();
+            if (!allReady) {
+                PayloadCore.cancelPreRoundCountdown();
+                PayloadUI.updatePreRoundUI();
+                return;
+            }
+
+            PayloadState.instance.preRoundCountdownRemaining = secondsLeft;
+            PayloadUI.updatePreRoundUI();
+            PayloadSounds.playPreRoundCountdownBeep();
+            await mod.Wait(1);
         }
+
+        if (!PayloadState.instance.isPreRound) {
+            return;
+        }
+        if (!PayloadState.instance.preRoundCountdownActive || PayloadState.instance.preRoundCountdownToken !== token) {
+            return;
+        }
+
+        const { allReady } = PayloadCore.getPreRoundReadiness();
+        if (!allReady) {
+            PayloadCore.cancelPreRoundCountdown();
+            PayloadUI.updatePreRoundUI();
+            return;
+        }
+
+        PayloadCore.cancelPreRoundCountdown();
+        await PayloadCore.startGame();
     }
 
     public static async startGame(): Promise<void> {
         if (!PayloadState.instance.isPreRound) return;
+
+        PayloadCore.cancelPreRoundCountdown();
 
         // 1. Undeploy all players, remove pre-round UI menus, disable UI input modes
         const allPlayers = mod.AllPlayers();

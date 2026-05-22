@@ -97,6 +97,9 @@ export class PayloadConfig {
     /** Grace period for out-of-bounds players in seconds */
     public static readonly oobGracePeriod = 5;
 
+    /** Cancelable ready-check countdown before the match start countdown */
+    public static readonly preRoundCountdownDurationSeconds = 5;
+
     /** Configuration for objectives that should be spawned at around the payload position */
     public static readonly payloadObjectives: ObjectiveConfig[] = [
         {

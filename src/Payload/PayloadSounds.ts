@@ -1,4 +1,3 @@
-import { OnGameModeStarted } from 'bf6-portal-utils/events/index.ts';
 import { PayloadState } from './PayloadState.ts';
 
 export class PayloadSounds {
@@ -8,6 +7,7 @@ export class PayloadSounds {
     private static soundCheckpoint: mod.SFX;
     private static progressSound: mod.SFX;
     private static reverseSound: mod.SFX;
+    private static preRoundCountdownBeep: mod.SFX;
     private static payloadMoving: mod.SFX;
     private static payloadIdle: mod.SFX;
     private static OOBSound: mod.SFX;
@@ -30,6 +30,7 @@ export class PayloadSounds {
         PayloadSounds.soundCheckpoint = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_AreaUnlock_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
         PayloadSounds.progressSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_CapturingTickIcon_IsFriendly_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
         PayloadSounds.reverseSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_CapturingTickEnemy_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
+        PayloadSounds.preRoundCountdownBeep = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_CapturingTickIcon_IsFriendly_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
         PayloadSounds.OOBSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_OutOfBounds_Countdown_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
 
         PayloadSounds.payloadMoving = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_Gamemodes_Payload_Breacher_Exterior_Accel_SimpleLoop3D, PayloadState.instance.payloadPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
@@ -153,6 +154,10 @@ export class PayloadSounds {
 
     public static playPayloadProgressingSound(player: mod.Player): void {
         mod.PlaySound(PayloadSounds.progressSound, 0.2, player);
+    }
+
+    public static playPreRoundCountdownBeep(): void {
+        mod.PlaySound(PayloadSounds.preRoundCountdownBeep, 0.35);
     }
 
     public static endGameMusic(team: number): void {
