@@ -1049,9 +1049,40 @@ export class PayloadCore {
             await mod.Wait(1);
         }
 
+        // --- SWIPE TRANSITION ---
+        const swipeOverlayName = "swipe_overlay";
+        const oldSwipe = mod.FindUIWidgetWithName(swipeOverlayName);
+        if (oldSwipe) {
+            mod.DeleteUIWidget(oldSwipe);
+        }
+
+        // Spawn swipe overlay container at the top (fully off-screen)
+        mod.AddUIContainer(
+            swipeOverlayName,
+            mod.CreateVector(0, -1200, 0),
+            mod.CreateVector(10000, 1200, 0),
+            mod.UIAnchor.TopCenter
+        );
+        const swipeWidget = mod.FindUIWidgetWithName(swipeOverlayName)!;
+        mod.SetUIWidgetBgFill(swipeWidget, mod.UIBgFill.Solid);
+        mod.SetUIWidgetBgColor(swipeWidget, PayloadConfig.uiConfig.goldColour);
+        mod.SetUIWidgetBgAlpha(swipeWidget, 1.0);
+        mod.SetUIWidgetDepth(swipeWidget, mod.UIDepth.AboveGameUI);
+
+        // Animate Swipe-in (fill from top)
+        const swipeSteps = 15;
+        const swipeStepDuration = 0.03; // 30ms per step = 600ms total swipe
+        for (let i = 1; i <= swipeSteps; i++) {
+            const progress = i / swipeSteps;
+            const easedProgress = progress * (2 - progress); // Ease-out quad
+            const yPos = -1200 + (1200 * easedProgress);
+            mod.SetUIWidgetPosition(swipeWidget, mod.CreateVector(0, yPos, 0));
+            await mod.Wait(swipeStepDuration);
+        }
+
         PayloadSounds.playImpactSound();
 
-        // Clean up countdown UI
+        // Clean up countdown UI while screen is covered
         mod.DeleteUIWidget(widget);
         mod.DeleteUIWidget(titleWidget);
 
@@ -1066,5 +1097,17 @@ export class PayloadCore {
         // 6. Initialize the standard payload HUD
         PayloadUI.setup();
         mod.EnableAllPlayerDeploy(true);
+
+        // Animate Swipe-out (exit down)
+        for (let i = 1; i <= swipeSteps; i++) {
+            const progress = i / swipeSteps;
+            const easedProgress = progress * progress; // Ease-in quad
+            const yPos = 1200 * easedProgress;
+            mod.SetUIWidgetPosition(swipeWidget, mod.CreateVector(0, yPos, 0));
+            await mod.Wait(swipeStepDuration);
+        }
+
+        // Clean up swipe container
+        mod.DeleteUIWidget(swipeWidget);
     }
 }
