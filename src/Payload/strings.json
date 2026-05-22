@@ -58,7 +58,7 @@
     },
     "preRound": {
       "title": "PRE-ROUND: READY UP",
-      "startingIn": "Starting in: {}",
+      "startingIn": "STARTING IN: {}",
       "ready": "READY UP",
       "unready": "NOT READY",
       "switchTeam": "SWITCH TEAMS",

@@ -11,6 +11,9 @@ export class PayloadSounds {
     private static payloadMoving: mod.SFX;
     private static payloadIdle: mod.SFX;
     private static OOBSound: mod.SFX;
+    private static countdown: mod.SFX;
+    private static impact: mod.SFX;
+
 
     private static winning1 = false;
     private static winning2 = false;
@@ -30,8 +33,10 @@ export class PayloadSounds {
         PayloadSounds.soundCheckpoint = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_AreaUnlock_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
         PayloadSounds.progressSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_CapturingTickIcon_IsFriendly_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
         PayloadSounds.reverseSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_CapturingTickEnemy_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
-        PayloadSounds.preRoundCountdownBeep = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_CaptureObjectives_CapturingTickIcon_IsFriendly_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
+        PayloadSounds.preRoundCountdownBeep = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Shared_Countdown_Tick_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
         PayloadSounds.OOBSound = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_OutOfBounds_Countdown_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
+        PayloadSounds.countdown = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_Intro_Countdown_Final_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
+        PayloadSounds.impact = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_Intro_FinalImpact_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
 
         PayloadSounds.payloadMoving = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_Gamemodes_Payload_Breacher_Exterior_Accel_SimpleLoop3D, PayloadState.instance.payloadPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
         PayloadSounds.payloadIdle = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_Gamemodes_Payload_Breacher_Idle_SimpleLoop3D, PayloadState.instance.payloadPosition, mod.CreateVector(0, 0, 0), mod.CreateVector(1, 1, 1));
@@ -157,7 +162,15 @@ export class PayloadSounds {
     }
 
     public static playPreRoundCountdownBeep(): void {
-        mod.PlaySound(PayloadSounds.preRoundCountdownBeep, 0.35);
+        mod.PlaySound(PayloadSounds.preRoundCountdownBeep, 1);
+    }
+
+    public static playFinalCountdown(): void {
+        mod.PlaySound(PayloadSounds.countdown, 0.6);
+    }
+
+    public static playImpactSound(): void {
+        mod.PlaySound(PayloadSounds.impact, 0.6);
     }
 
     public static endGameMusic(team: number): void {

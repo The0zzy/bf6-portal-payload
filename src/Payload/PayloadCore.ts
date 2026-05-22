@@ -1041,10 +1041,15 @@ export class PayloadCore {
         // 3. 10-second countdown loop
         for (let secondsLeft = 10; secondsLeft >= 1; secondsLeft--) {
             mod.SetUITextLabel(widget, mod.Message(mod.stringkeys.payload.preRound.countdown, secondsLeft));
+            if (secondsLeft <= 5) {
+                PayloadSounds.playFinalCountdown();
+            }
 
             // Wait 1 second
             await mod.Wait(1);
         }
+
+        PayloadSounds.playImpactSound();
 
         // Clean up countdown UI
         mod.DeleteUIWidget(widget);
