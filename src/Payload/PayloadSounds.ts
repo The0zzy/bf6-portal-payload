@@ -1,6 +1,8 @@
 import { PayloadState } from './PayloadState.ts';
 
 export class PayloadSounds {
+    private static initialized = false;
+
     private static VOModule1: mod.VO;
     private static VOModule2: mod.VO;
 
@@ -27,6 +29,11 @@ export class PayloadSounds {
     private static overtimePlayed = false;
 
     public static async init(): Promise<void> {
+        if (PayloadSounds.initialized) {
+            return;
+        }
+        PayloadSounds.initialized = true;
+
         PayloadSounds.VOModule1 = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_VOModule_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
         PayloadSounds.VOModule2 = mod.SpawnObject(mod.RuntimeSpawn_Common.SFX_VOModule_OneShot2D, mod.CreateVector(0, 0, 0), mod.CreateVector(0, 0, 0));
 
