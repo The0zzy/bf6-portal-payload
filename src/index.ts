@@ -20,34 +20,15 @@ enum GameModes {
 Events.OnGameModeStarted.subscribe(async () => {
     mod.EnableAllPlayerDeploy(false);
     // pick a random GameMode from the list of GameModes to determine which mode to initialize.
-    const gameModeValues = Object.values(GameModes).filter(value => typeof value === 'number') as number[];
+    const gameModeValues = Object.values(GameModes).filter((value) => typeof value === 'number') as number[];
     const currentGameMode = gameModeValues[Math.floor(Math.random() * gameModeValues.length)];
 
     if (currentGameMode === GameModes.Payload) {
         if (PayloadConfig.enableCompetitiveMode) {
-            new ReadyUpSystem(
-                () => Payload.init(),
-                {
-                    preRoundCountdownDurationSeconds: PayloadConfig.preRoundCountdownDurationSeconds,
-                    finalCountdownDurationSeconds: 10,
-                    text: {
-                        title: () => mod.Message(mod.stringkeys.payload.preRound.title),
-                        startingIn: (seconds: number) => mod.Message(mod.stringkeys.payload.preRound.startingIn, seconds),
-                        ready: () => mod.Message(mod.stringkeys.payload.preRound.ready),
-                        unready: () => mod.Message(mod.stringkeys.payload.preRound.unready),
-                        switchTeam: () => mod.Message(mod.stringkeys.payload.preRound.switchTeam),
-                        team1: () => mod.Message(mod.stringkeys.payload.preRound.team1),
-                        team2: () => mod.Message(mod.stringkeys.payload.preRound.team2),
-                        playerName: (player: mod.Player) => mod.Message(mod.stringkeys.payload.preRound.playerName, player),
-                        countdown: (seconds: number) => mod.Message(mod.stringkeys.payload.preRound.countdown, seconds),
-                        objectiveTitle: () => mod.Message(mod.stringkeys.payload.objective.title),
-                    },
-                    style: {
-                        goldColour: PayloadConfig.uiConfig.goldColour,
-                        goldBgColour: PayloadConfig.uiConfig.goldBgColour,
-                    },
-                }
-            );
+            new ReadyUpSystem(() => Payload.init(), {
+                preRoundCountdownDurationSeconds: PayloadConfig.preRoundCountdownDurationSeconds,
+                finalCountdownDurationSeconds: 10,
+            });
         } else {
             Payload.init();
         }

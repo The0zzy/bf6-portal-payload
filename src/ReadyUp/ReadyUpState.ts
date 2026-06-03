@@ -15,7 +15,7 @@ export class ReadyUpState {
     public preRoundCountdownToken = 0;
     public playerData: Map<number, ReadyUpPlayerData> = new Map<number, ReadyUpPlayerData>();
 
-    private constructor() { }
+    private constructor() {}
 
     public reset(): void {
         this.isPreRound = true;

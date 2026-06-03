@@ -11,10 +11,7 @@ export class ReadyUpSystem {
     private completed = false;
     private transitionStarted = false;
 
-    constructor(
-        onReady: () => void | Promise<void>,
-        config: ReadyUpSystemConfig
-    ) {
+    constructor(onReady: () => void | Promise<void>, config: ReadyUpSystemConfig) {
         this.onReady = onReady;
         this.config = ReadyUpConfig.resolve(config);
         this.ui = new ReadyUpUI(this.config);
@@ -157,7 +154,10 @@ export class ReadyUpSystem {
             if (!ReadyUpState.instance.isPreRound || this.completed) {
                 return;
             }
-            if (!ReadyUpState.instance.preRoundCountdownActive || ReadyUpState.instance.preRoundCountdownToken !== token) {
+            if (
+                !ReadyUpState.instance.preRoundCountdownActive ||
+                ReadyUpState.instance.preRoundCountdownToken !== token
+            ) {
                 return;
             }
 
@@ -230,14 +230,14 @@ export class ReadyUpSystem {
             mod.CreateVector(0, 150, 0),
             mod.CreateVector(10000, 10000, 0),
             mod.UIAnchor.Center,
-            this.config.text.countdown(this.config.finalCountdownDurationSeconds)
+            mod.Message(mod.stringkeys.readyup.countdown, this.config.finalCountdownDurationSeconds)
         );
         const widget = mod.FindUIWidgetWithName(countdownName)!;
         mod.SetUIWidgetBgFill(widget, mod.UIBgFill.Solid);
         mod.SetUIWidgetBgAlpha(widget, 1);
         mod.SetUIWidgetBgColor(widget, mod.CreateVector(0, 0, 0));
         mod.SetUITextSize(widget, 256);
-        mod.SetUITextColor(widget, this.config.style.goldColour);
+        mod.SetUITextColor(widget, ReadyUpConfig.goldColour);
         mod.SetUIWidgetDepth(widget, mod.UIDepth.AboveGameUI);
         mod.SetUITextAnchor(widget, mod.UIAnchor.Center);
 
@@ -246,19 +246,19 @@ export class ReadyUpSystem {
             mod.CreateVector(0, -150, 0),
             mod.CreateVector(10000, 150, 0),
             mod.UIAnchor.Center,
-            this.config.text.objectiveTitle()
+            mod.Message(mod.stringkeys.readyup.objective)
         );
         const titleWidget = mod.FindUIWidgetWithName(titleName)!;
         mod.SetUIWidgetBgFill(titleWidget, mod.UIBgFill.Solid);
         mod.SetUIWidgetBgAlpha(titleWidget, 0.1);
-        mod.SetUIWidgetBgColor(titleWidget, this.config.style.goldBgColour);
+        mod.SetUIWidgetBgColor(titleWidget, ReadyUpConfig.goldBgColour);
         mod.SetUITextSize(titleWidget, 156);
-        mod.SetUITextColor(titleWidget, this.config.style.goldColour);
+        mod.SetUITextColor(titleWidget, ReadyUpConfig.goldColour);
         mod.SetUIWidgetDepth(titleWidget, mod.UIDepth.AboveGameUI);
         mod.SetUITextAnchor(titleWidget, mod.UIAnchor.Center);
 
         for (let secondsLeft = this.config.finalCountdownDurationSeconds; secondsLeft >= 1; secondsLeft--) {
-            mod.SetUITextLabel(widget, this.config.text.countdown(secondsLeft));
+            mod.SetUITextLabel(widget, mod.Message(mod.stringkeys.readyup.countdown, secondsLeft));
             if (secondsLeft <= 5) {
                 ReadyUpSounds.playFinalCountdown();
             }
@@ -279,7 +279,7 @@ export class ReadyUpSystem {
         );
         const swipeWidget = mod.FindUIWidgetWithName(swipeOverlayName)!;
         mod.SetUIWidgetBgFill(swipeWidget, mod.UIBgFill.Solid);
-        mod.SetUIWidgetBgColor(swipeWidget, this.config.style.goldColour);
+        mod.SetUIWidgetBgColor(swipeWidget, ReadyUpConfig.goldColour);
         mod.SetUIWidgetBgAlpha(swipeWidget, 1.0);
         mod.SetUIWidgetDepth(swipeWidget, mod.UIDepth.AboveGameUI);
 
@@ -288,7 +288,7 @@ export class ReadyUpSystem {
         for (let i = 1; i <= swipeSteps; i++) {
             const progress = i / swipeSteps;
             const easedProgress = progress * (2 - progress);
-            const yPos = -1200 + (1200 * easedProgress);
+            const yPos = -1200 + 1200 * easedProgress;
             mod.SetUIWidgetPosition(swipeWidget, mod.CreateVector(0, yPos, 0));
             await mod.Wait(swipeStepDuration);
         }

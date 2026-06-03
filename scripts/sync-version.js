@@ -29,7 +29,6 @@ try {
     // Write strings.json
     fs.writeFileSync(stringsJsonPath, JSON.stringify(stringsJson, null, 2) + '\n');
     process.stdout.write(' Done.\n');
-
 } catch (error) {
     console.error('\nError syncing version to strings.json:');
     console.error(error.message);

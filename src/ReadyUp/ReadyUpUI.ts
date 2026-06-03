@@ -1,4 +1,4 @@
-import type { ResolvedReadyUpSystemConfig } from './ReadyUpConfig.ts';
+import { ReadyUpConfig, type ResolvedReadyUpSystemConfig } from './ReadyUpConfig.ts';
 import { ReadyUpState } from './ReadyUpState.ts';
 
 export class ReadyUpUI {
@@ -20,7 +20,13 @@ export class ReadyUpUI {
             mod.DeleteUIWidget(oldBorder);
         }
 
-        mod.AddUIContainer(borderContainerName, mod.CreateVector(0, 0, 0), mod.CreateVector(800, 500, 0), mod.UIAnchor.Center, player);
+        mod.AddUIContainer(
+            borderContainerName,
+            mod.CreateVector(0, 0, 0),
+            mod.CreateVector(800, 500, 0),
+            mod.UIAnchor.Center,
+            player
+        );
         const borderContainer = mod.FindUIWidgetWithName(borderContainerName)!;
         mod.SetUIWidgetBgFill(borderContainer, mod.UIBgFill.Solid);
         mod.SetUIWidgetBgColor(borderContainer, mod.CreateVector(0, 0, 0));
@@ -28,15 +34,51 @@ export class ReadyUpUI {
         mod.SetUIWidgetDepth(borderContainer, mod.UIDepth.BelowGameUI);
 
         const containerName = `pr_container_${playerId}`;
-        mod.AddUIContainer(containerName, mod.CreateVector(0, 0, 0), mod.CreateVector(800, 500, 0), mod.UIAnchor.Center, borderContainer, true, 0, this.config.style.goldColour, 0.4, mod.UIBgFill.OutlineThin, player);
+        mod.AddUIContainer(
+            containerName,
+            mod.CreateVector(0, 0, 0),
+            mod.CreateVector(800, 500, 0),
+            mod.UIAnchor.Center,
+            borderContainer,
+            true,
+            0,
+            ReadyUpConfig.goldColour,
+            0.4,
+            mod.UIBgFill.OutlineThin,
+            player
+        );
         const container = mod.FindUIWidgetWithName(containerName)!;
 
         const hdrBorderName = `pr_hdr_border_${playerId}`;
-        mod.AddUIContainer(hdrBorderName, mod.CreateVector(0, -195, 0), mod.CreateVector(704, 64, 0), mod.UIAnchor.Center, container, true, 0, this.config.style.goldColour, 0.35, mod.UIBgFill.Solid, player);
+        mod.AddUIContainer(
+            hdrBorderName,
+            mod.CreateVector(0, -195, 0),
+            mod.CreateVector(704, 64, 0),
+            mod.UIAnchor.Center,
+            container,
+            true,
+            0,
+            ReadyUpConfig.goldColour,
+            0.35,
+            mod.UIBgFill.Solid,
+            player
+        );
         const hdrBorder = mod.FindUIWidgetWithName(hdrBorderName)!;
 
         const hdrInnerName = `pr_hdr_inner_${playerId}`;
-        mod.AddUIContainer(hdrInnerName, mod.CreateVector(0, 0, 0), mod.CreateVector(700, 60, 0), mod.UIAnchor.Center, hdrBorder, true, 0, mod.CreateVector(0.06, 0.06, 0.06), 0.95, mod.UIBgFill.Solid, player);
+        mod.AddUIContainer(
+            hdrInnerName,
+            mod.CreateVector(0, 0, 0),
+            mod.CreateVector(700, 60, 0),
+            mod.UIAnchor.Center,
+            hdrBorder,
+            true,
+            0,
+            mod.CreateVector(0.06, 0.06, 0.06),
+            0.95,
+            mod.UIBgFill.Solid,
+            player
+        );
         const hdrInner = mod.FindUIWidgetWithName(hdrInnerName)!;
 
         const titleName = `pr_title_${playerId}`;
@@ -51,24 +93,60 @@ export class ReadyUpUI {
             mod.CreateVector(0, 0, 0),
             0,
             mod.UIBgFill.None,
-            this.config.text.title(),
+            mod.Message(mod.stringkeys.readyup.title),
             30,
-            this.config.style.goldColour,
+            ReadyUpConfig.goldColour,
             1,
             mod.UIAnchor.Center,
             player
         );
 
         const t1BorderName = `pr_t1_border_${playerId}`;
-        mod.AddUIContainer(t1BorderName, mod.CreateVector(-180, -10, 0), mod.CreateVector(344, 254, 0), mod.UIAnchor.Center, container, true, 0, mod.CreateVector(0.5, 0.8, 1), 0.4, mod.UIBgFill.Solid, player);
+        mod.AddUIContainer(
+            t1BorderName,
+            mod.CreateVector(-180, -10, 0),
+            mod.CreateVector(344, 254, 0),
+            mod.UIAnchor.Center,
+            container,
+            true,
+            0,
+            mod.CreateVector(0.5, 0.8, 1),
+            0.4,
+            mod.UIBgFill.Solid,
+            player
+        );
         const t1Border = mod.FindUIWidgetWithName(t1BorderName)!;
 
         const t1InnerName = `pr_t1_inner_${playerId}`;
-        mod.AddUIContainer(t1InnerName, mod.CreateVector(0, 0, 0), mod.CreateVector(340, 250, 0), mod.UIAnchor.Center, t1Border, true, 0, mod.CreateVector(0, 0, 0), 0.9, mod.UIBgFill.Solid, player);
+        mod.AddUIContainer(
+            t1InnerName,
+            mod.CreateVector(0, 0, 0),
+            mod.CreateVector(340, 250, 0),
+            mod.UIAnchor.Center,
+            t1Border,
+            true,
+            0,
+            mod.CreateVector(0, 0, 0),
+            0.9,
+            mod.UIBgFill.Solid,
+            player
+        );
         const t1Inner = mod.FindUIWidgetWithName(t1InnerName)!;
 
         const t1HdrName = `pr_t1_hdr_${playerId}`;
-        mod.AddUIContainer(t1HdrName, mod.CreateVector(0, -105, 0), mod.CreateVector(340, 40, 0), mod.UIAnchor.Center, t1Inner, true, 0, mod.CreateVector(0.5, 0.8, 1), 0.25, mod.UIBgFill.Solid, player);
+        mod.AddUIContainer(
+            t1HdrName,
+            mod.CreateVector(0, -105, 0),
+            mod.CreateVector(340, 40, 0),
+            mod.UIAnchor.Center,
+            t1Inner,
+            true,
+            0,
+            mod.CreateVector(0.5, 0.8, 1),
+            0.25,
+            mod.UIBgFill.Solid,
+            player
+        );
         const t1Hdr = mod.FindUIWidgetWithName(t1HdrName)!;
 
         const t1TitleName = `pr_t1_title_${playerId}`;
@@ -83,7 +161,7 @@ export class ReadyUpUI {
             mod.CreateVector(0, 0, 0),
             0,
             mod.UIBgFill.None,
-            this.config.text.team1(),
+            mod.Message(mod.stringkeys.readyup.team1),
             20,
             mod.CreateVector(0.5, 0.8, 1),
             1,
@@ -92,15 +170,51 @@ export class ReadyUpUI {
         );
 
         const t2BorderName = `pr_t2_border_${playerId}`;
-        mod.AddUIContainer(t2BorderName, mod.CreateVector(180, -10, 0), mod.CreateVector(344, 254, 0), mod.UIAnchor.Center, container, true, 0, mod.CreateVector(1, 0.4, 0.4), 0.4, mod.UIBgFill.Solid, player);
+        mod.AddUIContainer(
+            t2BorderName,
+            mod.CreateVector(180, -10, 0),
+            mod.CreateVector(344, 254, 0),
+            mod.UIAnchor.Center,
+            container,
+            true,
+            0,
+            mod.CreateVector(1, 0.4, 0.4),
+            0.4,
+            mod.UIBgFill.Solid,
+            player
+        );
         const t2Border = mod.FindUIWidgetWithName(t2BorderName)!;
 
         const t2InnerName = `pr_t2_inner_${playerId}`;
-        mod.AddUIContainer(t2InnerName, mod.CreateVector(0, 0, 0), mod.CreateVector(340, 250, 0), mod.UIAnchor.Center, t2Border, true, 0, mod.CreateVector(0.1, 0.04, 0.04), 0.9, mod.UIBgFill.Solid, player);
+        mod.AddUIContainer(
+            t2InnerName,
+            mod.CreateVector(0, 0, 0),
+            mod.CreateVector(340, 250, 0),
+            mod.UIAnchor.Center,
+            t2Border,
+            true,
+            0,
+            mod.CreateVector(0.1, 0.04, 0.04),
+            0.9,
+            mod.UIBgFill.Solid,
+            player
+        );
         const t2Inner = mod.FindUIWidgetWithName(t2InnerName)!;
 
         const t2HdrName = `pr_t2_hdr_${playerId}`;
-        mod.AddUIContainer(t2HdrName, mod.CreateVector(0, -105, 0), mod.CreateVector(340, 40, 0), mod.UIAnchor.Center, t2Inner, true, 0, mod.CreateVector(1, 0.4, 0.4), 0.25, mod.UIBgFill.Solid, player);
+        mod.AddUIContainer(
+            t2HdrName,
+            mod.CreateVector(0, -105, 0),
+            mod.CreateVector(340, 40, 0),
+            mod.UIAnchor.Center,
+            t2Inner,
+            true,
+            0,
+            mod.CreateVector(1, 0.4, 0.4),
+            0.25,
+            mod.UIBgFill.Solid,
+            player
+        );
         const t2Hdr = mod.FindUIWidgetWithName(t2HdrName)!;
 
         const t2TitleName = `pr_t2_title_${playerId}`;
@@ -115,7 +229,7 @@ export class ReadyUpUI {
             mod.CreateVector(0, 0, 0),
             0,
             mod.UIBgFill.None,
-            this.config.text.team2(),
+            mod.Message(mod.stringkeys.readyup.team2),
             20,
             mod.CreateVector(1, 0.4, 0.4),
             1,
@@ -124,11 +238,35 @@ export class ReadyUpUI {
         );
 
         const actBorderName = `pr_action_border_${playerId}`;
-        mod.AddUIContainer(actBorderName, mod.CreateVector(0, 180, 0), mod.CreateVector(704, 74, 0), mod.UIAnchor.Center, container, true, 0, mod.CreateVector(0.2, 0.2, 0.2), 0.35, mod.UIBgFill.None, player);
+        mod.AddUIContainer(
+            actBorderName,
+            mod.CreateVector(0, 180, 0),
+            mod.CreateVector(704, 74, 0),
+            mod.UIAnchor.Center,
+            container,
+            true,
+            0,
+            mod.CreateVector(0.2, 0.2, 0.2),
+            0.35,
+            mod.UIBgFill.None,
+            player
+        );
         const actBorder = mod.FindUIWidgetWithName(actBorderName)!;
 
         const actInnerName = `pr_action_inner_${playerId}`;
-        mod.AddUIContainer(actInnerName, mod.CreateVector(0, 0, 0), mod.CreateVector(700, 70, 0), mod.UIAnchor.Center, actBorder, true, 0, mod.CreateVector(0.06, 0.06, 0.06), 0.95, mod.UIBgFill.None, player);
+        mod.AddUIContainer(
+            actInnerName,
+            mod.CreateVector(0, 0, 0),
+            mod.CreateVector(700, 70, 0),
+            mod.UIAnchor.Center,
+            actBorder,
+            true,
+            0,
+            mod.CreateVector(0.06, 0.06, 0.06),
+            0.95,
+            mod.UIBgFill.None,
+            player
+        );
         const actInner = mod.FindUIWidgetWithName(actInnerName)!;
 
         const readyBtnName = `pr_ready_btn_${playerId}`;
@@ -171,7 +309,7 @@ export class ReadyUpUI {
             mod.CreateVector(0, 0, 0),
             0,
             mod.UIBgFill.None,
-            this.config.text.ready(),
+            mod.Message(mod.stringkeys.readyup.ready),
             18,
             mod.CreateVector(1, 1, 1),
             1,
@@ -219,7 +357,7 @@ export class ReadyUpUI {
             mod.CreateVector(0, 0, 0),
             0,
             mod.UIBgFill.None,
-            this.config.text.switchTeam(),
+            mod.Message(mod.stringkeys.readyup.switchTeam),
             18,
             mod.CreateVector(1, 1, 1),
             1,
@@ -271,12 +409,15 @@ export class ReadyUpUI {
                     mod.SetUIWidgetBgColor(headerBorder, mod.CreateVector(0.1, 0.7, 0.2));
                     mod.SetUIWidgetBgColor(headerInner, mod.CreateVector(0.04, 0.12, 0.04));
                     mod.SetUITextColor(headerTitle, mod.CreateVector(0.2, 1, 0.3));
-                    mod.SetUITextLabel(headerTitle, this.config.text.startingIn(ReadyUpState.instance.preRoundCountdownRemaining));
+                    mod.SetUITextLabel(
+                        headerTitle,
+                        mod.Message(mod.stringkeys.readyup.startingIn, ReadyUpState.instance.preRoundCountdownRemaining)
+                    );
                 } else {
-                    mod.SetUIWidgetBgColor(headerBorder, this.config.style.goldColour);
+                    mod.SetUIWidgetBgColor(headerBorder, ReadyUpConfig.goldColour);
                     mod.SetUIWidgetBgColor(headerInner, mod.CreateVector(0.06, 0.06, 0.06));
-                    mod.SetUITextColor(headerTitle, this.config.style.goldColour);
-                    mod.SetUITextLabel(headerTitle, this.config.text.title());
+                    mod.SetUITextColor(headerTitle, ReadyUpConfig.goldColour);
+                    mod.SetUITextLabel(headerTitle, mod.Message(mod.stringkeys.readyup.title));
                 }
             }
 
@@ -305,7 +446,7 @@ export class ReadyUpUI {
                     mod.CreateVector(0, 0, 0),
                     0,
                     mod.UIBgFill.None,
-                    this.config.text.playerName(p),
+                    mod.Message(mod.stringkeys.readyup.playerName, p),
                     18,
                     color,
                     1,
@@ -332,7 +473,7 @@ export class ReadyUpUI {
                     mod.CreateVector(0, 0, 0),
                     0,
                     mod.UIBgFill.None,
-                    this.config.text.playerName(p),
+                    mod.Message(mod.stringkeys.readyup.playerName, p),
                     18,
                     color,
                     1,
@@ -345,8 +486,8 @@ export class ReadyUpUI {
             if (readyBtnTxt) {
                 const viewerData = ReadyUpState.getPlayerData(viewerId);
                 const btnMsg = viewerData.isReady
-                    ? this.config.text.unready()
-                    : this.config.text.ready();
+                    ? mod.Message(mod.stringkeys.readyup.unready)
+                    : mod.Message(mod.stringkeys.readyup.ready);
                 mod.SetUITextLabel(readyBtnTxt, btnMsg);
             }
         }

@@ -1,0 +1,14 @@
+{
+    "readyup": {
+        "title": "PRE-ROUND: READY UP",
+        "startingIn": "STARTING IN: {}",
+        "ready": "READY UP",
+        "unready": "NOT READY",
+        "switchTeam": "SWITCH TEAMS",
+        "team1": "ATTACKERS",
+        "team2": "DEFENDERS",
+        "playerName": "{}",
+        "countdown": "{}",
+        "objective": "PAYLOAD"
+    }
+}
