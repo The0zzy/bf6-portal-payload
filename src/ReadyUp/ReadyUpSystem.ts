@@ -1,59 +1,87 @@
 import { Events } from 'bf6-portal-utils/events';
-import { ReadyUpConfig, type ReadyUpSystemConfig } from './ReadyUpConfig.ts';
 import { ReadyUpSounds } from './ReadyUpSounds.ts';
 import { ReadyUpState } from './ReadyUpState.ts';
 import { ReadyUpUI } from './ReadyUpUI.ts';
 
 export class ReadyUpSystem {
-    private readonly onReady: () => void | Promise<void>;
-    private readonly config: ReturnType<typeof ReadyUpConfig.resolve>;
-    private readonly ui: ReadyUpUI;
-    private completed = false;
-    private transitionStarted = false;
+    private static completed = false;
+    private static transitionStarted = false;
+    private static onReady: () => void | Promise<void> = () => {};
+    private static preRoundCountdownDurationSeconds = 5;
+    private static finalCountdownDurationSeconds = 10;
+    private static unsubscribers: Array<() => void> = [];
 
-    constructor(onReady: () => void | Promise<void>, config: ReadyUpSystemConfig) {
-        this.onReady = onReady;
-        this.config = ReadyUpConfig.resolve(config);
-        this.ui = new ReadyUpUI(this.config);
-
-        this.init();
+    public static isCompleted(): boolean {
+        return ReadyUpSystem.completed;
     }
 
-    private init(): void {
-        ReadyUpState.instance.reset();
+    public static start(): void;
+    public static start(onReady: () => void | Promise<void>, preRoundCountdownDurationSeconds: number, finalCountdownDurationSeconds: number): void;
+    // mod.JsAction('main.ReadyUpSystem.start') can be used to invoke this from blocks.
+    public static start(
+        onReady?: () => void | Promise<void>,
+        preRoundCountdownDurationSeconds?: number,
+        finalCountdownDurationSeconds?: number
+    ): void {
+        if (!ReadyUpSystem.completed && ReadyUpState.isPreRound) {
+            mod.SendErrorReport(mod.Message(mod.stringkeys.readyup.already_started));
+            return;
+        }
+
+        ReadyUpSystem.cleanupSubscriptions();
+        ReadyUpSystem.completed = false;
+        ReadyUpSystem.transitionStarted = false;
+        ReadyUpSystem.onReady = onReady ?? (() => {});
+        ReadyUpSystem.preRoundCountdownDurationSeconds = preRoundCountdownDurationSeconds ?? 5;
+        ReadyUpSystem.finalCountdownDurationSeconds = finalCountdownDurationSeconds ?? 10;
+
+        ReadyUpSystem.init();
+    }
+
+    private static init(): void {
+        ReadyUpState.reset();
         mod.PauseGameModeTime(true);
 
         ReadyUpSounds.init();
 
-        Events.OnPlayerUIButtonEvent.subscribe((player: mod.Player, widget: mod.UIWidget, event: mod.UIButtonEvent) => {
-            this.handleUIButtonEvent(player, widget, event);
+        const unsubscribeButton = Events.OnPlayerUIButtonEvent.subscribe((player: mod.Player, widget: mod.UIWidget, event: mod.UIButtonEvent) => {
+            ReadyUpSystem.handleUIButtonEvent(player, widget, event);
         });
 
-        Events.OnPlayerDeployed.subscribe((eventPlayer: mod.Player) => {
-            if (!ReadyUpState.instance.isPreRound || this.completed) {
+        const unsubscribeDeployed = Events.OnPlayerDeployed.subscribe((eventPlayer: mod.Player) => {
+            if (!ReadyUpState.isPreRound || ReadyUpSystem.completed) {
                 return;
             }
             if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier)) {
                 return;
             }
 
-            this.ui.setupPreRoundUI(eventPlayer);
+            ReadyUpUI.setupPreRoundUI(eventPlayer);
         });
 
-        Events.OnPlayerLeaveGame.subscribe((playerId: number) => {
-            if (!ReadyUpState.instance.isPreRound || this.completed) {
+        const unsubscribeLeave = Events.OnPlayerLeaveGame.subscribe((playerId: number) => {
+            if (!ReadyUpState.isPreRound || ReadyUpSystem.completed) {
                 return;
             }
 
-            this.ui.clearPlayerUI(playerId);
-            ReadyUpState.instance.playerData.delete(playerId);
-            this.ui.updatePreRoundUI();
-            this.checkPreRoundStartCondition();
+            ReadyUpUI.clearPlayerUI(playerId);
+            ReadyUpState.playerData.delete(playerId);
+            ReadyUpUI.updatePreRoundUI();
+            ReadyUpSystem.checkPreRoundStartCondition();
         });
+
+        ReadyUpSystem.unsubscribers = [unsubscribeButton, unsubscribeDeployed, unsubscribeLeave];
     }
 
-    private handleUIButtonEvent(player: mod.Player, widget: mod.UIWidget, event: mod.UIButtonEvent): void {
-        if (!ReadyUpState.instance.isPreRound || this.completed) {
+    private static cleanupSubscriptions(): void {
+        for (const unsubscribe of ReadyUpSystem.unsubscribers) {
+            unsubscribe();
+        }
+        ReadyUpSystem.unsubscribers = [];
+    }
+
+    private static handleUIButtonEvent(player: mod.Player, widget: mod.UIWidget, event: mod.UIButtonEvent): void {
+        if (!ReadyUpState.isPreRound || ReadyUpSystem.completed) {
             return;
         }
 
@@ -67,8 +95,8 @@ export class ReadyUpSystem {
 
             const pData = ReadyUpState.getPlayerData(playerId);
             pData.isReady = !pData.isReady;
-            this.ui.updatePreRoundUI();
-            this.checkPreRoundStartCondition();
+            ReadyUpUI.updatePreRoundUI();
+            ReadyUpSystem.checkPreRoundStartCondition();
             return;
         }
 
@@ -84,39 +112,39 @@ export class ReadyUpSystem {
             const pData = ReadyUpState.getPlayerData(playerId);
             pData.isReady = false;
 
-            this.ui.updatePreRoundUI();
-            this.checkPreRoundStartCondition();
+            ReadyUpUI.updatePreRoundUI();
+            ReadyUpSystem.checkPreRoundStartCondition();
         }
     }
 
-    private checkPreRoundStartCondition(): void {
-        if (!ReadyUpState.instance.isPreRound || this.completed) {
+    private static checkPreRoundStartCondition(): void {
+        if (!ReadyUpState.isPreRound || ReadyUpSystem.completed) {
             return;
         }
 
-        const { allReady } = this.getPreRoundReadiness();
+        const { allReady } = ReadyUpSystem.getPreRoundReadiness();
         if (allReady) {
-            if (ReadyUpState.instance.preRoundCountdownActive) {
+            if (ReadyUpState.preRoundCountdownActive) {
                 return;
             }
 
-            ReadyUpState.instance.preRoundCountdownActive = true;
-            ReadyUpState.instance.preRoundCountdownRemaining = this.config.preRoundCountdownDurationSeconds;
-            ReadyUpState.instance.preRoundCountdownToken += 1;
-            const token = ReadyUpState.instance.preRoundCountdownToken;
+            ReadyUpState.preRoundCountdownActive = true;
+            ReadyUpState.preRoundCountdownRemaining = ReadyUpSystem.preRoundCountdownDurationSeconds;
+            ReadyUpState.preRoundCountdownToken += 1;
+            const token = ReadyUpState.preRoundCountdownToken;
 
-            this.ui.updatePreRoundUI();
-            this.startPreRoundCountdown(token);
+            ReadyUpUI.updatePreRoundUI();
+            ReadyUpSystem.startPreRoundCountdown(token);
             return;
         }
 
-        if (ReadyUpState.instance.preRoundCountdownActive) {
-            this.cancelPreRoundCountdown();
-            this.ui.updatePreRoundUI();
+        if (ReadyUpState.preRoundCountdownActive) {
+            ReadyUpSystem.cancelPreRoundCountdown();
+            ReadyUpUI.updatePreRoundUI();
         }
     }
 
-    private getPreRoundReadiness(): { activeHumanCount: number; readyCount: number; allReady: boolean } {
+    private static getPreRoundReadiness(): { activeHumanCount: number; readyCount: number; allReady: boolean } {
         const allPlayers = mod.AllPlayers();
         const playerCount = mod.CountOf(allPlayers);
 
@@ -143,60 +171,60 @@ export class ReadyUpSystem {
         };
     }
 
-    private cancelPreRoundCountdown(): void {
-        ReadyUpState.instance.preRoundCountdownActive = false;
-        ReadyUpState.instance.preRoundCountdownRemaining = 0;
-        ReadyUpState.instance.preRoundCountdownToken += 1;
+    private static cancelPreRoundCountdown(): void {
+        ReadyUpState.preRoundCountdownActive = false;
+        ReadyUpState.preRoundCountdownRemaining = 0;
+        ReadyUpState.preRoundCountdownToken += 1;
     }
 
-    private async startPreRoundCountdown(token: number): Promise<void> {
-        for (let secondsLeft = this.config.preRoundCountdownDurationSeconds; secondsLeft >= 1; secondsLeft--) {
-            if (!ReadyUpState.instance.isPreRound || this.completed) {
+    private static async startPreRoundCountdown(token: number): Promise<void> {
+        for (let secondsLeft = ReadyUpSystem.preRoundCountdownDurationSeconds; secondsLeft >= 1; secondsLeft--) {
+            if (!ReadyUpState.isPreRound || ReadyUpSystem.completed) {
                 return;
             }
             if (
-                !ReadyUpState.instance.preRoundCountdownActive ||
-                ReadyUpState.instance.preRoundCountdownToken !== token
+                !ReadyUpState.preRoundCountdownActive ||
+                ReadyUpState.preRoundCountdownToken !== token
             ) {
                 return;
             }
 
-            const { allReady } = this.getPreRoundReadiness();
+            const { allReady } = ReadyUpSystem.getPreRoundReadiness();
             if (!allReady) {
-                this.cancelPreRoundCountdown();
-                this.ui.updatePreRoundUI();
+                ReadyUpSystem.cancelPreRoundCountdown();
+                ReadyUpUI.updatePreRoundUI();
                 return;
             }
 
-            ReadyUpState.instance.preRoundCountdownRemaining = secondsLeft;
-            this.ui.updatePreRoundUI();
+            ReadyUpState.preRoundCountdownRemaining = secondsLeft;
+            ReadyUpUI.updatePreRoundUI();
             ReadyUpSounds.playPreRoundCountdownBeep();
             await mod.Wait(1);
         }
 
-        if (!ReadyUpState.instance.isPreRound || this.completed) {
+        if (!ReadyUpState.isPreRound || ReadyUpSystem.completed) {
             return;
         }
-        if (!ReadyUpState.instance.preRoundCountdownActive || ReadyUpState.instance.preRoundCountdownToken !== token) {
+        if (!ReadyUpState.preRoundCountdownActive || ReadyUpState.preRoundCountdownToken !== token) {
             return;
         }
 
-        const { allReady } = this.getPreRoundReadiness();
+        const { allReady } = ReadyUpSystem.getPreRoundReadiness();
         if (!allReady) {
-            this.cancelPreRoundCountdown();
-            this.ui.updatePreRoundUI();
+            ReadyUpSystem.cancelPreRoundCountdown();
+            ReadyUpUI.updatePreRoundUI();
             return;
         }
 
-        this.cancelPreRoundCountdown();
-        await this.beginGameTransition();
+        ReadyUpSystem.cancelPreRoundCountdown();
+        await ReadyUpSystem.beginGameTransition();
     }
 
-    private async beginGameTransition(): Promise<void> {
-        if (this.transitionStarted || this.completed) {
+    private static async beginGameTransition(): Promise<void> {
+        if (ReadyUpSystem.transitionStarted || ReadyUpSystem.completed) {
             return;
         }
-        this.transitionStarted = true;
+        ReadyUpSystem.transitionStarted = true;
 
         const allPlayers = mod.AllPlayers();
         const playerCount = mod.CountOf(allPlayers);
@@ -206,7 +234,7 @@ export class ReadyUpSystem {
                 continue;
             }
 
-            this.ui.removePreRoundUI(p);
+            ReadyUpUI.removePreRoundUI(p);
         }
 
         mod.UndeployAllPlayers();
@@ -230,14 +258,14 @@ export class ReadyUpSystem {
             mod.CreateVector(0, 150, 0),
             mod.CreateVector(10000, 10000, 0),
             mod.UIAnchor.Center,
-            mod.Message(mod.stringkeys.readyup.countdown, this.config.finalCountdownDurationSeconds)
+            mod.Message(mod.stringkeys.readyup.countdown, ReadyUpSystem.finalCountdownDurationSeconds)
         );
         const widget = mod.FindUIWidgetWithName(countdownName)!;
         mod.SetUIWidgetBgFill(widget, mod.UIBgFill.Solid);
         mod.SetUIWidgetBgAlpha(widget, 1);
         mod.SetUIWidgetBgColor(widget, mod.CreateVector(0, 0, 0));
         mod.SetUITextSize(widget, 256);
-        mod.SetUITextColor(widget, ReadyUpConfig.goldColour);
+        mod.SetUITextColor(widget, ReadyUpUI.fgColor);
         mod.SetUIWidgetDepth(widget, mod.UIDepth.AboveGameUI);
         mod.SetUITextAnchor(widget, mod.UIAnchor.Center);
 
@@ -251,13 +279,13 @@ export class ReadyUpSystem {
         const titleWidget = mod.FindUIWidgetWithName(titleName)!;
         mod.SetUIWidgetBgFill(titleWidget, mod.UIBgFill.Solid);
         mod.SetUIWidgetBgAlpha(titleWidget, 0.1);
-        mod.SetUIWidgetBgColor(titleWidget, ReadyUpConfig.goldBgColour);
+        mod.SetUIWidgetBgColor(titleWidget, ReadyUpUI.bgColor);
         mod.SetUITextSize(titleWidget, 156);
-        mod.SetUITextColor(titleWidget, ReadyUpConfig.goldColour);
+        mod.SetUITextColor(titleWidget, ReadyUpUI.fgColor);
         mod.SetUIWidgetDepth(titleWidget, mod.UIDepth.AboveGameUI);
         mod.SetUITextAnchor(titleWidget, mod.UIAnchor.Center);
 
-        for (let secondsLeft = this.config.finalCountdownDurationSeconds; secondsLeft >= 1; secondsLeft--) {
+        for (let secondsLeft = ReadyUpSystem.finalCountdownDurationSeconds; secondsLeft >= 1; secondsLeft--) {
             mod.SetUITextLabel(widget, mod.Message(mod.stringkeys.readyup.countdown, secondsLeft));
             if (secondsLeft <= 5) {
                 ReadyUpSounds.playFinalCountdown();
@@ -279,7 +307,7 @@ export class ReadyUpSystem {
         );
         const swipeWidget = mod.FindUIWidgetWithName(swipeOverlayName)!;
         mod.SetUIWidgetBgFill(swipeWidget, mod.UIBgFill.Solid);
-        mod.SetUIWidgetBgColor(swipeWidget, ReadyUpConfig.goldColour);
+        mod.SetUIWidgetBgColor(swipeWidget, ReadyUpUI.fgColor);
         mod.SetUIWidgetBgAlpha(swipeWidget, 1.0);
         mod.SetUIWidgetDepth(swipeWidget, mod.UIDepth.AboveGameUI);
 
@@ -298,12 +326,13 @@ export class ReadyUpSystem {
         mod.DeleteUIWidget(widget);
         mod.DeleteUIWidget(titleWidget);
 
-        ReadyUpState.instance.isPreRound = false;
-        ReadyUpState.instance.preRoundCountdownActive = false;
-        ReadyUpState.instance.preRoundCountdownRemaining = 0;
-        this.completed = true;
+        ReadyUpState.isPreRound = false;
+        ReadyUpState.preRoundCountdownActive = false;
+        ReadyUpState.preRoundCountdownRemaining = 0;
+        ReadyUpSystem.completed = true;
+        ReadyUpSystem.cleanupSubscriptions();
 
-        await Promise.resolve(this.onReady());
+        await Promise.resolve(ReadyUpSystem.onReady());
 
         mod.EnableAllPlayerDeploy(true);
 

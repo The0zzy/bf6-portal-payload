@@ -1,14 +1,10 @@
-import { ReadyUpConfig, type ResolvedReadyUpSystemConfig } from './ReadyUpConfig.ts';
 import { ReadyUpState } from './ReadyUpState.ts';
 
 export class ReadyUpUI {
-    private readonly config: ResolvedReadyUpSystemConfig;
-
-    constructor(config: ResolvedReadyUpSystemConfig) {
-        this.config = config;
-    }
-
-    public setupPreRoundUI(player: mod.Player): void {
+    public static readonly fgColor = mod.CreateVector(1, 0.8, 0);
+    public static readonly bgColor = mod.CreateVector(0.5, 0.4, 0);
+    
+    public static setupPreRoundUI(player: mod.Player): void {
         const playerId = mod.GetObjId(player);
         if (mod.GetSoldierState(player, mod.SoldierStateBool.IsAISoldier)) return;
 
@@ -42,7 +38,7 @@ export class ReadyUpUI {
             borderContainer,
             true,
             0,
-            ReadyUpConfig.goldColour,
+            ReadyUpUI.fgColor,
             0.4,
             mod.UIBgFill.OutlineThin,
             player
@@ -58,7 +54,7 @@ export class ReadyUpUI {
             container,
             true,
             0,
-            ReadyUpConfig.goldColour,
+            ReadyUpUI.fgColor,
             0.35,
             mod.UIBgFill.Solid,
             player
@@ -95,7 +91,7 @@ export class ReadyUpUI {
             mod.UIBgFill.None,
             mod.Message(mod.stringkeys.readyup.title),
             30,
-            ReadyUpConfig.goldColour,
+            ReadyUpUI.fgColor,
             1,
             mod.UIAnchor.Center,
             player
@@ -365,11 +361,11 @@ export class ReadyUpUI {
             player
         );
 
-        this.updatePreRoundUI();
+        ReadyUpUI.updatePreRoundUI();
     }
 
-    public updatePreRoundUI(): void {
-        if (!ReadyUpState.instance.isPreRound) return;
+    public static updatePreRoundUI(): void {
+        if (!ReadyUpState.isPreRound) return;
 
         const allPlayers = mod.AllPlayers();
         const playerCount = mod.CountOf(allPlayers);
@@ -403,7 +399,7 @@ export class ReadyUpUI {
             const headerBorder = mod.FindUIWidgetWithName(`pr_hdr_border_${viewerId}`);
             const headerInner = mod.FindUIWidgetWithName(`pr_hdr_inner_${viewerId}`);
             const headerTitle = mod.FindUIWidgetWithName(`pr_title_${viewerId}`);
-            const isStarting = ReadyUpState.instance.preRoundCountdownActive;
+            const isStarting = ReadyUpState.preRoundCountdownActive;
             if (headerBorder && headerInner && headerTitle) {
                 if (isStarting) {
                     mod.SetUIWidgetBgColor(headerBorder, mod.CreateVector(0.1, 0.7, 0.2));
@@ -411,12 +407,12 @@ export class ReadyUpUI {
                     mod.SetUITextColor(headerTitle, mod.CreateVector(0.2, 1, 0.3));
                     mod.SetUITextLabel(
                         headerTitle,
-                        mod.Message(mod.stringkeys.readyup.startingIn, ReadyUpState.instance.preRoundCountdownRemaining)
+                        mod.Message(mod.stringkeys.readyup.startingIn, ReadyUpState.preRoundCountdownRemaining)
                     );
                 } else {
-                    mod.SetUIWidgetBgColor(headerBorder, ReadyUpConfig.goldColour);
+                    mod.SetUIWidgetBgColor(headerBorder, ReadyUpUI.fgColor);
                     mod.SetUIWidgetBgColor(headerInner, mod.CreateVector(0.06, 0.06, 0.06));
-                    mod.SetUITextColor(headerTitle, ReadyUpConfig.goldColour);
+                    mod.SetUITextColor(headerTitle, ReadyUpUI.fgColor);
                     mod.SetUITextLabel(headerTitle, mod.Message(mod.stringkeys.readyup.title));
                 }
             }
@@ -493,7 +489,7 @@ export class ReadyUpUI {
         }
     }
 
-    public removePreRoundUI(player: mod.Player): void {
+    public static removePreRoundUI(player: mod.Player): void {
         const playerId = mod.GetObjId(player);
         if (mod.GetSoldierState(player, mod.SoldierStateBool.IsAISoldier)) return;
 
@@ -506,7 +502,7 @@ export class ReadyUpUI {
         }
     }
 
-    public clearPlayerUI(playerId: number): void {
+    public static clearPlayerUI(playerId: number): void {
         const borderContainerName = `pr_bg_border_${playerId}`;
         const borderContainer = mod.FindUIWidgetWithName(borderContainerName);
         if (borderContainer) {

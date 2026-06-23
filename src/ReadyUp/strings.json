@@ -9,6 +9,7 @@
         "team2": "DEFENDERS",
         "playerName": "{}",
         "countdown": "{}",
-        "objective": "PAYLOAD"
+        "objective": "PAYLOAD",
+        "already_started": "Ready Up has already been started. Please wait for the current Ready Up to complete before starting a new one."
     }
 }

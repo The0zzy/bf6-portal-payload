@@ -25,10 +25,11 @@ Events.OnGameModeStarted.subscribe(async () => {
 
     if (currentGameMode === GameModes.Payload) {
         if (PayloadConfig.enableCompetitiveMode) {
-            new ReadyUpSystem(() => Payload.init(), {
-                preRoundCountdownDurationSeconds: PayloadConfig.preRoundCountdownDurationSeconds,
-                finalCountdownDurationSeconds: 10,
-            });
+            ReadyUpSystem.start(
+                () => Payload.init(),
+                PayloadConfig.preRoundCountdownDurationSeconds,
+                10
+            );
         } else {
             Payload.init();
         }

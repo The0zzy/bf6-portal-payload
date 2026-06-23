@@ -32,10 +32,10 @@ export class ReadyUpSounds {
     }
 
     public static playFinalCountdown(): void {
-        mod.PlaySound(ReadyUpSounds.countdown, 0.6);
+        mod.PlaySound(ReadyUpSounds.countdown, 1);
     }
 
     public static playImpactSound(): void {
-        mod.PlaySound(ReadyUpSounds.impact, 0.6);
+        mod.PlaySound(ReadyUpSounds.impact, 1);
     }
 }
